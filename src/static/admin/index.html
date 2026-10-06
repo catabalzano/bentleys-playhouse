@@ -1,21 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Bentley's Playhouse · Admin</title>
-  <link rel="icon" href="../assets/img/favicon.png" type="image/png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Bentley's Playhouse · Admin</title>
+<link rel="icon" href="../assets/img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..800&family=Fredoka:wght@500..700&display=swap">
+<link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <!-- Sveltia CMS: edits the site's content files on GitHub. Sign in with a GitHub token (see README "Admin"). -->
-  <script>
-    // One sign-in for both admin pages: reuse the token saved on /admin/submissions/ if the CMS has none yet.
-    try {
-      var t = localStorage.getItem('bp.ghToken');
-      if (t && !localStorage.getItem('sveltia-cms.user')) localStorage.setItem('sveltia-cms.user', JSON.stringify({ backendName: 'github', token: t }));
-    } catch (e) {}
-  </script>
-  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+<div id="app" class="boot"><p class="boot__msg">Loading…</p></div>
+<script src="config.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>

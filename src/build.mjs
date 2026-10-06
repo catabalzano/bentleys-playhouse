@@ -146,9 +146,12 @@ if (!finances.isExample) {
 }
 if (ctx.mode === 'live') for (const d of ['receipts', 'statements']) for (const f of fs.readdirSync(path.join(OUT, 'assets/finances', d))) if (f.startsWith('example-')) fs.rmSync(path.join(OUT, 'assets/finances', d, f));
 fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
-// the submissions review page reads its service URL from here
-fs.mkdirSync(path.join(OUT, 'admin/submissions'), { recursive: true });
-fs.writeFileSync(path.join(OUT, 'admin/submissions/config.js'), `window.BP_SUBMIT=${JSON.stringify((ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '')};\n`);
+// the admin reads its service URL (and the money categories) from here
+{
+  const fin = readJSON('finances/settings.json');
+  const cats = [...fin.expenseCategories.map((c) => ({ value: c.id, label: 'Spending · ' + c.label })), ...fin.incomeCategories.map((c) => ({ value: c.id, label: 'Income · ' + c.label }))];
+  fs.writeFileSync(path.join(OUT, 'admin/config.js'), `window.BP_ADMIN=${JSON.stringify({ api: (ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '', categories: cats })};\n`);
+}
 // share images (after assets are copied so dog photos can be read)
 const mime = (f) => (/\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg');
 for (const j of shareJobs) {

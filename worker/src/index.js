@@ -1,3 +1,4 @@
+import { handleAuth, handleContent, sessionOk, githubToken } from './admin.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -20,15 +21,17 @@ const YN = ['yes', 'no', 'unknown'];
 const YNS = ['yes', 'no', 'some', 'unknown'];
 
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const cors = corsHeaders(req, env);
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     try {
       let res;
       if (url.pathname === '/' && req.method === 'GET') res = json({ ok: true, service: 'pawsome-submissions' });
-      else if (url.pathname === '/submit' && req.method === 'POST') res = await submit(req, env);
+      else if (url.pathname === '/submit' && req.method === 'POST') res = await submit(req, env, ctx);
       else if (url.pathname.startsWith('/admin/')) res = await admin(req, env, url);
+      else if (url.pathname.startsWith('/auth/')) res = await handleAuth(req, env, url);
+      else if (url.pathname.startsWith('/api/')) res = await handleContent(req, env, url);
       else res = json({ error: 'Not found' }, 404);
       for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);
       return res;
@@ -46,7 +49,7 @@ function corsHeaders(req, env) {
   const allowed = String(env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
   const origin = req.headers.get('Origin') || '';
   const ok = allowed.includes(origin) || allowed.includes('*');
-  return ok ? { 'Access-Control-Allow-Origin': origin || '*', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Authorization,Content-Type', 'Access-Control-Max-Age': '86400', Vary: 'Origin' } : { Vary: 'Origin' };
+  return ok ? { 'Access-Control-Allow-Origin': origin || '*', 'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS', 'Access-Control-Allow-Headers': 'Authorization,Content-Type', 'Access-Control-Max-Age': '86400', Vary: 'Origin' } : { Vary: 'Origin' };
 }
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
 const fail = (msg, status = 400) => Object.assign(new Error(msg), { publicMessage: msg, status });
@@ -58,7 +61,7 @@ const slugify = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[̀-ͯ
 const miamiDate = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 
 // ---------- public: submit ----------
-async function submit(req, env) {
+async function submit(req, env, ctx) {
   const ct = req.headers.get('Content-Type') || '';
   if (!ct.includes('multipart/form-data')) throw fail('Please use the form on the website.');
   const ip = req.headers.get('CF-Connecting-IP') || 'local';
@@ -118,11 +121,43 @@ async function submit(req, env) {
   const record = { id: sid, status: 'pending', createdAt: new Date().toISOString(), photoCount: files.length, ...d };
   await env.SUBMISSIONS.put(`sub:${sid}`, JSON.stringify(record), { metadata: { status: 'pending', name: D.name, createdAt: record.createdAt } });
   await env.SUBMISSIONS.put(rlKey, String(used + 1), { expirationTtl: 3700 });
+  const mail = notify(env, record, files[0]).catch((e) => console.error('notify failed', e && e.message));
+  if (ctx && ctx.waitUntil) ctx.waitUntil(mail); else await mail;
   return json({ ok: true, id: sid });
+}
+
+// ---------- email alert to Bentley's Playhouse (via Resend) ----------
+const LOC_LABEL = { rescue: 'A rescue', 'mdas-doral': 'MDAS · Doral', 'mdas-medley': 'MDAS · Medley', broward: 'Broward shelter', family: 'Family rehoming', foster: 'In foster', other: 'Other' };
+const YN_LABEL = { yes: 'Yes', no: 'No', some: 'Some / depends', unknown: 'Not sure' };
+const h = (v) => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+async function notify(env, r, photo) {
+  if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) return;
+  const D = r.dog, S = r.submitter;
+  const review = `${env.SITE_URL || ''}/admin/submissions/`;
+  const where = [D.orgName, LOC_LABEL[D.locationType], D.city].filter(Boolean).join(', ');
+  const rows = [['Breed', D.breed], ['Age', D.age], ['Sex', D.sex], ['Where', where], ['Shelter ID', D.animalId || '—'],
+    ['Looking for', D.needs === 'both' ? 'Adopter or foster' : D.needs === 'foster' ? 'Foster' : 'Adopter'],
+    ['Spayed/neutered', YN_LABEL[D.fixed]], ['Vaccines', YN_LABEL[D.vaccinated]], ['Microchip', YN_LABEL[D.microchipped]], ['Heartworm neg.', YN_LABEL[D.heartworm]],
+    ['Good with', `Dogs: ${YN_LABEL[D.goodWithDogs]} · Cats: ${YN_LABEL[D.goodWithCats]} · Kids: ${YN_LABEL[D.goodWithKids]}`],
+    ['Photos', String(r.photoCount)],
+    ['Submitted by', `${S.firstName} ${S.lastName}`], ['Social', S.social], ['Phone', S.phone], ['Email', S.email]];
+  const html = `<div style="font-family:Arial,sans-serif;color:#1F1D2B;max-width:560px">
+<h2 style="color:#2F45C8;margin:0 0 4px">New Pawsome Pooches submission: ${h(D.name)}</h2>
+<p style="margin:0 0 16px;color:#5c5a72">It's waiting for your review. Nothing goes on the site until you approve it.</p>
+<p><a href="${h(review)}" style="display:inline-block;background:#FF914D;color:#1F1D2B;font-weight:bold;padding:12px 20px;border-radius:999px;text-decoration:none">Review ${h(D.name)}</a></p>
+<table style="border-collapse:collapse;font-size:14px">${rows.map(([k, v]) => `<tr><td style="padding:4px 14px 4px 0;color:#5c5a72;font-weight:bold;vertical-align:top">${h(k)}</td><td style="padding:4px 0">${h(v)}</td></tr>`).join('')}</table>
+<p style="font-weight:bold;margin:16px 0 4px">About ${h(D.name)}</p><p style="white-space:pre-wrap;margin:0">${h(D.about)}</p>
+${photo ? '<p style="color:#5c5a72;font-size:13px">The main photo is attached. See all photos on the review page.</p>' : ''}</div>`;
+  const text = `New Pawsome Pooches submission: ${D.name}\n\nReview it: ${review}\n\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nAbout ${D.name}:\n${D.about}\n`;
+  const body = { from: env.NOTIFY_FROM || "Bentley's Playhouse <onboarding@resend.dev>", to: [env.NOTIFY_EMAIL], subject: `New pup to review: ${D.name} (${LOC_LABEL[D.locationType] || 'Pawsome Pooches'})`, html, text, reply_to: S.email };
+  if (photo) body.attachments = [{ filename: `${slugify(D.name)}.jpg`, content: b64(await photo.arrayBuffer()) }];
+  const res = await fetch(`${env.RESEND_API || 'https://api.resend.com'}/emails`, { method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (!res.ok) console.error('resend', res.status, await res.text());
 }
 
 // ---------- admin ----------
 async function requireOwner(req, env) {
+  if (await sessionOk(env, req)) return githubToken(env); // signed in to the admin with the password
   const auth = req.headers.get('Authorization') || '';
   const token = auth.replace(/^(Bearer|token)\s+/i, '').trim();
   if (!token) throw fail('Sign in needed.', 401);
