@@ -127,10 +127,10 @@ export function pawsomeHome(pooches) {
   const adopted = pooches.filter((d) => d.status === 'adopted').length;
   const week = live.map((d) => d.featuredWeek).filter(Boolean).sort().pop();
   return `
-<section class="pawsome" aria-labelledby="pawsome-h">
+<section class="pawsome" aria-labelledby="pawsome-h" data-reveal="panel">
   ${sparkles()}
   <div class="wrap">
-    <div class="pawsome__head">
+    <div class="pawsome__head" data-reveal style="--d:.3s">
       <div>
         <p class="pawsome__kicker">${paw()} Community spotlight ${week ? `· week of ${esc(fmtDate(week))}` : ''}</p>
         <h2 id="pawsome-h" class="pawsome__title">Pawsome <span>Pooches</span></h2>
@@ -141,14 +141,14 @@ export function pawsomeHome(pooches) {
         <p><strong>${adopted}</strong><span>happy ${adopted === 1 ? 'tail' : 'tails'}</span></p>
       </div>
     </div>
-    <div class="pp-rail" data-pp-rail>
+    <div class="pp-rail" data-pp-rail data-reveal style="--d:.5s">
       <div class="pp-rail__track" tabindex="0" aria-label="Pawsome Pooches this week">
         ${live.map((d) => ppCard(d)).join('')}
         <article class="pp-card pp-card--submit"><a class="pp-card__link" href="${href('pawsome-pooches/#submit')}"><span class="pp-card__body"><span class="pp-submit__icon">${paw()}</span><span class="pp-card__name">Know a pup who needs a spotlight?</span><span class="pp-card__facts">Rescues, shelters and families can send us a dog to feature.</span><span class="pp-card__cta">How to submit ${icon('arrow', { size: 18 })}</span></span></a></article>
       </div>
       <div class="pp-rail__nav"><button type="button" class="pp-rail__btn" data-pp-prev aria-label="Previous dogs">${icon('arrow', { size: 20 })}</button><button type="button" class="pp-rail__btn" data-pp-next aria-label="More dogs">${icon('arrow', { size: 20 })}</button></div>
     </div>
-    <p class="pawsome__more">${button('See all Pawsome Pooches', 'pawsome-pooches/', { variant: 'primary', ic: 'paw' })}</p>
+    <p class="pawsome__more" data-reveal style="--d:.7s">${button('See all Pawsome Pooches', 'pawsome-pooches/', { variant: 'primary', ic: 'paw' })}</p>
   </div>
   ${templates(live)}
   ${dialogShell()}

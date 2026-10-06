@@ -103,6 +103,7 @@ export function home(data) {
   </div>
 </section>
 
+<div class="stack stack--pawsome">
 ${dogs.length || stories.length ? `
 <section class="dogs-home" aria-labelledby="dogs-h"><div class="wrap">
   <h2 id="dogs-h" class="section-h">Meet the dogs</h2>
@@ -121,6 +122,7 @@ ${dogs.length || stories.length ? `
 </div></section>`}
 
 ${pawsomeHome(data.pooches)}
+</div>
 
 <section class="help-ways" aria-labelledby="ways-h">
   <div class="wrap">

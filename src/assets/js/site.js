@@ -210,8 +210,8 @@
 /* Pin point for the stacked section: stick when its bottom reaches the bottom of the screen (works for tall sections on phones too). */
 (function () {
   'use strict';
-  var el = document.querySelector('.stack > .brings');
-  if (!el) return;
-  function set() { el.style.setProperty('--stick-top', Math.min(0, window.innerHeight - el.offsetHeight) + 'px'); }
+  var els = document.querySelectorAll('.stack > :first-child');
+  if (!els.length) return;
+  function set() { Array.prototype.forEach.call(els, function (el) { el.style.setProperty('--stick-top', Math.min(0, window.innerHeight - el.offsetHeight) + 'px'); }); }
   set(); window.addEventListener('resize', set);
 })();

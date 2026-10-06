@@ -961,3 +961,7 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .pp-gal-hint { display: flex; align-items: center; gap: .4rem; margin: .8rem 0 0; font-size: .9rem; font-weight: 700; color: var(--muted); }
 .pp-card__count { position: absolute; bottom: 10px; right: 10px; display: inline-flex; align-items: center; gap: .3rem; background: rgba(31, 29, 43, .72); color: #fff; font-size: .78rem; font-weight: 800; padding: .3em .7em; border-radius: 999px; }
 .stack > .rrr .rrr__intro p { color: var(--ink); }
+
+/* Pawsome Pooches slides up over "Looking for a dog to adopt?" (same stacking effect as Who we are) */
+.stack--pawsome > .dogs-home { position: sticky; top: var(--stick-top, 0px); z-index: 0; background: var(--cream); padding-bottom: clamp(4rem, 9vw, 7rem); }
+.stack--pawsome > .pawsome { z-index: 1; border-radius: clamp(40px, 8vw, 120px) clamp(40px, 8vw, 120px) 0 0; box-shadow: 0 -22px 50px rgba(255, 145, 77, .28); }
