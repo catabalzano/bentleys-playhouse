@@ -9,6 +9,13 @@
 </head>
 <body>
   <!-- Sveltia CMS: edits the site's content files on GitHub. Sign in with a GitHub token (see README "Admin"). -->
+  <script>
+    // One sign-in for both admin pages: reuse the token saved on /admin/submissions/ if the CMS has none yet.
+    try {
+      var t = localStorage.getItem('bp.ghToken');
+      if (t && !localStorage.getItem('sveltia-cms.user')) localStorage.setItem('sveltia-cms.user', JSON.stringify({ backendName: 'github', token: t }));
+    } catch (e) {}
+  </script>
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
 </body>
 </html>

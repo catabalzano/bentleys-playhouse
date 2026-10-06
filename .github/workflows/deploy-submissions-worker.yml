@@ -22,4 +22,8 @@ jobs:
         working-directory: worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npm install --no-audit --no-fund && npx wrangler deploy
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          npm install --no-audit --no-fund
+          npx wrangler deploy
+          if [ -n "$RESEND_API_KEY" ]; then echo "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY; else echo "No RESEND_API_KEY yet: email alerts are off."; fi

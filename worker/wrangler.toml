@@ -10,6 +10,9 @@ GITHUB_BRANCH = "main"
 SITE_URL = "https://bentleysplayhouse.org"
 ALLOWED_ORIGINS = "https://bentleysplayhouse.org,https://www.bentleysplayhouse.org,http://localhost:8765"
 MAX_PER_HOUR = "6"
+NOTIFY_EMAIL = "hello@bentleysplayhouse.org"
+NOTIFY_FROM = "Bentley's Playhouse <onboarding@resend.dev>"
+# RESEND_API_KEY is a secret, set by the deploy workflow from the GitHub secret of the same name.
 # TURNSTILE_SECRET is set as a secret (wrangler secret put TURNSTILE_SECRET), never here.
 
 [[kv_namespaces]]
