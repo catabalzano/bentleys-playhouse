@@ -1106,3 +1106,15 @@ img, video, svg { max-width: 100%; }
 .pol__back { position: relative; inset: auto; overflow: visible; }
 .pol__front { justify-content: flex-start; }
 @media (max-width: 480px) { .story-grid { grid-auto-columns: minmax(200px, 72vw); } .pol__story { font-size: 1.08rem; } }
+.gift__go[aria-disabled="true"] { opacity: 1; background: rgba(255, 255, 255, .9); color: #2F45C8; box-shadow: 0 5px 0 rgba(31, 29, 43, .25); }
+.gift__soon { margin: .8rem 0 0; color: #fff; font-size: .92rem; }
+.gift__soon a { color: var(--gold); font-weight: 800; }
+/* Phone header: Donate becomes a round heart button so it never crowds the logo or the Menu button */
+@media (max-width: 379px) {
+  .header__donate { width: 46px; min-height: 46px; padding: 0; justify-content: center; flex: none; }
+  .header__donate span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media (max-width: 340px) {
+  .menu-btn { padding: .35rem .7rem; }
+  .menu-btn__open > span, .menu-btn__close > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}

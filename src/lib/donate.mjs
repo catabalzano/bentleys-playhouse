@@ -18,7 +18,7 @@ export function donateReady() {
   const d = ctx.site.donate;
   return !!((d.verified && d.url) || (d.methods || []).some((m) => m.verified && (m.url || m.handle)));
 }
-export const donateVisible = () => donateReady() || ctx.mode === 'preview';
+export const donateVisible = () => donateReady() || ctx.mode === 'preview' || !!ctx.site.donate.showButton;
 
 function linkFor(m) {
   const h = (m.handle || '').trim().replace(/^@/, '');
@@ -56,7 +56,8 @@ export function giftBlock({ inDialog = false } = {}) {
   <div class="gift__tiers" role="radiogroup" aria-labelledby="${pid}">${tierHtml}</div>
   ${primary
     ? `<a class="gift__go" data-gift-go data-pay-tpl="${esc(pl.tpl)}" data-pay-base="${esc(pl.base)}" data-name="${esc(primary.name)}" href="${esc(fill(pl))}" target="_blank" rel="noopener">${icon('heart', { size: 20 })}<span data-gift-label>${goLabel(primary)}</span></a>`
-    : `<span class="gift__go" aria-disabled="true">${icon('heart', { size: 20 })}<span>Donate</span></span>`}
+    : `<span class="gift__go" aria-disabled="true">${icon('heart', { size: 20 })}<span>Online giving opens soon</span></span>
+       <p class="gift__soon">Want to give now? <a href="${href('contact/')}">Message us</a> and we'll tell you how.</p>`}
   ${payHtml ? `<p class="gift__or">or send it with</p><div class="gift__pay">${payHtml}</div>` : ''}
   ${ctx.mode === 'preview' && !donateReady() ? `<p class="preview-note">Preview only: add your Venmo, PayPal, Zelle and Cash App handles in <code>content/site.json → donate.methods</code> and set <code>verified: true</code>. The Donate button then appears on the live site.</p>` : ''}
   <div class="gift__foot"><span>${icon('paw', { size: 16 })} 100% volunteer-run. We share every expense.</span><a href="${href('transparency/')}">Where the money goes →</a></div>

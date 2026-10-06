@@ -153,7 +153,9 @@
         "verified": false
       }
     ],
-    "_methodsReadme": "Payment options for the Donate pop-up. type: paypal | venmo | cashapp | zelle | link. Put the handle only (paypal.me name, Venmo @name, Cash App $tag, Zelle email/phone). For 'link' (Zeffy, Givebutter, etc.) set url (and optional amountUrl with {amount}). The first one with primary: true is the big orange button. Set verified: true to show it on the live site."
+    "_methodsReadme": "Payment options for the Donate pop-up. type: paypal | venmo | cashapp | zelle | link. Put the handle only (paypal.me name, Venmo @name, Cash App $tag, Zelle email/phone). For 'link' (Zeffy, Givebutter, etc.) set url (and optional amountUrl with {amount}). The first one with primary: true is the big orange button. Set verified: true to show it on the live site.",
+    "showButton": true,
+    "_showButtonNote": "true = the Donate button and pop-up show on the live site even before payment options are added (the pop-up then says 'Online giving opens soon')."
   },
   "forms": {
     "_readme": "Paste a form endpoint (Formspree, Basin, Netlify Forms, etc.) to switch a form on. Empty = the form shows as 'not connected yet' and cannot be submitted.",
