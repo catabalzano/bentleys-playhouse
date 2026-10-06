@@ -188,3 +188,15 @@
     })
     .catch(function () { /* keep the fallback tiles */ });
 })();
+
+/* Scroll-triggered entrance for [data-reveal] elements. Without JS (or with reduced motion) everything simply shows. */
+(function () {
+  'use strict';
+  var els = document.querySelectorAll('[data-reveal]');
+  if (!els.length || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('js-reveal');
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+  Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+})();

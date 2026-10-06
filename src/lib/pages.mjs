@@ -74,18 +74,18 @@ export function home(data) {
 
 <section class="rrr" aria-labelledby="rrr-h">
   <div class="wrap rrr__in">
-    <div class="rrr__intro">
-      ${logo('rrr__badge', { alt: '' })}
+    <div class="rrr__intro" data-reveal>
+      <span class="logo rrr__wordmark"><img class="logo__l" src="${asset('img/logo-wordmark.png')}" alt="" width="900" height="322" loading="lazy"><img class="logo__d" src="${asset('img/logo-wordmark-dark.png')}" alt="" width="900" height="322" loading="lazy"></span>
       <p class="eyebrow">${tag('Who we are')}</p>
       <h2 id="rrr-h" class="section-h">A playhouse with a purpose</h2>
       <p>Since August 2022, Cata Balzano has been taking dogs out of abuse, neglect and backyard breeding into her Miami home, and helping them heal. The rescue is named for Bentley, her French Bulldog, who welcomed every one of them.</p>
       <p><a class="arrow-link" href="${href('our-story/')}">Read our story ${icon('arrow', { size: 18 })}</a></p>
     </div>
     <ol class="rrr__steps">
-      <li><span class="rrr__word">Rescue.</span><p>Getting dogs out of situations that are hurting them, and into safety.</p></li>
-      <li><span class="rrr__word">Rehab.</span><p>Vet care, patience, routine and time, until a dog is ready to trust again.</p></li>
-      <li><span class="rrr__word">Rehome.</span><p>Matching each dog with a family that fits, so the next home is the last one.</p></li>
-      <li class="rrr__repeat"><span class="rrr__word">Repeat.</span><p>Then we make room for the next dog who needs us.</p></li>
+      <li data-reveal style="--d:.1s"><span class="rrr__word">Rescue.</span><p>Getting dogs out of situations that are hurting them, and into safety.</p></li>
+      <li data-reveal style="--d:.22s"><span class="rrr__word">Rehab.</span><p>Vet care, patience, routine and time, until a dog is ready to trust again.</p></li>
+      <li data-reveal style="--d:.34s"><span class="rrr__word">Rehome.</span><p>Matching each dog with a family that fits, so the next home is the last one.</p></li>
+      <li class="rrr__repeat" data-reveal style="--d:.46s"><span class="rrr__word">Repeat.</span><p>Then we make room for the next dog who needs us.</p></li>
     </ol>
   </div>
 </section>
