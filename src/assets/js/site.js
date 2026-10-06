@@ -163,14 +163,14 @@
   'use strict';
   var grid = document.querySelector('[data-ig-feed]');
   if (!grid || !window.fetch) return;
-  // A short handwritten-style label from the post caption: first sentence, no hashtags/mentions, about 24 characters
-  function shortCap(c) {
+  // Sticky-note label: the post's first sentence when it's short, otherwise a friendly rotating label
+  var LABELS = ['Tap to read ❤', 'Playhouse life 🐾', 'New pup news!', 'Go say hi!', 'Read the story', 'Must see 🐶'];
+  function shortCap(c, i) {
     var t = String(c).split(/\n/)[0].replace(/[#@][\w.]+/g, '').replace(/\s+/g, ' ').trim();
-    t = t.split(/(?<=[.!?])\s/)[0].replace(/[.:,;]+$/, '');
-    if (t.length <= 26) return t;
-    var cut = t.slice(0, 24); cut = cut.slice(0, cut.lastIndexOf(' ') > 10 ? cut.lastIndexOf(' ') : 24);
-    return cut.replace(/[\s,.:;-]+$/, '') + '…';
+    t = t.split(/(?<=[.!?])\s/)[0];
+    return t && t.length <= 26 ? t : LABELS[i % LABELS.length];
   }
+
   fetch(grid.getAttribute('data-ig-feed'))
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (data) {
@@ -179,7 +179,7 @@
       grid.innerHTML = '';
       grid.removeAttribute('aria-hidden');
       grid.classList.add('community__grid--feed');
-      posts.forEach(function (p) {
+      posts.forEach(function (p, i) {
         var src = (p.sizes && p.sizes.medium && p.sizes.medium.mediaUrl) || p.thumbnailUrl || p.mediaUrl;
         if (!src) return;
         var a = document.createElement('a');
@@ -192,7 +192,7 @@
         a.appendChild(tape);
         a.appendChild(img);
         var note = document.createElement('span'); note.className = 'ig-post__note'; note.setAttribute('aria-hidden', 'true');
-        note.textContent = shortCap(p.prunedCaption || p.caption || '');
+        note.textContent = shortCap(p.prunedCaption || p.caption || '', i);
         if (note.textContent) a.appendChild(note);
         if (p.mediaType === 'VIDEO') { var b = document.createElement('span'); b.className = 'ig-post__badge'; b.textContent = 'Video'; a.appendChild(b); }
         var sr = document.createElement('span'); sr.className = 'visually-hidden'; sr.textContent = ' (opens Instagram in a new tab)'; a.appendChild(sr);
