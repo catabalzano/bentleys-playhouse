@@ -1,5 +1,6 @@
 ---
 title: Traveling internationally with your dog
+icon: globe
 category: laws-travel
 area: national
 order: 3

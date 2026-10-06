@@ -1,5 +1,6 @@
 ---
 title: Taking your dog to the UK and Europe
+icon: globe
 category: laws-travel
 area: general
 order: 4

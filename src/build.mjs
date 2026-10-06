@@ -9,6 +9,7 @@ import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
 import * as P2 from './lib/pages2.mjs';
 import * as P3 from './lib/pages3.mjs';
+import { renderShare } from './lib/covers.mjs';
 import { parse as parseCSV } from 'csv-parse/sync';
 
 const args = process.argv.slice(2);
@@ -90,8 +91,16 @@ const data = { pooches, rescues, guides, articles, checklists, dogs, stories, di
 fs.rmSync(OUT, { recursive: true, force: true });
 let count = 0;
 const sitemap = [];
+const shareJobs = [];
+const catLabel = (id) => (ctx.categories.find((c) => c.id === id) || {}).label;
 function emit(route, opts) {
   ctx.route = route;
+  // every page gets its own 1200×630 share image (title + topic art, or the dog's photo)
+  if (!opts.noindex && !opts.ogImage) {
+    const name = route.replace(/\/$/, '').replace(/\//g, '--') || 'home';
+    opts = { ...opts, ogImage: `og/${name}.png` };
+    shareJobs.push({ file: path.join(OUT, 'assets', opts.ogImage), title: opts.shareTitle || opts.title, kicker: opts.shareKicker || "Bentley's Playhouse", category: opts.shareCategory || 'default', icon: opts.shareIcon, photo: opts.sharePhoto });
+  }
   const { html, fragment } = page({ ...opts, body: typeof opts.body === 'function' ? opts.body() : opts.body });
   const file = route.endsWith('.html') ? path.join(OUT, route) : path.join(OUT, route, 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -101,18 +110,18 @@ function emit(route, opts) {
   count++;
 }
 
-emit('', { home: true, bodyClass: 'home', title: 'Home',
+emit('', { home: true, bodyClass: 'home', title: 'Home', shareTitle: 'Here for the dogs, and for the people who help them', shareKicker: 'Miami dog rescue',
   description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data), scripts: ['js/pawsome.js'] });
-emit('pawsome-pooches/', { title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js'] });
-for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, description: d.tagline || `Meet ${d.name}, looking for a home.`, ogImage: d.photos[0] ? d.photos[0].replace(/^\/?assets\//, '') : undefined, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js'] });
+emit('pawsome-pooches/', { shareTitle: 'Pawsome Pooches: dogs in our community who need a home', shareKicker: 'Updated weekly', shareCategory: 'adopt-foster', title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js'] });
+for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, shareTitle: d.status === 'adopted' ? `${d.name} found a home!` : `Meet ${d.name}`, shareKicker: d.status === 'adopted' ? 'Pawsome Pooches · Happy tail' : 'Pawsome Pooches · Adopt me', shareCategory: 'adopt-foster', sharePhoto: d.photos[0], description: d.tagline || `Meet ${d.name}, looking for a home.`, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js'] });
 emit('rescues-you-can-help/', { title: 'Rescues You Can Help', description: 'Miami-Dade rescues and shelters you can support by fostering, volunteering, sharing or sending supplies.', body: () => P3.rescuesPage(rescues) });
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
-for (const g of guides) emit(`get-help/${g.slug}/`, { title: g.title, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
+for (const g of guides) emit(`get-help/${g.slug}/`, { shareKicker: 'Get Help', shareCategory: g.category || 'lost-found', title: g.title, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
 emit('adopt-foster/', { title: 'Adopt & Foster', description: pages.adopt.summary, body: () => P.adopt(data) });
 for (const d of dogs) emit(`adopt-foster/dogs/${d.slug}/`, { title: d.name, description: d.summary || `Meet ${d.name}.`, body: () => P.dogPage(d) });
 emit('resources/', { title: 'Resource Library', description: 'Searchable guides, printable checklists and trusted resources for dog rescue, lost and found, adoption and care in Miami and beyond.', body: () => P.library(data), scripts: [] });
-for (const a of articles) emit(`resources/${a.slug}/`, { title: a.title, description: a.summary, body: () => P.article(a, data) });
-for (const c of checklists) emit(`resources/checklists/${c.slug}/`, { title: c.title, description: c.intro, bodyClass: 'is-checklist', body: () => P.checklist(c) });
+for (const a of articles) emit(`resources/${a.slug}/`, { shareKicker: catLabel(a.category) || 'Resource Library', shareCategory: a.category, shareIcon: a.icon, title: a.title, description: a.summary, body: () => P.article(a, data) });
+for (const c of checklists) emit(`resources/checklists/${c.slug}/`, { shareKicker: 'Printable checklist', shareCategory: c.category, shareIcon: c.icon || 'list', title: c.title, description: c.intro, bodyClass: 'is-checklist', body: () => P.checklist(c) });
 emit('resources/flyer-builder/', { title: 'Lost & Found Flyer Builder', description: 'Make a printable lost or found dog flyer. Your photo stays on your device.', bodyClass: 'is-flyer', body: () => P.flyer(), scripts: ['js/flyer.js'] });
 emit('resources/vet-clinics/', { title: 'Vet Clinic Directory', description: 'Miami-Dade vet clinics and 24/7 emergency hospitals: hours, walk-in policies, phone numbers and addresses.', bodyClass: 'is-clinics', body: () => P2.clinics(clinicData), scripts: ['js/clinics.js'] });
 emit('transparency/', { title: 'Where the Money Goes', description: "Every expense Bentley's Playhouse makes, with receipts: food, spay/neuter, medical care, toys and support for other rescues.", bodyClass: 'is-fin', body: () => P2.transparency(finances), scripts: ['js/transparency.js'] });
@@ -134,6 +143,14 @@ if (!finances.isExample) {
 }
 if (ctx.mode === 'live') for (const d of ['receipts', 'statements']) for (const f of fs.readdirSync(path.join(OUT, 'assets/finances', d))) if (f.startsWith('example-')) fs.rmSync(path.join(OUT, 'assets/finances', d, f));
 fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
+// share images (after assets are copied so dog photos can be read)
+const mime = (f) => (/\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg');
+for (const j of shareJobs) {
+  let photo;
+  if (j.photo) { const f = path.join(ROOT, 'src', j.photo.replace(/^\/?/, '').replace(/^assets\//, 'assets/')); if (fs.existsSync(f)) photo = `data:${mime(f)};base64,` + fs.readFileSync(f).toString('base64'); }
+  const ok = (await renderShare({ ...j, photo }, j.file)) || (photo && (await renderShare({ ...j, photo: undefined }, j.file)));
+  if (!ok) fs.copyFileSync(path.join(ROOT, 'src/assets/img/og-image.png'), j.file);
+}
 // sitemap + robots
 const base = ctx.site.siteUrl.replace(/\/$/, '');
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.map((r) => `  <url><loc>${base}/${r}</loc></url>`).join('\n')}\n</urlset>\n`);

@@ -111,7 +111,12 @@ ${robots}
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:image" content="${esc(s.siteUrl + '/assets/' + ogImage)}">
-<meta property="og:image:alt" content="${esc(s.name)} logo">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(home ? s.name : title)}">
+<meta name="twitter:image" content="${esc(s.siteUrl + '/assets/' + ogImage)}">
+<meta name="twitter:title" content="${esc(home ? s.name : title)}">
+<meta name="twitter:description" content="${esc(description)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#2F45C8">

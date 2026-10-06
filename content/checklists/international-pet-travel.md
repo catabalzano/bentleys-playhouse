@@ -1,6 +1,7 @@
 ---
 title: International pet travel checklist
 short: Every step, from microchip to landing
+icon: globe
 category: laws-travel
 order: 3
 area: national

@@ -1,5 +1,6 @@
 ---
 title: Florida animal laws, explained
+icon: shield
 category: laws-travel
 area: florida
 order: 1

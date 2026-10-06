@@ -1,5 +1,6 @@
 ---
 title: Federal laws that protect animals
+icon: shield
 category: laws-travel
 area: national
 order: 2
