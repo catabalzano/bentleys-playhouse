@@ -47,7 +47,9 @@ Everything below is either missing, unverified, or a connection the site needs b
 ## Integrations
 - [ ] Form endpoints (Formspree or similar) for Contact and Get Involved → `content/site.json → forms`.
 - [x] Domain bentleysplayhouse.org registered at Namecheap (Oct 6, 2026; auto-renew + privacy on).
-- [ ] Hosting: deploy to Netlify and point the domain to it.
+- [x] Hosting: GitHub Pages (repo `catabalzano/bentleys-playhouse`, deploys automatically on every push to `main`). Local clone: `~/Documents/GitHub/bentleys-playhouse` (push with GitHub Desktop).
+- [x] DNS at Namecheap (Oct 6, 2026): four A records `@` → 185.199.108.153 / .109.153 / .110.153 / .111.153, CNAME `www` → `catabalzano.github.io.`; parking redirect removed. Site live at bentleysplayhouse.org.
+- [ ] Turn on "Enforce HTTPS" in GitHub → Settings → Pages once the certificate is issued (usually within an hour of the DNS change).
 - [ ] Decide on analytics (optional). If added, update the Privacy page.
 
 ## Content review
