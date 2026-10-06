@@ -1,0 +1,4 @@
+{ "documents": [
+  { "title": "September 2026 bank statement (redacted)", "date": "2026-09-30", "kind": "Monthly statement", "file": "example-statement.svg" },
+  { "title": "August 2026 bank statement (redacted)", "date": "2026-08-31", "kind": "Monthly statement", "file": "example-statement.svg" }
+] }

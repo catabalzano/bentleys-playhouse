@@ -1,0 +1,38 @@
+{
+  "_readme": "Contact page FAQ. Answers are Markdown. verified:false shows the answer in preview with a 'Needs confirmation' tag and hides it on the live site.",
+  "questions": [
+    {
+      "q": "Are you a shelter or animal control?",
+      "a": "No. Bentley's Playhouse is a small Miami-based rescue. Public shelters and animal control, like [Miami-Dade Animal Services](https://www.miamidade.gov/global/animals/home.page), handle strays, lost and found reports and emergencies."
+    },
+    {
+      "q": "I found a dog. Can you take it?",
+      "a": "We can't promise intake. Our space changes week to week. Please start with [I found a dog](/get-help/found-a-dog/): get the dog scanned and report it to Animal Services, which is required in Miami-Dade. Then [contact us](#msg-h) with photos, the location and what you've done so far, and we'll tell you honestly what we can do."
+    },
+    {
+      "q": "Can you help pay for my dog's vet care?",
+      "a": "We can't offer funding for vet care. These options may help: [affordable vet care in Miami](/resources/affordable-vet-care-miami/), [RedRover Relief](https://redrover.org/relief/) and [Pet Help Finder](https://www.pethelpfinder.org/)."
+    },
+    {
+      "q": "How do I adopt one of your dogs?",
+      "a": "Start with our [adoption application](https://form.jotform.com/231626654705155). If it's approved, we'll call for a short phone screening, then a home safety inspection, a background check and vetting, and finally the adoption contract. See [Adopt & Foster](/adopt-foster/#our-dogs) for the full steps. Our current dogs are listed on [RescueMe](https://bentleysplayhouse.rescueme.org/) and [Instagram](https://www.instagram.com/bentleysplayhouse/)."
+    },
+    {
+      "q": "I can't keep my dog anymore. Can you help?",
+      "a": "We understand this is hard. Contact us and tell us about your dog. We may not have space, but we'll point you to options. Miami-Dade Animal Services also lists alternatives to surrender on its website.",
+      "verified": false
+    },
+    {
+      "q": "Do you answer messages around the clock?",
+      "a": "No. We're a small team and we reply when we can. If an animal is hurt or in danger, please use the [emergency steps](/get-help/emergency/) instead of waiting for us."
+    },
+    {
+      "q": "Are donations tax-deductible?",
+      "a": "We'll publish our legal and tax information on the Donate page once it's confirmed. Until then, please don't assume a gift is tax-deductible."
+    },
+    {
+      "q": "Is the site available in Spanish?",
+      "a": "Not yet. A full Spanish version is planned, so that guides, forms and checklists are all properly translated."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_readme": "Ways to help on the Get Involved page. status: open (available now) | interest (expression-of-interest only) | soon (not set up yet) | hidden. Only mark 'open' what you actually offer today.",
+  "ways": [
+    {
+      "id": "share", "icon": "share", "status": "open", "title": "Share rescue information",
+      "body": "This one is open to everyone, today. Share our guides when a friend finds or loses a dog. Re-share lost and found posts in your neighborhood. Follow us on Instagram and pass along dogs looking for homes.\n\n**Share well:** use the original post so updates reach people, avoid adding guesses about a dog's history, and never share a finder's or owner's home address.",
+      "action": { "label": "Follow @bentleysplayhouse", "url": "https://www.instagram.com/bentleysplayhouse/", "external": true }
+    },
+    {
+      "id": "volunteer", "icon": "hands", "status": "interest", "title": "Volunteer",
+      "body": "Rescue needs drivers, dog walkers, event helpers, photographers and people who are great at paperwork. Tell us what you enjoy and when you're free, and we'll reach out when there's a fit.",
+      "action": { "label": "Raise your hand", "url": "#interest-form" },
+      "preview": "List specific volunteer roles here once they're confirmed, and switch status to \"open\"."
+    },
+    {
+      "id": "foster", "icon": "home", "status": "interest", "title": "Foster a dog",
+      "body": "Foster homes give dogs a quiet place to heal and learn to trust. Join our interest list and we'll talk through what a placement would look like for your home. Joining doesn't commit you to anything.\n\nNew to fostering? Read [what fostering involves](/resources/what-fostering-involves/) and use the [foster-home checklist](/resources/checklists/foster-home/).",
+      "action": { "label": "Join the interest list", "url": "#interest-form" },
+      "preview": "Confirm your foster process (application, what you provide, vet arrangements) to describe it here."
+    },
+    {
+      "id": "supplies", "icon": "gift", "status": "soon", "title": "Donate supplies",
+      "body": "Food, bedding, leashes and enrichment toys keep rehab going. We'll post a wish list here once it's set up.",
+      "preview": "Our YouTube channel mentions an Amazon wishlist. Add its link to content/site.json → donate.wishlistUrl, then set this to \"open\"."
+    },
+    {
+      "id": "fundraisers", "icon": "heart", "status": "soon", "title": "Support verified fundraisers",
+      "body": "When we run or endorse a fundraiser, it will be listed here and on our official Instagram. If you see a fundraiser using our name anywhere else, please check with us before giving.",
+      "preview": "Add fundraisers here only after verifying the organizer and destination."
+    },
+    {
+      "id": "skills", "icon": "briefcase", "status": "interest", "title": "Offer professional skills",
+      "body": "Vets and vet techs, trainers, groomers, photographers, designers, writers, Spanish translators, accountants and lawyers: a few hours of skilled help can change what a small rescue can do. Tell us what you offer.",
+      "action": { "label": "Tell us your skills", "url": "#interest-form" }
+    },
+    {
+      "id": "partners", "icon": "handshake", "status": "interest", "title": "Community partnerships",
+      "body": "Businesses, schools, clinics and community groups: if you'd like to explore working together on an adoption event, supply drive or education day, we'd love to hear from you. We'll be honest about what we can take on.",
+      "action": { "label": "Start a conversation", "url": "#interest-form" }
+    },
+    {
+      "id": "donate", "icon": "heart", "status": "soon", "title": "Donate money",
+      "body": "Online donations are coming soon. We'll only ever ask you to give through the link on our Donate page or our official Instagram. Every expense will be listed, with receipts, on our [transparency page](/transparency/).",
+      "action": { "label": "About donating", "url": "donate/" }
+    }
+  ]
+}

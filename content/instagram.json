@@ -1,0 +1,4 @@
+{
+  "_readme": "Up to 5 of your own Instagram photos for the homepage. Save each image in src/assets/img/ and link to its post. Example: { \"image\": \"ig-1.jpg\", \"alt\": \"Bentley in a sunbeam\", \"url\": \"https://www.instagram.com/p/XXXX/\" }",
+  "posts": []
+}

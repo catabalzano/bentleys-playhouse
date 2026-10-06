@@ -1,0 +1,491 @@
+{
+  "_readme": "Vet clinic directory (shown at /resources/vet-clinics/). kind: emergency | clinic. emergency: yes | limited | no. walkIns: yes | appointment | no | ask. hours: \"24/7\" or per-day lists of [open, close] in 24h time ([] = closed). Re-check every clinic's hours every few months and update 'checked'. Listing a clinic is not an endorsement or partnership.",
+  "checked": "2026-10-06",
+  "clinics": [
+    {
+      "id": "veg-miami",
+      "kind": "emergency",
+      "name": "Veterinary Emergency Group (VEG) Miami",
+      "type": "24/7 emergency hospital",
+      "emergency": "yes",
+      "walkIns": "yes",
+      "walkInNote": "No appointments needed. VEG recommends calling on the way so they're ready.",
+      "address": "2707 Biscayne Blvd, Miami, FL 33137",
+      "area": "Edgewater",
+      "phone": "(786) 539-0339",
+      "hours": "24/7",
+      "hoursNote": "Open 24 hours, every day, including holidays.",
+      "website": "https://www.veg.com/locations/florida/miami",
+      "source": "https://www.veg.com/locations/florida/miami"
+    },
+    {
+      "id": "veg-pinecrest",
+      "kind": "emergency",
+      "name": "Veterinary Emergency Group (VEG) Pinecrest",
+      "type": "24/7 emergency hospital",
+      "emergency": "yes",
+      "walkIns": "yes",
+      "walkInNote": "No appointment needed. Walk in 24/7.",
+      "address": "11921 S Dixie Hwy, Pinecrest, FL 33156",
+      "area": "Pinecrest",
+      "phone": "(305) 615-1665",
+      "hours": "24/7",
+      "hoursNote": "Open 24 hours, every day.",
+      "website": "https://www.veg.com/locations/florida/pinecrest",
+      "source": "https://www.veg.com/locations/florida/pinecrest"
+    },
+    {
+      "id": "doral-centre",
+      "kind": "emergency",
+      "name": "Doral Centre Animal Hospital",
+      "type": "24/7 emergency hospital (also offers routine care)",
+      "emergency": "yes",
+      "walkIns": "yes",
+      "walkInNote": "Emergency and urgent walk-ins welcome 24/7. They ask you to call to let them know you're coming.",
+      "address": "2801 NW 87th Ave, Suite 4, Doral, FL 33172",
+      "area": "Doral",
+      "phone": "(305) 598-1234",
+      "hours": "24/7",
+      "hoursNote": "Open 24 hours a day, 7 days a week, 365 days a year.",
+      "website": "https://doralvet.com/",
+      "source": "https://doralvet.com/emergency/"
+    },
+    {
+      "id": "mvs",
+      "kind": "emergency",
+      "name": "Miami Veterinary Specialists",
+      "type": "24/7 emergency and specialty hospital",
+      "emergency": "yes",
+      "walkIns": "yes",
+      "walkInNote": "For an emergency, call or come directly. Staff assess your pet on arrival.",
+      "address": "8601 Sunset Dr, Miami, FL 33143",
+      "area": "South Miami / Kendall",
+      "phone": "(305) 665-2820",
+      "hours": "24/7",
+      "hoursNote": "Open 24 hours, 365 days a year.",
+      "website": "https://www.mvshospital.com/",
+      "source": "https://www.mvshospital.com/veterinary-specialty-services/animal-emergency-services/"
+    },
+    {
+      "id": "thrive-miami",
+      "kind": "emergency",
+      "name": "Thrive Pet Healthcare Specialists Miami",
+      "type": "24/7 emergency and specialty hospital",
+      "emergency": "yes",
+      "walkIns": "ask",
+      "walkInNote": "Walk-in policy not confirmed. Call before you go.",
+      "address": "6394 S Dixie Hwy, South Miami, FL 33143",
+      "area": "South Miami",
+      "phone": "(305) 666-4142",
+      "hours": "24/7",
+      "hoursNote": "Listed as open 24 hours. We confirmed this from a directory listing, not the hospital's own page, so please call to confirm.",
+      "confirm": "Hours, address and walk-in policy came from a directory listing because the hospital's page didn't load for us.",
+      "website": "https://www.thrivepetcare.com/locations/florida/miami/miami-specialty-emergency",
+      "source": "https://www.petinsurancereview.com/find-a-vet/fl/miami/thrive-pet-healthcare-specialists-miami"
+    },
+    {
+      "id": "kendall-animal-medical-center",
+      "kind": "emergency",
+      "name": "Kendall Animal Medical Center",
+      "type": "Animal hospital with walk-in emergency care (not overnight)",
+      "emergency": "yes",
+      "walkIns": "yes",
+      "walkInNote": "Walk-ins accepted for all services, including emergencies, while open. Same-day appointments for urgent care.",
+      "address": "12586 SW 88th St, Miami, FL 33186",
+      "area": "West Kendall",
+      "phone": "(786) 616-8830",
+      "hours": {
+        "mon": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ],
+        "tue": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ],
+        "wed": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ],
+        "thu": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ],
+        "fri": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ],
+        "sat": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ],
+        "sun": [
+          [
+            "08:00",
+            "21:00"
+          ]
+        ]
+      },
+      "hoursNote": "Open every day 8 AM–9 PM. After 9 PM, go to a 24/7 hospital above.",
+      "website": "https://kendallanimal.com/en/",
+      "source": "https://kendallanimal.com/en/pet-urgent-and-emergency-care"
+    },
+    {
+      "id": "miami-animal-clinic",
+      "kind": "clinic",
+      "name": "Miami Animal Clinic",
+      "type": "General practice",
+      "emergency": "no",
+      "walkIns": "ask",
+      "walkInNote": "The clinic's site asks you to book an appointment. Call to ask about walk-ins.",
+      "address": "7345 SW 8th St, Miami, FL 33144",
+      "area": "Flagami / Tamiami Trail",
+      "phone": "(786) 542-6070",
+      "hours": {
+        "mon": [
+          [
+            "09:00",
+            "21:00"
+          ]
+        ],
+        "tue": [
+          [
+            "09:00",
+            "21:00"
+          ]
+        ],
+        "wed": [
+          [
+            "09:00",
+            "21:00"
+          ]
+        ],
+        "thu": [
+          [
+            "09:00",
+            "21:00"
+          ]
+        ],
+        "fri": [
+          [
+            "09:00",
+            "21:00"
+          ]
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "hoursNote": "Wellness exams, vaccines, diagnostics, dental care and surgery.",
+      "confirm": "Walk-in and emergency policy aren't stated on the clinic's website.",
+      "website": "https://miamianimalclinic.net/",
+      "source": "https://miamianimalclinic.net/services/"
+    },
+    {
+      "id": "hsgm",
+      "kind": "clinic",
+      "name": "Humane Society of Greater Miami: Wags & Wellness Clinic",
+      "type": "Preventive care only (low cost)",
+      "emergency": "no",
+      "walkIns": "yes",
+      "walkInNote": "Walk-ins welcome. Online appointments need a non-refundable deposit.",
+      "address": "16101 W Dixie Hwy, North Miami Beach, FL 33160",
+      "area": "North Miami Beach",
+      "phone": "(305) 696-0800",
+      "hours": {
+        "mon": [],
+        "tue": [
+          [
+            "08:00",
+            "12:00"
+          ],
+          [
+            "13:00",
+            "16:00"
+          ]
+        ],
+        "wed": [
+          [
+            "08:00",
+            "12:00"
+          ],
+          [
+            "13:00",
+            "16:00"
+          ]
+        ],
+        "thu": [
+          [
+            "08:00",
+            "12:00"
+          ],
+          [
+            "13:00",
+            "16:00"
+          ]
+        ],
+        "fri": [
+          [
+            "08:00",
+            "12:00"
+          ],
+          [
+            "13:00",
+            "16:00"
+          ]
+        ],
+        "sat": [
+          [
+            "08:00",
+            "12:00"
+          ],
+          [
+            "13:00",
+            "16:00"
+          ]
+        ],
+        "sun": []
+      },
+      "hoursNote": "Closed for lunch 12–1. Vaccines, preventives, county license tags. Not equipped for sick or injured animals.",
+      "website": "https://www.humanesocietymiami.org/vaccine-and-preventative-care/",
+      "source": "https://www.humanesocietymiami.org/vaccine-and-preventative-care/"
+    },
+    {
+      "id": "aspca-liberty-city",
+      "kind": "clinic",
+      "name": "ASPCA Community Veterinary Clinic, Liberty City",
+      "type": "Low-cost community clinic",
+      "emergency": "no",
+      "walkIns": "appointment",
+      "walkInNote": "By appointment only. Dog licenses don't need an appointment.",
+      "address": "1320 NW 62nd St, Miami, FL 33147",
+      "area": "Liberty City",
+      "phone": "(844) 692-7722",
+      "phoneNote": "844-MY-ASPCA, option 3 for Miami",
+      "hours": {
+        "mon": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ],
+        "tue": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ],
+        "wed": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ],
+        "thu": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ],
+        "fri": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "hoursNote": "Exams, vaccines, spay/neuter, microchips. Emergencies are referred to an emergency hospital.",
+      "eligibility": "Miami-Dade residents 18+. Discounted prices with proof of public benefits.",
+      "confirm": "Hours come from Miami-Dade County's 311 information page; the ASPCA's own page doesn't list them.",
+      "website": "https://clinic.aspca.org/clinics/miami/liberty-city",
+      "source": "https://secure.miamidade.gov/internal/calltaker-faq.page?Mduid_faq=faq162370190355563"
+    },
+    {
+      "id": "mdas-wellness",
+      "kind": "clinic",
+      "name": "Miami-Dade Animal Services Wellness Clinic",
+      "type": "County shelter wellness clinic (low cost)",
+      "emergency": "no",
+      "walkIns": "yes",
+      "walkInNote": "Walk-ins only for vaccines and microchips. Spay/neuter needs an appointment.",
+      "address": "3599 NW 79th Ave, Doral, FL 33122",
+      "area": "Doral",
+      "phone": "311 or (305) 468-5900",
+      "hours": {
+        "mon": [
+          [
+            "09:00",
+            "18:00"
+          ]
+        ],
+        "tue": [
+          [
+            "09:00",
+            "18:00"
+          ]
+        ],
+        "wed": [
+          [
+            "09:00",
+            "18:00"
+          ]
+        ],
+        "thu": [
+          [
+            "09:00",
+            "18:00"
+          ]
+        ],
+        "fri": [
+          [
+            "09:00",
+            "18:00"
+          ]
+        ],
+        "sat": [
+          [
+            "09:00",
+            "16:00"
+          ]
+        ],
+        "sun": [
+          [
+            "09:00",
+            "16:00"
+          ]
+        ]
+      },
+      "hoursNote": "Closed on county holidays. Vaccines, rabies, microchips, spay/neuter.",
+      "eligibility": "Pets must be registered in Miami-Dade County and at least 4 months old. Lower rabies price with proof of public benefits.",
+      "website": "https://www.miamidade.gov/global/service.page?Mduid_service=ser1599264624594140",
+      "source": "https://www.miamidade.gov/global/animals/contact.page"
+    },
+    {
+      "id": "south-kendall",
+      "kind": "clinic",
+      "name": "South Kendall Animal Hospital",
+      "type": "General practice",
+      "emergency": "limited",
+      "walkIns": "no",
+      "walkInNote": "No walk-ins. Same-day appointments for urgent cases when possible; call first.",
+      "address": "14201 S Dixie Hwy, Palmetto Bay, FL 33176",
+      "area": "Palmetto Bay",
+      "phone": "(305) 238-2030",
+      "hours": {
+        "mon": [
+          [
+            "08:00",
+            "18:00"
+          ]
+        ],
+        "tue": [
+          [
+            "08:00",
+            "18:00"
+          ]
+        ],
+        "wed": [
+          [
+            "08:00",
+            "18:00"
+          ]
+        ],
+        "thu": [
+          [
+            "08:00",
+            "18:00"
+          ]
+        ],
+        "fri": [
+          [
+            "08:00",
+            "18:00"
+          ]
+        ],
+        "sat": [
+          [
+            "08:00",
+            "16:00"
+          ]
+        ],
+        "sun": []
+      },
+      "hoursNote": "Offers urgent care during business hours. Not an emergency hospital.",
+      "website": "https://www.southkendall.com/",
+      "source": "https://www.southkendall.com/contact-us/"
+    },
+    {
+      "id": "vca-alton-road",
+      "kind": "clinic",
+      "name": "VCA Alton Road Animal Hospital",
+      "type": "General practice",
+      "emergency": "limited",
+      "walkIns": "ask",
+      "walkInNote": "The hospital encourages online booking. Call to ask about walk-ins.",
+      "address": "929 Alton Rd, Suite 101, Miami Beach, FL 33139",
+      "area": "Miami Beach",
+      "phone": "(305) 674-7387",
+      "hours": {
+        "mon": [
+          [
+            "08:00",
+            "20:00"
+          ]
+        ],
+        "tue": [
+          [
+            "08:00",
+            "20:00"
+          ]
+        ],
+        "wed": [
+          [
+            "08:00",
+            "20:00"
+          ]
+        ],
+        "thu": [
+          [
+            "08:00",
+            "20:00"
+          ]
+        ],
+        "fri": [
+          [
+            "08:00",
+            "20:00"
+          ]
+        ],
+        "sat": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ],
+        "sun": [
+          [
+            "09:00",
+            "17:00"
+          ]
+        ]
+      },
+      "hoursNote": "Open 7 days, with evening hours on weekdays.",
+      "confirm": "Walk-in and urgent-care policies aren't stated on the hospital's page.",
+      "website": "https://vcahospitals.com/alton-road",
+      "source": "https://vcahospitals.com/alton-road"
+    }
+  ]
+}

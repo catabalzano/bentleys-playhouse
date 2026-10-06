@@ -1,0 +1,128 @@
+// Build the static site:  node src/build.mjs [--live] [--pretty] [--out dist]
+//   default            → preview build (shows "Needs confirmation" items, links to folder/index.html)
+//   --live             → live build (hides unverified items, allows indexing)
+//   --pretty           → links as /folder/ (use when hosting on Netlify, Cloudflare Pages, etc.)
+import fs from 'node:fs';
+import path from 'node:path';
+import { ctx, ROOT, readJSON, readCollection, md, strip, href } from './lib/core.mjs';
+import { page } from './lib/layout.mjs';
+import * as P from './lib/pages.mjs';
+import * as P2 from './lib/pages2.mjs';
+import { parse as parseCSV } from 'csv-parse/sync';
+
+const args = process.argv.slice(2);
+ctx.mode = args.includes('--live') ? 'live' : 'preview';
+ctx.links = args.includes('--pretty') ? 'pretty' : 'explicit';
+const OUT = path.join(ROOT, args.includes('--out') ? args[args.indexOf('--out') + 1] : 'dist');
+
+// ---------- load content ----------
+ctx.site = readJSON('site.json');
+const strings = readJSON('strings/en.json');
+ctx.t = Object.assign((k) => strings[k] ?? k, { all: strings });
+ctx.categories = readJSON('categories.json');
+ctx.instagram = fs.existsSync(path.join(ROOT, 'content/instagram.json')) ? readJSON('instagram.json').posts : [];
+
+const guides = readCollection('guides');
+const articles = readCollection('library');
+const checklists = readCollection('checklists').map((c) => ({ ...c, groups: c.groups || [] }));
+const dogs = readCollection('dogs');
+const stories = readCollection('stories');
+const directory = readJSON('directory.json').resources;
+const involved = readJSON('involved.json').ways;
+const faq = readJSON('faq.json').questions;
+const pages = Object.fromEntries(readCollection('pages').map((p) => [p.slug, p]));
+
+const clinicData = readJSON('clinics.json');
+const mdas = readJSON('mdas.json');
+
+// ---------- finances (Transparency page) ----------
+function loadFinances() {
+  const settings = readJSON('finances/settings.json');
+  const valid = new Set([...settings.expenseCategories, ...settings.incomeCategories].map((c) => c.id));
+  const read = (f) => parseCSV(fs.readFileSync(path.join(ROOT, 'content/finances', f), 'utf8'), { columns: true, skip_empty_lines: true, trim: true });
+  let raw = read('transactions.csv');
+  let isExample = false;
+  if (!raw.length && ctx.mode === 'preview') { raw = read('example-transactions.csv'); isExample = true; }
+  const warnings = [];
+  const rows = raw.map((r, i) => {
+    const amount = Math.abs(parseFloat(String(r.amount).replace(/[$,]/g, '')));
+    const type = /^in/i.test(r.type) ? 'income' : 'expense';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date)) warnings.push(`row ${i + 2}: date should look like 2026-09-28`);
+    if (isNaN(amount)) warnings.push(`row ${i + 2}: amount isn't a number`);
+    if (!valid.has(r.category)) warnings.push(`row ${i + 2}: unknown category "${r.category}"`);
+    if (r.receipt && !/^https?:/.test(r.receipt) && !fs.existsSync(path.join(ROOT, 'src/assets/finances/receipts', r.receipt))) warnings.push(`row ${i + 2}: receipt file "${r.receipt}" not found`);
+    return { date: r.date, type, category: r.category, description: r.description, amount: amount || 0, party: r.paid_to_or_from, dog: r.dog, receipt: r.receipt, notes: r.notes };
+  }).sort((a, b) => b.date.localeCompare(a.date));
+  const docs = (isExample ? readJSON('finances/example-documents.json') : readJSON('finances/documents.json')).documents;
+  warnings.forEach((w) => console.warn('  ⚠ ledger ' + w));
+  return { rows, isExample, docs, settings, warnings };
+}
+const finances = loadFinances();
+
+const searchText = (...parts) => parts.filter(Boolean).join(' ').toLowerCase().replace(/\s+/g, ' ').slice(0, 2500);
+
+// Every library entry, in one list (used by Library, Home, related links, search).
+const items = [
+  ...guides.map((g) => ({ ...g, type: 'guide', route: `get-help/${g.slug}/`,
+    searchText: searchText(g.title, g.summary, (g.keywords || []).join(' '), g.steps.map((s) => s.title + ' ' + s.body).join(' '), strip(md(g.body))) })),
+  ...articles.map((a) => ({ ...a, type: 'article', route: `resources/${a.slug}/`,
+    searchText: searchText(a.title, a.summary, (a.keywords || []).join(' '), strip(md(a.body))) })),
+  { slug: 'flyer-builder', type: 'tool', category: 'lost-found', route: 'resources/flyer-builder/', title: 'Lost & found flyer builder',
+    summary: 'Add a photo and details, choose what contact info to show, then print or save a flyer.', short: 'Make a printable lost or found flyer', area: 'general', featured: true,
+    searchText: 'flyer poster lost found dog print photo sign notice' },
+  { slug: 'vet-clinics', type: 'tool', category: 'affordable', route: 'resources/vet-clinics/', title: 'Vet clinic directory',
+    summary: 'Hours, walk-in policies, phone numbers and addresses for 6 emergency hospitals and 6 everyday clinics in Miami-Dade.', short: 'Emergency hospitals and everyday clinics', area: 'local', featured: true,
+    searchText: 'vet clinic veterinarian emergency hospital 24 hours walk in hours phone address cheap low cost ' + clinicData.clinics.map((c) => c.name + ' ' + c.area).join(' ').toLowerCase() },
+  ...checklists.map((c) => ({ ...c, type: 'checklist', route: `resources/checklists/${c.slug}/`, summary: c.intro, short: c.short,
+    searchText: searchText(c.title, c.intro, c.groups.flatMap((g) => g.items).join(' ')) })),
+  ...directory.filter((d) => d.verified !== false || ctx.mode === 'preview').map((d) => ({ ...d, type: 'link', slug: d.id, searchText: searchText(d.title, d.summary, d.keywords, d.area) })),
+];
+const data = { guides, articles, checklists, dogs, stories, directory: items.filter((i) => i.type === 'link'), involved, faq, pages, items, mdas };
+
+// ---------- write ----------
+fs.rmSync(OUT, { recursive: true, force: true });
+let count = 0;
+const sitemap = [];
+function emit(route, opts) {
+  ctx.route = route;
+  const { html, fragment } = page({ ...opts, body: typeof opts.body === 'function' ? opts.body() : opts.body });
+  const file = route.endsWith('.html') ? path.join(OUT, route) : path.join(OUT, route, 'index.html');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, html);
+  if (route === '' && ctx.mode === 'preview') fs.writeFileSync(path.join(OUT, '_artifact-home.html'), fragment);
+  if (!opts.noindex) sitemap.push(route);
+  count++;
+}
+
+emit('', { home: true, bodyClass: 'home', title: 'Home',
+  description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data) });
+emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
+for (const g of guides) emit(`get-help/${g.slug}/`, { title: g.title, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
+emit('adopt-foster/', { title: 'Adopt & Foster', description: pages.adopt.summary, body: () => P.adopt(data) });
+for (const d of dogs) emit(`adopt-foster/dogs/${d.slug}/`, { title: d.name, description: d.summary || `Meet ${d.name}.`, body: () => P.dogPage(d) });
+emit('resources/', { title: 'Resource Library', description: 'Searchable guides, printable checklists and trusted resources for dog rescue, lost and found, adoption and care in Miami and beyond.', body: () => P.library(data), scripts: [] });
+for (const a of articles) emit(`resources/${a.slug}/`, { title: a.title, description: a.summary, body: () => P.article(a, data) });
+for (const c of checklists) emit(`resources/checklists/${c.slug}/`, { title: c.title, description: c.intro, bodyClass: 'is-checklist', body: () => P.checklist(c) });
+emit('resources/flyer-builder/', { title: 'Lost & Found Flyer Builder', description: 'Make a printable lost or found dog flyer. Your photo stays on your device.', bodyClass: 'is-flyer', body: () => P.flyer(), scripts: ['js/flyer.js'] });
+emit('resources/vet-clinics/', { title: 'Vet Clinic Directory', description: 'Miami-Dade vet clinics and 24/7 emergency hospitals: hours, walk-in policies, phone numbers and addresses.', bodyClass: 'is-clinics', body: () => P2.clinics(clinicData), scripts: ['js/clinics.js'] });
+emit('transparency/', { title: 'Where the Money Goes', description: "Every expense Bentley's Playhouse makes, with receipts: food, spay/neuter, medical care, toys and support for other rescues.", bodyClass: 'is-fin', body: () => P2.transparency(finances), scripts: ['js/transparency.js'] });
+emit('our-story/', { title: 'Our Story', description: pages.story.summary, body: () => P.story(data) });
+emit('get-involved/', { title: 'Get Involved', description: 'Volunteer, foster, donate supplies, share rescue information or offer your skills to Bentley\'s Playhouse.', body: () => P.involved(data) });
+emit('donate/', { title: 'Donate', description: 'Support Bentley\'s Playhouse dog rescue in Miami.', noindex: !ctx.site.donate.verified, body: () => P.donate() });
+emit('contact/', { title: 'Contact & FAQ', description: 'How to reach Bentley\'s Playhouse, what we can help with, and who to call when an animal needs urgent help.', body: () => P.contact(data) });
+emit('privacy/', { title: 'Privacy', description: 'How Bentley\'s Playhouse handles the information you share.', body: () => P.privacy() });
+emit('404.html', { title: 'Page not found', description: 'Page not found.', noindex: true, body: () => P.notFound() });
+
+// assets
+fs.cpSync(path.join(ROOT, 'src/assets'), path.join(OUT, 'assets'), { recursive: true });
+// the public ledger CSV (live data only) and no example files on the live site
+fs.mkdirSync(path.join(OUT, 'assets/finances'), { recursive: true });
+if (!finances.isExample) fs.copyFileSync(path.join(ROOT, 'content/finances/transactions.csv'), path.join(OUT, 'assets/finances/transactions.csv'));
+if (ctx.mode === 'live') for (const d of ['receipts', 'statements']) for (const f of fs.readdirSync(path.join(OUT, 'assets/finances', d))) if (f.startsWith('example-')) fs.rmSync(path.join(OUT, 'assets/finances', d, f));
+fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
+// sitemap + robots
+const base = ctx.site.siteUrl.replace(/\/$/, '');
+fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.map((r) => `  <url><loc>${base}/${r}</loc></url>`).join('\n')}\n</urlset>\n`);
+fs.writeFileSync(path.join(OUT, 'robots.txt'), ctx.mode === 'live' ? `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n` : 'User-agent: *\nDisallow: /\n');
+
+console.log(`Built ${count} pages (${ctx.mode}, ${ctx.links} links) → ${path.relative(ROOT, OUT)}/`);

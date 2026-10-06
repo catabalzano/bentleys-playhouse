@@ -1,0 +1,116 @@
+{
+  "_readme": "Organization settings. Anything with \"verified\": false is shown only in PREVIEW builds (with a 'Needs confirmation' tag) and hidden in the live build. Flip to true once you've confirmed it.",
+  "name": "Bentley's Playhouse",
+  "shortName": "Bentley's Playhouse",
+  "mission": "Rescue. Rehab. Rehome.",
+  "location": "Miami, Florida",
+  "founder": "Cata Balzano",
+  "siteUrl": "https://bentleysplayhouse.org",
+  "siteUrlVerified": true,
+  "lastReviewed": "2026-10-05",
+  "languages": [
+    {
+      "code": "en",
+      "label": "English",
+      "enabled": true
+    },
+    {
+      "code": "es",
+      "label": "Español",
+      "enabled": false
+    }
+  ],
+  "hero": {
+    "image": "",
+    "imageAlt": "",
+    "_note": "Add a joyful photo you own to src/assets/img/ and put its filename here, e.g. \"hero.jpg\". Until then the doorway illustration is used."
+  },
+  "social": {
+    "instagram": {
+      "url": "https://www.instagram.com/bentleysplayhouse/",
+      "handle": "@bentleysplayhouse",
+      "verified": true,
+      "feedUrl": "",
+      "_feedNote": "To show your latest posts automatically: create a free Behold account (behold.so), connect @bentleysplayhouse, create a JSON feed, and paste its URL here (looks like https://feeds.behold.so/XXXX). Free plan = latest 6 posts. Until then, the homepage uses content/instagram.json or brand tiles."
+    },
+    "youtube": {
+      "url": "https://www.youtube.com/@BentleysPlayhouseTV",
+      "handle": "@BentleysPlayhouseTV",
+      "verified": true
+    },
+    "rescueme": {
+      "url": "https://bentleysplayhouse.rescueme.org/",
+      "label": "RescueMe listings",
+      "verified": true
+    },
+    "facebook": {
+      "url": "https://www.facebook.com/itsbentleysplayhouse/",
+      "handle": "Bentley's Playhouse",
+      "verified": true
+    }
+  },
+  "contact": {
+    "email": "bentleysplayhouseorg@gmail.com",
+    "emailVerified": true,
+    "phone": "",
+    "phoneVerified": false,
+    "preferredRoute": "Instagram direct message",
+    "responseNote": "We're a small, volunteer-powered rescue. We read messages when we can, but we can't monitor them around the clock or promise a response time.",
+    "_note": "Email and phone (305-760-4510) appear on our Facebook contact info. Set emailVerified to true to publish the email. The phone number is not shown on the site unless you add it here and set phoneVerified."
+  },
+  "services": {
+    "intakeStatus": "",
+    "intakeVerified": false,
+    "defaultIntakeText": "Our capacity changes from week to week, and we can't promise intake. Please talk with us before bringing or leaving any animal with us.",
+    "canHelpWith": [
+      "Questions about adopting one of our dogs",
+      "Pointing you to the right guide or local resource",
+      "Volunteer, foster and partnership interest"
+    ],
+    "canHelpWithVerified": false
+  },
+  "adoption": {
+    "applicationUrl": "https://form.jotform.com/231626654705155",
+    "applicationVerified": true,
+    "_note": "Linked from our Facebook, YouTube and RescueMe pages.",
+    "process": [
+      "Fill out our adoption application form.",
+      "If your application is approved, we'll contact you for a phone screening.",
+      "A 10–15 minute initial screening.",
+      "A home safety inspection.",
+      "A background check and vetting process.",
+      "If you're eligible, sign the adoption contract.",
+      "Take your new best friend home."
+    ],
+    "processSource": "https://www.facebook.com/itsbentleysplayhouse/"
+  },
+  "donate": {
+    "url": "",
+    "verified": false,
+    "label": "Donate",
+    "uses": [],
+    "legal": {
+      "legalName": "",
+      "status": "",
+      "ein": "",
+      "taxStatement": "",
+      "verified": false
+    },
+    "wishlistUrl": "",
+    "wishlistVerified": false,
+    "_note": "YouTube lists Venmo, Cash App, Zelle and PayPal without handles, and the Amazon link points to Amazon's generic wishlist page. Add exact, verified destinations to switch donations on."
+  },
+  "forms": {
+    "_readme": "Paste a form endpoint (Formspree, Basin, Netlify Forms, etc.) to switch a form on. Empty = the form shows as 'not connected yet' and cannot be submitted.",
+    "contactEndpoint": "",
+    "involvedEndpoint": ""
+  },
+  "analytics": "",
+  "tagline": "Rescue. Rehab. Rehome. Repeat.",
+  "foster": {
+    "applicationUrl": "https://docs.google.com/forms/d/1WfFiNT0acpZ4y0JCJoW3EWcqrOf8fzfM3LwHHVxHI04/viewform",
+    "verified": false,
+    "_note": "Our YouTube links an /edit address for this Google Form, which visitors can't open. Confirm this /viewform link works when signed out, then set verified to true."
+  },
+  "founded": "August 2022"
+}

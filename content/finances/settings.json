@@ -1,0 +1,22 @@
+{
+  "_readme": "Categories for the Transparency ledger. 'id' is what you type in the CSV 'category' column.",
+  "expenseCategories": [
+    { "id": "food-supplies", "label": "Food & supplies" },
+    { "id": "vet-spay-neuter", "label": "Spay & neuter" },
+    { "id": "vet-medical", "label": "Medical care" },
+    { "id": "vaccines", "label": "Vaccines & microchips" },
+    { "id": "toys-enrichment", "label": "Toys & enrichment" },
+    { "id": "other-rescues", "label": "Support for other rescues" },
+    { "id": "transport", "label": "Transport" },
+    { "id": "boarding-foster", "label": "Boarding & foster support" },
+    { "id": "fees-admin", "label": "Fees & admin" },
+    { "id": "other", "label": "Other" }
+  ],
+  "incomeCategories": [
+    { "id": "donations", "label": "Donations" },
+    { "id": "adoption-fees", "label": "Adoption fees" },
+    { "id": "fundraisers", "label": "Fundraisers" },
+    { "id": "grants", "label": "Grants" },
+    { "id": "other-income", "label": "Other income" }
+  ]
+}

@@ -1,0 +1,11 @@
+date,type,category,description,amount,paid_to_or_from,dog,receipt,notes
+2026-09-28,expense,vet-spay-neuter,Neuter surgery,180.00,Example Animal Clinic,Example dog A,example-receipt.svg,
+2026-09-22,expense,food-supplies,Dry food (2 x 30 lb bags),104.98,Example pet store,,example-receipt.svg,
+2026-09-18,income,donations,Individual donations (6 gifts),340.00,Donors (names not published),,,
+2026-09-15,expense,vet-medical,Exam and skin treatment,236.40,Example Animal Clinic,Example dog B,example-receipt.svg,
+2026-09-10,expense,toys-enrichment,Chew toys and puzzle feeders,42.17,Example pet store,,example-receipt.svg,
+2026-09-04,expense,other-rescues,Contribution to a partner rescue's medical fund,75.00,Example rescue,,example-receipt.svg,
+2026-08-29,income,adoption-fees,Adoption fee,150.00,Adopter (name not published),Example dog C,,
+2026-08-20,expense,vaccines,Vaccines and microchip,95.00,Example Animal Clinic,Example dog C,example-receipt.svg,
+2026-08-12,expense,transport,Gas for vet transport,38.50,Example gas station,,example-receipt.svg,
+2026-08-03,income,donations,Individual donations (11 gifts),615.00,Donors (names not published),,,
