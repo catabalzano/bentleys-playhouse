@@ -1123,3 +1123,40 @@ img, video, svg { max-width: 100%; }
 .gift__badge img { width: 100%; height: 100%; border-radius: 0; object-fit: contain; }
 .gift { padding-top: 84px; }
 .gift-dialog { padding-top: 72px; }
+/* Page banners run all the way up to the header (the space under the hanging logo badge is part of the banner, no white strip) */
+main > :first-child, main > :first-child > .page-head:first-child { background-origin: border-box; }
+
+/* ---------- Pawsome Pooches: submit a pup ---------- */
+.page-head--pawsome { background: radial-gradient(60% 90% at 0% 0%, #FFE3D1 0%, transparent 60%), radial-gradient(55% 80% at 100% 0%, #EADFFF 0%, transparent 60%), #FFF8F4; }
+.pps { max-width: none; }
+.pps__h { display: flex; align-items: center; gap: .5rem; margin: 1.2rem 0 0; padding-top: 1.1rem; border-top: 1.5px dashed var(--line); font: 700 1.3rem/1.2 var(--font-display); color: var(--ink); }
+.pps__h .icon { color: var(--orange); }
+.form__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 760px) { .form__grid--3 { grid-template-columns: 1fr; } }
+.pick-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+.pick { position: relative; display: inline-flex; cursor: pointer; }
+.pick input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.pick span { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .95rem; border: 2px solid var(--line); border-radius: 999px; background: #fff; font-weight: 700; font-size: .92rem; transition: border-color .15s, background .15s; }
+.pick:hover span { border-color: var(--blue); }
+.pick input:checked + span { border-color: var(--orange); background: #FFF1E6; box-shadow: 0 3px 0 var(--gold); }
+.pick input:focus-visible + span { outline: 3px solid var(--blue); outline-offset: 2px; }
+.pick input[aria-invalid="true"] + span { border-color: var(--alert-ink); }
+.pick--block { display: flex; margin-top: .4rem; }
+.pick--block input { width: 22px; height: 22px; position: static; opacity: 1; flex: none; margin: .1rem .6rem 0 0; accent-color: var(--orange); }
+.pick--block span { display: block; min-height: 0; padding: 0; border: 0; background: none; font-weight: 600; box-shadow: none !important; }
+.pps-file { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.pps-drop { display: flex; align-items: center; gap: .9rem; padding: 1.1rem 1.2rem; border: 2.5px dashed #B9C3F2; border-radius: 20px; background: #F6F8FF; color: var(--deep, #2F45C8); cursor: pointer; font-weight: 600; }
+.pps-drop:hover, .pps-file:focus-visible + .pps-drop { border-color: var(--blue); background: #EEF2FF; }
+.pps-file:disabled ~ .pps-drop, .pps-drop:has(+ .pps-file:disabled) { opacity: .6; cursor: default; }
+.pps-thumbs { list-style: none; padding: 0; margin: .4rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: .6rem; }
+.pps-thumbs li { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--tint-violet); box-shadow: 0 4px 12px rgba(31, 29, 43, .12); }
+.pps-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pps-thumbs__tag { position: absolute; left: 6px; bottom: 6px; background: #fff; border-radius: 999px; padding: .1rem .5rem; font-size: .72rem; font-weight: 800; }
+.pps-thumbs button { position: absolute; top: 5px; right: 5px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(31, 29, 43, .75); color: #fff; font-weight: 800; cursor: pointer; }
+.pps .field select, .pps .field input[type="text"], .pps .field input[type="tel"], .pps .field input[type="email"], .pps .field textarea { width: 100%; }
+.pps-done { text-align: center; padding: 2rem 1rem; }
+.cf-turnstile { min-height: 65px; }
+.pick-row { align-items: flex-start; align-content: flex-start; }
+.pick span { min-height: 44px; height: auto; }
+fieldset.field { align-content: start; }
+.pps .form__grid { align-items: start; }

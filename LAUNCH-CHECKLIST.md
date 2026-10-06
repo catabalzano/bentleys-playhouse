@@ -16,7 +16,7 @@ Everything below is either missing, unverified, or a connection the site needs b
 - [x] Behold JSON feed connected to @bentleysplayhouse (`https://feeds.behold.so/W2YGDyyPF85eLju0zHnb`, free plan = latest 6 posts) and set in `content/site.json → social.instagram.feedUrl`.
 
 ## Contact & services
-- [x] Public email `bentleysplayhouseorg@gmail.com` published on the Contact page (for now).
+- [x] Public email `hello@bentleysplayhouse.org` published on the Contact page (for now).
 - [ ] Phone: your Facebook lists 305-760-4510 (mobile). Not published. Add it only if you want it public.
 - [ ] Which inquiries you handle (Contact page list) → `services.canHelpWithVerified`.
 - [ ] Intake policy wording → `services.intakeStatus` + `intakeVerified`.

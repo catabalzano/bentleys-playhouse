@@ -54,7 +54,7 @@
     "_note": "Google Analytics 4 property \"Bentley's Playhouse\" (account 404754026), web stream 16054447145. Added only to the live build. Set ga4 to \"\" to turn analytics off; the Privacy page section disappears with it."
   },
   "contact": {
-    "email": "bentleysplayhouseorg@gmail.com",
+    "email": "hello@bentleysplayhouse.org",
     "emailVerified": true,
     "phone": "",
     "phoneVerified": false,
@@ -168,5 +168,11 @@
     "verified": false,
     "_note": "Our YouTube links an /edit address for this Google Form, which visitors can't open. Confirm this /viewform link works when signed out, then set verified to true."
   },
-  "founded": "August 2022"
+  "founded": "August 2022",
+  "pawsome": {
+    "email": "hello@bentleysplayhouse.org",
+    "submitEndpoint": "",
+    "turnstileSiteKey": "",
+    "_readme": "email: where 'Email us about <pup>' sends adoption inquiries. submitEndpoint: the submissions service URL (Cloudflare Worker). Empty = the submit form says it's not switched on yet. turnstileSiteKey: optional Cloudflare Turnstile spam check."
+  }
 }

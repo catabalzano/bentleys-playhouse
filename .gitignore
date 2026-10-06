@@ -2,3 +2,5 @@ node_modules/
 dist/
 live/
 tmp/
+worker/node_modules/
+worker/.wrangler/

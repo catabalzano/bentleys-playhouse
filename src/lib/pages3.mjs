@@ -1,5 +1,6 @@
 // Pawsome Pooches (weekly spotlight of adoptable dogs in the community) and "Rescues you can help".
 import { ctx, esc, href, asset, md, tag, previewNote, button, breadcrumb, icon, fmtDate, paw } from './core.mjs';
+import { adoptMailto, pawsomeEmail } from './pawsome-submit.mjs';
 
 // Where a dog is. Keys are what the admin stores in location.type.
 export const LOCATIONS = {
@@ -57,16 +58,17 @@ export function ppCard(d, { headingLevel = 'h3' } = {}) {
 
 function contactButtons(d) {
   const c = d.contact; const out = [];
-  if (c.applyUrl) out.push(button('Apply to adopt', c.applyUrl, { externalLink: true }));
-  if (c.instagram) out.push(button(`Message @${esc(c.instagram.replace(/^@/, ''))}`, `https://www.instagram.com/${c.instagram.replace(/^@/, '')}/`, { variant: out.length ? 'ghost' : 'primary', ic: 'instagram', externalLink: true }));
+  out.push(`<a class="btn btn--primary" href="${esc(adoptMailto(d))}">${icon('mail', { size: 20 })}<span>Email us about ${esc(d.name)}</span></a>`);
+  if (c.applyUrl) out.push(button('Apply to adopt', c.applyUrl, { variant: 'ghost', externalLink: true }));
+  if (c.instagram) out.push(button(`Message @${esc(c.instagram.replace(/^@/, ''))}`, `https://www.instagram.com/${c.instagram.replace(/^@/, '')}/`, { variant: 'ghost', ic: 'instagram', externalLink: true }));
   if (c.website) out.push(button('Website', c.website, { variant: 'ghost', ic: 'globe', externalLink: true }));
   if (c.phone) out.push(`<a class="btn btn--ghost" href="tel:${esc(c.phone.replace(/[^\d+]/g, ''))}">${icon('phone', { size: 20 })}<span>${esc(c.phone)}</span></a>`);
   if (c.email) out.push(`<a class="btn btn--ghost" href="mailto:${esc(c.email)}">${icon('mail', { size: 20 })}<span>Email</span></a>`);
-  if (!out.length) {
+  if (out.length === 1) {
     const t = d.loc.type;
-    if (t.startsWith('mdas')) out.push(button('MDAS adoptions', ctx.mdas?.adoptionPage || 'https://www.miamidade.gov/global/animals/home.page', { externalLink: true }));
-    else if (t === 'broward') out.push(button('Broward adoptable dogs', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { externalLink: true }));
-    else out.push(button('Message us on Instagram', ctx.site.social.instagram.url, { ic: 'instagram', externalLink: true }));
+    if (t.startsWith('mdas')) out.push(button('MDAS adoptions', ctx.mdas?.adoptionPage || 'https://www.miamidade.gov/global/animals/home.page', { variant: 'ghost', externalLink: true }));
+    else if (t === 'broward') out.push(button('Broward adoptable dogs', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { variant: 'ghost', externalLink: true }));
+    else out.push(button('Message us on Instagram', ctx.site.social.instagram.url, { variant: 'ghost', ic: 'instagram', externalLink: true }));
   }
   return out.join('');
 }
@@ -74,10 +76,10 @@ function contactButtons(d) {
 function howTo(d) {
   if (d.contact.instructions) return md(d.contact.instructions);
   const t = d.loc.type; const id = d.loc.animalId ? ` Bring ${esc(d.name)}'s animal ID (<strong>${esc(d.loc.animalId)}</strong>).` : '';
-  if (t.startsWith('mdas')) return `<p>Visit Miami-Dade Animal Services or start on their adoption page.${id} Check MDAS for current hours before you go.</p>`;
-  if (t === 'broward') return `<p>Visit Broward County Animal Care or browse their adoptable dogs online.${id}</p>`;
-  if (t === 'family') return `<p>Send us a message on Instagram. We'll connect you with the family and help make sure it's a safe match.</p>`;
-  return `<p>Reach out to the rescue directly using the buttons below.${id}</p>`;
+  if (t.startsWith('mdas')) return `<p>Visit Miami-Dade Animal Services or start on their adoption page.${id} Check MDAS for current hours before you go. Questions? Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a>.</p>`;
+  if (t === 'broward') return `<p>Visit Broward County Animal Care or browse their adoptable dogs online.${id} Questions? Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a>.</p>`;
+  if (t === 'family') return `<p>Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a> or send us a DM on Instagram. We'll connect you with the family and help make sure it's a safe match.</p>`;
+  return `<p>Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a> and we'll put you in touch, or reach out to the rescue directly.${id}</p>`;
 }
 
 const HEALTH = [['fixed', 'Spayed or neutered'], ['vaccinated', 'Vaccines up to date'], ['microchipped', 'Microchipped'], ['heartworm', 'Heartworm negative']];
@@ -144,7 +146,7 @@ export function pawsomeHome(pooches) {
     <div class="pp-rail" data-pp-rail data-reveal style="--d:.5s">
       <div class="pp-rail__track" tabindex="0" aria-label="Pawsome Pooches this week">
         ${live.map((d) => ppCard(d)).join('')}
-        <article class="pp-card pp-card--submit"><a class="pp-card__link" href="${href('pawsome-pooches/#submit')}"><span class="pp-card__body"><span class="pp-submit__icon">${paw()}</span><span class="pp-card__name">Know a pup who needs a spotlight?</span><span class="pp-card__facts">Rescues, shelters and families can send us a dog to feature.</span><span class="pp-card__cta">How to submit ${icon('arrow', { size: 18 })}</span></span></a></article>
+        <article class="pp-card pp-card--submit"><a class="pp-card__link" href="${href('pawsome-pooches/submit/')}"><span class="pp-card__body"><span class="pp-submit__icon">${paw()}</span><span class="pp-card__name">Know a pup who needs a spotlight?</span><span class="pp-card__facts">Rescues, shelters and families can send us a dog to feature.</span><span class="pp-card__cta">Submit a pup ${icon('arrow', { size: 18 })}</span></span></a></article>
       </div>
       <div class="pp-rail__nav"><button type="button" class="pp-rail__btn" data-pp-prev aria-label="Previous dogs">${icon('arrow', { size: 20 })}</button><button type="button" class="pp-rail__btn" data-pp-next aria-label="More dogs">${icon('arrow', { size: 20 })}</button></div>
     </div>
@@ -198,9 +200,9 @@ export function pawsomePage(pooches) {
 
   <section class="pp-submit" id="submit" aria-labelledby="submit-h">
     <div><h2 id="submit-h" class="section-h">Know a pup who needs a spotlight?</h2>
-    <p>Rescues, shelter volunteers and families can send us a dog to feature. Send a DM to <a href="${esc(ctx.site.social.instagram.url)}" target="_blank" rel="noopener">@bentleysplayhouse<span class="visually-hidden"> (opens in a new tab)</span></a> with clear photos, the dog's age, sex, breed, spay/neuter and vaccine status, how they do with dogs, cats and kids, and where they are.</p>
+    <p>Rescues, shelter volunteers and families can submit a dog to feature. Fill out a short form with 1 to 5 clear photos and the pup's details. We review every submission before it goes live.</p>
     <p>Want to meet more adoptable pets? Follow <a href="https://www.instagram.com/adoptmiamipets/" target="_blank" rel="noopener">@adoptmiamipets<span class="visually-hidden"> (opens in a new tab)</span></a> for Miami-Dade Animal Services and see <a href="${href('rescues-you-can-help/')}">rescues you can help</a>.</p></div>
-    <div class="btn-row">${button('Send us a dog on Instagram', ctx.site.social.instagram.url, { ic: 'instagram', externalLink: true })}${button('Thinking of rehoming? Read this first', 'resources/rehoming-a-dog-safely/', { variant: 'ghost' })}</div>
+    <div class="btn-row">${button('Submit a pup', 'pawsome-pooches/submit/', { ic: 'paw' })}${button('Thinking of rehoming? Read this first', 'resources/rehoming-a-dog-safely/', { variant: 'ghost' })}</div>
   </section>
   ${!pooches.length ? previewNote('Add dogs in the admin (/admin) under Pawsome Pooches.') : ''}
 </div>

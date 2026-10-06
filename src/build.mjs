@@ -9,6 +9,7 @@ import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
 import * as P2 from './lib/pages2.mjs';
 import * as P3 from './lib/pages3.mjs';
+import * as PS from './lib/pawsome-submit.mjs';
 import { renderShare } from './lib/covers.mjs';
 import { parse as parseCSV } from 'csv-parse/sync';
 
@@ -115,6 +116,7 @@ emit('', { home: true, bodyClass: 'home', title: 'Home', shareTitle: 'We support
   description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data), scripts: ['js/pawsome.js'] });
 emit('pawsome-pooches/', { shareTitle: 'Pawsome Pooches: dogs in our community who need a home', shareKicker: 'Updated weekly', shareCategory: 'adopt-foster', sharePhoto: (() => { const d = pooches.find((x) => x.status !== 'adopted' && x.photos[0]); return d && (d.sharePhoto || d.photos[0]); })(), title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js'] });
 for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, shareTitle: d.status === 'adopted' ? `${d.name} found a home!` : `Meet ${d.name}`, shareKicker: d.status === 'adopted' ? 'Pawsome Pooches · Happy tail' : 'Pawsome Pooches · Adopt me', shareCategory: 'adopt-foster', sharePhoto: d.sharePhoto || d.photos[0], description: d.tagline || `Meet ${d.name}, looking for a home.`, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js'] });
+emit('pawsome-pooches/submit/', { title: 'Submit a pup · Pawsome Pooches', shareTitle: 'Submit a pup to Pawsome Pooches', shareKicker: 'Rescues, volunteers & families', shareCategory: 'adopt-foster', description: 'Rescues, shelter volunteers and families can submit a dog who needs a home to be featured on Pawsome Pooches.', bodyClass: 'is-pawsome', body: () => PS.pawsomeSubmitPage(), scripts: ['js/pawsome-submit.js'] });
 emit('rescues-you-can-help/', { title: 'Rescues You Can Help', description: 'Miami-Dade rescues and shelters you can support by fostering, volunteering, sharing or sending supplies.', body: () => P3.rescuesPage(rescues) });
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
 for (const g of guides) emit(`get-help/${g.slug}/`, { shareKicker: 'Get Help', shareCategory: g.category || 'lost-found', title: g.title, seoTitle: g.seoTitle, ogType: 'article', modified: g.lastReviewed, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
@@ -144,6 +146,9 @@ if (!finances.isExample) {
 }
 if (ctx.mode === 'live') for (const d of ['receipts', 'statements']) for (const f of fs.readdirSync(path.join(OUT, 'assets/finances', d))) if (f.startsWith('example-')) fs.rmSync(path.join(OUT, 'assets/finances', d, f));
 fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
+// the submissions review page reads its service URL from here
+fs.mkdirSync(path.join(OUT, 'admin/submissions'), { recursive: true });
+fs.writeFileSync(path.join(OUT, 'admin/submissions/config.js'), `window.BP_SUBMIT=${JSON.stringify((ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '')};\n`);
 // share images (after assets are copied so dog photos can be read)
 const mime = (f) => (/\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg');
 for (const j of shareJobs) {

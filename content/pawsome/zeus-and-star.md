@@ -36,7 +36,7 @@ location:
   animalId: ""
 contact:
   instagram: bentleysplayhouse
-  instructions: Send us a DM on Instagram and tell us a little about your home, and whether you're interested in Zeus, Star or both. We'll connect you with their family and help make sure it's a safe match. Please note that no dog is adopted out unless they are spayed or neutered, so Zeus will be neutered before he goes home with you.
+  instructions: Email us at hello@bentleysplayhouse.org or send us a DM on Instagram, and tell us a little about your home, and whether you're interested in Zeus, Star or both. We'll connect you with their family and help make sure it's a safe match. Please note that no dog is adopted out unless they are spayed or neutered, so Zeus will be neutered before he goes home with you.
 ---
 Meet **Zeus and Star**, two Samoyeds who share a home. Their family reached out to us because they're struggling financially and need to find them new homes. This is a surrender case, so we're helping make sure they go somewhere safe and loving.
 
