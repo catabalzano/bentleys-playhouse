@@ -95,7 +95,8 @@ export function pawsomeSubmitPage() {
     <h2 class="pps__h">${icon('found', { size: 22 })} Where the pup is</h2>
     <div class="form__grid">
       ${field('pps-loc', 'The pup is…', `<select id="pps-loc" name="locationType" required><option value="">Choose one</option>${['mdas-doral', 'mdas-medley', 'broward', 'rescue', 'foster', 'family', 'other'].map((k) => `<option value="${k}">${k === 'family' ? 'With a family looking to rehome' : k === 'rescue' ? 'With a rescue' : k === 'foster' ? 'In a foster home' : k === 'other' ? 'Somewhere else' : esc(LOCATIONS[k].long)}</option>`).join('')}</select>`)}
-      <div class="field" data-pps-org hidden><label for="pps-org">Name of the rescue or organization</label>${text('pps-org', 'orgName', 'maxlength="120"')}</div>
+      <div class="field" data-pps-org hidden><label for="pps-org" data-pps-orglabel>Name of the rescue or organization</label>${text('pps-org', 'orgName', 'maxlength="120"')}</div>
+      <div class="field" data-pps-url hidden><label for="pps-url">Rescue's website or Instagram <span class="opt">(if they have one)</span></label><input id="pps-url" name="orgUrl" type="text" inputmode="url" maxlength="200" placeholder="e.g. myrescue.org or @myrescue"></div>
       ${field('pps-city', 'City or area', text('pps-city', 'city', 'maxlength="80" placeholder="e.g. Doral, Kendall, Hialeah"'))}
       <div class="field"><label for="pps-id">Shelter or animal ID number <span class="opt">(if you have it)</span></label><input id="pps-id" name="animalId" type="text" maxlength="60" autocomplete="off" placeholder="e.g. A1234567"></div>
       ${group('Looking for', radios('needs', [['adoption', 'An adopter'], ['foster', 'A foster'], ['both', 'Either']]))}

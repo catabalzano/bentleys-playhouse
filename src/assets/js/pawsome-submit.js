@@ -14,7 +14,13 @@
   function say(msg, ok) { status.textContent = msg; status.className = 'form__status ' + (ok ? 'is-ok' : msg ? 'is-error' : ''); }
 
   // Show "name of the rescue" only when it applies
-  function syncOrg() { var need = ['rescue', 'foster', 'other'].indexOf(loc.value) > -1; org.hidden = !need; org.querySelector('input').required = need; }
+  var url = form.querySelector('[data-pps-url]'), orgLabel = form.querySelector('[data-pps-orglabel]');
+  function syncOrg() {
+    var need = ['rescue', 'foster', 'other'].indexOf(loc.value) > -1, isRescue = loc.value === 'rescue';
+    org.hidden = !need; org.querySelector('input').required = need;
+    if (orgLabel) orgLabel.textContent = isRescue ? 'Rescue name' : 'Name of the rescue or organization';
+    if (url) { url.hidden = !isRescue; if (!isRescue) url.querySelector('input').value = ''; }
+  }
   loc.addEventListener('change', syncOrg); syncOrg();
 
   // Resize to max 1600px JPEG so uploads are quick on phones

@@ -111,6 +111,7 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
       <${HB} class="pp-box__h">${icon('found', { size: 18 })} Where ${d.pair ? 'they are' : esc(d.name) + ' is'}</${HB}>
       <p class="pp-where__name">${esc(d.loc.name || d.loc.meta.long || d.loc.meta.label)}</p>
       ${d.loc.name && d.loc.meta.long && d.loc.type !== 'rescue' ? `<p class="pp-where__sub">${esc(d.loc.meta.long)}</p>` : ''}
+      ${/^https?:\/\//.test(d.loc.url || '') ? `<p class="pp-where__sub"><a href="${esc(d.loc.url)}" target="_blank" rel="noopener">${esc(/instagram\.com/.test(d.loc.url) ? '@' + d.loc.url.replace(/\/+$/, '').split('/').pop() + ' on Instagram' : d.loc.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))} ↗</a></p>` : ''}
       ${[d.loc.city, d.loc.animalId && 'Animal ID ' + d.loc.animalId].filter(Boolean).length ? `<p class="pp-where__sub">${[d.loc.city, d.loc.animalId && 'Animal ID ' + d.loc.animalId].filter(Boolean).map(esc).join(' · ')}</p>` : ''}
       ${d.status !== 'adopted' ? `<div class="pp-howto"><${HC}>How to ${d.needs === 'foster' ? 'foster' : 'adopt'} ${d.pair ? 'them' : esc(d.name)}</${HC}>${howTo(d)}</div><div class="btn-row">${contactButtons(d)}</div>` : `<p class="pp-where__sub">${esc(d.name)} found a home. Thank you to everyone who shared!</p>`}
     </div>

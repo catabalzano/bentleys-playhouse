@@ -106,6 +106,7 @@
         ['Where the pup is', [
           { k: 'location.type', label: 'The pup is with', type: 'select', options: LOC, req: true },
           { k: 'location.name', label: 'Name of the rescue or place', hint: 'Leave empty for shelters.' },
+          { k: 'location.url', label: 'Rescue website or Instagram link', hint: 'Optional. Shown as a link on the pup\'s page.' },
           { k: 'location.city', label: 'City or area' }, { k: 'location.animalId', label: 'Shelter animal ID', hint: 'e.g. A1234567' },
         ]],
         ['How to adopt', [
@@ -512,7 +513,7 @@
       '<p><span class="pill ' + (s.status === 'approved' ? 'ok' : s.status === 'rejected' ? 'bad' : 'warn') + '">' + s.status + '</span><span class="pill">' + esc(SLOC[d.locationType] || d.locationType) + '</span><span class="pill">' + esc(d.needs === 'both' ? 'Adopt or foster' : d.needs === 'foster' ? 'Needs foster' : 'Needs adopter') + '</span></p>' +
       '<h2>' + esc(d.name) + '</h2><p class="hint">Submitted ' + esc(new Date(s.createdAt).toLocaleString()) + '</p>' +
       '<dl class="facts"><dt>Breed</dt><dd>' + esc(d.breed) + '</dd><dt>Age</dt><dd>' + esc(d.age) + '</dd><dt>Sex</dt><dd>' + esc(d.sex) + '</dd><dt>Spayed/neutered</dt><dd>' + SYN[d.fixed] + '</dd><dt>Vaccines</dt><dd>' + SYN[d.vaccinated] + '</dd><dt>Microchip</dt><dd>' + SYN[d.microchipped] + '</dd><dt>Heartworm neg.</dt><dd>' + SYN[d.heartworm] + '</dd>' +
-      '<dt>Good with</dt><dd>Dogs: ' + SYN[d.goodWithDogs] + ' · Cats: ' + SYN[d.goodWithCats] + ' · Kids: ' + SYN[d.goodWithKids] + '</dd><dt>Where</dt><dd>' + esc([d.orgName, SLOC[d.locationType], d.city].filter(Boolean).join(', ')) + '</dd>' + (d.animalId ? '<dt>Shelter ID</dt><dd>' + esc(d.animalId) + '</dd>' : '') + '</dl>' +
+      '<dt>Good with</dt><dd>Dogs: ' + SYN[d.goodWithDogs] + ' · Cats: ' + SYN[d.goodWithCats] + ' · Kids: ' + SYN[d.goodWithKids] + '</dd><dt>Where</dt><dd>' + esc([d.orgName, SLOC[d.locationType], d.city].filter(Boolean).join(', ')) + '</dd>' + (d.orgUrl ? '<dt>Rescue website</dt><dd><a href="' + esc(d.orgUrl) + '" target="_blank" rel="noopener">' + esc(d.orgUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')) + ' ↗</a></dd>' : '') + (d.animalId ? '<dt>Shelter ID</dt><dd>' + esc(d.animalId) + '</dd>' : '') + '</dl>' +
       '<div class="private"><h3>Submitted by (private)</h3><dl class="facts"><dt>Name</dt><dd>' + esc(p.firstName + ' ' + p.lastName) + '</dd><dt>Social</dt><dd><a href="https://www.instagram.com/' + encodeURIComponent(social) + '/" target="_blank" rel="noopener">@' + esc(social) + '</a></dd><dt>Phone</dt><dd><a href="tel:' + esc(String(p.phone).replace(/[^\d+]/g, '')) + '">' + esc(p.phone) + '</a></dd><dt>Email</dt><dd><a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a></dd></dl></div>' +
       (s.status === 'pending' ?
         '<div class="grid"><div class="f wide"><label for="n-' + s.id + '">Name on the site</label><input type="text" id="n-' + s.id + '" value="' + esc(d.name) + '"></div>' +

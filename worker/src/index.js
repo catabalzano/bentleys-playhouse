@@ -63,6 +63,15 @@ async function sha256(s) { const b = await crypto.subtle.digest('SHA-256', new T
 const slugify = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 50) || 'pup';
 const miamiDate = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 
+// A rescue's website or Instagram, typed any way ("myrescue.org", "@myrescue", full link) → a safe https link or ''
+function D_url(v) {
+  v = String(v || '').trim();
+  if (!v) return '';
+  if (/^@[\w.]{1,30}$/.test(v)) return `https://www.instagram.com/${v.slice(1)}/`;
+  if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+  try { const u = new URL(v); return /^https?:$/.test(u.protocol) && u.hostname.includes('.') ? u.href : ''; } catch (e) { return ''; }
+}
+
 // ---------- public: submit ----------
 async function submit(req, env, ctx) {
   const ct = req.headers.get('Content-Type') || '';
@@ -88,7 +97,7 @@ async function submit(req, env, ctx) {
       name: g('name', 80), breed: g('breed', 80), age: g('age', 60), sex: g('sex', 10),
       fixed: g('fixed', 10), vaccinated: g('vaccinated', 10), microchipped: g('microchipped', 10), heartworm: g('heartworm', 10),
       goodWithDogs: g('goodWithDogs', 10), goodWithCats: g('goodWithCats', 10), goodWithKids: g('goodWithKids', 10),
-      locationType: g('locationType', 20), orgName: g('orgName', 120), city: g('city', 80), animalId: g('animalId', 60),
+      locationType: g('locationType', 20), orgName: g('orgName', 120), orgUrl: D_url(g('orgUrl', 200)), city: g('city', 80), animalId: g('animalId', 60),
       needs: g('needs', 10), about: cleanLong(f.get('about'), 3000),
     },
     submitter: { firstName: g('firstName', 60), lastName: g('lastName', 60), social: g('social', 100), phone: g('phone', 30), email: g('email', 120) },
@@ -138,7 +147,7 @@ async function notify(env, r, photo) {
   const D = r.dog, S = r.submitter;
   const review = `${env.SITE_URL || ''}/admin/submissions/`;
   const where = [D.orgName, LOC_LABEL[D.locationType], D.city].filter(Boolean).join(', ');
-  const rows = [['Breed', D.breed], ['Age', D.age], ['Sex', D.sex], ['Where', where], ['Shelter ID', D.animalId || '—'],
+  const rows = [['Breed', D.breed], ['Age', D.age], ['Sex', D.sex], ['Where', where], ['Shelter ID', D.animalId || '—'], ...(D.orgUrl ? [['Rescue website', D.orgUrl]] : []),
     ['Looking for', D.needs === 'both' ? 'Adopter or foster' : D.needs === 'foster' ? 'Foster' : 'Adopter'],
     ['Spayed/neutered', YN_LABEL[D.fixed]], ['Vaccines', YN_LABEL[D.vaccinated]], ['Microchip', YN_LABEL[D.microchipped]], ['Heartworm neg.', YN_LABEL[D.heartworm]],
     ['Good with', `Dogs: ${YN_LABEL[D.goodWithDogs]} · Cats: ${YN_LABEL[D.goodWithCats]} · Kids: ${YN_LABEL[D.goodWithKids]}`],
@@ -263,6 +272,7 @@ function buildMarkdown(dog, slug, photoPaths, opt) {
     'location:',
     `  type: ${dog.locationType}`,
     `  name: ${yq(dog.orgName)}`,
+    `  url: ${yq(dog.orgUrl || '')}`,
     `  city: ${yq(dog.city)}`,
     `  animalId: ${yq(dog.animalId)}`,
     'contact:',
