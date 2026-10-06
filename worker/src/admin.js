@@ -25,16 +25,6 @@ async function hashPassword(password, saltHex) {
   const salt = new Uint8Array(saltHex.match(/../g).map((h) => parseInt(h, 16)));
   return hex(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256));
 }
-async function newSession(env) {
-  const token = rand(32);
-  await env.SUBMISSIONS.put(`sess:${await sha256(token)}`, '1', { expirationTtl: SESSION_DAYS * 86400 });
-  return token;
-}
-export async function sessionOk(env, req) {
-  const m = (req.headers.get('Authorization') || '').match(/^Session\s+([a-f0-9]{64})$/i);
-  if (!m) return false;
-  return !!(await env.SUBMISSIONS.get(`sess:${await sha256(m[1])}`));
-}
 async function rateLimit(env, req, key, max) {
   const ip = req.headers.get('CF-Connecting-IP') || 'local';
   const k = `rl:${key}:${await sha256(ip)}:${new Date().toISOString().slice(0, 13)}`;
@@ -75,108 +65,102 @@ async function checkTotp(secret, code, lastStep) {
 }
 const cleanUser = (u) => String(u || '').trim().toLowerCase();
 const publicProfile = (a) => ({ username: a.username || '', name: a.name || '', email: a.email || '', photo: a.photo || '', twoFactor: !!a.totp, recoveryLeft: (a.recovery || []).length });
+// ---------- admin accounts (several admins, like Fénix) ----------
+// KV cfg:users = [{ id, username, name, email, photo, salt, hash, totp, totpStep, recovery, active, createdAt }]
+async function loadUsers(env) {
+  let users = await env.SUBMISSIONS.get('cfg:users', 'json');
+  if (!users) {
+    const legacy = await env.SUBMISSIONS.get('cfg:admin', 'json'); // the first single-account version
+    users = legacy ? [{ id: 'u1', active: true, ...legacy }] : [];
+    if (legacy) await env.SUBMISSIONS.put('cfg:users', JSON.stringify(users));
+  }
+  return users;
+}
+const saveUsers = (env, users) => env.SUBMISSIONS.put('cfg:users', JSON.stringify(users));
+const newId = () => 'u' + rand(6);
+async function newSession(env, userId) {
+  const token = rand(32);
+  await env.SUBMISSIONS.put(`sess:${await sha256(token)}`, userId, { expirationTtl: SESSION_DAYS * 86400 });
+  return token;
+}
+/** The signed-in admin (active accounts only), or null. */
+export async function sessionUser(env, req) {
+  const m = (req.headers.get('Authorization') || '').match(/^Session\s+([a-f0-9]{64})$/i);
+  if (!m) return null;
+  const v = await env.SUBMISSIONS.get(`sess:${await sha256(m[1])}`);
+  if (!v) return null;
+  const users = await loadUsers(env);
+  const u = v === '1' ? users[0] : users.find((x) => x.id === v); // '1' = sessions from before multi-user
+  return u && u.active !== false ? u : null;
+}
+export async function sessionOk(env, req) { return !!(await sessionUser(env, req)); }
+
+const listRow = (u) => ({ id: u.id, username: u.username || '', name: u.name || '', email: u.email || '', photo: u.photo || '', active: u.active !== false, twoFactor: !!u.totp, createdAt: u.createdAt || '' });
+const makeCodes = async () => { const codes = Array.from({ length: 8 }, () => rand(5).toUpperCase().slice(0, 10).replace(/(.{5})/, '$1-')); return { codes, hashes: await Promise.all(codes.map((c) => sha256(c.replace(/-/g, '')))) }; };
+function checkUsername(u, users, selfId) {
+  if (!/^[a-z0-9._-]{3,30}$/.test(u)) throw fail('Usernames are 3 to 30 letters or numbers (dots, dashes and underscores are fine).');
+  if (users.some((x) => x.username === u && x.id !== selfId)) throw fail('That username is taken.');
+}
+function checkEmail(e) { if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) throw fail('Please enter a valid email.'); }
 
 export async function handleAuth(req, env, url) {
-  const action = url.pathname.split('/')[2];
-  const body = req.method === 'POST' ? await req.json().catch(() => ({})) : {};
-  const account = await env.SUBMISSIONS.get('cfg:admin', 'json');
+  const parts = url.pathname.split('/').filter(Boolean); // auth, action, id, sub
+  const action = parts[1];
+  const body = req.method === 'POST' || req.method === 'DELETE' ? await req.json().catch(() => ({})) : {};
+  const users = await loadUsers(env);
 
-  if (action === 'status') return json({ setup: !!account, session: await sessionOk(env, req), username: !!(account && account.username) });
+  if (action === 'status') { const me = await sessionUser(env, req); return json({ setup: users.length > 0, session: !!me, username: !!(me && me.username) }); }
 
   if (action === 'setup' && req.method === 'POST') {
-    if (account) throw fail('The admin password is already set. Sign in instead.', 409);
+    if (users.length) throw fail('The admin is already set up. Sign in instead.', 409);
     await rateLimit(env, req, 'setup', 10);
     const pw = String(body.password || '');
     if (pw.length < 10) throw fail('Please use a password with at least 10 characters.');
     const token = String(body.githubToken || '').trim();
     if (!token || !(await tokenCanPush(env, token))) throw fail('We couldn\'t confirm this is the site owner. The GitHub token is missing or can\'t edit the site.', 403);
+    const u = cleanUser(body.username); if (u) checkUsername(u, users);
     const salt = rand(16);
-    const u = cleanUser(body.username);
-    if (u && !/^[a-z0-9._-]{3,30}$/.test(u)) throw fail('Usernames are 3 to 30 letters or numbers.');
-    await env.SUBMISSIONS.put('cfg:admin', JSON.stringify({ username: u, salt, hash: await hashPassword(pw, salt), createdAt: new Date().toISOString() }));
+    const user = { id: newId(), username: u, salt, hash: await hashPassword(pw, salt), active: true, createdAt: new Date().toISOString() };
+    await saveUsers(env, [user]);
     await env.SUBMISSIONS.put('cfg:ghToken', token);
-    return json({ ok: true, session: await newSession(env) });
+    return json({ ok: true, session: await newSession(env, user.id) });
   }
 
   if (action === 'login' && req.method === 'POST') {
-    if (!account) throw fail('The admin password hasn\'t been set up yet.', 409);
+    if (!users.length) throw fail('The admin hasn\'t been set up yet.', 409);
     await rateLimit(env, req, 'login', 10);
-    const userOk = !account.username || cleanUser(body.username) === account.username;
-    const passOk = (await hashPassword(String(body.password || ''), account.salt)) === account.hash;
-    if (!userOk || !passOk) throw fail('That username or password isn\'t right.', 401);
-    if (account.totp) {
+    const name = cleanUser(body.username);
+    // before usernames existed there was one account with none: it signs in with any username
+    const u = users.find((x) => x.username && x.username === name) || (users.length === 1 && !users[0].username ? users[0] : null);
+    const passOk = u && (await hashPassword(String(body.password || ''), u.salt)) === u.hash;
+    if (!passOk) throw fail('That username or password isn\'t right.', 401);
+    if (u.active === false) throw fail('This account is turned off. Ask another admin to turn it back on.', 403);
+    if (u.totp) {
       const pending = rand(32);
-      await env.SUBMISSIONS.put(`pend:${await sha256(pending)}`, '1', { expirationTtl: 300 });
+      await env.SUBMISSIONS.put(`pend:${await sha256(pending)}`, u.id, { expirationTtl: 300 });
       return json({ ok: true, needCode: true, pending });
     }
-    return json({ ok: true, session: await newSession(env) });
+    return json({ ok: true, session: await newSession(env, u.id) });
   }
 
   if (action === 'code' && req.method === 'POST') {
-    if (!account || !account.totp) throw fail('Please sign in again.', 401);
     await rateLimit(env, req, 'code', 10);
     const pkey = `pend:${await sha256(String(body.pending || ''))}`;
-    if (!(await env.SUBMISSIONS.get(pkey))) throw fail('That took too long. Please sign in again.', 401);
+    const uid = await env.SUBMISSIONS.get(pkey);
+    const u = uid && users.find((x) => x.id === uid || (uid === '1' && x === users[0]));
+    if (!u || !u.totp || u.active === false) throw fail('That took too long. Please sign in again.', 401);
     const code = String(body.code || '').trim();
-    const st = await checkTotp(account.totp, code, account.totpStep);
-    if (st > 0) account.totpStep = st;
+    const st = await checkTotp(u.totp, code, u.totpStep);
+    if (st > 0) u.totpStep = st;
     else {
       const h = await sha256(code.toUpperCase().replace(/[^A-Z0-9]/g, ''));
-      const i = (account.recovery || []).indexOf(h);
+      const i = (u.recovery || []).indexOf(h);
       if (i < 0) throw fail('That code isn\'t right. Check your authenticator app and try again.', 401);
-      account.recovery.splice(i, 1);
+      u.recovery.splice(i, 1);
     }
-    await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
+    await saveUsers(env, users);
     await env.SUBMISSIONS.delete(pkey);
-    return json({ ok: true, session: await newSession(env), recoveryLeft: (account.recovery || []).length });
-  }
-
-  // ----- signed-in only below -----
-  if (['me', 'profile', '2fa-start', '2fa-confirm', '2fa-disable', 'recovery'].includes(action)) {
-    if (!(await sessionOk(env, req))) throw fail('Please sign in again.', 401);
-    if (action === 'me') return json(publicProfile(account));
-    if (action === 'profile' && req.method === 'POST') {
-      const u = cleanUser(body.username);
-      if (!/^[a-z0-9._-]{3,30}$/.test(u)) throw fail('Usernames are 3 to 30 letters or numbers (dots, dashes and underscores are fine).');
-      if (body.photo && (String(body.photo).length > 300000 || !/^data:image\/(jpeg|png|webp);base64,/.test(body.photo))) throw fail('That photo is too big. Please choose a smaller one.');
-      if (body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(body.email).trim())) throw fail('Please enter a valid email.');
-      Object.assign(account, { username: u, name: String(body.name || '').trim().slice(0, 60), email: String(body.email || '').trim().slice(0, 120) });
-      if (body.photo !== undefined) account.photo = body.photo || '';
-      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
-      return json({ ok: true, profile: publicProfile(account) });
-    }
-    if (action === '2fa-start' && req.method === 'POST') {
-      const secret = b32encode(crypto.getRandomValues(new Uint8Array(20)));
-      await env.SUBMISSIONS.put('cfg:totpPending', secret, { expirationTtl: 900 });
-      const label = encodeURIComponent(`Bentley's Playhouse:${account.username || 'admin'}`);
-      return json({ secret, uri: `otpauth://totp/${label}?secret=${secret}&issuer=${encodeURIComponent("Bentley's Playhouse")}&algorithm=SHA1&digits=6&period=30` });
-    }
-    if (action === '2fa-confirm' && req.method === 'POST') {
-      const secret = await env.SUBMISSIONS.get('cfg:totpPending');
-      if (!secret) throw fail('That setup expired. Please start again.', 400);
-      const st = await checkTotp(secret, body.code, 0);
-      if (st < 0) throw fail('That code isn\'t right. Make sure your phone\'s time is correct and try the newest code.', 400);
-      const codes = Array.from({ length: 8 }, () => rand(5).toUpperCase().slice(0, 10).replace(/(.{5})/, '$1-'));
-      account.totp = secret; account.totpStep = st;
-      account.recovery = await Promise.all(codes.map((c) => sha256(c.replace(/-/g, ''))));
-      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
-      await env.SUBMISSIONS.delete('cfg:totpPending');
-      return json({ ok: true, recoveryCodes: codes });
-    }
-    if (action === 'recovery' && req.method === 'POST') {
-      if (!account.totp) throw fail('Two-step sign-in is off.');
-      if ((await hashPassword(String(body.password || ''), account.salt)) !== account.hash) throw fail('Your password isn\'t right.', 401);
-      const codes = Array.from({ length: 8 }, () => rand(5).toUpperCase().slice(0, 10).replace(/(.{5})/, '$1-'));
-      account.recovery = await Promise.all(codes.map((c) => sha256(c.replace(/-/g, ''))));
-      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
-      return json({ ok: true, recoveryCodes: codes });
-    }
-    if (action === '2fa-disable' && req.method === 'POST') {
-      if ((await hashPassword(String(body.password || ''), account.salt)) !== account.hash) throw fail('Your password isn\'t right.', 401);
-      delete account.totp; delete account.totpStep; delete account.recovery;
-      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
-      return json({ ok: true });
-    }
+    return json({ ok: true, session: await newSession(env, u.id), recoveryLeft: (u.recovery || []).length });
   }
 
   if (action === 'logout' && req.method === 'POST') {
@@ -185,21 +169,116 @@ export async function handleAuth(req, env, url) {
     return json({ ok: true });
   }
 
+  // ----- signed-in only below -----
+  const me = await sessionUser(env, req);
+  if (!me) throw fail('Please sign in again.', 401);
+  const self = users.find((x) => x.id === me.id) || users[0];
+  const pwOk = async (u, p) => (await hashPassword(String(p || ''), u.salt)) === u.hash;
+
+  if (action === 'me') return json({ ...publicProfile(self), id: self.id });
+
+  if (action === 'profile' && req.method === 'POST') {
+    const u = cleanUser(body.username); checkUsername(u, users, self.id);
+    if (body.photo && (String(body.photo).length > 300000 || !/^data:image\/(jpeg|png|webp);base64,/.test(body.photo))) throw fail('That photo is too big. Please choose a smaller one.');
+    const email = String(body.email || '').trim(); checkEmail(email);
+    Object.assign(self, { username: u, name: String(body.name || '').trim().slice(0, 60), email: email.slice(0, 120) });
+    if (body.photo !== undefined) self.photo = body.photo || '';
+    await saveUsers(env, users);
+    return json({ ok: true, profile: publicProfile(self) });
+  }
+
   if (action === 'password' && req.method === 'POST') {
-    if (!(await sessionOk(env, req))) throw fail('Please sign in again.', 401);
-    if ((await hashPassword(String(body.current || ''), account.salt)) !== account.hash) throw fail('Your current password isn\'t right.', 401);
+    if (!(await pwOk(self, body.current))) throw fail('Your current password isn\'t right.', 401);
     if (String(body.password || '').length < 10) throw fail('Please use a new password with at least 10 characters.');
-    const salt = rand(16);
-    await env.SUBMISSIONS.put('cfg:admin', JSON.stringify({ ...account, salt, hash: await hashPassword(body.password, salt), changedAt: new Date().toISOString() }));
+    self.salt = rand(16); self.hash = await hashPassword(body.password, self.salt); self.changedAt = new Date().toISOString();
+    await saveUsers(env, users);
     return json({ ok: true });
   }
 
   if (action === 'github' && req.method === 'POST') {
-    if (!(await sessionOk(env, req))) throw fail('Please sign in again.', 401);
     const token = String(body.githubToken || '').trim();
     if (!(await tokenCanPush(env, token))) throw fail('That GitHub token can\'t edit the site. It needs Contents: Read and write for bentleys-playhouse.', 400);
     await env.SUBMISSIONS.put('cfg:ghToken', token);
     return json({ ok: true });
+  }
+
+  // two-step sign-in for yourself (/auth/2fa-*) or, from Manage users, for another admin (/auth/users/:id/2fa-*)
+  const twoFA = async (target, step) => {
+    const pkey = `cfg:totpPending:${target.id}`;
+    if (step === 'start') {
+      const secret = b32encode(crypto.getRandomValues(new Uint8Array(20)));
+      await env.SUBMISSIONS.put(pkey, secret, { expirationTtl: 900 });
+      const label = encodeURIComponent(`Bentley's Playhouse:${target.username || 'admin'}`);
+      return json({ secret, uri: `otpauth://totp/${label}?secret=${secret}&issuer=${encodeURIComponent("Bentley's Playhouse")}&algorithm=SHA1&digits=6&period=30` });
+    }
+    if (step === 'confirm') {
+      const secret = await env.SUBMISSIONS.get(pkey);
+      if (!secret) throw fail('That setup expired. Please start again.', 400);
+      const st = await checkTotp(secret, body.code, 0);
+      if (st < 0) throw fail('That code isn\'t right. Make sure the phone\'s time is correct and try the newest code.', 400);
+      const { codes, hashes } = await makeCodes();
+      Object.assign(target, { totp: secret, totpStep: st, recovery: hashes });
+      await saveUsers(env, users); await env.SUBMISSIONS.delete(pkey);
+      return json({ ok: true, recoveryCodes: codes });
+    }
+    if (step === 'disable') {
+      delete target.totp; delete target.totpStep; delete target.recovery;
+      await saveUsers(env, users);
+      return json({ ok: true });
+    }
+    throw fail('Not found.', 404);
+  };
+
+  if (action === '2fa-start' && req.method === 'POST') return twoFA(self, 'start');
+  if (action === '2fa-confirm' && req.method === 'POST') return twoFA(self, 'confirm');
+  if (action === '2fa-disable' && req.method === 'POST') { if (!(await pwOk(self, body.password))) throw fail('Your password isn\'t right.', 401); return twoFA(self, 'disable'); }
+  if (action === 'recovery' && req.method === 'POST') {
+    if (!self.totp) throw fail('Two-step sign-in is off.');
+    if (!(await pwOk(self, body.password))) throw fail('Your password isn\'t right.', 401);
+    const { codes, hashes } = await makeCodes(); self.recovery = hashes; await saveUsers(env, users);
+    return json({ ok: true, recoveryCodes: codes });
+  }
+
+  // ----- Manage users -----
+  if (action === 'users') {
+    const id = parts[2], sub = parts[3];
+    if (!id && req.method === 'GET') return json({ users: users.map(listRow), me: self.id });
+    if (!id && req.method === 'POST') {
+      const u = cleanUser(body.username); checkUsername(u, users);
+      const email = String(body.email || '').trim(); checkEmail(email);
+      if (String(body.password || '').length < 10) throw fail('Please give them a password with at least 10 characters.');
+      const salt = rand(16);
+      const user = { id: newId(), username: u, name: String(body.name || '').trim().slice(0, 60), email: email.slice(0, 120), salt, hash: await hashPassword(body.password, salt), active: true, createdAt: new Date().toISOString(), createdBy: self.username || self.id };
+      users.push(user); await saveUsers(env, users);
+      return json({ ok: true, user: listRow(user) });
+    }
+    const target = users.find((x) => x.id === id);
+    if (!target) throw fail('That admin wasn\'t found.', 404);
+    const activeCount = users.filter((x) => x.active !== false).length;
+    if (!sub && req.method === 'POST') { // edit
+      const u = cleanUser(body.username || target.username); checkUsername(u, users, target.id);
+      const email = String(body.email || '').trim(); checkEmail(email);
+      Object.assign(target, { username: u, name: String(body.name || '').trim().slice(0, 60), email: email.slice(0, 120) });
+      if (body.password) {
+        if (String(body.password).length < 10) throw fail('Passwords need at least 10 characters.');
+        target.salt = rand(16); target.hash = await hashPassword(body.password, target.salt);
+      }
+      await saveUsers(env, users);
+      return json({ ok: true, user: listRow(target) });
+    }
+    if (sub === 'active' && req.method === 'POST') {
+      if (target.id === self.id && !body.active) throw fail('You can\'t turn off your own account.');
+      if (!body.active && activeCount <= 1) throw fail('At least one admin must stay active.');
+      target.active = !!body.active; await saveUsers(env, users);
+      return json({ ok: true, user: listRow(target) });
+    }
+    if (sub && sub.startsWith('2fa-') && req.method === 'POST') return twoFA(target, sub.slice(4));
+    if (!sub && req.method === 'DELETE') {
+      if (target.id === self.id) throw fail('You can\'t delete your own account.');
+      if (target.active !== false && activeCount <= 1) throw fail('At least one admin must stay active.');
+      users.splice(users.indexOf(target), 1); await saveUsers(env, users);
+      return json({ ok: true });
+    }
   }
   throw fail('Not found.', 404);
 }

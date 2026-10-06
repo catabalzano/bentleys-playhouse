@@ -242,7 +242,7 @@
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
-      '<div class="side__sep"></div><a class="nav" href="#profile" data-nav="profile">⚙️ Profile &amp; security</a>' +
+      '<div class="side__sep"></div><a class="nav" href="#users" data-nav="users">👥 Manage users</a><a class="nav" href="#profile" data-nav="profile">⚙️ Profile &amp; security</a>' +
       '<div class="side__foot"><a href="../" target="_blank" rel="noopener">View the website ↗</a></div></aside>' +
       '<div><div class="topbar"><button type="button" data-menu>☰ Menu</button><b>Admin</b></div><main class="main" id="main" tabindex="-1"></main></div></div>';
     $('[data-menu]').onclick = function () { $('.shell').classList.toggle('menu-open'); };
@@ -276,6 +276,7 @@
     if (h === 'submissions') return submissions();
     if (h === 'donations') return donations();
     if (h === 'settings' || h === 'profile') return profile();
+    if (h === 'users') return manageUsers();
     if (p[0] === 'c' && COLS[p[1]]) return p[2] ? editor(p[1], p[2] === 'new' ? null : p[2]) : list(p[1]);
     location.hash = '#home';
   }
@@ -653,6 +654,93 @@
     document.head.appendChild(sc);
   }
 
+
+  // ---------- manage users (several admins, like Fénix) ----------
+  function fmtDate(iso) { if (!iso) return '–'; var d = new Date(iso); return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }); }
+  function modal(html) {
+    var d = document.createElement('dialog'); d.className = 'modal'; d.innerHTML = '<div class="modal__in">' + html + '</div>';
+    document.body.appendChild(d); d.showModal();
+    d.addEventListener('close', function () { d.remove(); });
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    $$('[data-close]', d).forEach(function (b) { b.onclick = function () { d.close(); }; });
+    return d;
+  }
+  function manageUsers() {
+    main().innerHTML = '<div class="head"><div><h1>👥 Manage users</h1><p>Everyone who can sign in to this admin. Each person gets their own username and password.</p></div><button class="btn btn--go" data-new>＋ New admin</button></div><div data-users><p class="empty">Loading…</p></div>';
+    $('[data-new]').onclick = function () { userForm(null); };
+    api('/auth/users').then(function (j) {
+      var box = $('[data-users]'); if (!box) return;
+      box.innerHTML = '<div class="card ut-wrap"><table class="ut"><thead><tr><th>Username</th><th>Display name</th><th>Email</th><th>Status</th><th>2FA</th><th>Created</th><th>Actions</th></tr></thead><tbody>' +
+        j.users.map(function (u) {
+          var you = u.id === j.me;
+          return '<tr data-id="' + esc(u.id) + '"><td data-l="Username"><b>' + esc(u.username || '(not set)') + '</b>' + (you ? ' <span class="pill">You</span>' : '') + '</td><td data-l="Display name">' + esc(u.name || '–') + '</td><td data-l="Email">' + esc(u.email || '–') + '</td>' +
+            '<td data-l="Status"><span class="pill ' + (u.active ? 'ok' : 'bad') + '">' + (u.active ? 'Active' : 'Off') + '</span></td>' +
+            '<td data-l="2FA"><span class="pill ' + (u.twoFactor ? 'ok' : 'warn') + '">' + (u.twoFactor ? 'On' : 'Off') + '</span></td>' +
+            '<td data-l="Created">' + esc(fmtDate(u.createdAt)) + '</td>' +
+            '<td data-l="Actions"><div class="ut-act"><button class="btn btn--ghost btn--sm" data-a="edit">✏️ Edit</button>' +
+            (u.twoFactor ? '<button class="btn btn--ghost btn--sm" data-a="2fa-off">Disable 2FA</button>' : '<button class="btn btn--ghost btn--sm" data-a="2fa-on">🔐 Enable 2FA</button>') +
+            (you ? '' : '<button class="btn btn--ghost btn--sm" data-a="toggle">' + (u.active ? '⏸ Deactivate' : '▶ Activate') + '</button><button class="btn btn--danger btn--sm" data-a="del" aria-label="Delete ' + esc(u.username) + '">🗑</button>') +
+            '</div></td></tr>';
+        }).join('') + '</tbody></table></div>';
+      $$('tr[data-id]', box).forEach(function (tr) {
+        var u = j.users.filter(function (x) { return x.id === tr.getAttribute('data-id'); })[0], you = u.id === j.me;
+        $$('[data-a]', tr).forEach(function (b) {
+          b.onclick = function () {
+            var a = b.getAttribute('data-a');
+            if (a === 'edit') return you ? (location.hash = '#profile') : userForm(u);
+            if (a === '2fa-on') return you ? (location.hash = '#profile') : userTwoFactor(u);
+            if (a === '2fa-off') {
+              if (you) { location.hash = '#profile'; return; }
+              if (!confirm('Turn off two-step sign-in for ' + u.username + '?')) return;
+              return api('/auth/users/' + u.id + '/2fa-disable', { method: 'POST', json: {} }).then(function () { toast('Two-step sign-in is off for ' + u.username + '.'); manageUsers(); }).catch(function (e) { toast(e.message); });
+            }
+            if (a === 'toggle') {
+              if (u.active && !confirm('Turn off ' + u.username + '\'s account? They\'ll be signed out and can\'t sign in until you turn it back on.')) return;
+              return api('/auth/users/' + u.id + '/active', { method: 'POST', json: { active: !u.active } }).then(function () { manageUsers(); }).catch(function (e) { toast(e.message); });
+            }
+            if (a === 'del') {
+              if (!confirm('Delete ' + u.username + '\'s account for good?')) return;
+              return api('/auth/users/' + u.id, { method: 'DELETE', json: {} }).then(function () { toast('Deleted.'); manageUsers(); }).catch(function (e) { toast(e.message); });
+            }
+          };
+        });
+      });
+    }).catch(function (e) { var b = $('[data-users]'); if (b) b.innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
+  }
+  function userForm(u) {
+    var d = modal('<button class="modal__x" data-close aria-label="Close">✕</button><h2>' + (u ? 'Edit ' + esc(u.username) : 'New admin') + '</h2>' +
+      '<form novalidate class="grid" style="margin-top:14px"><div class="f wide"><label for="nu-user">Username <span class="req">*</span></label><input type="text" id="nu-user" value="' + esc(u ? u.username : '') + '" autocomplete="off" autocapitalize="off" spellcheck="false"></div>' +
+      '<div class="f wide"><label for="nu-name">Display name</label><input type="text" id="nu-name" value="' + esc(u ? u.name : '') + '" autocomplete="off"></div>' +
+      '<div class="f wide"><label for="nu-mail">Email <span class="hint">(optional)</span></label><input type="email" id="nu-mail" value="' + esc(u ? u.email : '') + '" autocomplete="off"></div>' +
+      '<div class="f wide"><label for="nu-pw">' + (u ? 'New password' : 'Password <span class="req">*</span>') + '</label><input type="password" id="nu-pw" autocomplete="new-password"><p class="hint">' + (u ? 'Leave blank to keep their current password.' : 'At least 10 characters. Share it with them privately; they can change it in Profile &amp; security.') + '</p></div>' +
+      '<p class="msg err wide" data-m role="alert"></p><div class="btn-line wide"><button class="btn btn--go" type="submit">' + (u ? 'Save' : 'Create admin') + '</button><button class="btn btn--ghost" type="button" data-close>Cancel</button></div></form>');
+    $('#nu-user', d).focus();
+    $('form', d).onsubmit = function (e) {
+      e.preventDefault(); var m = $('[data-m]', d); m.textContent = '';
+      var body = { username: $('#nu-user', d).value, name: $('#nu-name', d).value, email: $('#nu-mail', d).value, password: $('#nu-pw', d).value };
+      if (!u && body.password.length < 10) { m.textContent = 'Please give them a password with at least 10 characters.'; return; }
+      $('button[type=submit]', d).disabled = true;
+      api(u ? '/auth/users/' + u.id : '/auth/users', { method: 'POST', json: body }).then(function () { d.close(); toast(u ? 'Saved.' : 'Admin created.'); manageUsers(); })
+        .catch(function (er) { m.textContent = er.message; $('button[type=submit]', d).disabled = false; });
+    };
+  }
+  function userTwoFactor(u) {
+    var d = modal('<button class="modal__x" data-close aria-label="Close">✕</button><h2>Two-step sign-in for ' + esc(u.username) + '</h2><div data-2fabox><p class="empty">Loading…</p></div>');
+    var box = $('[data-2fabox]', d);
+    api('/auth/users/' + u.id + '/2fa-start', { method: 'POST', json: {} }).then(function (j) {
+      box.innerHTML = '<p class="hint" style="margin:8px 0 12px">Do this with ' + esc(u.name || u.username) + ' next to you, using their phone.</p><ol class="steps"><li>On their phone, open an authenticator app (like Google Authenticator) and tap <b>+</b>.</li>' +
+        '<li>Scan this code:<div class="qr" data-qr></div><details><summary>Can\'t scan? Type this key instead</summary><code class="key">' + esc(j.secret.replace(/(.{4})/g, '$1 ').trim()) + '</code></details></li>' +
+        '<li>Type the 6-digit code their app shows:<div class="code-row"><input type="text" data-c inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="6-digit code"><button type="button" class="btn btn--go" data-ok>Turn on</button></div><p class="msg" data-m role="status"></p></li></ol>';
+      drawQr($('[data-qr]', box), j.uri);
+      $('[data-ok]', box).onclick = function () {
+        var m = $('[data-m]', box); m.className = 'msg'; m.textContent = 'Checking…';
+        api('/auth/users/' + u.id + '/2fa-confirm', { method: 'POST', json: { code: $('[data-c]', box).value } }).then(function (r) {
+          showCodes(box, r.recoveryCodes, '✓ Two-step sign-in is on for ' + esc(u.username) + '. Give them these backup codes.');
+          $('[data-done]', box).onclick = function () { d.close(); manageUsers(); };
+        }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; });
+      };
+    }).catch(function (e) { box.innerHTML = '<p class="msg err">' + esc(e.message) + '</p>'; });
+  }
 
   // ---------- start ----------
   if (!API) { app.innerHTML = '<div class="gate"><div class="gate__card"><h1>Admin not connected</h1><p>content/site.json → pawsome.submitEndpoint is empty.</p></div></div>'; return; }

@@ -158,3 +158,15 @@ dl.facts dt{font-weight:800;color:var(--muted)}dl.facts dd{margin:0}
 .qr svg{display:block;width:200px;height:200px}
 .code-row .btn{white-space:nowrap}
 .card .actions{background:none}
+.ut-wrap{padding:0;overflow:hidden}
+.ut{width:100%;border-collapse:collapse;font-size:14.5px}
+.ut th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 14px;background:#F8F9FF;border-bottom:1px solid var(--line)}
+.ut td{padding:14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.ut tr:last-child td{border-bottom:0}
+.ut-act{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:900px){.ut thead{display:none}.ut,.ut tbody,.ut tr,.ut td{display:block;width:100%}.ut tr{padding:12px 14px;border-bottom:1px solid var(--line)}.ut td{padding:4px 0;border:0;display:flex;gap:10px}.ut td::before{content:attr(data-l);min-width:110px;font-weight:800;color:var(--muted);font-size:13px}.ut td[data-l="Actions"]{display:block;padding-top:8px}.ut td[data-l="Actions"]::before{content:none}}
+dialog.modal{border:0;padding:0;border-radius:24px;width:min(520px,calc(100vw - 24px));max-height:calc(100dvh - 24px);box-shadow:0 30px 80px rgba(31,29,43,.35)}
+dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
+.modal__in{position:relative;padding:24px 22px 20px}
+.modal__in h2{font-size:22px;padding-right:40px}
+.modal__x{all:unset;cursor:pointer;position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-weight:800}
