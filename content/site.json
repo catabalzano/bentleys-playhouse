@@ -49,6 +49,10 @@
       "verified": true
     }
   },
+  "analytics": {
+    "ga4": "G-XKXYYWB2RE",
+    "_note": "Google Analytics 4 property \"Bentley's Playhouse\" (account 404754026), web stream 16054447145. Added only to the live build. Set ga4 to \"\" to turn analytics off; the Privacy page section disappears with it."
+  },
   "contact": {
     "email": "bentleysplayhouseorg@gmail.com",
     "emailVerified": true,
@@ -105,7 +109,6 @@
     "contactEndpoint": "",
     "involvedEndpoint": ""
   },
-  "analytics": "",
   "tagline": "Rescue. Rehab. Rehome. Repeat.",
   "foster": {
     "applicationUrl": "https://docs.google.com/forms/d/1WfFiNT0acpZ4y0JCJoW3EWcqrOf8fzfM3LwHHVxHI04/viewform",

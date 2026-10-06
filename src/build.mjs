@@ -95,6 +95,7 @@ const shareJobs = [];
 const catLabel = (id) => (ctx.categories.find((c) => c.id === id) || {}).label;
 function emit(route, opts) {
   ctx.route = route;
+  ctx.crumbs = null;
   // every page gets its own 1200×630 share image (title + topic art, or the dog's photo)
   if (!opts.noindex && !opts.ogImage) {
     const name = route.replace(/\/$/, '').replace(/\//g, '--') || 'home';
@@ -116,20 +117,20 @@ emit('pawsome-pooches/', { shareTitle: 'Pawsome Pooches: dogs in our community w
 for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, shareTitle: d.status === 'adopted' ? `${d.name} found a home!` : `Meet ${d.name}`, shareKicker: d.status === 'adopted' ? 'Pawsome Pooches · Happy tail' : 'Pawsome Pooches · Adopt me', shareCategory: 'adopt-foster', sharePhoto: d.photos[0], description: d.tagline || `Meet ${d.name}, looking for a home.`, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js'] });
 emit('rescues-you-can-help/', { title: 'Rescues You Can Help', description: 'Miami-Dade rescues and shelters you can support by fostering, volunteering, sharing or sending supplies.', body: () => P3.rescuesPage(rescues) });
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
-for (const g of guides) emit(`get-help/${g.slug}/`, { shareKicker: 'Get Help', shareCategory: g.category || 'lost-found', title: g.title, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
+for (const g of guides) emit(`get-help/${g.slug}/`, { shareKicker: 'Get Help', shareCategory: g.category || 'lost-found', title: g.title, seoTitle: g.seoTitle, ogType: 'article', modified: g.lastReviewed, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
 emit('adopt-foster/', { title: 'Adopt & Foster', description: pages.adopt.summary, body: () => P.adopt(data) });
 for (const d of dogs) emit(`adopt-foster/dogs/${d.slug}/`, { title: d.name, description: d.summary || `Meet ${d.name}.`, body: () => P.dogPage(d) });
 emit('resources/', { title: 'Resource Library', description: 'Searchable guides, printable checklists and trusted resources for dog rescue, lost and found, adoption and care in Miami and beyond.', body: () => P.library(data), scripts: [] });
-for (const a of articles) emit(`resources/${a.slug}/`, { shareKicker: catLabel(a.category) || 'Resource Library', shareCategory: a.category, shareIcon: a.icon, title: a.title, description: a.summary, body: () => P.article(a, data) });
+for (const a of articles) emit(`resources/${a.slug}/`, { shareKicker: catLabel(a.category) || 'Resource Library', shareCategory: a.category, shareIcon: a.icon, title: a.title, seoTitle: a.seoTitle, ogType: 'article', modified: a.lastReviewed, description: a.summary, body: () => P.article(a, data) });
 for (const c of checklists) emit(`resources/checklists/${c.slug}/`, { shareKicker: 'Printable checklist', shareCategory: c.category, shareIcon: c.icon || 'list', title: c.title, description: c.intro, bodyClass: 'is-checklist', body: () => P.checklist(c) });
 emit('resources/flyer-builder/', { title: 'Lost & Found Flyer Builder', description: 'Make a printable lost or found dog flyer. Your photo stays on your device.', bodyClass: 'is-flyer', body: () => P.flyer(), scripts: ['js/flyer.js'] });
 emit('resources/vet-clinics/', { title: 'Vet Clinic Directory', description: 'Miami-Dade vet clinics and 24/7 emergency hospitals: hours, walk-in policies, phone numbers and addresses.', bodyClass: 'is-clinics', body: () => P2.clinics(clinicData), scripts: ['js/clinics.js'] });
 emit('transparency/', { title: 'Where the Money Goes', description: "Every expense Bentley's Playhouse makes, with receipts: food, spay/neuter, medical care, toys and support for other rescues.", bodyClass: 'is-fin', body: () => P2.transparency(finances), scripts: ['js/transparency.js'] });
 emit('our-story/', { title: 'Our Story', description: pages.story.summary, body: () => P.story(data) });
 emit('get-involved/', { title: 'Get Involved', description: 'Volunteer, foster, donate supplies, share rescue information or offer your skills to Bentley\'s Playhouse.', body: () => P.involved(data) });
-emit('donate/', { title: 'Donate', description: 'Support Bentley\'s Playhouse dog rescue in Miami.', noindex: !ctx.site.donate.verified, body: () => P.donate() });
+emit('donate/', { title: 'Donate', description: 'Support Bentley\'s Playhouse, a volunteer-run dog rescue in Miami: food, spay/neuter, vet care and supplies for dogs in our care.', noindex: !ctx.site.donate.verified, body: () => P.donate() });
 emit('contact/', { title: 'Contact & FAQ', description: 'How to reach Bentley\'s Playhouse, what we can help with, and who to call when an animal needs urgent help.', body: () => P.contact(data) });
-emit('privacy/', { title: 'Privacy', description: 'How Bentley\'s Playhouse handles the information you share.', body: () => P.privacy() });
+emit('privacy/', { title: 'Privacy', description: 'How Bentley\'s Playhouse handles the information you share: forms, the flyer builder, checklists and website analytics.', body: () => P.privacy() });
 emit('404.html', { title: 'Page not found', description: 'Page not found.', noindex: true, body: () => P.notFound() });
 
 // assets

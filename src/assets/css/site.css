@@ -632,7 +632,7 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8.5pt; word-break: break-all; }
   .rcard a::after { content: none; }
   .print-head img { width: 90px; margin-bottom: .5rem; }
-  .print-head h1 { font-size: 20pt; margin: 0 0 .2rem; }
+  .print-head__h { font-weight: 700; font-size: 20pt; margin: 0 0 .2rem; }
   .check-group { margin-top: 1rem; break-inside: avoid; }
   .check-group legend { font-size: 13pt; }
   .check-group li { border: 0; padding: .2rem 0; background: none !important; }

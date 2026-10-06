@@ -1,5 +1,6 @@
 ---
 title: "Rehoming a dog safely: why \"free to a good home\" is dangerous"
+seoTitle: "Rehoming a Dog Safely: Why \"Free to a Good Home\" Is Risky"
 category: adopt-foster
 area: general
 order: 0

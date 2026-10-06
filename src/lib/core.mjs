@@ -135,6 +135,7 @@ export function button(label, target, { variant = 'primary', ic = '', externalLi
   return `<a class="btn btn--${variant}" href="${href(target)}">${ic ? icon(ic, { size: 20 }) : ''}<span>${label}</span></a>`;
 }
 export function breadcrumb(items) {
+  ctx.crumbs = items; // used by layout.mjs for BreadcrumbList structured data
   return `<nav class="breadcrumb" aria-label="Breadcrumb"><ol>${items.map((it, i) =>
     i === items.length - 1 ? `<li><span aria-current="page">${esc(it[0])}</span></li>` : `<li><a href="${href(it[1])}">${esc(it[0])}</a></li>`).join('')}</ol></nav>`;
 }

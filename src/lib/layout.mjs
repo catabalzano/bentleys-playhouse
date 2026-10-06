@@ -95,9 +95,12 @@ export function footer() {
 </footer>`;
 }
 
-export function page({ title, description, body, home = false, bodyClass = '', noindex = false, scripts = [], ogImage = 'img/og-image.png' }) {
+export function page({ title, seoTitle, description, body, home = false, bodyClass = '', noindex = false, scripts = [], ogImage = 'img/og-image.png', ogType = 'website', modified }) {
   const s = ctx.site;
-  const full = home ? `${s.name} | Dog Rescue in Miami` : `${title} | ${s.name}`;
+  // Search results show about 60 characters: drop the site-name suffix when it would push the title past that.
+  const baseTitle = seoTitle || title;
+  const full = home ? `${s.name} | Dog Rescue in Miami` : (`${baseTitle} | ${s.name}`.length <= 60 ? `${baseTitle} | ${s.name}` : baseTitle);
+  description = clip(description, 160);
   const canonical = s.siteUrl + '/' + ctx.route;
   const robots = noindex || ctx.mode === 'preview' ? '<meta name="robots" content="noindex">' : '';
   const headInner = `
@@ -108,7 +111,8 @@ ${robots}
 <meta property="og:site_name" content="${esc(s.name)}">
 <meta property="og:title" content="${esc(home ? s.name : title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
+<meta property="og:locale" content="en_US">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:image" content="${esc(s.siteUrl + '/assets/' + ogImage)}">
 <meta property="og:image:width" content="1200">
@@ -125,7 +129,7 @@ ${robots}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400..800;1,400..600&family=Fredoka:wght@400..700&display=swap">
-<link rel="stylesheet" href="${asset('css/site.css')}">`;
+<link rel="stylesheet" href="${asset('css/site.css')}">${structuredData({ home, title, description, canonical, ogType, modified, noindex })}${analyticsTag()}`;
   const bodyInner = `
 ${header({ home })}
 <main id="main" tabindex="-1">
@@ -150,4 +154,65 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 
 function pick(obj, re) {
   return Object.fromEntries(Object.entries(obj).filter(([k]) => re.test(k)));
+}
+
+// Trim a meta description to `max` characters at a word boundary.
+function clip(text = '', max = 160) {
+  const t = String(text).replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  return t.slice(0, max - 1).replace(/\s+\S*$/, '').replace(/[,;:.\s]+$/, '') + '…';
+}
+
+// Google Analytics 4. Only added to the live build, and only when content/site.json → analytics.ga4 is set.
+function analyticsTag() {
+  const id = ctx.site.analytics && ctx.site.analytics.ga4;
+  if (ctx.mode !== 'live' || !id || !/^G-[A-Z0-9]+$/.test(id)) return '';
+  return `
+<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${id}');</script>`;
+}
+
+// schema.org structured data (JSON-LD): the organization and website on the homepage,
+// breadcrumbs on every inner page, and Article details on guides and resource articles.
+function structuredData({ home, title, description, canonical, ogType, modified, noindex }) {
+  if (noindex) return '';
+  const s = ctx.site;
+  const orgId = s.siteUrl + '/#organization';
+  const graph = [];
+  if (home) {
+    const sameAs = Object.values(s.social || {}).filter((x) => x && x.url && x.verified !== false).map((x) => x.url);
+    graph.push({
+      '@type': 'Organization', '@id': orgId, name: s.name, url: s.siteUrl + '/',
+      logo: { '@type': 'ImageObject', url: s.siteUrl + '/assets/img/logo-main.png' },
+      description,
+      slogan: s.tagline || undefined,
+      founder: s.founder ? { '@type': 'Person', name: s.founder } : undefined,
+      email: s.contact && s.contact.emailVerified ? s.contact.email : undefined,
+      areaServed: { '@type': 'AdministrativeArea', name: 'Miami-Dade County, Florida' },
+      address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
+      sameAs,
+    });
+    graph.push({ '@type': 'WebSite', '@id': s.siteUrl + '/#website', url: s.siteUrl + '/', name: s.name, inLanguage: 'en-US', publisher: { '@id': orgId } });
+  }
+  if (ctx.crumbs && ctx.crumbs.length > 1) {
+    graph.push({
+      '@type': 'BreadcrumbList',
+      itemListElement: ctx.crumbs.map((c, i) => ({
+        '@type': 'ListItem', position: i + 1, name: c[0],
+        item: i === ctx.crumbs.length - 1 ? canonical : s.siteUrl + '/' + c[1],
+      })),
+    });
+  }
+  if (ogType === 'article') {
+    graph.push({
+      '@type': 'Article', headline: String(title).slice(0, 110), description, url: canonical, mainEntityOfPage: canonical,
+      image: s.siteUrl + '/assets/' + 'og/' + (ctx.route.replace(/\/$/, '').replace(/\//g, '--') || 'home') + '.png', inLanguage: 'en-US',
+      dateModified: modified || undefined,
+      author: { '@type': 'Organization', '@id': orgId, name: s.name },
+      publisher: { '@type': 'Organization', '@id': orgId, name: s.name, logo: { '@type': 'ImageObject', url: s.siteUrl + '/assets/img/logo-main.png' } },
+    });
+  }
+  if (!graph.length) return '';
+  const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
+  return `\n<script type="application/ld+json">${json}</script>`;
 }

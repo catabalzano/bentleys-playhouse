@@ -341,7 +341,7 @@ export function checklist(c) {
       </div>
     </div>
     <p class="muted small no-print">Your ticks are saved only in this browser, on this device.</p>
-    <div class="print-only print-head"><img src="${asset('img/logo-main.png')}" alt="${esc(ctx.site.name)}" width="110"><h1>${esc(c.title)}</h1><p>${esc(c.intro)}</p></div>
+    <div class="print-only print-head"><img src="${asset('img/logo-main.png')}" alt="${esc(ctx.site.name)}" width="110"><p class="print-head__h">${esc(c.title)}</p><p>${esc(c.intro)}</p></div>
     ${c.groups.map((g) => `<fieldset class="check-group"><legend>${esc(g.title)}</legend><ul>${g.items.map((it) => {
       const id = `${c.slug}-${++n}`;
       return `<li><input type="checkbox" id="${id}" data-key="${id}"><label for="${id}">${mdInline(it)}</label></li>`;
@@ -698,9 +698,12 @@ export function privacy() {
   <p>The flyer builder runs entirely in your browser. Your photo and details are never uploaded to us, and they're gone when you remove the photo or close the page.</p>
   <h2>Checklists</h2>
   <p>Ticks on our checklists are saved only in your own browser so you don't lose your place. Use “Clear ticks” to remove them.</p>
-  <h2>Protecting yourself</h2>
+  ${ctx.site.analytics && ctx.site.analytics.ga4 ? `<h2>Website analytics</h2>
+  <p>We use Google Analytics to understand how people find and use this site, such as which guides are read most and which pages people arrive from. It uses cookies and collects information like pages visited, approximate location (city or region), device and browser type, and how you reached the site. It doesn't tell us who you are, and we never send it anything you type into our forms or the flyer builder.</p>
+  <p>Google processes this data under its own <a href="https://policies.google.com/privacy" rel="noopener">privacy policy</a>. You can opt out with your browser's cookie settings, a content blocker, or the <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">Google Analytics opt-out add-on</a>.</p>
+  ` : ''}<h2>Protecting yourself</h2>
   <p>When you post about a lost or found dog, share general areas rather than your home address, and consider a separate email or text-only number. Never send money to someone you haven't verified.</p>
-  ${previewNote('Have this page reviewed once your form provider and any analytics are chosen, so it describes exactly what is collected.')}
+  ${previewNote('Have this page reviewed once your form provider is chosen, so it describes exactly what is collected.')}
 </div>`;
 }
 
