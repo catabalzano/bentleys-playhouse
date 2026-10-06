@@ -1037,3 +1037,11 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .gift__foot a { color: #1F1D2B; text-decoration: underline; text-underline-offset: 3px; }
 .gift .preview-note { color: var(--preview-ink); }
 .donate-page .gift { margin-top: 5rem; box-shadow: 0 18px 50px rgba(47, 69, 200, .25); }
+
+/* Rescue stories (Our Story): Pawsome-style tilted cards that straighten and lift on hover */
+.story-sec__lede { margin: -.25rem 0 1.4rem; color: var(--muted); }
+.story-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 1.6rem 1.2rem; }
+.pp-card--story .pp-card__link { cursor: default; }
+.pp-card--story .pp-card__story { color: var(--ink); font-size: .95rem; line-height: 1.5; padding-top: .3rem; }
+.pp-ribbon--home { display: inline-flex; align-items: center; gap: .3em; background: #1B6E45; color: #fff; }
+.pp-ribbon--home .icon { fill: currentColor; }
