@@ -1051,3 +1051,13 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .pp-card--story .pp-card__name { font-size: 1.35rem; }
 .pp-card--story .pp-card__story { font-size: .9rem; }
 .pp-card--story .pp-chip { font-size: .74rem; }
+
+/* Our Story photo frames: colored offset shadow like the arch frames; lifts on hover */
+.photo-row .photo-slot--img { overflow: hidden; box-shadow: 6px 6px 0 var(--gold); transition: transform .35s ease, box-shadow .35s ease; }
+.photo-row .photo-slot--img:nth-child(2) { box-shadow: 6px 6px 0 var(--orange); }
+.photo-row .photo-slot--img:nth-child(3) { box-shadow: 6px 6px 0 var(--blue); }
+.photo-row .photo-slot--img:hover { transform: translateY(-6px); box-shadow: 10px 10px 0 var(--gold); }
+.photo-row .photo-slot--img:nth-child(2):hover { box-shadow: 10px 10px 0 var(--orange); }
+.photo-row .photo-slot--img:nth-child(3):hover { box-shadow: 10px 10px 0 var(--blue); }
+.photo-row { padding: 0 10px 10px 0; }
+@media (prefers-reduced-motion: reduce) { .photo-row .photo-slot--img { transition: none; } .photo-row .photo-slot--img:hover { transform: none; } }
