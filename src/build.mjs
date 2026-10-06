@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 // Build the static site:  node src/build.mjs [--live] [--pretty] [--out dist]
 //   default            → preview build (shows "Needs confirmation" items, links to folder/index.html)
 //   --live             → live build (hides unverified items, allows indexing)
@@ -151,6 +152,10 @@ fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
   const fin = readJSON('finances/settings.json');
   const cats = [...fin.expenseCategories.map((c) => ({ value: c.id, label: 'Spending · ' + c.label })), ...fin.incomeCategories.map((c) => ({ value: c.id, label: 'Income · ' + c.label }))];
   fs.writeFileSync(path.join(OUT, 'admin/config.js'), `window.BP_ADMIN=${JSON.stringify({ api: (ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '', categories: cats })};\n`);
+  // cache-bust the admin's own files so browsers always load the newest version
+  const ah = path.join(OUT, 'admin/index.html');
+  const v = (f) => crypto.createHash('sha1').update(fs.readFileSync(path.join(OUT, 'admin', f))).digest('hex').slice(0, 8);
+  fs.writeFileSync(ah, fs.readFileSync(ah, 'utf8').replace(/(admin\.(?:js|css)|config\.js)"/g, (m, f) => `${f}?v=${f === 'config.js' ? Date.now().toString(36) : v(f)}"`));
 }
 // share images (after assets are copied so dog photos can be read)
 const mime = (f) => (/\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg');
