@@ -22,7 +22,7 @@ Romeo became Bentley's Playhouse's first rescue. His arrival is where the rescue
 
 After Romeo, the rescue settled into the way it still works today: **rescue, foster, rehabilitate, rehome**. Whether a dog needs medical treatment, training, or just a lot of love and attention, we do everything we can to help them heal and thrive before they meet their family.
 
-Not every dog takes that last step. **Kiara**, a blind, special-needs senior Husky, never went through rehoming; she stayed with the family. **Fénix** was rescued with the same intention as every other dog, but couldn't safely be rehomed, so he stayed too.
+Not every dog takes that last step. **Kiara**, a blind, special-needs senior Husky, never went through rehoming; she stayed with the family. **Fénix** was rescued with the same intention as every other dog, but couldn't safely be rehomed by the rescue, and a group of heroes stepped in to help. While we weren't able to give Fénix the ending we've given all the dogs that have stopped by the rescue, we love him, and we named our animal welfare portal after him: [Fénix Animal Project](https://fenixanimalproject.org/).
 
 ## Meet Cata
 
