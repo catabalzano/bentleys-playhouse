@@ -35,7 +35,7 @@ export function header({ home = false } = {}) {
 ${ctx.mode === 'preview' ? `<aside class="preview-ribbon" aria-label="Preview notice">Preview build. Items tagged “Needs confirmation” stay hidden on the live site until verified. Print and download buttons work on the live site, not in this preview window.</aside>` : ''}
 <nav class="utility" aria-label="Quick links">
   <div class="wrap utility__in">
-    <a class="utility__urgent" href="${href('get-help/emergency/')}">${icon('alert', { size: 18 })}<span>${t('urgent.bar')}</span> <strong>${t('urgent.link')}</strong></a>
+    <a class="utility__urgent" href="${href('get-help/emergency/')}"><b class="utility__sos" aria-hidden="true">SOS</b><span>${t('urgent.bar')}</span> <strong>${t('urgent.link')}</strong></a>
     <div class="utility__right">
       ${langSwitch()}
       <a href="${href('transparency/')}"${isCurrent('transparency/') ? ' aria-current="page"' : ''}>Transparency</a>
