@@ -240,6 +240,7 @@
       '<a class="side__me" href="#profile" data-nav="profile"><span class="avatar" data-avatar></span><span><b data-myname>My profile</b><small>Profile &amp; security</small></span></a>' +
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
+      '<a class="nav" href="#messages" data-nav="messages">📬 Messages <span class="count" data-msgcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
@@ -277,6 +278,7 @@
     if (h === 'submissions') return submissions();
     if (h === 'donations') return donations();
     if (h === 'homephoto') return homePhoto();
+    if (h === 'messages') return messages();
     if (h === 'settings' || h === 'profile') return profile();
     if (h === 'users') return manageUsers();
     if (p[0] === 'c' && COLS[p[1]]) return p[2] ? editor(p[1], p[2] === 'new' ? null : p[2]) : list(p[1]);
@@ -289,11 +291,13 @@
     main().innerHTML = '<div class="head"><div><h1>Hi ' + esc((S.me && (S.me.name || '').split(' ')[0]) || 'there') + '! 🐾</h1><p>Everything you save here goes live on the website in about 2 minutes.</p></div></div>' +
       '<div class="home-cards">' +
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
+      '<a class="home-card" href="#messages"><span class="big">' + (S.msgs ? unread() : '…') + '</span><b>Messages</b><span>From the Contact and Get Involved forms</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
       ORDER.map(function (k) { return '<a class="home-card" href="#c/' + k + '"><span class="big">' + COLS[k].icon + '</span><b>' + esc(COLS[k].label) + '</b><span>' + esc(COLS[k].intro) + '</span></a>'; }).join('') +
       '<a class="home-card" href="#homephoto"><span class="big">🖼️</span><b>Homepage photo</b><span>The big photo at the top of the home page</span></a>' +
       '<a class="home-card" href="#donations"><span class="big">💛</span><b>Donations</b><span>Payment handles, amounts and the Donate button</span></a>' +
       '</div>';
+    if (!S.msgs) loadMsgs().then(function () { if ((location.hash || '#home') === '#home') home(); }).catch(function () {});
     if (!S.subs) loadSubs().then(function () { if ((location.hash || '#home') === '#home') home(); }).catch(function () {});
   }
 
@@ -550,6 +554,39 @@
   }
 
   // ---------- donations ----------
+  // ---------- messages ----------
+  function unread() { return (S.msgs || []).filter(function (m) { return !m.read; }).length; }
+  function msgCount() { var c = $('[data-msgcount]'); if (c) c.textContent = unread() || ''; }
+  function loadMsgs() { return api('/api/messages').then(function (j) { S.msgs = j.messages || []; msgCount(); return S.msgs; }); }
+  function messages() {
+    main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form and the "Raise your hand" form on Get Involved. Only admins can see these.</p></div></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
+    var tab = 'all';
+    function draw() {
+      var all = S.msgs || [], list = all.filter(function (m) { return tab === 'all' || (tab === 'unread' ? !m.read : m.form === tab); });
+      var T = [['all', 'All', all.length], ['unread', 'Unread', unread()], ['contact', 'Contact', all.filter(function (m) { return m.form === 'contact'; }).length], ['involved', 'Get Involved', all.filter(function (m) { return m.form === 'involved'; }).length]];
+      $('[data-mtabs]').innerHTML = T.map(function (t) { return '<button class="tab" aria-pressed="' + (t[0] === tab) + '" data-t="' + t[0] + '">' + t[1] + ' <span>' + t[2] + '</span></button>'; }).join('');
+      $$('[data-t]').forEach(function (b) { b.onclick = function () { tab = b.getAttribute('data-t'); draw(); }; });
+      if (!list.length) { $('[data-msgs]').innerHTML = '<p class="empty">' + (all.length ? 'Nothing here.' : 'No messages yet. When someone uses a form on the website, it shows up here.') + '</p>'; return; }
+      $('[data-msgs]').innerHTML = list.map(function (m) {
+        var subj = m.form === 'contact' ? (m.topic || 'Contact form') : 'Raise your hand';
+        var rows = [['Phone', m.phone], ['Area', m.area], ['Interested in', (m.interests || []).join(', ')]].filter(function (r) { return r[1]; });
+        return '<section class="card msg-card' + (m.read ? '' : ' is-new') + '" data-id="' + esc(m.id) + '">' +
+          '<div class="msg-top"><div><b>' + esc(m.name) + '</b> ' + (m.read ? '' : '<span class="pill">New</span>') + '<div class="hint">' + esc(subj) + ' · ' + esc(new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div></div>' +
+          '<a class="btn btn--blue btn--sm" href="mailto:' + esc(m.email) + '?subject=' + encodeURIComponent('Re: ' + subj + ' - Bentley\'s Playhouse') + '">✉️ Reply</a></div>' +
+          '<p class="msg-email"><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></p>' +
+          (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('') + '</dl>' : '') +
+          (m.message ? '<p class="msg-body">' + esc(m.message) + '</p>' : '') +
+          '<div class="row__act" style="justify-content:flex-start;margin-top:10px"><button class="btn btn--ghost btn--sm" data-rd>' + (m.read ? 'Mark as unread' : 'Mark as read') + '</button><button class="btn btn--danger btn--sm" data-dl>Delete</button></div></section>';
+      }).join('');
+      $$('.msg-card').forEach(function (card) {
+        var id = card.getAttribute('data-id'), m = S.msgs.filter(function (x) { return x.id === id; })[0];
+        $('[data-rd]', card).onclick = function () { api('/api/messages/' + id + '/read', { method: 'POST', json: { read: !m.read } }).then(function () { m.read = !m.read; msgCount(); draw(); }).catch(function (e) { alert(e.message); }); };
+        $('[data-dl]', card).onclick = function () { if (!confirm('Delete the message from ' + m.name + ' for good?')) return; api('/api/messages/' + id, { method: 'DELETE' }).then(function () { S.msgs = S.msgs.filter(function (x) { return x.id !== id; }); msgCount(); draw(); }).catch(function (e) { alert(e.message); }); };
+      });
+    }
+    loadMsgs().then(draw).catch(function (e) { $('[data-msgs]').innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
+  }
+
   // ---------- homepage photo ----------
   function heroShrink(file) {
     return new Promise(function (resolve, reject) {
@@ -572,7 +609,7 @@
       $('[data-hp]').innerHTML = '<form data-hform novalidate><section class="card">' +
         '<div class="hp-prev" data-prev>' + (cur ? '<img src="' + cur + '" alt="">' : '<span>Right now the home page shows the Bentley doorway illustration.</span>') + '</div>' +
         '<p class="hint">On phones the photo is shown a bit taller, so the left and right edges get trimmed.</p>' +
-        '<div class="actions" style="margin:12px 0 6px"><label class="btn"><input type="file" accept="image/*" data-file hidden>📷 Choose a photo</label>' + (h.image ? '<button class="btn" type="button" data-rm>Use the illustration instead</button>' : '') + '</div>' +
+        '<div class="actions" style="margin:12px 0 6px"><label class="btn btn--blue"><input type="file" accept="image/*" data-file hidden>📷 Choose a photo</label>' + (h.image ? '<button class="btn btn--ghost" type="button" data-rm>Use the illustration instead</button>' : '') + '</div>' +
         '<div class="f"><label for="halt">Describe the photo (for screen readers and Google)</label><input type="text" id="halt" maxlength="200" value="' + esc(h.imageAlt || '') + '" placeholder="e.g. Four happy dogs sitting together in a sunny garden"></div>' +
         '</section><div class="actions"><button class="btn btn--go" type="submit">💾 Save</button><span class="msg" data-msg role="status"></span></div></form>';
       var f = $('[data-hform]'), msg = $('[data-msg]', f), btn = $('button[type=submit]', f);

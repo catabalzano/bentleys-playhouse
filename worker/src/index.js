@@ -1,4 +1,5 @@
 import { handleAuth, handleContent, sessionOk, githubToken } from './admin.js';
+import { receiveMessage, handleMessages } from './messages.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -31,6 +32,8 @@ export default {
       else if (url.pathname === '/submit' && req.method === 'POST') res = await submit(req, env, ctx);
       else if (url.pathname.startsWith('/admin/')) res = await admin(req, env, url);
       else if (url.pathname.startsWith('/auth/')) res = await handleAuth(req, env, url);
+      else if (url.pathname === '/message' && req.method === 'POST') res = await receiveMessage(req, env, url);
+      else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);
       else if (url.pathname.startsWith('/api/')) res = await handleContent(req, env, url);
       else res = json({ error: 'Not found' }, 404);
       for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);

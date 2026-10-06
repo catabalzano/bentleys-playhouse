@@ -158,9 +158,9 @@
     "_showButtonNote": "true = the Donate button and pop-up show on the live site even before payment options are added (the pop-up then says 'Online giving opens soon')."
   },
   "forms": {
-    "_readme": "Paste a form endpoint (Formspree, Basin, Netlify Forms, etc.) to switch a form on. Empty = the form shows as 'not connected yet' and cannot be submitted.",
-    "contactEndpoint": "",
-    "involvedEndpoint": ""
+    "_readme": "Messages from these forms go to the private inbox in the admin (Admin → Messages).",
+    "contactEndpoint": "https://bentleys-playhouse-submissions.catabalzanoinc.workers.dev/message?form=contact",
+    "involvedEndpoint": "https://bentleys-playhouse-submissions.catabalzanoinc.workers.dev/message?form=involved"
   },
   "tagline": "Rescue. Rehab. Rehome. Repeat.",
   "foster": {
