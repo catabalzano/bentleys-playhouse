@@ -130,6 +130,11 @@ collections:
       label: Photo
       name: image
       widget: image
+  - label: Photo for social shares (optional)
+    name: sharePhoto
+    widget: image
+    required: false
+    hint: A wide (landscape) photo works best. Leave empty to use the first photo.
   - label: Photo description
     name: photoAlt
     widget: string

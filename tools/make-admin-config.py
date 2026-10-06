@@ -44,6 +44,7 @@ pawsome = {
         {'label': 'Urgent', 'name': 'urgent', 'widget': 'boolean', 'default': False, 'required': False, 'hint': 'Shows an "Urgent" ribbon and moves the pup to the front'},
         sel('Looking for', 'needs', [{'label': 'Adopters', 'value': 'adoption'}, {'label': 'A foster', 'value': 'foster'}, {'label': 'Adopters or a foster', 'value': 'both'}], 'adoption'),
         {'label': 'Photos', 'name': 'photos', 'widget': 'list', 'required': False, 'hint': 'The first photo is the main one. Phone photos are resized automatically.', 'field': {'label': 'Photo', 'name': 'image', 'widget': 'image'}},
+        {'label': 'Photo for social shares (optional)', 'name': 'sharePhoto', 'widget': 'image', 'required': False, 'hint': 'A wide (landscape) photo works best. Leave empty to use the first photo.'},
         s('Photo description', 'photoAlt', False, 'For people using screen readers, e.g. "Luna, a tan pit mix, sitting in the grass"'),
         s('One-line intro', 'tagline'),
         s('Breed', 'breed'), s('Age', 'age', False, 'e.g. "About 2 years"'), s('Sex', 'sex', False, 'e.g. "Female"'),

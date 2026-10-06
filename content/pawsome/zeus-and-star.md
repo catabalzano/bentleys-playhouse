@@ -13,6 +13,7 @@ photos:
   - /assets/img/pawsome/zs-smile.jpg
   - /assets/img/pawsome/zs-chair.jpg
   - /assets/img/pawsome/zs-couch.jpg
+sharePhoto: /assets/img/pawsome/zs-bed.jpg
 photoAlt: Zeus and Star, two fluffy white Samoyeds, sitting side by side by a door
 tagline: Two fluffy Samoyeds whose family needs to rehome them. They can be adopted together or separately.
 breed: Samoyed
