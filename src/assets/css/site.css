@@ -230,7 +230,7 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
 /* "What brings you here?" stays pinned while "Who we are" slides up over it */
 .stack { position: relative; }
 .stack > .brings { position: sticky; top: var(--stick-top, 0px); z-index: 0; background: var(--cream); padding-bottom: clamp(3rem, 8vw, 6rem); }
-.stack > .rrr { position: relative; z-index: 1; margin-top: 0; box-shadow: 0 -18px 40px rgba(47, 69, 200, .14); }
+.stack > .rrr { position: relative; z-index: 1; margin-top: 0; background: #BCC8FF; box-shadow: 0 -22px 50px rgba(47, 69, 200, .28); }
 .section-h { font-size: var(--step-3); }
 .section-h--sm { font-size: var(--step-2); }
 .section-h--center { text-align: center; }
@@ -960,3 +960,4 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .pp-gal-count { position: absolute; bottom: 12px; right: 12px; background: rgba(31, 29, 43, .7); color: #fff; font-weight: 700; font-size: .85rem; padding: .25em .7em; border-radius: 999px; }
 .pp-gal-hint { display: flex; align-items: center; gap: .4rem; margin: .8rem 0 0; font-size: .9rem; font-weight: 700; color: var(--muted); }
 .pp-card__count { position: absolute; bottom: 10px; right: 10px; display: inline-flex; align-items: center; gap: .3rem; background: rgba(31, 29, 43, .72); color: #fff; font-size: .78rem; font-weight: 800; padding: .3em .7em; border-radius: 999px; }
+.stack > .rrr .rrr__intro p { color: var(--ink); }
