@@ -21,9 +21,9 @@
     }
   ],
   "hero": {
-    "image": "",
-    "imageAlt": "",
-    "_note": "Add a joyful photo you own to src/assets/img/ and put its filename here, e.g. \"hero.jpg\". Until then the doorway illustration is used."
+    "image": "hero-four-dogs.jpg",
+    "imageAlt": "Four happy dogs sitting together in a sunny garden",
+    "_note": "Change it in Admin → Homepage photo. Current photo: Elina Volkova on Pexels (free Pexels license, no credit required)."
   },
   "social": {
     "instagram": {
