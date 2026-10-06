@@ -15,3 +15,5 @@ contact details) private in Cloudflare KV, and publishes approved pups to the si
    `pawsome.turnstileSiteKey` and run `npx wrangler secret put TURNSTILE_SECRET`.
 
 Nothing secret lives in this folder. Admin actions use the reviewer's own GitHub token.
+
+Deployed automatically by .github/workflows/deploy-submissions-worker.yml when worker/ changes.
