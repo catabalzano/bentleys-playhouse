@@ -170,3 +170,8 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .modal__in{position:relative;padding:24px 22px 20px}
 .modal__in h2{font-size:22px;padding-right:40px}
 .modal__x{all:unset;cursor:pointer;position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-weight:800}
+
+/* homepage photo */
+.hp-prev{aspect-ratio:1200/580;border-radius:50% 50% 18px 18px/70% 70% 18px 18px;overflow:hidden;background:#FDEBDD;box-shadow:8px 8px 0 var(--gold);display:grid;place-items:center;max-width:720px}
+.hp-prev img{width:100%;height:100%;object-fit:cover;display:block}
+.hp-prev span{padding:20px;text-align:center;color:var(--muted);font-weight:700}

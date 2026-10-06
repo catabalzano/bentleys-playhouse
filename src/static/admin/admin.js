@@ -241,6 +241,7 @@
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
+      '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
       '<div class="side__sep"></div><a class="nav" href="#users" data-nav="users">👥 Manage users</a><a class="nav" href="#profile" data-nav="profile">⚙️ Profile &amp; security</a>' +
       '<div class="side__foot"><a href="../" target="_blank" rel="noopener">View the website ↗</a></div></aside>' +
@@ -275,6 +276,7 @@
     if (h === 'home') return home();
     if (h === 'submissions') return submissions();
     if (h === 'donations') return donations();
+    if (h === 'homephoto') return homePhoto();
     if (h === 'settings' || h === 'profile') return profile();
     if (h === 'users') return manageUsers();
     if (p[0] === 'c' && COLS[p[1]]) return p[2] ? editor(p[1], p[2] === 'new' ? null : p[2]) : list(p[1]);
@@ -289,6 +291,7 @@
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
       ORDER.map(function (k) { return '<a class="home-card" href="#c/' + k + '"><span class="big">' + COLS[k].icon + '</span><b>' + esc(COLS[k].label) + '</b><span>' + esc(COLS[k].intro) + '</span></a>'; }).join('') +
+      '<a class="home-card" href="#homephoto"><span class="big">🖼️</span><b>Homepage photo</b><span>The big photo at the top of the home page</span></a>' +
       '<a class="home-card" href="#donations"><span class="big">💛</span><b>Donations</b><span>Payment handles, amounts and the Donate button</span></a>' +
       '</div>';
     if (!S.subs) loadSubs().then(function () { if ((location.hash || '#home') === '#home') home(); }).catch(function () {});
@@ -547,6 +550,59 @@
   }
 
   // ---------- donations ----------
+  // ---------- homepage photo ----------
+  function heroShrink(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        var k = Math.min(1, 2400 / img.naturalWidth), c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+        resolve(c.toDataURL('image/jpeg', 0.84));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('We couldn\'t read that file. Please use a JPG or PNG photo.')); };
+      img.src = url;
+    });
+  }
+  function homePhoto() {
+    main().innerHTML = '<div class="head"><div><h1>🖼️ Homepage photo</h1><p>The big photo at the top of the home page. Use a wide (landscape) photo you\'re allowed to use, with the dogs near the middle.</p></div></div><div data-hp><p class="empty">Loading…</p></div>';
+    api('/api/settings').then(function (st) {
+      var h = st.hero || {}, picked = null;
+      var cur = h.image ? '../assets/img/' + encodeURIComponent(h.image) : '';
+      $('[data-hp]').innerHTML = '<form data-hform novalidate><section class="card">' +
+        '<div class="hp-prev" data-prev>' + (cur ? '<img src="' + cur + '" alt="">' : '<span>Right now the home page shows the Bentley doorway illustration.</span>') + '</div>' +
+        '<p class="hint">On phones the photo is shown a bit taller, so the left and right edges get trimmed.</p>' +
+        '<div class="actions" style="margin:12px 0 6px"><label class="btn"><input type="file" accept="image/*" data-file hidden>📷 Choose a photo</label>' + (h.image ? '<button class="btn" type="button" data-rm>Use the illustration instead</button>' : '') + '</div>' +
+        '<div class="f"><label for="halt">Describe the photo (for screen readers and Google)</label><input type="text" id="halt" maxlength="200" value="' + esc(h.imageAlt || '') + '" placeholder="e.g. Four happy dogs sitting together in a sunny garden"></div>' +
+        '</section><div class="actions"><button class="btn btn--go" type="submit">💾 Save</button><span class="msg" data-msg role="status"></span></div></form>';
+      var f = $('[data-hform]'), msg = $('[data-msg]', f), btn = $('button[type=submit]', f);
+      function busy(t) { btn.disabled = true; msg.className = 'msg'; msg.textContent = t; }
+      function done(t) { dirty = false; msg.className = 'msg ok'; msg.textContent = t; btn.disabled = false; }
+      function oops(er) { msg.className = 'msg err'; msg.textContent = er.message; btn.disabled = false; }
+      f.addEventListener('input', function () { dirty = true; });
+      $('[data-file]', f).onchange = function () {
+        var file = this.files && this.files[0]; if (!file) return;
+        busy('Getting the photo ready…');
+        heroShrink(file).then(function (d) { picked = d; $('[data-prev]').innerHTML = '<img src="' + d + '" alt="">'; dirty = true; msg.className = 'msg'; msg.textContent = 'Looks good? Add a short description and press Save.'; btn.disabled = false; }).catch(oops);
+      };
+      var rm = $('[data-rm]', f);
+      if (rm) rm.onclick = function () {
+        if (!confirm('Go back to the doorway illustration?')) return;
+        busy('Saving…');
+        api('/api/settings', { method: 'PUT', json: { hero: { remove: true } } }).then(function () { done('Done. The illustration is back in about 2 minutes.'); setTimeout(homePhoto, 1500); }).catch(oops);
+      };
+      f.onsubmit = function (e) {
+        e.preventDefault();
+        var alt = $('#halt').value.trim();
+        if ((picked || h.image) && !alt) { msg.className = 'msg err'; msg.textContent = 'Please add a short description of the photo.'; return; }
+        if (!picked && alt === (h.imageAlt || '')) { msg.className = 'msg'; msg.textContent = 'Choose a photo first.'; return; }
+        busy('Saving…');
+        api('/api/settings', { method: 'PUT', json: { hero: picked ? { base64: picked, alt: alt } : { alt: alt } } })
+          .then(function () { picked = null; done('Saved! The home page updates in about 2 minutes.'); }).catch(oops);
+      };
+    }).catch(function (e) { $('[data-hp]').innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
+  }
+
   function donations() {
     main().innerHTML = '<div class="head"><div><h1>💛 Donations</h1><p>Your payment handles, the amounts people can pick, and whether the Donate button shows on the site.</p></div></div><div data-don><p class="empty">Loading…</p></div>';
     api('/api/settings').then(function (st) {

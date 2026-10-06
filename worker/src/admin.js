@@ -353,7 +353,7 @@ export async function handleContent(req, env, url) {
   if (kind === 'settings') {
     const text = await readFile(env, token, 'content/site.json');
     const site = JSON.parse(text);
-    if (req.method === 'GET') return json({ donate: site.donate, pawsome: site.pawsome, contact: { email: site.contact && site.contact.email } });
+    if (req.method === 'GET') return json({ donate: site.donate, pawsome: site.pawsome, contact: { email: site.contact && site.contact.email }, hero: { image: (site.hero && site.hero.image) || '', imageAlt: (site.hero && site.hero.imageAlt) || '' } });
     if (req.method === 'PUT') {
       const b = await req.json();
       if (b.donate) {
@@ -363,7 +363,26 @@ export async function handleContent(req, env, url) {
         if (typeof b.donate.showButton === 'boolean') d.showButton = b.donate.showButton;
       }
       if (b.pawsome && typeof b.pawsome.email === 'string') site.pawsome.email = b.pawsome.email.trim();
-      await commitFiles(env, token, 'Admin: update donation & contact settings', [{ path: 'content/site.json', content: JSON.stringify(site, null, 2) + '\n' }]);
+      const changes = [];
+      let what = 'donation & contact settings';
+      if (b.hero && typeof b.hero === 'object') {
+        // Homepage photo: {base64, alt} to replace it, {alt} to edit the description, {remove:true} for the illustration
+        site.hero = site.hero || {};
+        what = 'homepage photo';
+        if (b.hero.remove) { site.hero.image = ''; site.hero.imageAlt = ''; }
+        else {
+          if (b.hero.base64) {
+            const raw = String(b.hero.base64);
+            const ext = /^data:image\/png/.test(raw) ? 'png' : /^data:image\/webp/.test(raw) ? 'webp' : 'jpg';
+            const file = `hero-${Date.now().toString(36)}.${ext}`;
+            changes.push({ path: `src/assets/img/${file}`, base64: raw.replace(/^data:[^,]+,/, '') });
+            site.hero.image = file;
+          }
+          if (typeof b.hero.alt === 'string') site.hero.imageAlt = b.hero.alt.trim().slice(0, 200);
+        }
+      }
+      changes.push({ path: 'content/site.json', content: JSON.stringify(site, null, 2) + '\n' });
+      await commitFiles(env, token, `Admin: update ${what}`, changes);
       return json({ ok: true });
     }
   }
