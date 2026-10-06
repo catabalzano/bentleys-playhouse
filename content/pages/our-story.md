@@ -1,6 +1,6 @@
 ---
 slug: story
-title: Our story
+title: Our Story
 summary: Bentley's Playhouse is a grassroots Miami dog rescue founded by Cata Balzano in August 2022. Rescue, rehab, rehome, repeat.
 ---
 Bentley's Playhouse is a grassroots Miami animal rescue founded by **Cata Balzano** in August 2022. Dogs come into Cata's home, where they get vet care, time and patience, and then a family of their own.

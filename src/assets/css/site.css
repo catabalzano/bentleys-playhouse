@@ -1015,3 +1015,25 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
   .header__donate { display: inline-flex; margin-right: .5rem; min-height: 44px; }
   .nav__donate { display: none; }
 }
+
+/* Donate gift: "Sticker pop" look (violet card, logo sticker popping out the top, gold ribbon) */
+.gift-dialog { padding-top: 64px; box-shadow: none; }
+.gift { color: #fff; background: linear-gradient(170deg, #7A45E6, #2F45C8); border-radius: 32px; padding: 78px var(--gp) 0; overflow: visible; box-shadow: 0 30px 80px rgba(31, 29, 43, .35); }
+.gift::before { content: none; }
+.gift__badge { position: absolute; left: 50%; top: -64px; width: 132px; height: 132px; margin: 0; transform: translateX(-50%) rotate(-6deg); border: 5px solid var(--gold); box-shadow: 0 10px 24px rgba(0, 0, 0, .25); }
+.gift__h { color: #fff; }
+.gift__sub { color: rgba(255, 255, 255, .88); }
+.gift-tier { border-color: transparent; }
+.gift-tier:hover { border-color: var(--gold); }
+.gift-tier[aria-checked="true"] { border-color: var(--orange); }
+.gift-tier:focus-visible, .gift-pay:focus-visible, .gift__go:focus-visible, .gift__foot a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.gift__or { color: #E5E0FF; }
+.gift-pay { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .35); color: #fff; }
+.gift-pay span { color: #DDD8FF; }
+.gift-pay:hover { background: rgba(255, 255, 255, .22); border-color: #fff; }
+.gift__foot { margin: 1.4rem calc(-1 * var(--gp)) 0; padding: .95rem var(--gp); border-top: 0; border-radius: 0 0 32px 32px; background: var(--gold); color: #1F1D2B; }
+.gift__foot span { color: #1F1D2B; }
+.gift__foot svg { color: #1F1D2B; }
+.gift__foot a { color: #1F1D2B; text-decoration: underline; text-underline-offset: 3px; }
+.gift .preview-note { color: var(--preview-ink); }
+.donate-page .gift { margin-top: 5rem; box-shadow: 0 18px 50px rgba(47, 69, 200, .25); }
