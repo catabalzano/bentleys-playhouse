@@ -215,3 +215,40 @@
   function set() { Array.prototype.forEach.call(els, function (el) { el.style.setProperty('--stick-top', Math.min(0, window.innerHeight - el.offsetHeight) + 'px'); }); }
   set(); window.addEventListener('resize', set);
 })();
+
+/* Donate: gift pop-up (and the same block on the Donate page). Without JS the nav button just opens /donate/. */
+(function () {
+  'use strict';
+  function wireGift(g) {
+    var go = g.querySelector('[data-gift-go]'), label = g.querySelector('[data-gift-label]');
+    var tiers = Array.prototype.slice.call(g.querySelectorAll('.gift-tier'));
+    var pays = Array.prototype.slice.call(g.querySelectorAll('[data-pay-tpl]'));
+    function pick(t) {
+      var amt = t.getAttribute('data-amount');
+      tiers.forEach(function (o) { o.setAttribute('aria-checked', String(o === t)); });
+      pays.forEach(function (a) { var tpl = a.getAttribute('data-pay-tpl'); if (tpl && tpl !== '#') a.href = amt ? tpl.replace('{amount}', amt) : a.getAttribute('data-pay-base'); });
+      if (label) label.textContent = 'Donate' + (amt ? ' $' + amt : '') + (go && go.getAttribute('data-name') ? ' with ' + go.getAttribute('data-name') : '');
+    }
+    tiers.forEach(function (t, i) {
+      t.addEventListener('click', function () { pick(t); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+        if (!d) return; e.preventDefault(); var n = tiers[(i + d + tiers.length) % tiers.length]; n.focus(); pick(n);
+      });
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-gift]'), wireGift);
+  var dlg = document.querySelector('[data-donate-dialog]');
+  if (!dlg || typeof dlg.showModal !== 'function') return;
+  var last = null;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-donate-open]');
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+    e.preventDefault(); last = document.activeElement; dlg.showModal();
+    var on = dlg.querySelector('.gift-tier[aria-checked="true"]'); if (on) on.focus();
+  });
+  dlg.querySelector('[data-donate-close]').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', function () { if (last && last.focus) last.focus(); });
+  if (location.hash === '#donate') dlg.showModal();
+})();

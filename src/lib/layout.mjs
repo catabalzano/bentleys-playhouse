@@ -1,4 +1,5 @@
 import { ctx, esc, href, asset, isCurrent, icon, show, paw, logo } from './core.mjs';
+import { donateVisible, donateDialog } from './donate.mjs';
 
 const NAV = [
   ['nav.help', 'get-help/'],
@@ -15,9 +16,8 @@ function navLinks() {
 }
 
 function donateLink(cls = 'btn btn--donate') {
-  const d = ctx.site.donate;
-  if (d.verified && d.url) return `<a class="${cls}" href="${href('donate/')}">${icon('heart', { size: 18 })}<span>${ctx.t('nav.donate')}</span></a>`;
-  return '';
+  if (!donateVisible()) return '';
+  return `<a class="${cls}" href="${href('donate/')}" data-donate-open>${icon('heart', { size: 18 })}<span>${ctx.t('nav.donate')}</span></a>`;
 }
 
 function langSwitch() {
@@ -47,16 +47,16 @@ ${ctx.mode === 'preview' ? `<aside class="preview-ribbon" aria-label="Preview no
 <header class="site-header${home ? ' site-header--home' : ''}">
   <div class="wrap site-header__in">
     <a class="brand" href="${href('')}"${home ? ' aria-current="page"' : ''}>${logoHtml}</a>
+    ${donateVisible() ? donateLink('btn btn--donate header__donate') : ''}
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">
       <span class="menu-btn__open">${icon('menu')}<span>${t('menu')}</span></span>
       <span class="menu-btn__close">${icon('x')}<span>${t('close')}</span></span>
     </button>
     <nav class="nav" id="site-nav" aria-label="Main">
-      <ul class="nav__list">${navLinks()}</ul>
+      <ul class="nav__list">${navLinks()}${donateVisible() ? `<li class="nav__donate">${donateLink()}</li>` : ''}</ul>
       <div class="nav__extra">
         <a class="nav__link nav__contact" href="${href('transparency/')}">Transparency</a>
         <a class="nav__link nav__contact" href="${href('contact/')}">${t('nav.contact')}</a>
-        ${donateLink()}
       </div>
     </nav>
   </div>
@@ -136,6 +136,7 @@ ${header({ home })}
 ${body}
 </main>
 ${footer()}
+${donateDialog()}
 <script>window.BP_CONFIG=${JSON.stringify({ forms: s.forms, route: ctx.route, mode: ctx.mode, preferredRoute: s.contact.preferredRoute, email: s.contact.emailVerified ? s.contact.email : '', strings: pick(ctx.t.all, /^(form|search|copied|copyFailed)/) })};</script>
 <script src="${asset('js/site.js')}" defer></script>
 ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')}`;

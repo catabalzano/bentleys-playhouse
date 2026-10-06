@@ -5,6 +5,7 @@ import {
 import { mdasBlock } from './pages2.mjs';
 import { pawsomeHome, img } from './pages3.mjs';
 import { heroDoorway, photoSlot } from './art.mjs';
+import { giftBlock, donateVisible } from './donate.mjs';
 
 const CHOICES = [
   { k: 'found', title: 'I found a dog', sub: 'Stay safe, check for a chip, report it and find the family.', to: 'get-help/found-a-dog/', tone: 'blue' },
@@ -609,31 +610,24 @@ export function form(kind) {
 // ============ DONATE ============
 export function donate() {
   const d = ctx.site.donate;
-  const ready = d.verified && d.url;
   return `
 <section class="page-head page-head--donate"><div class="wrap wrap--text">
   ${breadcrumb([['Home', ''], ['Donate', '']])}
   <h1 class="page-h">Support the playhouse</h1>
   <p class="page-lede">Every dog we help needs vet care, food, a safe place to land and time. Donations keep that going.</p>
 </div></section>
-<div class="wrap wrap--text">
-  ${ready ? `
-    <div class="donate-box">
-      ${button('Donate securely', d.url, { externalLink: true, ic: 'heart' })}
-      ${d.uses.length ? `<h2 class="section-h section-h--sm">Where donations go</h2><ul>${d.uses.map((u) => `<li>${esc(u)}</li>`).join('')}</ul>` : ''}
-      ${d.legal.verified ? `<div class="legal"><h2 class="section-h section-h--sm">Our details</h2><p>${esc(d.legal.legalName)}${d.legal.status ? ` · ${esc(d.legal.status)}` : ''}${d.legal.ein ? ` · EIN ${esc(d.legal.ein)}` : ''}</p>${d.legal.taxStatement ? `<p>${esc(d.legal.taxStatement)}</p>` : ''}</div>` : ''}
-    </div>` : `
+<div class="wrap wrap--text donate-page">
+  ${donateVisible() ? giftBlock() : `
     <div class="empty empty--wide">
       <img src="${asset('img/bentley-head.png')}" alt="" width="110" height="127" class="empty__bentley">
       <div>
         <h2>Online donations are coming soon</h2>
-        <p>We'll add a secure donation link here once it's ready. We won't ask you to send money anywhere that isn't listed on this page or our official Instagram.</p>
-        <p>When donations open, you'll be able to see exactly how every dollar is spent on our <a href="${href('transparency/')}">transparency page</a>, receipts included.</p>
-        <p>In the meantime, there are lots of ways to help that don't involve money.</p>
+        <p>We'll add our donation options here once they're ready. We won't ask you to send money anywhere that isn't listed on this page or our official Instagram.</p>
+        <p>You'll be able to see exactly how every dollar is spent on our <a href="${href('transparency/')}">transparency page</a>.</p>
         ${button('Other ways to help', 'get-involved/', { ic: 'hands' })}
       </div>
-    </div>
-    ${previewNote('To switch this page on, add your verified payment link to <code>content/site.json → donate.url</code> and set <code>verified: true</code>. Add confirmed uses of funds and legal/tax details only after they\'re verified. The Donate button appears in the header automatically.')}`}
+    </div>`}
+  ${d.legal.verified ? `<div class="legal"><h2 class="section-h section-h--sm">Our details</h2><p>${esc(d.legal.legalName)}${d.legal.status ? ` · ${esc(d.legal.status)}` : ''}${d.legal.ein ? ` · EIN ${esc(d.legal.ein)}` : ''}</p>${d.legal.taxStatement ? `<p>${esc(d.legal.taxStatement)}</p>` : ''}</div>` : ''}
 </div>`;
 }
 

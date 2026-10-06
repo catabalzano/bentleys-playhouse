@@ -102,7 +102,58 @@
     },
     "wishlistUrl": "",
     "wishlistVerified": false,
-    "_note": "YouTube lists Venmo, Cash App, Zelle and PayPal without handles, and the Amazon link points to Amazon's generic wishlist page. Add exact, verified destinations to switch donations on."
+    "_note": "YouTube lists Venmo, Cash App, Zelle and PayPal without handles, and the Amazon link points to Amazon's generic wishlist page. Add exact, verified destinations to switch donations on.",
+    "tiers": [
+      {
+        "amount": "25",
+        "emoji": "🥣",
+        "label": "A week of food"
+      },
+      {
+        "amount": "50",
+        "emoji": "💉",
+        "label": "A round of vaccines",
+        "default": true
+      },
+      {
+        "amount": "150",
+        "emoji": "🩺",
+        "label": "Help with a spay/neuter"
+      },
+      {
+        "amount": "",
+        "emoji": "❤️",
+        "label": "Wherever it's needed most"
+      }
+    ],
+    "methods": [
+      {
+        "type": "paypal",
+        "name": "PayPal",
+        "handle": "",
+        "primary": true,
+        "verified": false
+      },
+      {
+        "type": "venmo",
+        "name": "Venmo",
+        "handle": "",
+        "verified": false
+      },
+      {
+        "type": "zelle",
+        "name": "Zelle",
+        "handle": "",
+        "verified": false
+      },
+      {
+        "type": "cashapp",
+        "name": "Cash App",
+        "handle": "",
+        "verified": false
+      }
+    ],
+    "_methodsReadme": "Payment options for the Donate pop-up. type: paypal | venmo | cashapp | zelle | link. Put the handle only (paypal.me name, Venmo @name, Cash App $tag, Zelle email/phone). For 'link' (Zeffy, Givebutter, etc.) set url (and optional amountUrl with {amount}). The first one with primary: true is the big orange button. Set verified: true to show it on the live site."
   },
   "forms": {
     "_readme": "Paste a form endpoint (Formspree, Basin, Netlify Forms, etc.) to switch a form on. Empty = the form shows as 'not connected yet' and cannot be submitted.",
