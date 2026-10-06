@@ -195,8 +195,14 @@
   var els = document.querySelectorAll('[data-reveal]');
   if (!els.length || !('IntersectionObserver' in window)) return;
   document.documentElement.classList.add('js-reveal');
+  // children of a panel wait for the panel, then rise one after another
   var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
-  Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      Array.prototype.forEach.call(e.target.querySelectorAll('[data-reveal]'), function (c) { c.classList.add('is-in'); });
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+  Array.prototype.forEach.call(els, function (el) { if (!el.parentElement.closest('[data-reveal="panel"]')) io.observe(el); });
 })();
