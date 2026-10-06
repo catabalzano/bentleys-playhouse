@@ -275,3 +275,23 @@
     b.setAttribute('aria-pressed', String(!on));
   });
 })();
+
+/* Cookie choice: a small notice until the visitor picks; analytics loads only after "Accept". Also powers the Cookie Policy buttons. */
+(function () {
+  'use strict';
+  if (typeof window.bpLoadGA !== 'function') return; // analytics not set up on this build
+  var KEY = 'bp.cookies';
+  function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function clearGA() { document.cookie.split(';').forEach(function (c) { var n = c.split('=')[0].trim(); if (/^_ga/.test(n)) { ['', '; domain=' + location.hostname, '; domain=.' + location.hostname.replace(/^www\./, '')].forEach(function (d) { document.cookie = n + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d; }); } }); }
+  function choose(v) { set(v); if (v === 'yes') window.bpLoadGA(); else clearGA(); var b = document.querySelector('.cookie-note'); if (b) b.remove(); sync(); }
+  function sync() { var st = document.querySelector('[data-cookie-status]'); if (!st) return; var v = get(); st.textContent = v === 'yes' ? 'You’re allowing analytics cookies.' : v === 'no' ? 'You’ve turned analytics cookies off.' : 'You haven’t made a choice yet.'; }
+  document.addEventListener('click', function (e) { var t = e.target.closest('[data-cookie-choice]'); if (t) choose(t.getAttribute('data-cookie-choice')); });
+  sync();
+  if (get() || document.querySelector('[data-cookie-page]')) return;
+  var base = (document.querySelector('link[rel="stylesheet"][href*="css/site.css"]') || {}).getAttribute ? document.querySelector('link[rel="stylesheet"][href*="css/site.css"]').getAttribute('href').replace(/assets\/css\/site\.css.*$/, '') : '/';
+  var n = document.createElement('div');
+  n.className = 'cookie-note'; n.setAttribute('role', 'region'); n.setAttribute('aria-label', 'Cookie choice');
+  n.innerHTML = '<p>🍪 We use a few analytics cookies to see which guides help people most. Nothing else, and never for ads. <a href="' + base + 'cookies/">Cookie policy</a></p><div class="cookie-note__btns"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">Accept</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">No thanks</button></div>';
+  document.body.appendChild(n);
+})();

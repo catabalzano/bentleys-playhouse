@@ -133,7 +133,9 @@ emit('our-story/', { title: 'Our Story', description: pages.story.summary, body:
 emit('get-involved/', { title: 'Get Involved', description: 'Volunteer, foster, donate supplies, share rescue information or offer your skills to Bentley\'s Playhouse.', body: () => P.involved(data) });
 emit('donate/', { title: 'Donate', description: 'Support Bentley\'s Playhouse, a volunteer-run dog rescue in Miami: food, spay/neuter, vet care and supplies for dogs in our care.', noindex: !ctx.site.donate.verified, body: () => P.donate() });
 emit('contact/', { title: 'Contact & FAQ', description: 'How to reach Bentley\'s Playhouse, what we can help with, and who to call when an animal needs urgent help.', body: () => P.contact(data) });
-emit('privacy/', { title: 'Privacy', description: 'How Bentley\'s Playhouse handles the information you share: forms, the flyer builder, checklists and website analytics.', body: () => P.privacy() });
+emit('privacy/', { title: 'Privacy Policy', description: 'How Bentley\'s Playhouse handles the information you share: forms, pup submissions, donations, analytics and your choices.', body: () => P.privacy() });
+emit('terms/', { title: 'Terms of Use', description: 'The ground rules for using the Bentley\'s Playhouse website: guidance, listings, submissions and donations.', body: () => P.terms() });
+emit('cookies/', { title: 'Cookie Policy', description: 'Which cookies and browser storage the Bentley\'s Playhouse website uses, and how to change your choice.', body: () => P.cookies() });
 emit('404.html', { title: 'Page not found', description: 'Page not found.', noindex: true, body: () => P.notFound() });
 
 // assets

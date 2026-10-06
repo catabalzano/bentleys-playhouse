@@ -694,26 +694,128 @@ export function contact(data) {
 </div>`;
 }
 
-export function privacy() {
-  return `
+const UPDATED = 'October 6, 2026';
+const legalHead = (title, lede, crumb) => `
 <section class="page-head"><div class="wrap wrap--text">
-  ${breadcrumb([['Home', ''], ['Privacy', '']])}
-  <h1 class="page-h">Privacy</h1>
-  <p class="page-lede">The short version: we collect as little as we can, and we use it only to help.</p>
-</div></section>
-<div class="wrap wrap--text prose">
-  <h2>Forms</h2>
-  <p>When you send a message or interest form, we receive what you type in it. We use it only to reply to you and to coordinate the help you asked about. We don't sell or share it for marketing.</p>
-  <h2>The flyer builder</h2>
-  <p>The flyer builder runs entirely in your browser. Your photo and details are never uploaded to us, and they're gone when you remove the photo or close the page.</p>
-  <h2>Checklists</h2>
-  <p>Ticks on our checklists are saved only in your own browser so you don't lose your place. Use “Clear ticks” to remove them.</p>
-  ${ctx.site.analytics && ctx.site.analytics.ga4 ? `<h2>Website analytics</h2>
-  <p>We use Google Analytics to understand how people find and use this site, such as which guides are read most and which pages people arrive from. It uses cookies and collects information like pages visited, approximate location (city or region), device and browser type, and how you reached the site. It doesn't tell us who you are, and we never send it anything you type into our forms or the flyer builder.</p>
-  <p>Google processes this data under its own <a href="https://policies.google.com/privacy" rel="noopener">privacy policy</a>. You can opt out with your browser's cookie settings, a content blocker, or the <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">Google Analytics opt-out add-on</a>.</p>
-  ` : ''}<h2>Protecting yourself</h2>
+  ${breadcrumb([['Home', ''], [crumb, '']])}
+  <h1 class="page-h">${title}</h1>
+  <p class="page-lede">${lede}</p>
+  <p class="legal-updated">Last updated ${UPDATED}</p>
+</div></section>`;
+const mail = () => `<a href="mailto:${esc(ctx.site.contact.email)}">${esc(ctx.site.contact.email)}</a>`;
+
+export function privacy() {
+  const ga = ctx.site.analytics && ctx.site.analytics.ga4;
+  return `${legalHead('Privacy Policy', 'The short version: we collect as little as we can, we use it only to help dogs and the people helping them, and we never sell it.', 'Privacy Policy')}
+<div class="wrap wrap--text prose legal">
+  <p>This policy explains what ${esc(ctx.site.name)} ("we", "us") collects through bentleysplayhouse.org, why, and the choices you have. Questions? Email ${mail()}.</p>
+
+  <h2>What we collect</h2>
+  <h3>Messages and interest forms</h3>
+  <p>When you use our Contact form or the "Raise your hand" form on Get Involved, we receive what you type: your name, email, and anything optional you add (phone, neighborhood or ZIP, interests, your message). We use it only to reply to you and coordinate the help you asked about.</p>
+  <h3>"Submit a pup" for Pawsome Pooches</h3>
+  <p>When you submit a dog, we receive the dog's details and photos, plus your name, social media handle, phone and email. Your contact details are only for us: they are never shown on the website. If we approve the listing, the dog's details and photos are published on the site. If we don't, we delete the photos.</p>
+  <h3>Donations</h3>
+  <p>Donations go through the payment app you choose (such as PayPal, Venmo, Zelle or Cash App). We don't see or store your card or bank details. That app's own privacy policy applies, and we receive what it shares with recipients, usually your name and the amount.</p>
+  <h3>Things that stay on your device</h3>
+  <p>The flyer builder runs entirely in your browser: your photo and details are never uploaded. Checklist ticks and your cookie choice are saved only in your own browser. You can clear them any time in your browser settings.</p>
+  ${ga ? `<h3>Website analytics (only if you accept)</h3>
+  <p>If you click "Accept" on our cookie notice, we use Google Analytics to understand how people find and use the site, such as which guides are read most. It collects things like pages visited, approximate location (city or region), device and browser type, and how you reached the site. It doesn't tell us who you are, and we never send it anything you type into our forms. If you say no, Google Analytics doesn't load at all. See our <a href="${href('cookies/')}">Cookie Policy</a>.</p>` : ''}
+
+  <h2>Who helps us run the site</h2>
+  <p>We use a few trusted services to run the website. They process data only to provide their service to us:</p>
+  <ul>
+    <li><strong>Cloudflare</strong> stores form messages and pup submissions privately until we delete them.</li>
+    <li><strong>GitHub</strong> hosts the website and its published content.</li>
+    <li><strong>Google</strong> provides our fonts${ga ? ' and, if you accept cookies, Google Analytics' : ''}.</li>
+    <li><strong>Behold</strong> and <strong>Instagram</strong> show our latest Instagram posts on the homepage. Your browser loads those images from them.</li>
+  </ul>
+  <p>We don't sell, rent or trade your information, and we don't use it for advertising. We'd only share it if the law required us to, or with your permission (for example, to connect you with a rescue about a specific dog).</p>
+
+  <h2>How long we keep it</h2>
+  <p>We keep messages and submissions only as long as we need them to help, then delete them. You can ask us to delete yours at any time.</p>
+
+  <h2>Your choices</h2>
+  <ul>
+    <li>Ask what information we have about you, or ask us to correct or delete it, by emailing ${mail()}.</li>
+    <li>Change your cookie choice any time on the <a href="${href('cookies/')}">Cookie Policy</a> page.</li>
+    <li>If you're in a place with specific privacy laws (such as California or the EU), you have the rights those laws give you, and we'll honor them.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>This site isn't directed to children under 13, and we don't knowingly collect their information. If you think a child has sent us something, email us and we'll delete it.</p>
+
+  <h2>Keeping yourself safe</h2>
   <p>When you post about a lost or found dog, share general areas rather than your home address, and consider a separate email or text-only number. Never send money to someone you haven't verified.</p>
-  ${previewNote('Have this page reviewed once your form provider is chosen, so it describes exactly what is collected.')}
+
+  <h2>Changes</h2>
+  <p>If we change this policy, we'll update the date at the top of this page.</p>
+</div>`;
+}
+
+export function terms() {
+  return `${legalHead('Terms of Use', 'The ground rules for using this website. Plain English, no tricks.', 'Terms of Use')}
+<div class="wrap wrap--text prose legal">
+  <p>By using bentleysplayhouse.org you agree to these terms. If you don't agree, please don't use the site. Questions? Email ${mail()}.</p>
+
+  <h2>Our information is general guidance</h2>
+  <p>Our guides, checklists and directories are here to help, but they're general information, not veterinary, legal or professional advice. Every dog and situation is different: please talk to a veterinarian or the right professional about your specific case. We work hard to keep things accurate and up to date, but details like clinic hours or shelter policies can change, so please confirm before you go.</p>
+
+  <h2>Emergencies</h2>
+  <p>We're a small, volunteer-run rescue, not an emergency service or animal control agency. If an animal is hurt or in danger, contact an emergency vet or your local animal services right away. In Miami-Dade, call 311 or 305-468-5900.</p>
+
+  <h2>Pawsome Pooches and other listings</h2>
+  <p>Pawsome Pooches features community dogs to help them get seen. Many are not in our care: they're at shelters, with other rescues, or with families. Listing details come from shelters, rescues and the people who submit them, and we can't guarantee they're complete or accurate. Each adoption or foster is handled by whoever has the dog, under their own process and policies. Please meet the dog and ask your own questions before you commit.</p>
+
+  <h2>What you send us</h2>
+  <p>When you submit a dog, photos or a message, you confirm that the information is true to the best of your knowledge and that you have the right to share the photos. You give us permission to use, edit and publish what you submit about the dog (never your contact details) on this site and our social media to help the dog find a home. We may edit, decline or remove any submission or listing at any time.</p>
+
+  <h2>Donations</h2>
+  <p>Donations are voluntary gifts that support our rescue work, and are generally non-refundable. If you think a donation was made in error, email us and we'll do our best to help. We'll say clearly on our Donate page whether donations are tax-deductible.</p>
+
+  <h2>Using the site fairly</h2>
+  <p>Please don't misuse the site: no spam, false or harmful submissions, attempts to break or overload it, or scraping it for other purposes.</p>
+
+  <h2>Our content</h2>
+  <p>The text, logo, illustrations and design of this site belong to ${esc(ctx.site.name)} or are used with permission. You're welcome to share links to our pages and print our checklists and flyers for personal or rescue use. Please ask before reusing anything else.</p>
+
+  <h2>Links to other sites</h2>
+  <p>We link to shelters, rescues, clinics and other helpful sites. We don't control them and aren't responsible for their content or practices.</p>
+
+  <h2>Limits on our responsibility</h2>
+  <p>The site is provided "as is". To the extent the law allows, ${esc(ctx.site.name)} and its volunteers aren't liable for any loss or harm that comes from using the site or relying on its information, or from any adoption, foster or arrangement made through a listing.</p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of the State of Florida, USA.</p>
+
+  <h2>Changes</h2>
+  <p>We may update these terms. The date at the top of this page shows when they last changed.</p>
+</div>`;
+}
+
+export function cookies() {
+  const ga = ctx.site.analytics && ctx.site.analytics.ga4;
+  return `${legalHead('Cookie Policy', 'Which cookies and similar storage this site uses, and how to change your choice.', 'Cookie Policy')}
+<div class="wrap wrap--text prose legal">
+  <h2>Your choice</h2>
+  <div class="cookie-choice" data-cookie-page>
+    <p data-cookie-status>${ga ? 'You haven’t made a choice yet.' : 'This site doesn’t use analytics cookies right now.'}</p>
+    ${ga ? `<div class="btn-row"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">Allow analytics cookies</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">No analytics cookies</button></div>` : ''}
+  </div>
+
+  <h2>What we use</h2>
+  <table class="legal-table">
+    <thead><tr><th scope="col">Name</th><th scope="col">What it's for</th><th scope="col">How long</th></tr></thead>
+    <tbody>
+      ${ga ? `<tr><td><code>_ga</code>, <code>_ga_*</code></td><td>Google Analytics: counts visits and which pages are used. Only set if you allow analytics cookies.</td><td>Up to 2 years</td></tr>` : ''}
+      <tr><td><code>bp.cookies</code> (browser storage)</td><td>Remembers your cookie choice so we don't ask again.</td><td>Until you clear it</td></tr>
+      <tr><td>Checklist ticks (browser storage)</td><td>Keeps your place on our printable checklists.</td><td>Until you clear them</td></tr>
+    </tbody>
+  </table>
+  <p>We don't use advertising or tracking cookies, and we don't sell data. Some pages show content from other services (like our Instagram posts or Google Fonts); those services may receive basic technical information such as your IP address when your browser loads them.</p>
+
+  <h2>Managing cookies</h2>
+  <p>Use the buttons above to change your choice at any time. You can also block or delete cookies in your browser settings. For more about how we handle information, see our <a href="${href('privacy/')}">Privacy Policy</a>.</p>
 </div>`;
 }
 

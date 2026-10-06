@@ -69,7 +69,7 @@ export function footer() {
   const col = (title, links) => `<div class="footer__col"><h2 class="footer__h">${title}</h2><ul>${links.map(([l, r]) => `<li><a href="${href(r)}">${l}</a></li>`).join('')}</ul></div>`;
   const social = [['instagram', s.social.instagram], ['facebook', s.social.facebook], ['youtube', s.social.youtube]]
     .filter(([, v]) => v && show(v.verified))
-    .map(([k, v]) => `<li><a href="${esc(v.url)}" target="_blank" rel="noopener">${icon(k, { size: 18 })} ${esc(v.handle)}<span class="visually-hidden"> (${t('externalLink')})</span></a></li>`).join('');
+    .map(([k, v]) => `<li><a href="${esc(v.url)}" target="_blank" rel="noopener">${icon(k, { size: 18 })} ${{ instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube' }[k]}<span class="visually-hidden"> (${t('externalLink')})</span></a></li>`).join('');
   return `
 <footer class="site-footer">
   <div class="footer__wave" aria-hidden="true"></div>
@@ -81,7 +81,7 @@ export function footer() {
     </div>
     ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
     ${col('Learn', [['Pawsome Pooches', 'pawsome-pooches/'], ['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists'], ['Rehoming a dog safely', 'resources/rehoming-a-dog-safely/']])}
-    ${col(esc(s.name), [['Our Story', 'our-story/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : []), ['Privacy', 'privacy/']])}
+    ${col(esc(s.name), [['Our Story', 'our-story/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : [])])}
     <div class="footer__col"><h2 class="footer__h">Follow along</h2><ul class="footer__social">${social}</ul></div>
   </div>
   <div class="wrap footer__notice">
@@ -89,6 +89,7 @@ export function footer() {
   </div>
   <div class="wrap footer__base">
     <p>© ${new Date('2026-10-05').getFullYear()} ${esc(s.name)}. Guidance last reviewed <time datetime="${s.lastReviewed}">${new Date(s.lastReviewed + 'T12:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>.</p>
+    <p class="footer__legal"><a href="${href('privacy/')}">Privacy</a><a href="${href('terms/')}">Terms</a><a href="${href('cookies/')}">Cookies</a></p>
     <p class="footer__credit">Design by <a href="https://byposhpixel.com/" target="_blank" rel="noopener">Posh Pixel<span class="visually-hidden"> (${t('externalLink')})</span></a></p>
     <p class="footer__paws" aria-hidden="true">${paw()}${paw()}${paw()}</p>
   </div>
@@ -168,9 +169,9 @@ function clip(text = '', max = 160) {
 function analyticsTag() {
   const id = ctx.site.analytics && ctx.site.analytics.ga4;
   if (ctx.mode !== 'live' || !id || !/^G-[A-Z0-9]+$/.test(id)) return '';
+  // Loads only after the visitor accepts analytics cookies (choice kept in localStorage 'bp.cookies'; banner in site.js)
   return `
-<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${id}');</script>`;
+<script>(function(){var id='${id}';window.bpLoadGA=function(){if(window.__bpGA)return;window.__bpGA=1;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.appendChild(s);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config',id);};var c;try{c=localStorage.getItem('bp.cookies');}catch(e){}if(c==='yes')window.bpLoadGA();})();</script>`;
 }
 
 // schema.org structured data (JSON-LD): the organization and website on the homepage,
