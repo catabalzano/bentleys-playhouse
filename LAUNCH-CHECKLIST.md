@@ -13,7 +13,7 @@ Everything below is either missing, unverified, or a connection the site needs b
 - [ ] Photos of Bentley, Romeo, Kiara, Fénix and Cata.
 
 ## Instagram feed
-- [ ] Create a free Behold account, connect @bentleysplayhouse, make a JSON feed, and send me the feed URL (or paste it in `content/site.json`).
+- [x] Behold JSON feed connected to @bentleysplayhouse (`https://feeds.behold.so/W2YGDyyPF85eLju0zHnb`, free plan = latest 6 posts) and set in `content/site.json → social.instagram.feedUrl`.
 
 ## Contact & services
 - [x] Public email `bentleysplayhouseorg@gmail.com` published on the Contact page (for now).
@@ -24,7 +24,7 @@ Everything below is either missing, unverified, or a connection the site needs b
 
 ## Adoption & fostering
 - [x] Adoption application (JotForm) and 7-step process: verified from your Facebook featured post.
-- [ ] **Dog profiles.** Facebook shows Roo as ready for adoption. Send details and photos for each current dog to build profiles.
+- [ ] **Dog profiles.** Send details and photos for each current adoptable dog to build profiles.
 - [ ] **Foster form:** YouTube links the Google Form's `/edit` address, which the public can't open. Confirm the `/viewform` link works signed-out → `foster.verified: true`.
 - [ ] Describe your foster process (what you provide, vet arrangements).
 
