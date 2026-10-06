@@ -1,5 +1,5 @@
 # Deploys the Pawsome Pooches submissions service (worker/) to Cloudflare.
-# Needs two repository secrets: CLOUDFLARE_API_TOKEN ("Edit Cloudflare Workers" token) and CLOUDFLARE_ACCOUNT_ID.
+# Needs one repository secret: CLOUDFLARE_API_TOKEN ("Edit Cloudflare Workers" token). The account ID is in worker/wrangler.toml.
 name: Deploy submissions service
 on:
   push:
@@ -22,5 +22,4 @@ jobs:
         working-directory: worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npm install --no-audit --no-fund && npx wrangler deploy

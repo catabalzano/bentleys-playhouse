@@ -1,6 +1,8 @@
 name = "bentleys-playhouse-submissions"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
+account_id = "911ff2a22e1deb64d07ecadf2061eb91"
+workers_dev = true
 
 [vars]
 GITHUB_REPO = "catabalzano/bentleys-playhouse"
@@ -12,4 +14,4 @@ MAX_PER_HOUR = "6"
 
 [[kv_namespaces]]
 binding = "SUBMISSIONS"
-id = "REPLACE_WITH_KV_ID"
+id = "5608dc2b1e8d44a091479bf3d2ddde8a"
