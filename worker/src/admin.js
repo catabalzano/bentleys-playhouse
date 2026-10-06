@@ -54,12 +54,34 @@ export async function githubToken(env) {
   return t;
 }
 
+
+// ---------- two-step sign-in (authenticator app codes, RFC 6238) ----------
+const B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32encode(bytes) { let bits = 0, val = 0, out = ''; for (const b of bytes) { val = (val << 8) | b; bits += 8; while (bits >= 5) { out += B32[(val >>> (bits - 5)) & 31]; bits -= 5; } } if (bits > 0) out += B32[(val << (5 - bits)) & 31]; return out; }
+function b32decode(str) { const s = String(str).replace(/=+$/, '').toUpperCase().replace(/\s/g, ''); let bits = 0, val = 0; const out = []; for (const c of s) { const i = B32.indexOf(c); if (i < 0) continue; val = (val << 5) | i; bits += 5; if (bits >= 8) { out.push((val >>> (bits - 8)) & 255); bits -= 8; } } return new Uint8Array(out); }
+async function totpAt(secret, step) {
+  const key = await crypto.subtle.importKey('raw', b32decode(secret), { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+  const msg = new ArrayBuffer(8); const v = new DataView(msg); v.setUint32(0, Math.floor(step / 4294967296)); v.setUint32(4, step >>> 0);
+  const h = new Uint8Array(await crypto.subtle.sign('HMAC', key, msg)); const o = h[19] & 15;
+  return String((((h[o] & 127) << 24) | (h[o + 1] << 16) | (h[o + 2] << 8) | h[o + 3]) % 1000000).padStart(6, '0');
+}
+/** Returns the matching time step (to stop the same code being used twice) or -1. */
+async function checkTotp(secret, code, lastStep) {
+  code = String(code || '').replace(/\D/g, '');
+  if (code.length !== 6) return -1;
+  const now = Math.floor(Date.now() / 30000);
+  for (const d of [0, -1, 1]) { const st = now + d; if (st > (lastStep || 0) && (await totpAt(secret, st)) === code) return st; }
+  return -1;
+}
+const cleanUser = (u) => String(u || '').trim().toLowerCase();
+const publicProfile = (a) => ({ username: a.username || '', name: a.name || '', email: a.email || '', photo: a.photo || '', twoFactor: !!a.totp, recoveryLeft: (a.recovery || []).length });
+
 export async function handleAuth(req, env, url) {
   const action = url.pathname.split('/')[2];
   const body = req.method === 'POST' ? await req.json().catch(() => ({})) : {};
   const account = await env.SUBMISSIONS.get('cfg:admin', 'json');
 
-  if (action === 'status') return json({ setup: !!account, session: await sessionOk(env, req) });
+  if (action === 'status') return json({ setup: !!account, session: await sessionOk(env, req), username: !!(account && account.username) });
 
   if (action === 'setup' && req.method === 'POST') {
     if (account) throw fail('The admin password is already set. Sign in instead.', 409);
@@ -69,7 +91,9 @@ export async function handleAuth(req, env, url) {
     const token = String(body.githubToken || '').trim();
     if (!token || !(await tokenCanPush(env, token))) throw fail('We couldn\'t confirm this is the site owner. The GitHub token is missing or can\'t edit the site.', 403);
     const salt = rand(16);
-    await env.SUBMISSIONS.put('cfg:admin', JSON.stringify({ salt, hash: await hashPassword(pw, salt), createdAt: new Date().toISOString() }));
+    const u = cleanUser(body.username);
+    if (u && !/^[a-z0-9._-]{3,30}$/.test(u)) throw fail('Usernames are 3 to 30 letters or numbers.');
+    await env.SUBMISSIONS.put('cfg:admin', JSON.stringify({ username: u, salt, hash: await hashPassword(pw, salt), createdAt: new Date().toISOString() }));
     await env.SUBMISSIONS.put('cfg:ghToken', token);
     return json({ ok: true, session: await newSession(env) });
   }
@@ -77,8 +101,82 @@ export async function handleAuth(req, env, url) {
   if (action === 'login' && req.method === 'POST') {
     if (!account) throw fail('The admin password hasn\'t been set up yet.', 409);
     await rateLimit(env, req, 'login', 10);
-    if ((await hashPassword(String(body.password || ''), account.salt)) !== account.hash) throw fail('That password isn\'t right.', 401);
+    const userOk = !account.username || cleanUser(body.username) === account.username;
+    const passOk = (await hashPassword(String(body.password || ''), account.salt)) === account.hash;
+    if (!userOk || !passOk) throw fail('That username or password isn\'t right.', 401);
+    if (account.totp) {
+      const pending = rand(32);
+      await env.SUBMISSIONS.put(`pend:${await sha256(pending)}`, '1', { expirationTtl: 300 });
+      return json({ ok: true, needCode: true, pending });
+    }
     return json({ ok: true, session: await newSession(env) });
+  }
+
+  if (action === 'code' && req.method === 'POST') {
+    if (!account || !account.totp) throw fail('Please sign in again.', 401);
+    await rateLimit(env, req, 'code', 10);
+    const pkey = `pend:${await sha256(String(body.pending || ''))}`;
+    if (!(await env.SUBMISSIONS.get(pkey))) throw fail('That took too long. Please sign in again.', 401);
+    const code = String(body.code || '').trim();
+    const st = await checkTotp(account.totp, code, account.totpStep);
+    if (st > 0) account.totpStep = st;
+    else {
+      const h = await sha256(code.toUpperCase().replace(/[^A-Z0-9]/g, ''));
+      const i = (account.recovery || []).indexOf(h);
+      if (i < 0) throw fail('That code isn\'t right. Check your authenticator app and try again.', 401);
+      account.recovery.splice(i, 1);
+    }
+    await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
+    await env.SUBMISSIONS.delete(pkey);
+    return json({ ok: true, session: await newSession(env), recoveryLeft: (account.recovery || []).length });
+  }
+
+  // ----- signed-in only below -----
+  if (['me', 'profile', '2fa-start', '2fa-confirm', '2fa-disable', 'recovery'].includes(action)) {
+    if (!(await sessionOk(env, req))) throw fail('Please sign in again.', 401);
+    if (action === 'me') return json(publicProfile(account));
+    if (action === 'profile' && req.method === 'POST') {
+      const u = cleanUser(body.username);
+      if (!/^[a-z0-9._-]{3,30}$/.test(u)) throw fail('Usernames are 3 to 30 letters or numbers (dots, dashes and underscores are fine).');
+      if (body.photo && (String(body.photo).length > 300000 || !/^data:image\/(jpeg|png|webp);base64,/.test(body.photo))) throw fail('That photo is too big. Please choose a smaller one.');
+      if (body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(body.email).trim())) throw fail('Please enter a valid email.');
+      Object.assign(account, { username: u, name: String(body.name || '').trim().slice(0, 60), email: String(body.email || '').trim().slice(0, 120) });
+      if (body.photo !== undefined) account.photo = body.photo || '';
+      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
+      return json({ ok: true, profile: publicProfile(account) });
+    }
+    if (action === '2fa-start' && req.method === 'POST') {
+      const secret = b32encode(crypto.getRandomValues(new Uint8Array(20)));
+      await env.SUBMISSIONS.put('cfg:totpPending', secret, { expirationTtl: 900 });
+      const label = encodeURIComponent(`Bentley's Playhouse:${account.username || 'admin'}`);
+      return json({ secret, uri: `otpauth://totp/${label}?secret=${secret}&issuer=${encodeURIComponent("Bentley's Playhouse")}&algorithm=SHA1&digits=6&period=30` });
+    }
+    if (action === '2fa-confirm' && req.method === 'POST') {
+      const secret = await env.SUBMISSIONS.get('cfg:totpPending');
+      if (!secret) throw fail('That setup expired. Please start again.', 400);
+      const st = await checkTotp(secret, body.code, 0);
+      if (st < 0) throw fail('That code isn\'t right. Make sure your phone\'s time is correct and try the newest code.', 400);
+      const codes = Array.from({ length: 8 }, () => rand(5).toUpperCase().slice(0, 10).replace(/(.{5})/, '$1-'));
+      account.totp = secret; account.totpStep = st;
+      account.recovery = await Promise.all(codes.map((c) => sha256(c.replace(/-/g, ''))));
+      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
+      await env.SUBMISSIONS.delete('cfg:totpPending');
+      return json({ ok: true, recoveryCodes: codes });
+    }
+    if (action === 'recovery' && req.method === 'POST') {
+      if (!account.totp) throw fail('Two-step sign-in is off.');
+      if ((await hashPassword(String(body.password || ''), account.salt)) !== account.hash) throw fail('Your password isn\'t right.', 401);
+      const codes = Array.from({ length: 8 }, () => rand(5).toUpperCase().slice(0, 10).replace(/(.{5})/, '$1-'));
+      account.recovery = await Promise.all(codes.map((c) => sha256(c.replace(/-/g, ''))));
+      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
+      return json({ ok: true, recoveryCodes: codes });
+    }
+    if (action === '2fa-disable' && req.method === 'POST') {
+      if ((await hashPassword(String(body.password || ''), account.salt)) !== account.hash) throw fail('Your password isn\'t right.', 401);
+      delete account.totp; delete account.totpStep; delete account.recovery;
+      await env.SUBMISSIONS.put('cfg:admin', JSON.stringify(account));
+      return json({ ok: true });
+    }
   }
 
   if (action === 'logout' && req.method === 'POST') {

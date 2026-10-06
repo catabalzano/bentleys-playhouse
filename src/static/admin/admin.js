@@ -183,38 +183,53 @@
   var ORDER = ['pawsome', 'stories', 'rescues', 'dogs', 'money'];
 
   // ---------- sign-in ----------
+  function card(inner) { app.className = ''; app.innerHTML = '<div class="gate"><div class="gate__card"><div class="card-top"></div><img class="gate__logo" src="../assets/img/logo-badge.png" alt="">' + inner + '</div></div>'; }
+  function signedIn(j) { S.session = j.session; store(SKEY, j.session); shell(); route(); if (j.recoveryLeft != null && j.recoveryLeft < 3) toast('You have ' + j.recoveryLeft + ' backup codes left. Make new ones in Profile & security.'); }
   function gate(msg) {
     api('/auth/status').then(function (st) {
       var setup = !st.setup;
       var ghToken = load('bp.ghToken');
       if (!ghToken) { try { var u = JSON.parse(load('sveltia-cms.user') || 'null'); if (u && u.token) ghToken = u.token; } catch (e) {} }
-      app.className = '';
-      app.innerHTML = '<div class="gate"><div class="gate__card"><div class="card-top"></div><img class="gate__logo" src="../assets/img/logo-badge.png" alt=""><h1>' + (setup ? 'Create your admin password' : 'Welcome back') + '</h1>' +
-        '<p>' + (setup ? 'You\'ll use this password to sign in to the admin from now on.' : 'Sign in to manage Bentley\'s Playhouse.') + '</p>' +
-        '<form novalidate>' +
-        (setup ? '<div class="f"><label for="pw1">New password</label><input type="password" id="pw1" autocomplete="new-password" minlength="10" required><p class="hint">At least 10 characters.</p></div><div class="f"><label for="pw2">Type it again</label><input type="password" id="pw2" autocomplete="new-password" required></div>' +
-          (ghToken ? '' : '<div class="f"><label for="ght">GitHub token (one time only)</label><input type="password" id="ght" autocomplete="off"><p class="hint">This proves you own the site. Paste the token you used before. You won\'t need it again.</p></div>')
+      card('<h1>' + (setup ? 'Create your admin login' : 'Welcome back') + '</h1>' +
+        '<p>' + (setup ? 'Choose a username and password for the admin.' : 'Sign in to manage Bentley\'s Playhouse.') + '</p>' +
+        '<form novalidate><div class="f"><label for="un">Username</label><input type="text" id="un" autocomplete="username" autocapitalize="off" spellcheck="false"></div>' +
+        (setup ? '<div class="f"><label for="pw1">Password</label><input type="password" id="pw1" autocomplete="new-password" minlength="10" required><p class="hint">At least 10 characters.</p></div><div class="f"><label for="pw2">Type it again</label><input type="password" id="pw2" autocomplete="new-password" required></div>' +
+          (ghToken ? '' : '<div class="f"><label for="ght">GitHub token (one time only)</label><input type="password" id="ght" autocomplete="off"><p class="hint">This proves you own the site. You won\'t need it again.</p></div>')
           : '<div class="f"><label for="pw">Password</label><input type="password" id="pw" autocomplete="current-password" required></div>') +
-        '<p class="msg err" role="alert">' + esc(msg || '') + '</p><button class="btn btn--go" type="submit">' + (setup ? 'Create password & sign in' : 'Sign in') + '</button></form></div></div>';
+        '<p class="msg err" role="alert">' + esc(msg || '') + '</p><button class="btn btn--go" type="submit">' + (setup ? 'Create login & sign in' : 'Sign in') + '</button></form>');
       var form = $('form', app), m = $('.msg', app);
-      (setup ? $('#pw1') : $('#pw')).focus();
+      $('#un').focus();
       form.onsubmit = function (e) {
         e.preventDefault(); m.textContent = '';
-        var req;
+        var un = $('#un').value.trim(), req;
         if (setup) {
           var a = $('#pw1').value, b = $('#pw2').value;
+          if (!/^[A-Za-z0-9._-]{3,30}$/.test(un)) { m.textContent = 'Usernames are 3 to 30 letters or numbers.'; return; }
           if (a.length < 10) { m.textContent = 'Please use at least 10 characters.'; return; }
           if (a !== b) { m.textContent = 'The two passwords don\'t match.'; return; }
-          req = api('/auth/setup', { method: 'POST', json: { password: a, githubToken: ghToken || ($('#ght') && $('#ght').value) } });
-        } else req = api('/auth/login', { method: 'POST', json: { password: $('#pw').value } });
+          req = api('/auth/setup', { method: 'POST', json: { username: un, password: a, githubToken: ghToken || ($('#ght') && $('#ght').value) } });
+        } else req = api('/auth/login', { method: 'POST', json: { username: un, password: $('#pw').value } });
         $('button', form).disabled = true;
         req.then(function (j) {
-          S.session = j.session; store(SKEY, j.session);
           if (setup) { store('bp.ghToken', null); store('sveltia-cms.user', null); }
-          shell(); route();
+          if (j.needCode) return codeStep(j.pending);
+          signedIn(j);
         }).catch(function (err) { m.textContent = err.message; $('button', form).disabled = false; });
       };
-    }).catch(function () { app.innerHTML = '<div class="gate"><div class="gate__card"><h1>Can\'t reach the admin</h1><p>Please check your connection and reload.</p></div></div>'; });
+    }).catch(function () { card('<h1>Can\'t reach the admin</h1><p>Please check your connection and reload.</p>'); });
+  }
+  function codeStep(pending) {
+    card('<h1>Enter your code</h1><p>Open your authenticator app and type the 6-digit code for Bentley\'s Playhouse.</p>' +
+      '<form novalidate><div class="f"><label for="cd">6-digit code</label><input type="text" id="cd" inputmode="numeric" autocomplete="one-time-code" maxlength="11" style="font-size:24px;letter-spacing:.2em;text-align:center"></div>' +
+      '<p class="hint">Lost your phone? Type one of your backup codes instead.</p><p class="msg err" role="alert"></p><button class="btn btn--go" type="submit">Verify</button></form>');
+    var form = $('form', app), m = $('.msg', app), cd = $('#cd');
+    cd.focus();
+    cd.addEventListener('input', function () { if (/^\d{6}$/.test(cd.value.trim())) form.requestSubmit(); });
+    form.onsubmit = function (e) {
+      e.preventDefault(); m.textContent = ''; $('button', form).disabled = true;
+      api('/auth/code', { method: 'POST', json: { pending: pending, code: cd.value } }).then(signedIn)
+        .catch(function (err) { if (/too long/.test(err.message)) return gate(err.message); m.textContent = err.message; cd.value = ''; cd.focus(); $('button', form).disabled = false; });
+    };
   }
 
   // ---------- shell ----------
@@ -222,18 +237,27 @@
     app.className = '';
     app.innerHTML = '<div class="shell"><aside class="side" aria-label="Admin sections">' +
       '<a class="side__brand" href="#home"><img src="../assets/img/logo-badge.png" alt=""><span><b>Bentley\'s Playhouse</b><small>Admin</small></span></a>' +
+      '<a class="side__me" href="#profile" data-nav="profile"><span class="avatar" data-avatar></span><span><b data-myname>My profile</b><small>Profile &amp; security</small></span></a>' +
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
-      '<div class="side__sep"></div><a class="nav" href="#settings" data-nav="settings">⚙️ Settings</a>' +
+      '<div class="side__sep"></div><a class="nav" href="#profile" data-nav="profile">⚙️ Profile &amp; security</a>' +
       '<div class="side__foot"><a href="../" target="_blank" rel="noopener">View the website ↗</a></div></aside>' +
       '<div><div class="topbar"><button type="button" data-menu>☰ Menu</button><b>Admin</b></div><main class="main" id="main" tabindex="-1"></main></div></div>';
     $('[data-menu]').onclick = function () { $('.shell').classList.toggle('menu-open'); };
     $$('.nav').forEach(function (n) { n.addEventListener('click', function () { $('.shell').classList.remove('menu-open'); }); });
-    loadSubs();
+    loadSubs(); loadMe();
   }
   function main() { return $('#main'); }
+  function loadMe() {
+    return api('/auth/me').then(function (me) {
+      S.me = me;
+      var n = $('[data-myname]'); if (n) n.textContent = me.name || me.username || 'My profile';
+      var av = $('[data-avatar]'); if (av) av.innerHTML = me.photo ? '<img alt="" src="' + esc(me.photo) + '">' : esc(((me.name || me.username || '?').trim()[0] || '?').toUpperCase());
+      return me;
+    });
+  }
   function loadSubs() {
     return api('/admin/list').then(function (j) { S.subs = j.submissions || []; var n = S.subs.filter(function (s) { return s.status === 'pending'; }).length; var c = $('[data-subcount]'); if (c) c.textContent = n ? n : ''; return S.subs; });
   }
@@ -245,12 +269,12 @@
   function route() {
     if (!S.session) return gate();
     var h = (location.hash || '#home').slice(1), p = h.split('/');
-    $$('.nav').forEach(function (n) { var k = n.getAttribute('data-nav'); n.setAttribute('aria-current', h === k || (k !== 'home' && h.indexOf(k + '/') === 0) ? 'page' : 'false'); });
+    $$('.nav, .side__me').forEach(function (n) { var k = n.getAttribute('data-nav'); n.setAttribute('aria-current', h === k || (k !== 'home' && h.indexOf(k + '/') === 0) ? 'page' : 'false'); });
     window.scrollTo(0, 0);
     if (h === 'home') return home();
     if (h === 'submissions') return submissions();
     if (h === 'donations') return donations();
-    if (h === 'settings') return settings();
+    if (h === 'settings' || h === 'profile') return profile();
     if (p[0] === 'c' && COLS[p[1]]) return p[2] ? editor(p[1], p[2] === 'new' ? null : p[2]) : list(p[1]);
     location.hash = '#home';
   }
@@ -258,7 +282,7 @@
   // ---------- home ----------
   function home() {
     var pending = (S.subs || []).filter(function (s) { return s.status === 'pending'; }).length;
-    main().innerHTML = '<div class="head"><div><h1>Hi Cata! 🐾</h1><p>Everything you save here goes live on the website in about 2 minutes.</p></div></div>' +
+    main().innerHTML = '<div class="head"><div><h1>Hi ' + esc((S.me && (S.me.name || '').split(' ')[0]) || 'there') + '! 🐾</h1><p>Everything you save here goes live on the website in about 2 minutes.</p></div></div>' +
       '<div class="home-cards">' +
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
@@ -549,16 +573,85 @@
     }).catch(function (e) { $('[data-don]').innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
   }
 
-  // ---------- settings ----------
-  function settings() {
-    main().innerHTML = '<div class="head"><div><h1>⚙️ Settings</h1></div></div>' +
-      '<section class="card"><h2>Change password</h2><form data-pw class="grid" novalidate><div class="f"><label for="cur">Current password</label><input type="password" id="cur" autocomplete="current-password"></div><div class="f"><label for="np">New password</label><input type="password" id="np" autocomplete="new-password"><p class="hint">At least 10 characters.</p></div><div class="wide"><button class="btn btn--blue" type="submit">Change password</button> <span class="msg" data-m1 role="status"></span></div></form></section>' +
-      '<section class="card"><h2>Website connection</h2><p class="hint">Only needed if saving ever says the connection expired. Paste a new GitHub token (Contents: Read and write for bentleys-playhouse).</p><form data-gh class="grid" novalidate><div class="f wide"><label for="gt">New GitHub token</label><input type="password" id="gt" autocomplete="off"></div><div class="wide"><button class="btn btn--ghost" type="submit">Reconnect</button> <span class="msg" data-m2 role="status"></span></div></form></section>' +
-      '<section class="card"><h2>Sign out</h2><p class="hint">Signs this browser out of the admin.</p><button class="btn btn--danger" data-out>Sign out</button></section>';
-    $('[data-pw]').onsubmit = function (e) { e.preventDefault(); var m = $('[data-m1]'); m.className = 'msg'; m.textContent = 'Saving…'; api('/auth/password', { method: 'POST', json: { current: $('#cur').value, password: $('#np').value } }).then(function () { m.className = 'msg ok'; m.textContent = 'Password changed.'; $('#cur').value = $('#np').value = ''; }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; }); };
-    $('[data-gh]').onsubmit = function (e) { e.preventDefault(); var m = $('[data-m2]'); m.className = 'msg'; m.textContent = 'Checking…'; api('/auth/github', { method: 'POST', json: { githubToken: $('#gt').value } }).then(function () { m.className = 'msg ok'; m.textContent = 'Connected.'; $('#gt').value = ''; }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; }); };
-    $('[data-out]').onclick = function () { api('/auth/logout', { method: 'POST', json: {} }).catch(function () {}).then(function () { S.session = null; store(SKEY, null); gate(); }); };
+  // ---------- profile & security ----------
+  function profile() {
+    main().innerHTML = '<p class="empty">Loading…</p>';
+    loadMe().then(function (me) {
+      var photo = me.photo || '';
+      main().innerHTML = '<div class="head"><div><h1>⚙️ Profile &amp; security</h1><p>Your login, your details and two-step sign-in.</p></div></div>' +
+        '<section class="card"><h2>Profile</h2><form data-prof novalidate><div class="grid">' +
+        '<div class="f wide"><span class="lbl">Photo</span><div class="me-photo"><span class="avatar avatar--lg" data-ph></span><label class="btn btn--ghost btn--sm"><input type="file" accept="image/*" hidden data-phin>Choose photo</label><button type="button" class="btn btn--ghost btn--sm" data-phrm>Remove</button></div></div>' +
+        '<div class="f"><label for="p-name">Your name</label><input type="text" id="p-name" value="' + esc(me.name) + '" autocomplete="name"></div>' +
+        '<div class="f"><label for="p-user">Username <span class="req">*</span></label><input type="text" id="p-user" value="' + esc(me.username) + '" autocomplete="username" autocapitalize="off" spellcheck="false"><p class="hint">You\'ll sign in with this. Letters, numbers, dots or dashes.</p></div>' +
+        '<div class="f"><label for="p-mail">Email</label><input type="email" id="p-mail" value="' + esc(me.email) + '" autocomplete="email"></div>' +
+        '</div><div class="actions" style="position:static"><button class="btn btn--go" type="submit">💾 Save profile</button><span class="msg" data-m0 role="status"></span></div></form></section>' +
+        '<section class="card"><h2>Two-step sign-in</h2><div data-2fa></div></section>' +
+        '<section class="card"><h2>Change password</h2><form data-pw class="grid" novalidate><div class="f"><label for="cur">Current password</label><input type="password" id="cur" autocomplete="current-password"></div><div class="f"><label for="np">New password</label><input type="password" id="np" autocomplete="new-password"><p class="hint">At least 10 characters.</p></div><div class="wide"><button class="btn btn--blue" type="submit">Change password</button> <span class="msg" data-m1 role="status"></span></div></form></section>' +
+        '<section class="card"><h2>Website connection</h2><p class="hint">Only needed if saving ever says the connection expired. Paste a new GitHub token (Contents: Read and write for bentleys-playhouse).</p><form data-gh class="grid" novalidate><div class="f wide"><label for="gt">New GitHub token</label><input type="password" id="gt" autocomplete="off"></div><div class="wide"><button class="btn btn--ghost" type="submit">Reconnect</button> <span class="msg" data-m2 role="status"></span></div></form></section>' +
+        '<section class="card"><h2>Sign out</h2><p class="hint">Signs this browser out of the admin.</p><button class="btn btn--danger" data-out>Sign out</button></section>';
+      function drawPhoto() { $('[data-ph]').innerHTML = photo ? '<img alt="" src="' + esc(photo) + '">' : esc(((me.name || me.username || '?')[0] || '?').toUpperCase()); $('[data-phrm]').hidden = !photo; }
+      drawPhoto();
+      $('[data-phin]').onchange = function () {
+        var f = this.files[0]; if (!f) return;
+        var url = URL.createObjectURL(f), img = new Image();
+        img.onload = function () { var c = document.createElement('canvas'), z = 240, k = Math.max(z / img.naturalWidth, z / img.naturalHeight); c.width = c.height = z; var w = img.naturalWidth * k, h = img.naturalHeight * k; c.getContext('2d').drawImage(img, (z - w) / 2, (z - h) / 2, w, h); photo = c.toDataURL('image/jpeg', 0.85); URL.revokeObjectURL(url); drawPhoto(); };
+        img.onerror = function () { toast('Please choose a JPG or PNG photo.'); }; img.src = url;
+      };
+      $('[data-phrm]').onclick = function () { photo = ''; drawPhoto(); };
+      $('[data-prof]').onsubmit = function (e) {
+        e.preventDefault(); var m = $('[data-m0]'); m.className = 'msg'; m.textContent = 'Saving…';
+        api('/auth/profile', { method: 'POST', json: { username: $('#p-user').value, name: $('#p-name').value, email: $('#p-mail').value, photo: photo } })
+          .then(function () { m.className = 'msg ok'; m.textContent = 'Saved.'; loadMe(); }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; });
+      };
+      twoFactor(me);
+      $('[data-pw]').onsubmit = function (e) { e.preventDefault(); var m = $('[data-m1]'); m.className = 'msg'; m.textContent = 'Saving…'; api('/auth/password', { method: 'POST', json: { current: $('#cur').value, password: $('#np').value } }).then(function () { m.className = 'msg ok'; m.textContent = 'Password changed.'; $('#cur').value = $('#np').value = ''; }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; }); };
+      $('[data-gh]').onsubmit = function (e) { e.preventDefault(); var m = $('[data-m2]'); m.className = 'msg'; m.textContent = 'Checking…'; api('/auth/github', { method: 'POST', json: { githubToken: $('#gt').value } }).then(function () { m.className = 'msg ok'; m.textContent = 'Connected.'; $('#gt').value = ''; }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; }); };
+      $('[data-out]').onclick = function () { api('/auth/logout', { method: 'POST', json: {} }).catch(function () {}).then(function () { S.session = null; store(SKEY, null); gate(); }); };
+    }).catch(function (e) { main().innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
   }
+  function showCodes(box, codes, intro) {
+    box.innerHTML = '<p class="msg ok">' + intro + '</p><p>Save these backup codes somewhere safe (like your password manager or a note). Each one works <b>once</b> if you ever lose your phone.</p>' +
+      '<ul class="codes">' + codes.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
+      '<div class="btn-line"><button type="button" class="btn btn--ghost btn--sm" data-copy>Copy codes</button><button type="button" class="btn btn--ghost btn--sm" data-dl>Download as a file</button><button type="button" class="btn btn--go btn--sm" data-done>I saved them</button></div>';
+    var text = "Bentley's Playhouse admin backup codes\n" + codes.join('\n') + '\n';
+    $('[data-copy]', box).onclick = function () { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { toast('Copied.'); }, function () { toast('Copy didn\'t work. Please write them down.'); }); };
+    $('[data-dl]', box).onclick = function () { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = 'bentleys-playhouse-backup-codes.txt'; a.click(); };
+    $('[data-done]', box).onclick = function () { loadMe().then(twoFactor); };
+  }
+  function twoFactor(me) {
+    var box = $('[data-2fa]'); if (!box) return;
+    if (me.twoFactor) {
+      box.innerHTML = '<p><span class="pill ok">On</span> When you sign in, you\'ll also type a 6-digit code from your authenticator app.</p><p class="hint">Backup codes left: <b>' + me.recoveryLeft + '</b></p>' +
+        '<div class="grid"><div class="f"><label for="p2">Your password (to make changes)</label><input type="password" id="p2" autocomplete="current-password"></div></div>' +
+        '<div class="btn-line"><button type="button" class="btn btn--ghost btn--sm" data-newcodes>Make new backup codes</button><button type="button" class="btn btn--danger btn--sm" data-off>Turn off two-step sign-in</button><span class="msg" data-m3 role="status"></span></div>';
+      $('[data-newcodes]', box).onclick = function () { api('/auth/recovery', { method: 'POST', json: { password: $('#p2').value } }).then(function (j) { showCodes(box, j.recoveryCodes, 'New backup codes made. The old ones no longer work.'); }).catch(function (er) { var m = $('[data-m3]'); m.className = 'msg err'; m.textContent = er.message; }); };
+      $('[data-off]', box).onclick = function () { if (!confirm('Turn off two-step sign-in? Your account will be less protected.')) return; api('/auth/2fa-disable', { method: 'POST', json: { password: $('#p2').value } }).then(function () { toast('Two-step sign-in is off.'); loadMe().then(twoFactor); }).catch(function (er) { var m = $('[data-m3]'); m.className = 'msg err'; m.textContent = er.message; }); };
+      return;
+    }
+    box.innerHTML = '<p><span class="pill warn">Off</span> Add a second step to signing in: after your password, you type a 6-digit code from an app on your phone. Even if someone learns your password, they can\'t get in.</p>' +
+      '<button type="button" class="btn btn--go" data-start>Turn on two-step sign-in</button>';
+    $('[data-start]', box).onclick = function () {
+      api('/auth/2fa-start', { method: 'POST', json: {} }).then(function (j) {
+        box.innerHTML = '<ol class="steps"><li>On your phone, open an authenticator app. Google Authenticator, Microsoft Authenticator and 1Password all work. If you have none, install <b>Google Authenticator</b> (free).</li>' +
+          '<li>In the app, tap <b>+</b> and scan this code:<div class="qr" data-qr></div><details><summary>Can\'t scan? Type this key instead</summary><code class="key">' + esc(j.secret.replace(/(.{4})/g, '$1 ').trim()) + '</code></details></li>' +
+          '<li>Type the 6-digit code the app shows:<div class="code-row"><input type="text" id="c1" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="6-digit code"><button type="button" class="btn btn--go" data-confirm>Turn on</button></div><p class="msg" data-m4 role="status"></p></li></ol>';
+        drawQr($('[data-qr]', box), j.uri);
+        $('#c1').focus();
+        $('[data-confirm]', box).onclick = function () {
+          var m = $('[data-m4]'); m.className = 'msg'; m.textContent = 'Checking…';
+          api('/auth/2fa-confirm', { method: 'POST', json: { code: $('#c1').value } }).then(function (r) { showCodes(box, r.recoveryCodes, '✓ Two-step sign-in is on.'); }).catch(function (er) { m.className = 'msg err'; m.textContent = er.message; });
+        };
+      }).catch(function (er) { toast(er.message); });
+    };
+  }
+  function drawQr(el, text) {
+    function go() { var q = window.qrcode(0, 'M'); q.addData(text); q.make(); el.innerHTML = q.createSvgTag({ cellSize: 5, margin: 2, scalable: true }); }
+    if (window.qrcode) return go();
+    var sc = document.createElement('script'); sc.src = 'qr.js'; sc.onload = go;
+    sc.onerror = function () { el.innerHTML = '<p class="hint">The code picture couldn\'t load. Use "Type this key instead" below.</p>'; };
+    document.head.appendChild(sc);
+  }
+
 
   // ---------- start ----------
   if (!API) { app.innerHTML = '<div class="gate"><div class="gate__card"><h1>Admin not connected</h1><p>content/site.json → pawsome.submitEndpoint is empty.</p></div></div>'; return; }
