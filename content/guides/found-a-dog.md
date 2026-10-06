@@ -1,4 +1,7 @@
 ---
+cover: guide-found-a-dog.jpg
+coverAlt: "A brown stray dog walking down a sunny city street"
+coverCredit: "Yakup Polat on Pexels"
 title: I found a dog
 eyebrow: Get Help · Found a dog
 tone: blue

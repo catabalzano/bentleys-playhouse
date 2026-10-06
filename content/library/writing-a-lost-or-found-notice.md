@@ -1,4 +1,7 @@
 ---
+cover: writing-a-lost-or-found-notice.jpg
+coverAlt: "A close-up of a dog’s collar with an ID tag"
+coverCredit: "Blue Bird on Pexels"
 title: Writing a lost or found notice that works
 category: lost-found
 area: general

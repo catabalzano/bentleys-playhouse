@@ -1,4 +1,7 @@
 ---
+cover: returning-a-found-dog-safely.jpg
+coverAlt: "A woman hugging a happy golden dog"
+coverCredit: "RDNE Stock project on Pexels"
 title: Returning a found dog safely
 category: lost-found
 area: general

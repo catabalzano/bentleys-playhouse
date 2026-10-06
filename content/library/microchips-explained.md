@@ -1,4 +1,7 @@
 ---
+cover: microchips-explained.jpg
+coverAlt: "A veterinarian checking a dog lying on an exam table"
+coverCredit: "Tima Miroshnichenko on Pexels"
 title: Microchips, explained
 category: lost-found
 area: general

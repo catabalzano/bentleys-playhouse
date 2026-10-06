@@ -1,4 +1,7 @@
 ---
+cover: checklist-lost-dog.jpg
+coverAlt: "A small dog on a leash sitting on a sidewalk"
+coverCredit: "Footage Kingdom on Pexels"
 title: Lost-dog checklist
 short: Your first-day and every-day search plan
 category: lost-found

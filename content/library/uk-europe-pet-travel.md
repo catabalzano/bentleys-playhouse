@@ -1,4 +1,7 @@
 ---
+cover: uk-europe-pet-travel.jpg
+coverAlt: "A dog looking out of a train window"
+coverCredit: "Spiridon Varfalameev on Pexels"
 title: Taking your dog to the UK and Europe
 icon: globe
 category: laws-travel

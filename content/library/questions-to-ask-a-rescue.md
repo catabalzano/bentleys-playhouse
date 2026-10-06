@@ -1,4 +1,7 @@
 ---
+cover: questions-to-ask-a-rescue.jpg
+coverAlt: "A smiling woman kneeling beside a dog wearing an adopt-me bandana"
+coverCredit: "Barbara Reis on Pexels"
 title: Questions to ask before you adopt
 category: adopt-foster
 area: general

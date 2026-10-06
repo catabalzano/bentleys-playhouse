@@ -1,4 +1,7 @@
 ---
+cover: toolkit-for-independent-rescuers.jpg
+coverAlt: "Two volunteers smiling and petting a dog"
+coverCredit: "Mikhail Nilov on Pexels"
 title: A toolkit for independent rescuers
 category: rescuers
 area: local

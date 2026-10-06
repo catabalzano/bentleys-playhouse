@@ -1,4 +1,7 @@
 ---
+cover: finding-a-humane-trainer.jpg
+coverAlt: "A dog gently taking a treat from a hand during training"
+coverCredit: "Anton Kudryashov on Pexels"
 title: Finding a humane trainer
 category: behavior
 area: national

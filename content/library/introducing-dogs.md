@@ -1,4 +1,7 @@
 ---
+cover: introducing-dogs.jpg
+coverAlt: "Two dogs greeting each other nose to nose on the grass"
+coverCredit: "Florencia Pérez on Pexels"
 title: Introducing a new dog to your dog
 category: behavior
 area: general

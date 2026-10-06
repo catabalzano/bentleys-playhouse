@@ -201,14 +201,20 @@ export function helpHub(data) {
 }
 
 // ============ GUIDE (Get Help) ============
+
+// Arched cover photo for guide, article and checklist headers ("split with arch")
+const coverFig = (x) => x.cover ? `<figure class="arch-cover"><img src="${asset('img/covers/' + x.cover)}" alt="${esc(x.coverAlt || '')}" width="800" height="880" fetchpriority="high">${x.coverCredit ? `<figcaption>Photo: ${esc(x.coverCredit)}</figcaption>` : ''}</figure>` : '';
+const splitOpen = (x, narrow = 'wrap--text') => x.cover ? '<div class="wrap page-head__split"><div class="page-head__text">' : `<div class="wrap ${narrow}">`;
+const splitClose = (x) => x.cover ? `</div>${coverFig(x)}</div>` : '</div>';
+
 export function guide(g, data) {
   const { intro, sections: secs } = sections(g.body);
   const checklist = g.checklist && data.checklists.find((c) => c.slug === g.checklist);
   const related = (g.related || []).map((slug) => data.items.find((i) => i.slug === slug)).filter(Boolean);
   return `
 <article class="guide">
-  <header class="page-head page-head--guide">
-    <div class="wrap wrap--text">
+  <header class="page-head page-head--guide${g.cover ? ' has-cover' : ''}">
+    ${splitOpen(g)}
       ${breadcrumb([['Home', ''], ['Get Help', 'get-help/'], [g.title, '']])}
       <p class="eyebrow">${tag(g.eyebrow || 'Guide', g.tone || '')}</p>
       <h1 class="page-h">${esc(g.title)}</h1>
@@ -223,7 +229,7 @@ export function guide(g, data) {
         ${checklist ? `<a class="btn btn--small btn--ghost" href="${href('resources/checklists/' + checklist.slug + '/')}">${icon('list', { size: 18 })}<span>Checklist</span></a>` : ''}
       </div>
       <p class="copy-status" role="status" aria-live="polite"></p>
-    </div>
+    ${splitClose(g)}
   </header>
   <div class="wrap wrap--text">
     ${intro ? `<div class="prose guide__intro">${md(intro)}</div>` : ''}
@@ -300,8 +306,8 @@ export function article(a, data) {
   const { intro, sections: secs } = sections(a.body);
   return `
 <article>
-  <header class="page-head page-head--article">
-    <div class="wrap wrap--text">
+  <header class="page-head page-head--article${a.cover ? ' has-cover' : ''}">
+    ${splitOpen(a)}
       ${breadcrumb([['Home', ''], ['Resources', 'resources/'], [a.title, '']])}
       <p class="eyebrow">${tag(cat ? esc(cat.label) : 'Article')} ${a.area ? `<span class="area area--${a.area}">${ctx.t('area.' + a.area)}</span>` : ''}</p>
       <h1 class="page-h">${esc(a.title)}</h1>
@@ -311,7 +317,7 @@ export function article(a, data) {
         <button class="btn btn--small btn--ghost" type="button" data-print>${icon('print', { size: 18 })}<span>${ctx.t('print')}</span></button>
       </div>
       <p class="copy-status" role="status" aria-live="polite"></p>
-    </div>
+    ${splitClose(a)}
   </header>
   <div class="wrap wrap--text">
     ${secs.length > 2 ? `<nav class="toc" aria-label="${ctx.t('onThisPage')}"><h2 class="toc__h">${ctx.t('onThisPage')}</h2><ul>${secs.map((s) => `<li><a href="#${s.id}">${esc(s.title)}</a></li>`).join('')}</ul></nav>` : ''}
@@ -327,12 +333,12 @@ export function article(a, data) {
 export function checklist(c) {
   let n = 0;
   return `
-<section class="page-head page-head--check no-print">
-  <div class="wrap wrap--text">
+<section class="page-head page-head--check no-print${c.cover ? ' has-cover' : ''}">
+  ${splitOpen(c)}
     ${breadcrumb([['Home', ''], ['Resources', 'resources/'], [c.title, '']])}
     <h1 class="page-h">${esc(c.title)}</h1>
     <p class="page-lede">${esc(c.intro)}</p>
-  </div>
+  ${splitClose(c)}
 </section>
 <div class="wrap wrap--text">
   <div class="checklist" data-checklist="${c.slug}">

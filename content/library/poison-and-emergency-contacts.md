@@ -1,4 +1,7 @@
 ---
+cover: poison-and-emergency-contacts.jpg
+coverAlt: "A gloved hand comforting a dog lying on an exam table"
+coverCredit: "Tima Miroshnichenko on Pexels"
 title: Emergency numbers to save now
 category: emergency
 area: local

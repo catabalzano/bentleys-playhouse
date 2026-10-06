@@ -1,4 +1,7 @@
 ---
+cover: international-pet-travel.jpg
+coverAlt: "Two dogs in vests on an airport runway beside a plane"
+coverCredit: "Jeswin Thomas on Pexels"
 title: Traveling internationally with your dog
 icon: globe
 category: laws-travel

@@ -1,4 +1,7 @@
 ---
+cover: federal-laws.jpg
+coverAlt: "A serious-looking dog sitting outdoors"
+coverCredit: "Nicki Dick on Pexels"
 title: Federal laws that protect animals
 icon: shield
 category: laws-travel

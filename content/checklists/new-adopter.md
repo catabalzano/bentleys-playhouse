@@ -1,4 +1,7 @@
 ---
+cover: checklist-new-adopter.jpg
+coverAlt: "A puppy taking its first steps in a new home"
+coverCredit: "NaNa Photography on Pexels"
 title: New-adopter checklist
 short: Get your home and routine ready
 category: adopt-foster

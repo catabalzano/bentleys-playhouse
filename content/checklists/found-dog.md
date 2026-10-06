@@ -1,4 +1,7 @@
 ---
+cover: checklist-found-dog.jpg
+coverAlt: "A beagle standing in a backyard"
+coverCredit: "Anastasiia Adamenko on Pexels"
 title: Found-dog checklist
 short: Report, scan and search, step by step
 category: lost-found

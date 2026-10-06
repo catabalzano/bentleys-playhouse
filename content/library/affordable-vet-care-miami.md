@@ -1,4 +1,7 @@
 ---
+cover: affordable-vet-care-miami.jpg
+coverAlt: "A veterinarian holding a fluffy Pomeranian"
+coverCredit: "Tima Miroshnichenko on Pexels"
 title: Affordable vet care in Miami
 category: affordable
 area: local

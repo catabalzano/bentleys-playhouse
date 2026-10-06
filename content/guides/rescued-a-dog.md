@@ -1,4 +1,7 @@
 ---
+cover: guide-rescued-a-dog.jpg
+coverAlt: "A rescued dog on a leash being comforted by a caregiver"
+coverCredit: "Dominik Gryzbon on Pexels"
 title: I rescued a dog
 eyebrow: Get Help · Rescued a dog
 tone: violet

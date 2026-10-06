@@ -1,4 +1,7 @@
 ---
+cover: approaching-a-scared-dog.jpg
+coverAlt: "A nervous dog crouching as a hand reaches out gently"
+coverCredit: "Ivan S on Pexels"
 title: Approaching a scared or unfamiliar dog
 category: rescue-basics
 area: general

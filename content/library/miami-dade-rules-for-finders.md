@@ -1,4 +1,7 @@
 ---
+cover: miami-dade-rules-for-finders.jpg
+coverAlt: "A stray dog standing on a city sidewalk"
+coverCredit: "Syed Qaarif Andrabi on Pexels"
 title: What Miami-Dade requires when you find a dog
 category: rescue-basics
 area: local

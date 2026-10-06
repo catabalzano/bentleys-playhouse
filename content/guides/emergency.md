@@ -1,4 +1,7 @@
 ---
+cover: guide-emergency.jpg
+coverAlt: "A dog wearing a recovery cone resting on the ground"
+coverCredit: "Rachael Holzman on Pexels"
 title: A dog is hurt or in danger
 eyebrow: Get Help · Emergency
 tone: orange

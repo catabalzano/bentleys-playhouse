@@ -1,4 +1,7 @@
 ---
+cover: checklist-foster-home.jpg
+coverAlt: "A dog resting its head on a soft pillow"
+coverCredit: "Viktoria B. on Pexels"
 title: Foster-home checklist
 short: Questions to ask and things to prepare
 category: adopt-foster

@@ -1,4 +1,7 @@
 ---
+cover: what-fostering-involves.jpg
+coverAlt: "A pug being held and cuddled"
+coverCredit: "Ivan Babydov on Pexels"
 title: What fostering a dog involves
 category: adopt-foster
 area: general

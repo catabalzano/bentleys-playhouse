@@ -1,4 +1,7 @@
 ---
+cover: reporting-animal-cruelty.jpg
+coverAlt: "A dog looking out from behind a chain-link fence"
+coverCredit: "Vivian Nguyen on Pexels"
 title: Reporting animal cruelty in Miami-Dade
 category: rescuers
 area: local

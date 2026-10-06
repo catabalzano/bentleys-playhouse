@@ -1,4 +1,7 @@
 ---
+cover: guide-lost-my-dog.jpg
+coverAlt: "A brown dog standing alert in a forest clearing"
+coverCredit: "Ave Calvar Martinez on Pexels"
 title: I lost my dog
 eyebrow: Get Help · Lost dog
 tone: orange

@@ -1,4 +1,7 @@
 ---
+cover: the-first-three-months.jpg
+coverAlt: "A French Bulldog sleeping peacefully on a blanket"
+coverCredit: "Bo Ponomari on Pexels"
 title: The first three months with a new dog
 category: behavior
 area: general

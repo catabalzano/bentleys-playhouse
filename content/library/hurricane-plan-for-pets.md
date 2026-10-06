@@ -1,4 +1,7 @@
 ---
+cover: hurricane-plan-for-pets.jpg
+coverAlt: "A dog walking through puddles on a rainy road"
+coverCredit: "Thái Trường Giang on Pexels"
 title: A hurricane plan for your dog
 category: emergency
 area: local

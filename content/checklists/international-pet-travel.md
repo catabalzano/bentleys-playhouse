@@ -1,4 +1,7 @@
 ---
+cover: checklist-international-pet-travel.jpg
+coverAlt: "A dog riding in a bike basket by a canal"
+coverCredit: "Zack Tu Nan on Pexels"
 title: International pet travel checklist
 short: Every step, from microchip to landing
 icon: globe

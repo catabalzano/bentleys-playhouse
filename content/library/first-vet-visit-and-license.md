@@ -1,4 +1,7 @@
 ---
+cover: first-vet-visit-and-license.jpg
+coverAlt: "A vet examining a happy dog with a volunteer"
+coverCredit: "Mikhail Nilov on Pexels"
 title: First vet visit, rabies and your county license
 category: care
 area: local

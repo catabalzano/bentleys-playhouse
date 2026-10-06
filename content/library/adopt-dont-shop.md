@@ -1,4 +1,7 @@
 ---
+cover: adopt-dont-shop.jpg
+coverAlt: "A dog resting behind the bars of a shelter kennel"
+coverCredit: "Critical Smith on Pexels"
 title: Why we say "adopt, don't shop"
 category: adopt-foster
 area: general

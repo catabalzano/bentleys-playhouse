@@ -1,4 +1,7 @@
 ---
+cover: florida-animal-laws.jpg
+coverAlt: "A husky lying on grass under palm trees"
+coverCredit: "Lucas Andrade on Pexels"
 title: Florida animal laws, explained
 icon: shield
 category: laws-travel
