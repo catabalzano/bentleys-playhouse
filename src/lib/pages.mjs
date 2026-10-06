@@ -3,6 +3,7 @@ import {
   breadcrumb, sourcesList, icon, paw, pawTrail, fmtDate, strip, slugify, isEmptyBody, logo,
 } from './core.mjs';
 import { mdasBlock } from './pages2.mjs';
+import { pawsomeHome, img } from './pages3.mjs';
 import { heroDoorway, photoSlot } from './art.mjs';
 
 const CHOICES = [
@@ -118,6 +119,8 @@ ${dogs.length || stories.length ? `
   </div>
   ${previewNote('Add real dogs in <code>content/dogs/</code> and rescue stories in <code>content/stories/</code>. They appear here automatically.')}
 </div></section>`}
+
+${pawsomeHome(data.pooches)}
 
 <section class="help-ways" aria-labelledby="ways-h">
   <div class="wrap">
@@ -428,7 +431,7 @@ export function flyer() {
 export function dogCard(d) {
   const theirs = d.source === 'bentleys';
   return `<article class="dog">
-    <a class="dog__photo" href="${href('adopt-foster/dogs/' + d.slug + '/')}">${d.photo ? `<img src="${asset('img/dogs/' + d.photo)}" alt="${esc(d.photoAlt || d.name)}" loading="lazy">` : photoSlot('Photo coming soon', 'violet')}</a>
+    <a class="dog__photo" href="${href('adopt-foster/dogs/' + d.slug + '/')}">${d.photo ? `<img src="${img(d.photo, 'img/dogs/')}" alt="${esc(d.photoAlt || d.name)}" loading="lazy">` : photoSlot('Photo coming soon', 'violet')}</a>
     <div class="dog__body">
       <p class="dog__badges">${theirs ? tag("Bentley's Playhouse dog", 'blue') : (d.source === 'mdas' ? tag('Miami-Dade Animal Services' + (d.animalId ? ' · ' + esc(d.animalId) : ''), 'gold') : tag('Partner listing: ' + esc(d.partnerName || ''), 'gold'))} ${d.status === 'pending' ? '<span class="pill">Adoption pending</span>' : ''}</p>
       <h3 class="dog__name"><a href="${href('adopt-foster/dogs/' + d.slug + '/')}">${esc(d.name)}</a></h3>
@@ -439,7 +442,7 @@ export function dogCard(d) {
 }
 export function storyCard(st) {
   return `<article class="dog dog--story">
-    <div class="dog__photo">${st.photo ? `<img src="${asset('img/stories/' + st.photo)}" alt="${esc(st.photoAlt || '')}" loading="lazy">` : photoSlot('Photo coming soon', 'gold')}</div>
+    <div class="dog__photo">${st.photo ? `<img src="${img(st.photo, 'img/stories/')}" alt="${esc(st.photoAlt || '')}" loading="lazy">` : photoSlot('Photo coming soon', 'gold')}</div>
     <div class="dog__body"><p>${tag('Rescue story', 'orange')}</p><h3 class="dog__name">${esc(st.title)}</h3><p>${esc(st.summary)}</p></div>
   </article>`;
 }
@@ -453,7 +456,7 @@ export function dogPage(d) {
   <p class="page-lede">${[d.age, d.sex, d.size].filter(Boolean).map(esc).join(' · ')}</p>
 </div></section>
 <div class="wrap wrap--text">
-  <div class="dog-hero">${d.photo ? `<img src="${asset('img/dogs/' + d.photo)}" alt="${esc(d.photoAlt || d.name)}">` : photoSlot('Photo coming soon', 'violet')}</div>
+  <div class="dog-hero">${d.photo ? `<img src="${img(d.photo, 'img/dogs/')}" alt="${esc(d.photoAlt || d.name)}">` : photoSlot('Photo coming soon', 'violet')}</div>
   <dl class="dog-facts">${[['Good with', d.goodWith], ['Energy', d.energy], ['Medical notes', d.medical], ['Listed', d.date && fmtDate(d.date)]].filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
   <div class="prose">${md(d.body)}</div>
   <div class="btn-row">
@@ -482,6 +485,7 @@ export function adopt(data) {
   </div>
 </section>
 <div class="wrap">
+  <aside class="pp-xlink pp-xlink--adopt"><p class="pawsome__kicker">${paw()} Updated weekly</p><h2 class="section-h">Pawsome Pooches</h2><p>Dogs from Miami-Dade Animal Services, the Broward shelter, local rescues and families rehoming safely, all in one place.</p><p><a class="arrow-link" href="${href('pawsome-pooches/')}">Meet this week's pups ${icon('arrow', { size: 18 })}</a></p></aside>
   <section class="adopt-sec" id="our-dogs" aria-labelledby="our-dogs-h">
     <h2 id="our-dogs-h" class="section-h">Our dogs</h2>
     ${ours.length ? `<div class="dog-grid">${ours.map(dogCard).join('')}</div>` : `
@@ -564,6 +568,7 @@ export function involved(data) {
       ${w.preview ? previewNote(w.preview) : ''}
     </li>`).join('')}
   </ul>
+  <aside class="pp-xlink"><p class="pawsome__kicker">${paw()} Help beyond our own dogs</p><h2 class="section-h">Rescues you can help</h2><p>Local rescues and shelters doing the hard work every day, and how you can support them.</p><p><a class="arrow-link" href="${href('rescues-you-can-help/')}">See rescues you can help ${icon('arrow', { size: 18 })}</a> <a class="arrow-link" href="${href('pawsome-pooches/')}">Meet this week's Pawsome Pooches ${icon('arrow', { size: 18 })}</a></p></aside>
   <section class="form-wrap" id="interest-form" aria-labelledby="int-h">
     <h2 id="int-h" class="section-h">Raise your hand</h2>
     <p>Tell us how you'd like to help. This doesn't sign you up for anything or guarantee a placement. It lets us reach out when there's a good fit.</p>

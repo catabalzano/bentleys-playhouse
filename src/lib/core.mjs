@@ -40,8 +40,7 @@ export function readCollection(dir) {
     .map((f) => {
       const { data, content } = matter(fs.readFileSync(path.join(full, f), 'utf8'));
       const slug = data.slug || f.replace(/\.md$/, '');
-      if (data.lastReviewed instanceof Date) data.lastReviewed = data.lastReviewed.toISOString().slice(0, 10);
-      if (data.date instanceof Date) data.date = data.date.toISOString().slice(0, 10);
+      for (const k of Object.keys(data)) if (data[k] instanceof Date) data[k] = data[k].toISOString().slice(0, 10);
       return { ...data, slug, body: content, file: path.join('content', dir, f) };
     })
     .sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || String(a.title).localeCompare(b.title));

@@ -1,10 +1,56 @@
 [
-  { "id": "lost-found", "label": "Lost & Found", "icon": "found", "description": "Reuniting dogs with their families, from microchips to flyers." },
-  { "id": "rescue-basics", "label": "Rescue Basics", "icon": "rescued", "description": "Safe first steps when you step in to help a dog." },
-  { "id": "adopt-foster", "label": "Adoption & Fostering", "icon": "adopt", "description": "Choosing well, preparing, and settling in." },
-  { "id": "care", "label": "Everyday Care & Nutrition", "icon": "food", "description": "Licensing, vaccines and the routine care every dog needs." },
-  { "id": "behavior", "label": "Behavior & Adjustment", "icon": "heart", "description": "Introductions, training and helping a dog feel safe." },
-  { "id": "affordable", "label": "Affordable Care & Supplies", "icon": "med", "description": "Lower-cost vet care and help paying for it." },
-  { "id": "emergency", "label": "Emergency & Disaster Prep", "icon": "storm", "description": "Injuries, poisoning and hurricane season." },
-  { "id": "rescuers", "label": "Support for Rescuers", "icon": "hands", "description": "For independent rescuers and volunteers doing the hard parts." }
+  {
+    "id": "lost-found",
+    "label": "Lost & Found",
+    "icon": "found",
+    "description": "Reuniting dogs with their families, from microchips to flyers."
+  },
+  {
+    "id": "rescue-basics",
+    "label": "Rescue Basics",
+    "icon": "rescued",
+    "description": "Safe first steps when you step in to help a dog."
+  },
+  {
+    "id": "adopt-foster",
+    "label": "Adoption & Fostering",
+    "icon": "adopt",
+    "description": "Choosing well, preparing, and settling in."
+  },
+  {
+    "id": "care",
+    "label": "Everyday Care & Nutrition",
+    "icon": "food",
+    "description": "Licensing, vaccines and the routine care every dog needs."
+  },
+  {
+    "id": "behavior",
+    "label": "Behavior & Adjustment",
+    "icon": "heart",
+    "description": "Introductions, training and helping a dog feel safe."
+  },
+  {
+    "id": "affordable",
+    "label": "Affordable Care & Supplies",
+    "icon": "med",
+    "description": "Lower-cost vet care and help paying for it."
+  },
+  {
+    "id": "emergency",
+    "label": "Emergency & Disaster Prep",
+    "icon": "storm",
+    "description": "Injuries, poisoning and hurricane season."
+  },
+  {
+    "id": "laws-travel",
+    "label": "Laws & Travel",
+    "icon": "book",
+    "description": "Florida and federal animal laws, and traveling with your dog abroad."
+  },
+  {
+    "id": "rescuers",
+    "label": "Support for Rescuers",
+    "icon": "hands",
+    "description": "For independent rescuers and volunteers doing the hard parts."
+  }
 ]

@@ -8,6 +8,7 @@ import { ctx, ROOT, readJSON, readCollection, md, strip, href } from './lib/core
 import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
 import * as P2 from './lib/pages2.mjs';
+import * as P3 from './lib/pages3.mjs';
 import { parse as parseCSV } from 'csv-parse/sync';
 
 const args = process.argv.slice(2);
@@ -34,13 +35,19 @@ const pages = Object.fromEntries(readCollection('pages').map((p) => [p.slug, p])
 
 const clinicData = readJSON('clinics.json');
 const mdas = readJSON('mdas.json');
+ctx.mdas = mdas;
+const pooches = P3.prepPooches(readCollection('pawsome'));
+const rescues = readCollection('rescues');
 
 // ---------- finances (Transparency page) ----------
 function loadFinances() {
   const settings = readJSON('finances/settings.json');
   const valid = new Set([...settings.expenseCategories, ...settings.incomeCategories].map((c) => c.id));
   const read = (f) => parseCSV(fs.readFileSync(path.join(ROOT, 'content/finances', f), 'utf8'), { columns: true, skip_empty_lines: true, trim: true });
-  let raw = read('transactions.csv');
+  // entries added in the admin (content/finances/entries/*.json) plus any rows still in the CSV
+  const entryDir = path.join(ROOT, 'content/finances/entries');
+  const entries = fs.existsSync(entryDir) ? fs.readdirSync(entryDir).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(fs.readFileSync(path.join(entryDir, f), 'utf8'))) : [];
+  let raw = [...read('transactions.csv'), ...entries.map((e) => ({ ...e, amount: String(e.amount ?? ''), receipt: e.receipt ? path.basename(String(e.receipt)) : '' }))];
   let isExample = false;
   if (!raw.length && ctx.mode === 'preview') { raw = read('example-transactions.csv'); isExample = true; }
   const warnings = [];
@@ -77,7 +84,7 @@ const items = [
     searchText: searchText(c.title, c.intro, c.groups.flatMap((g) => g.items).join(' ')) })),
   ...directory.filter((d) => d.verified !== false || ctx.mode === 'preview').map((d) => ({ ...d, type: 'link', slug: d.id, searchText: searchText(d.title, d.summary, d.keywords, d.area) })),
 ];
-const data = { guides, articles, checklists, dogs, stories, directory: items.filter((i) => i.type === 'link'), involved, faq, pages, items, mdas };
+const data = { pooches, rescues, guides, articles, checklists, dogs, stories, directory: items.filter((i) => i.type === 'link'), involved, faq, pages, items, mdas };
 
 // ---------- write ----------
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -95,7 +102,10 @@ function emit(route, opts) {
 }
 
 emit('', { home: true, bodyClass: 'home', title: 'Home',
-  description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data) });
+  description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data), scripts: ['js/pawsome.js'] });
+emit('pawsome-pooches/', { title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js'] });
+for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, description: d.tagline || `Meet ${d.name}, looking for a home.`, ogImage: d.photos[0] ? d.photos[0].replace(/^\/?assets\//, '') : undefined, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js'] });
+emit('rescues-you-can-help/', { title: 'Rescues You Can Help', description: 'Miami-Dade rescues and shelters you can support by fostering, volunteering, sharing or sending supplies.', body: () => P3.rescuesPage(rescues) });
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
 for (const g of guides) emit(`get-help/${g.slug}/`, { title: g.title, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
 emit('adopt-foster/', { title: 'Adopt & Foster', description: pages.adopt.summary, body: () => P.adopt(data) });
@@ -117,7 +127,11 @@ emit('404.html', { title: 'Page not found', description: 'Page not found.', noin
 fs.cpSync(path.join(ROOT, 'src/assets'), path.join(OUT, 'assets'), { recursive: true });
 // the public ledger CSV (live data only) and no example files on the live site
 fs.mkdirSync(path.join(OUT, 'assets/finances'), { recursive: true });
-if (!finances.isExample) fs.copyFileSync(path.join(ROOT, 'content/finances/transactions.csv'), path.join(OUT, 'assets/finances/transactions.csv'));
+if (!finances.isExample) {
+  const q = (v) => (/[",\n]/.test(String(v ?? '')) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v ?? ''));
+  const csv = ['date,type,category,description,amount,paid_to_or_from,dog,receipt,notes', ...finances.rows.map((r) => [r.date, r.type, r.category, r.description, r.amount.toFixed(2), r.party, r.dog, r.receipt, r.notes].map(q).join(','))].join('\n') + '\n';
+  fs.writeFileSync(path.join(OUT, 'assets/finances/transactions.csv'), csv);
+}
 if (ctx.mode === 'live') for (const d of ['receipts', 'statements']) for (const f of fs.readdirSync(path.join(OUT, 'assets/finances', d))) if (f.startsWith('example-')) fs.rmSync(path.join(OUT, 'assets/finances', d, f));
 fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
 // sitemap + robots
