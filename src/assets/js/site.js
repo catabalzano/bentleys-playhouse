@@ -206,3 +206,12 @@
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
   Array.prototype.forEach.call(els, function (el) { if (!el.parentElement.closest('[data-reveal="panel"]')) io.observe(el); });
 })();
+
+/* Pin point for the stacked section: stick when its bottom reaches the bottom of the screen (works for tall sections on phones too). */
+(function () {
+  'use strict';
+  var el = document.querySelector('.stack > .brings');
+  if (!el) return;
+  function set() { el.style.setProperty('--stick-top', Math.min(0, window.innerHeight - el.offsetHeight) + 'px'); }
+  set(); window.addEventListener('resize', set);
+})();

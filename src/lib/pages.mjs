@@ -64,6 +64,7 @@ export function home(data) {
   </div>
 </section>
 
+<div class="stack">
 <section class="brings" aria-labelledby="brings-h">
   <div class="wrap">
     <h2 id="brings-h" class="section-h section-h--center">What brings you here?</h2>
@@ -89,6 +90,7 @@ export function home(data) {
     </ol>
   </div>
 </section>
+</div>
 
 <section class="guides" aria-labelledby="guides-h">
   <div class="wrap">
