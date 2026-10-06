@@ -7,13 +7,20 @@
   /* ---------- gallery + share (inside a profile, wherever it is) ---------- */
   function wire(root) {
     $$('[data-pp-gallery]', root).forEach(function (g) {
-      var main = $('[data-pp-main]', g);
-      $$('.pp-thumb', g).forEach(function (t) {
-        t.addEventListener('click', function () {
-          if (main) main.src = t.getAttribute('data-src');
-          $$('.pp-thumb', g).forEach(function (o) { o.setAttribute('aria-pressed', String(o === t)); });
-        });
-      });
+      var main = $('[data-pp-main]', g), thumbs = $$('.pp-thumb', g), nEl = $('[data-pp-n]', g), cur = 0;
+      function show(i) {
+        if (!thumbs.length) return;
+        cur = (i + thumbs.length) % thumbs.length;
+        if (main) main.src = thumbs[cur].getAttribute('data-src');
+        thumbs.forEach(function (o, k) { o.setAttribute('aria-pressed', String(k === cur)); });
+        if (nEl) nEl.textContent = cur + 1;
+      }
+      thumbs.forEach(function (t, k) { t.addEventListener('click', function () { show(k); }); });
+      $$('[data-pp-step]', g).forEach(function (b) { b.addEventListener('click', function () { show(cur + Number(b.getAttribute('data-pp-step'))); }); });
+      // swipe on phones
+      var x0 = null;
+      g.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+      g.addEventListener('touchend', function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1)); x0 = null; });
     });
     $$('[data-pp-share]', root).forEach(function (b) {
       b.addEventListener('click', function () {

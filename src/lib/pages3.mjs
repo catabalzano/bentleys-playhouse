@@ -32,6 +32,7 @@ export function prepPooches(list) {
   }).sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0) || String(b.featuredWeek || '').localeCompare(String(a.featuredWeek || '')) || String(a.name).localeCompare(b.name));
 }
 
+const pups = (list) => list.reduce((n, d) => n + (Number(d.count) || 1), 0);
 const route = (d) => `pawsome-pooches/${d.slug}/`;
 const facts = (d) => [d.breed, d.age, d.sex].filter(Boolean).map(esc).join(' · ');
 const locBadge = (d) => `<span class="pp-loc pp-loc--${d.loc.meta.tone}">${icon('found', { size: 15 })}${esc(d.loc.type === 'rescue' && d.loc.name ? d.loc.name : d.loc.meta.label)}</span>`;
@@ -43,7 +44,7 @@ export function ppCard(d, { headingLevel = 'h3' } = {}) {
   const ribbon = d.status === 'adopted' ? `<span class="pp-stamp">Adopted!</span>` : d.status === 'pending' ? `<span class="pp-ribbon pp-ribbon--pending">Adoption pending</span>` : d.urgent ? `<span class="pp-ribbon pp-ribbon--urgent">Urgent</span>` : d.isNew ? `<span class="pp-ribbon">New this week</span>` : '';
   return `<article class="pp-card${d.status === 'adopted' ? ' pp-card--adopted' : ''}" data-pp-card data-loc="${d.loc.group}" data-needs="${esc(d.needs || 'adoption')}" data-size="${esc((d.size || '').toLowerCase())}" data-good="${Object.entries(d.good).filter(([, v]) => v === 'yes').map(([k]) => k).join(' ')}">
     <a class="pp-card__link" href="${href(route(d))}" data-pp-open="${esc(d.slug)}">
-      <span class="pp-card__photo">${photo ? `<img src="${img(photo)}" alt="${esc(d.photoAlt || d.name)}" loading="lazy">` : `<span class="pp-card__nophoto">${paw()}</span>`}${ribbon}</span>
+      <span class="pp-card__photo">${photo ? `<img src="${img(photo)}" alt="${esc(d.photoAlt || d.name)}" loading="lazy">` : `<span class="pp-card__nophoto">${paw()}</span>`}${ribbon}${d.photos.length > 1 ? `<span class="pp-card__count">${icon('image', { size: 15 })}${d.photos.length} photos</span>` : ''}</span>
       <span class="pp-card__body">
         <${H} class="pp-card__name">${esc(d.name)}</${H}>
         <span class="pp-card__facts">${facts(d)}</span>
@@ -89,7 +90,8 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
   const statusPill = d.status === 'adopted' ? `<span class="pp-status pp-status--adopted">Adopted${d.adoptedDate ? ' ' + esc(fmtDate(d.adoptedDate)) : ''}</span>` : d.status === 'pending' ? '<span class="pp-status">Adoption pending</span>' : `<span class="pp-status pp-status--open">${d.needs === 'foster' ? 'Needs a foster' : d.needs === 'both' ? 'Ready to adopt or foster' : 'Ready for adoption'}</span>`;
   return `<div class="pp-detail">
   <div class="pp-detail__media" data-pp-gallery>
-    <div class="pp-detail__main">${d.photos[0] ? `<img src="${img(d.photos[0])}" alt="${esc(d.photoAlt || d.name)}" data-pp-main>` : `<span class="pp-card__nophoto">${paw()}</span>`}</div>
+    <div class="pp-detail__main">${d.photos[0] ? `<img src="${img(d.photos[0])}" alt="${esc(d.photoAlt || d.name)}" data-pp-main>` : `<span class="pp-card__nophoto">${paw()}</span>`}${d.photos.length > 1 ? `<button type="button" class="pp-gal-btn pp-gal-btn--prev" data-pp-step="-1" aria-label="Previous photo">${icon('arrow', { size: 22 })}</button><button type="button" class="pp-gal-btn pp-gal-btn--next" data-pp-step="1" aria-label="Next photo">${icon('arrow', { size: 22 })}</button><span class="pp-gal-count" aria-live="polite"><span data-pp-n>1</span> / ${d.photos.length}</span>` : ''}</div>
+    ${d.photos.length > 1 ? `<p class="pp-gal-hint">${icon('image', { size: 16 })} ${d.photos.length} photos. Use the arrows or tap a photo below to see more.</p>` : ''}
     ${d.photos.length > 1 ? `<div class="pp-thumbs" role="group" aria-label="More photos of ${esc(d.name)}">${d.photos.map((p, i) => `<button type="button" class="pp-thumb" data-src="${img(p)}" aria-pressed="${i === 0}"><img src="${img(p)}" alt="Photo ${i + 1} of ${esc(d.name)}" loading="lazy"></button>`).join('')}</div>` : ''}
   </div>
   <div class="pp-detail__info">
@@ -135,7 +137,7 @@ export function pawsomeHome(pooches) {
         <p class="pawsome__lede">Every week we spotlight dogs in our community who need a home: at Miami-Dade Animal Services, the Broward shelter, local rescues, and families who need to rehome safely. Tap a pup to meet them.</p>
       </div>
       <div class="pawsome__stats" aria-label="This week at a glance">
-        <p><strong>${live.length}</strong><span>${live.length === 1 ? 'listing' : 'listings'} this week</span></p>
+        <p><strong>${pups(live)}</strong><span>${pups(live) === 1 ? 'pup' : 'pups'} this week</span></p>
         <p><strong>${adopted}</strong><span>happy ${adopted === 1 ? 'tail' : 'tails'}</span></p>
       </div>
     </div>
@@ -171,8 +173,13 @@ export function pawsomePage(pooches) {
     <h1 class="pawsome__title pawsome__title--page">Pawsome <span>Pooches</span></h1>
     <p class="page-lede">Every week we feature dogs who are ready for adoption or foster in our community: at Miami-Dade Animal Services in Doral and Medley, the Broward County shelter, local rescues doing the work every day, and families who need to rehome safely.</p>
     <div class="pawsome__stats pawsome__stats--page">
-      <p><strong>${live.length}</strong><span>${live.length === 1 ? 'pup' : 'pups'} looking</span></p>
-      <p><strong>${new Set(live.map((d) => d.loc.name || d.loc.type)).size}</strong><span>${new Set(live.map((d) => d.loc.name || d.loc.type)).size === 1 ? 'place' : 'places'}</span></p>
+      <p><strong>${pups(live)}</strong><span>${pups(live) === 1 ? 'pup' : 'pups'} looking</span></p>
+      ${(() => {
+        // families are counted per listing; shelters and rescues once each
+        const fam = live.filter((d) => d.loc.type === 'family').length;
+        const orgs = new Set(live.filter((d) => d.loc.type !== 'family').map((d) => d.loc.name || d.loc.type)).size;
+        return (fam ? `<p><strong>${fam}</strong><span>${fam === 1 ? 'family' : 'families'}</span></p>` : '') + (orgs || !fam ? `<p><strong>${orgs}</strong><span>${orgs === 1 ? 'shelter or rescue' : 'shelters & rescues'}</span></p>` : '');
+      })()}
       <p><strong>${adopted.length}</strong><span>happy ${adopted.length === 1 ? 'tail' : 'tails'}</span></p>
     </div>
   </div>

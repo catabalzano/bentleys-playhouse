@@ -68,6 +68,13 @@ collections:
     widget: boolean
     default: false
     required: false
+  - label: Number of dogs in this listing
+    name: count
+    widget: number
+    default: 1
+    min: 1
+    required: false
+    hint: e.g. 2 for a pair. Used for the "pups looking" count.
   - label: Status
     name: status
     widget: select

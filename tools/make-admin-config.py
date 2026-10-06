@@ -37,6 +37,7 @@ pawsome = {
     'fields': [
         s('Name', 'name', True, 'For two dogs listed together, e.g. "Zeus & Star"'),
         {'label': 'Listed together (a pair)', 'name': 'pair', 'widget': 'boolean', 'default': False, 'required': False},
+        {'label': 'Number of dogs in this listing', 'name': 'count', 'widget': 'number', 'default': 1, 'min': 1, 'required': False, 'hint': 'e.g. 2 for a pair. Used for the "pups looking" count.'},
         sel('Status', 'status', [{'label': 'Available', 'value': 'available'}, {'label': 'Adoption pending', 'value': 'pending'}, {'label': 'Adopted', 'value': 'adopted'}], 'available'),
         date('Featured week', 'featuredWeek', True, 'The week this pup is featured. The newest week gets a "New this week" ribbon.'),
         date('Adopted on', 'adoptedDate', False, 'Only when Status is Adopted'),
