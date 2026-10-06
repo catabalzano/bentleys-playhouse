@@ -1118,3 +1118,8 @@ img, video, svg { max-width: 100%; }
   .menu-btn { padding: .35rem .7rem; }
   .menu-btn__open > span, .menu-btn__close > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
+/* Donate badge: logo sits inside a white disc with breathing room, so the gold ring never touches the lettering */
+.gift__badge { width: 140px; height: 140px; top: -70px; padding: 13px; background: #fff; border: 5px solid var(--gold); box-sizing: border-box; }
+.gift__badge img { width: 100%; height: 100%; border-radius: 0; object-fit: contain; }
+.gift { padding-top: 84px; }
+.gift-dialog { padding-top: 72px; }
