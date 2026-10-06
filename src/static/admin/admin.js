@@ -183,7 +183,7 @@
   var ORDER = ['pawsome', 'stories', 'rescues', 'dogs', 'money'];
 
   // ---------- sign-in ----------
-  function card(inner) { app.className = ''; app.innerHTML = '<div class="gate"><div class="gate__card"><div class="card-top"></div><img class="gate__logo" src="../assets/img/logo-badge.png" alt="">' + inner + '</div></div>'; }
+  function card(inner) { app.className = ''; app.innerHTML = '<div class="gate"><div class="gate__card"><div class="card-top"></div><img class="gate__logo" src="../assets/img/logo-main.png" alt="">' + inner + '</div></div>'; }
   function signedIn(j) { S.session = j.session; store(SKEY, j.session); shell(); route(); if (j.recoveryLeft != null && j.recoveryLeft < 3) toast('You have ' + j.recoveryLeft + ' backup codes left. Make new ones in Profile & security.'); }
   function gate(msg) {
     api('/auth/status').then(function (st) {
@@ -236,7 +236,7 @@
   function shell() {
     app.className = '';
     app.innerHTML = '<div class="shell"><aside class="side" aria-label="Admin sections">' +
-      '<a class="side__brand" href="#home"><img src="../assets/img/logo-badge.png" alt=""><span><b>Bentley\'s Playhouse</b><small>Admin</small></span></a>' +
+      '<a class="side__brand" href="#home"><img src="../assets/img/logo-main-dark.png" alt="Bentley\'s Playhouse"><small>Admin</small></a>' +
       '<a class="side__me" href="#profile" data-nav="profile"><span class="avatar" data-avatar></span><span><b data-myname>My profile</b><small>Profile &amp; security</small></span></a>' +
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
