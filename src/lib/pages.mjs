@@ -111,7 +111,7 @@ ${dogs.length || stories.length ? `
     <div>
       <h2 id="dogs-h" class="section-h">Looking for a dog to adopt?</h2>
       <p>Profiles of our current dogs will live here. For now, our adoptable dogs are listed on RescueMe, and our day-to-day rescue work is on Instagram.</p>
-      <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}${button('Dogs at Miami-Dade Animal Services', 'adopt-foster/#mdas', { variant: 'ghost' })}</div>
+      <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}${button('Dogs at Miami-Dade Animal Services', 'adopt-foster/#mdas', { variant: 'ghost' })}${button('Dogs at Broward County Animal Care', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { variant: 'ghost', externalLink: true })}</div>
     </div>
   </div>
   ${previewNote('Add real dogs in <code>content/dogs/</code> and rescue stories in <code>content/stories/</code>. They appear here automatically.')}
