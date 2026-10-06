@@ -34,6 +34,8 @@ A shared note or spreadsheet with each dog's name, where and when they were foun
 
 ## Rehoming responsibly
 
+Never list a dog as "free to a good home." The full checklist, and why it matters, is in [rehoming a dog safely](/resources/rehoming-a-dog-safely/).
+
 - Screen adopters: meet them more than once, ask about their home and other pets, and check references.
 - Spay/neuter, vaccinate and microchip before placement if you can, and transfer the chip registration.
 - Use a simple written adoption agreement, and ask adopters to return the dog to you if things don't work out.

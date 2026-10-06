@@ -95,7 +95,7 @@ Most people who call are exactly who they say they are. A few aren't. Before you
 
 A dirty, thin or collarless dog may still have a family looking for it. Dogs slip out of gates and through storms, and people search for weeks. In almost every state, the finder doesn't become the owner just by finding the dog. The legal holding period and a real effort to find the family come first.
 
-If you'd like to keep or rehome the dog, report it, search properly, and ask Animal Services how the process works for you.
+If you'd like to keep or rehome the dog, report it, search properly, and ask Animal Services how the process works for you. If you rehome, follow the steps in [rehoming a dog safely](/resources/rehoming-a-dog-safely/).
 
 ## If you can keep the dog for now
 

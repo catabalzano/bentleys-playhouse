@@ -49,7 +49,7 @@ Everything below is either missing, unverified, or a connection the site needs b
 - [x] Domain bentleysplayhouse.org registered at Namecheap (Oct 6, 2026; auto-renew + privacy on).
 - [x] Hosting: GitHub Pages (repo `catabalzano/bentleys-playhouse`, deploys automatically on every push to `main`). Local clone: `~/Documents/GitHub/bentleys-playhouse` (push with GitHub Desktop).
 - [x] DNS at Namecheap (Oct 6, 2026): four A records `@` → 185.199.108.153 / .109.153 / .110.153 / .111.153, CNAME `www` → `catabalzano.github.io.`; parking redirect removed. Site live at bentleysplayhouse.org.
-- [ ] Turn on "Enforce HTTPS" in GitHub → Settings → Pages once the certificate is issued (usually within an hour of the DNS change).
+- [x] HTTPS certificate issued and "Enforce HTTPS" turned on (Oct 6, 2026). http:// and www now redirect to https://bentleysplayhouse.org.
 - [ ] Decide on analytics (optional). If added, update the Privacy page.
 
 ## Content review

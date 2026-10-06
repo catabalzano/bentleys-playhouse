@@ -288,6 +288,7 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
 
 /* ---------- empty states ---------- */
 .empty { display: flex; gap: 1.5rem; align-items: center; padding: clamp(1.25rem, 3vw, 2rem); border-radius: var(--r-lg); background: var(--tint-gold); }
+.dogs-home .empty { background: var(--tint-violet); }
 .empty--wide { padding: clamp(1.5rem, 4vw, 2.75rem); }
 .empty img { flex: none; width: clamp(70px, 12vw, 120px); }
 .empty h2, .empty h3 { margin-top: 0; }

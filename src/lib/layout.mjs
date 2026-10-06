@@ -80,7 +80,7 @@ export function footer() {
       <p class="footer__line">A Miami-based animal rescue helping dogs, and the people who show up for them.</p>
     </div>
     ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
-    ${col('Learn', [['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists']])}
+    ${col('Learn', [['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists'], ['Rehoming a dog safely', 'resources/rehoming-a-dog-safely/']])}
     ${col(esc(s.name), [['Our Story', 'our-story/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : []), ['Privacy', 'privacy/']])}
     <div class="footer__col"><h2 class="footer__h">Follow along</h2><ul class="footer__social">${social}</ul></div>
   </div>

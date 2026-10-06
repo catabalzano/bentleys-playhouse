@@ -57,7 +57,7 @@ Call a vet if the dog isn't drinking, has vomiting or diarrhea that doesn't sett
 You have options:
 
 - **Keep the dog.** Once the holding and reporting steps are done, and if no family comes forward, ask Animal Services how ownership works for you.
-- **Rehome the dog responsibly.** Screen adopters carefully, meet them more than once, and ask a vet or rescue for advice. Our [adoption guidance](/adopt-foster/) explains what a good match looks like.
+- **Rehome the dog responsibly.** Never give a dog away for free or unaltered. Screen adopters carefully, meet them more than once, and ask a vet or rescue for advice. Follow every step in [rehoming a dog safely](/resources/rehoming-a-dog-safely/). Our [adoption guidance](/adopt-foster/) explains what a good match looks like.
 - **Ask a rescue for help.** Most are full, but many can advise or share your post. [Tell us](/contact/) what you're working with.
 
 ## Look after yourself too
