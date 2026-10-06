@@ -112,8 +112,8 @@ ${robots}
 <meta property="og:image" content="${esc(s.siteUrl + '/assets/' + ogImage)}">
 <meta property="og:image:alt" content="${esc(s.name)} logo">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#F9F5F2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#17162A" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#2F45C8">
 <link rel="icon" href="${asset('img/favicon.png')}" type="image/png">
 <link rel="apple-touch-icon" href="${asset('img/logo-badge.png')}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -130,7 +130,7 @@ ${footer()}
 <script src="${asset('js/site.js')}" defer></script>
 ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')}`;
   const html = `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}

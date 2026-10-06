@@ -3,13 +3,13 @@
    and the logo's offset golden shadow marks whatever you can press. */
 :root {
   /* palette sampled from the logo */
-  --cream: #F9F5F2;      /* page — the logo's own background */
+  --cream: #F2F5FF;      /* page — the logo's own background */
   --header-band: #2F45C8; /* header band */
   --band-h: 76px; --badge: 132px; --badge-hang: 64px;
-  --paper: #FFFDFB;      /* raised surfaces */
+  --paper: #FFFFFF;      /* raised surfaces */
   --ink: #1F1D2B;        /* text */
   --muted: #5B566B;
-  --line: #E7DDD3;
+  --line: #D9E0F5;
   --blue: #5271FF;       /* Playhouse Blue — brand, display */
   --blue-deep: #2F45C8;  /* links, buttons, focus (AA on cream) */
   --orange: #FF914D;     /* Paw Orange — accents */
@@ -19,23 +19,23 @@
   --orange-ink: #C2560D;
   --good: #1B6E45;
   --good-bg: #E2F4EA;
-  --tint-blue: #E8ECFF;
+  --tint-blue: #DDE4FF;
   --tint-orange: #FFEADC;
   --tint-violet: #F0E8FF;
-  --tint-gold: #FFF2D9;
+  --tint-gold: #E9EEFF;
   --alert-ink: #A93A07;
   --alert-bg: #FFF0E4;
   --btn-bg: #2F45C8;
   --btn-fg: #FFFFFF;
   --link: #2F45C8;
   --focus: #2F45C8;
-  --footer-bg: #24226A;
+  --footer-bg: #2F45C8;
   --footer-ink: #F9F5F2;
   --footer-muted: #C9C6EC;
-  --hero-wall: #FDEBDD;
-  --hero-stripe: #FBE3D0;
-  --hero-floor: #F3CBA9;
-  --hero-trim: #FFFDFB;
+  --hero-wall: #E4EAFF;
+  --hero-stripe: #D8E0FF;
+  --hero-floor: #C5D0FF;
+  --hero-trim: #FFFFFF;
   --hero-sky: #D3E1FF;
   --flyer-bg: #FFFFFF;
   --flyer-ink: #1F1D2B;
@@ -167,7 +167,7 @@ main:focus { outline: none; }
 .utility__ig { display: inline-flex; padding: .3rem; }
 
 /* Blue band with the badge hanging off it like a sticker (same header on every page) */
-.site-header { position: relative; z-index: 5; background: var(--header-band); }
+.site-header { position: relative; z-index: 5; background: var(--header-band); background-image: linear-gradient(90deg, #2F45C8, #7A45E6); }
 /* room for the hanging badge: a transparent top border keeps the first section's own background behind it */
 main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .page-head:first-child { border-top: var(--badge-hang) solid transparent; }
 .site-header__in { position: relative; display: flex; align-items: center; gap: 1.5rem; min-height: var(--band-h); padding-left: calc(var(--gutter) + var(--badge) + 1.25rem); }
@@ -207,7 +207,7 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
 @media (max-width: 420px) { .utility__right a:not(.utility__ig) { display: none; } }
 
 /* ---------- hero ---------- */
-.hero { padding-block: .5rem 0; }
+.hero { padding-block: .5rem 0; background: linear-gradient(#FFFFFF, #FFFFFF 78%, var(--cream)) border-box; --hero-wall: #FFF1E6; --hero-stripe: #FFE7D6; --hero-floor: #FECCAD; }
 .hero__frame { position: relative; overflow: hidden; aspect-ratio: 1200 / 580; max-width: 100%; border-radius: 50% 50% var(--r-lg) var(--r-lg) / 70% 70% var(--r-lg) var(--r-lg); background: var(--hero-wall); box-shadow: 10px 10px 0 var(--gold); }
 .hero__frame > svg, .hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero-art__bentley { animation: peek 1s .35s cubic-bezier(.2, .9, .3, 1.2) both; }
