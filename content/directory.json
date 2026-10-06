@@ -31,6 +31,8 @@
       "summary": "What to bring and the rules for evacuating with pets during a hurricane. No pre-registration required.", "keywords": "hurricane evacuation shelter storm", "checked": "2026-10-05" },
     { "id": "fdem-pets", "title": "Florida Division of Emergency Management: Make a Pet Plan", "url": "https://www.floridadisaster.org/planprepare/pets/", "area": "florida", "category": "emergency",
       "summary": "Florida's guide to a pet disaster kit and evacuation plan.", "keywords": "hurricane kit plan florida", "checked": "2026-10-05" },
+    { "id": "fenix-lost-found", "title": "Fénix Animal Project: Lost & Found", "url": "https://fenixanimalproject.org/", "area": "national", "category": "lost-found",
+      "summary": "Report a lost or found animal and browse listings. Open to lost and found animals anywhere in the world.", "keywords": "lost found post report listing board fenix reunite", "checked": "2026-10-06" },
     { "id": "petco-love-lost", "title": "Petco Love Lost", "url": "https://petcolove.org/lost/", "area": "national", "category": "lost-found",
       "summary": "Free lost and found pet database with photo matching, used by Miami-Dade Animal Services and thousands of shelters.", "keywords": "photo match facial recognition database", "checked": "2026-10-05" },
     { "id": "aaha-lookup", "title": "AAHA microchip registry lookup", "url": "https://www.aaha.org/for-veterinary-professionals/microchip-registry-lookup-tool-aaha-find-your-pets-microchip-registry/", "area": "national", "category": "lost-found",

@@ -416,7 +416,7 @@ export function flyer() {
       <p class="flyer__temper"></p>
       <dl class="flyer__facts"><div><dt>Area</dt><dd class="flyer__where"></dd></div><div><dt class="flyer__when-l">Last seen</dt><dd class="flyer__when"></dd></div></dl>
       <div class="flyer__contact"></div>
-      <p class="flyer__foot">Check Miami-Dade Animal Services and Petco Love Lost too.</p>
+      <p class="flyer__foot">Also check Miami-Dade Animal Services, fenixanimalproject.org and Petco Love Lost.</p>
     </div>
   </div>
 </div>`;

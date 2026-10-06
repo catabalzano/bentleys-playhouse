@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 // Shared helpers: content loading, links, markdown, small components.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -58,7 +60,17 @@ export function href(target = '') {
   if (ctx.links !== 'pretty') out = out.replace(/^\.\/(?=.)/, '');
   return hash ? `${out}#${hash}` : out;
 }
-export const asset = (p) => (ctx.links === 'pretty' ? '/' : rel()) + 'assets/' + p;
+// css/js get a content hash (?v=) so browsers pick up changes right after each deploy
+const _ver = {};
+function assetVersion(p) {
+  if (!/\.(css|js)$/.test(p)) return '';
+  if (!(p in _ver)) {
+    try { _ver[p] = '?v=' + createHash('sha1').update(readFileSync(new URL('../assets/' + p, import.meta.url))).digest('hex').slice(0, 8); }
+    catch { _ver[p] = ''; }
+  }
+  return _ver[p];
+}
+export const asset = (p) => (ctx.links === 'pretty' ? '/' : rel()) + 'assets/' + p + assetVersion(p);
 export const isCurrent = (section) => ctx.route.startsWith(section);
 
 // ---------- markdown ----------

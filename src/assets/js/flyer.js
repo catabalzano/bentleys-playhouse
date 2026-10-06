@@ -117,7 +117,7 @@
     ctx.fillText(out.band.textContent, W / 2, M + 145);
     // bottom-up layout
     var y = H - M; ctx.textBaseline = 'alphabetic';
-    ctx.font = '600 44px ' + body; ctx.fillStyle = '#5B566B'; ctx.fillText('Check Miami-Dade Animal Services and Petco Love Lost too.', W / 2, y); y -= 80;
+    ctx.font = '600 44px ' + body; ctx.fillStyle = '#5B566B'; ctx.fillText('fenixanimalproject.org and Petco Love Lost.', W / 2, y); ctx.fillText('Also check Miami-Dade Animal Services,', W / 2, y - 56); y -= 136;
     var lines = contactLines(); if (!lines.length) lines = ['Add a way to reach you'];
     var ch = 80 + 100 + (lines.length - 1) * 64;
     ctx.fillStyle = '#1F1D2B'; rr(ctx, M, y - ch, cw, ch, 40); ctx.fill();

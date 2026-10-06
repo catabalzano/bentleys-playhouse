@@ -19,7 +19,7 @@ steps:
   - title: Update your microchip
     body: Call the registry to report your dog missing and confirm your phone number is current. Not sure which registry? Use the [AAHA lookup](https://www.aaha.org/for-veterinary-professionals/microchip-registry-lookup-tool-aaha-find-your-pets-microchip-registry/) with the chip number from your vet records.
   - title: Post your dog everywhere people look
-    body: Create a free listing on [Petco Love Lost](https://petcolove.org/lost/), which matches photos with shelter intakes and found reports. Post in local lost-and-found groups and on Nextdoor. Use a clear photo.
+    body: Report your dog lost on [Fénix Animal Project](https://fenixanimalproject.org/), where people post lost and found animals and browse the listings. Create a free listing on [Petco Love Lost](https://petcolove.org/lost/) too, which matches photos with shelter intakes and found reports. Post in local lost-and-found groups and on Nextdoor. Use a clear photo.
   - title: Put up flyers
     body: Big "LOST DOG", a clear photo and a phone number, within about a mile of where your dog went missing. Our [flyer builder](/resources/flyer-builder/) makes one in minutes.
   - title: Protect yourself from scams
@@ -37,6 +37,7 @@ sources:
   - { title: "How to find a lost dog", org: "Humane World for Animals", url: "https://www.humaneworld.org/en/resources/how-find-lost-dog" }
   - { title: "Lost & Found Pets", org: "Miami-Dade Animal Services", url: "https://www.miamidade.gov/global/service.page?Mduid_service=ser1599347990362966" }
   - { title: "Contact & hours", org: "Miami-Dade Animal Services", url: "https://www.miamidade.gov/global/animals/contact.page" }
+  - { title: "Lost & Found", org: "Fénix Animal Project", url: "https://fenixanimalproject.org/" }
   - { title: "Petco Love Lost", org: "Petco Love", url: "https://petcolove.org/lost/" }
   - { title: "Lost pet scam warning", org: "NBC DFW", url: "https://www.nbcdfw.com/news/local/lost-pet-scam-warning/3837369/" }
 ---
@@ -75,4 +76,4 @@ Lost-pet scams are common. Some scammers pretend to be shelter staff and say the
 
 ## Keep going
 
-Visit shelters in person, and check found posts and Petco Love Lost every day. Dogs have come home after long absences. If your dog is found, remember to take down flyers and tell the shelter and the microchip registry.
+Visit shelters in person, and check found posts on [Fénix Animal Project](https://fenixanimalproject.org/) and Petco Love Lost every day. Dogs have come home after long absences. If your dog is found, remember to take down flyers and tell the shelter and the microchip registry.

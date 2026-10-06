@@ -19,11 +19,12 @@ groups:
   - title: Every day or two
     items:
       - Visited the shelter in person with photos and walked the kennels
-      - Checked Petco Love Lost for matches
+      - Checked Fénix Animal Project (fenixanimalproject.org) and Petco Love Lost for matches
       - Checked found-dog posts in local groups and Nextdoor
       - Searched at dawn and after dark with a flashlight and favorite food
   - title: Spreading the word
     items:
+      - Reported my dog lost on Fénix Animal Project (fenixanimalproject.org)
       - Made a flyer with a clear photo and "LOST DOG" in large letters
       - Put up flyers within about a mile (corners, dog parks, vets, pet stores)
       - Called nearby vet clinics and Broward County Animal Care (954-359-1313)
