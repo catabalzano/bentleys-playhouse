@@ -171,9 +171,11 @@ main:focus { outline: none; }
 /* room for the hanging badge: a transparent top border keeps the first section's own background behind it */
 main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .page-head:first-child { border-top: var(--badge-hang) solid transparent; }
 .site-header__in { position: relative; display: flex; align-items: center; gap: 1.5rem; min-height: var(--band-h); padding-left: calc(var(--gutter) + var(--badge) + 1.25rem); }
-.brand { position: absolute; left: var(--gutter); top: 8px; width: var(--badge); height: var(--badge); border-radius: 50%; background: var(--cream); box-shadow: 5px 5px 0 var(--gold); display: grid; place-items: center; transition: transform .2s ease; }
+.brand { position: absolute; left: var(--gutter); top: 8px; width: var(--badge); height: var(--badge); border-radius: 50%; background: #F9F5F2; box-shadow: 5px 5px 0 var(--gold); display: grid; place-items: center; transition: transform .2s ease; }
 .brand:hover { transform: rotate(-4deg); }
 .brand__logo { width: 92%; }
+/* the badge is always a light sticker, so Bentley (black) stays visible in dark mode too */
+.brand .logo .logo__l { display: block !important; } .brand .logo .logo__d { display: none !important; }
 .brand:focus-visible { outline-color: var(--gold); outline-offset: 4px; border-radius: 50%; }
 .nav { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
 .nav__list { display: flex; flex-wrap: wrap; gap: .25rem; list-style: none; margin: 0; padding: 0; }
