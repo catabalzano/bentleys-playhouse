@@ -171,7 +171,7 @@
   "founded": "August 2022",
   "pawsome": {
     "email": "hello@bentleysplayhouse.org",
-    "submitEndpoint": "",
+    "submitEndpoint": "https://bentleys-playhouse-submissions.catabalzanoinc.workers.dev",
     "turnstileSiteKey": "",
     "_readme": "email: where 'Email us about <pup>' sends adoption inquiries. submitEndpoint: the submissions service URL (Cloudflare Worker). Empty = the submit form says it's not switched on yet. turnstileSiteKey: optional Cloudflare Turnstile spam check."
   }
