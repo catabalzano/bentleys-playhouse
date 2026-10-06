@@ -128,7 +128,7 @@ ${robots}
 <link rel="apple-touch-icon" href="${asset('img/logo-badge.png')}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400..800;1,400..600&family=Fredoka:wght@400..700&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400..800;1,400..600&family=Fredoka:wght@400..700&family=Caveat:wght@600;700&display=swap">
 <link rel="stylesheet" href="${asset('css/site.css')}">${structuredData({ home, title, description, canonical, ogType, modified, noindex })}${analyticsTag()}`;
   const bodyInner = `
 ${header({ home })}

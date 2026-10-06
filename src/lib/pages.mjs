@@ -146,11 +146,11 @@ ${pawsomeHome(data.pooches)}
       <p>Rescue updates, vet bills and receipts, happy endings, and the everyday business of dogs being dogs. Come say hi.</p>
       ${button('@bentleysplayhouse on Instagram', s.social.instagram.url, { variant: 'primary', externalLink: true, ic: 'instagram' })}
     </div>
-    <div class="community__grid"${ctx.instagram.length ? '' : ' aria-hidden="true"'}${s.social.instagram.feedUrl ? ` data-ig-feed="${esc(s.social.instagram.feedUrl)}"` : ''}>
+    <div class="ig-board"><div class="community__grid"${ctx.instagram.length ? '' : ' aria-hidden="true"'}${s.social.instagram.feedUrl ? ` data-ig-feed="${esc(s.social.instagram.feedUrl)}"` : ''}>
       ${ctx.instagram.length
         ? ctx.instagram.slice(0, 5).map((p, i) => `<a class="ig-tile ig-tile--${i}" href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${asset('img/' + p.image)}" alt="${esc(p.alt)}" loading="lazy"></a>`).join('')
         : ['blue', 'orange', 'violet', 'gold', 'peach'].map((c, i) => `<div class="ig-tile ig-tile--${i} ig-tile--${c}">${i === 2 ? `<img src="${asset('img/bentley-head.png')}" alt="" loading="lazy">` : paw()}</div>`).join('')}
-    </div>
+    </div></div>
   </div>
   <div class="wrap">${ctx.instagram.length ? '' : previewNote(s.social.instagram.feedUrl ? 'Your live Instagram feed loads here on the real site. The preview window blocks it, so you see the placeholder tiles.' : 'To show your latest Instagram posts here automatically, connect a free Behold feed (see <code>content/site.json → social.instagram.feedUrl</code>). Or add 5 of your photos in <code>content/instagram.json</code>.')}</div>
 </section>`;

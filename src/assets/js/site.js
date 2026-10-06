@@ -163,6 +163,14 @@
   'use strict';
   var grid = document.querySelector('[data-ig-feed]');
   if (!grid || !window.fetch) return;
+  // A short handwritten-style label from the post caption: first sentence, no hashtags/mentions, about 24 characters
+  function shortCap(c) {
+    var t = String(c).split(/\n/)[0].replace(/[#@][\w.]+/g, '').replace(/\s+/g, ' ').trim();
+    t = t.split(/(?<=[.!?])\s/)[0].replace(/[.:,;]+$/, '');
+    if (t.length <= 26) return t;
+    var cut = t.slice(0, 24); cut = cut.slice(0, cut.lastIndexOf(' ') > 10 ? cut.lastIndexOf(' ') : 24);
+    return cut.replace(/[\s,.:;-]+$/, '') + '…';
+  }
   fetch(grid.getAttribute('data-ig-feed'))
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (data) {
@@ -180,7 +188,12 @@
         img.src = src; img.loading = 'lazy';
         var cap = (p.altText || p.prunedCaption || p.caption || 'Instagram post').replace(/\s+/g, ' ').trim();
         img.alt = cap.length > 120 ? cap.slice(0, 117) + '…' : cap;
+        var tape = document.createElement('span'); tape.className = 'ig-post__tape'; tape.setAttribute('aria-hidden', 'true');
+        a.appendChild(tape);
         a.appendChild(img);
+        var note = document.createElement('span'); note.className = 'ig-post__note'; note.setAttribute('aria-hidden', 'true');
+        note.textContent = shortCap(p.prunedCaption || p.caption || '');
+        if (note.textContent) a.appendChild(note);
         if (p.mediaType === 'VIDEO') { var b = document.createElement('span'); b.className = 'ig-post__badge'; b.textContent = 'Video'; a.appendChild(b); }
         var sr = document.createElement('span'); sr.className = 'visually-hidden'; sr.textContent = ' (opens Instagram in a new tab)'; a.appendChild(sr);
         grid.appendChild(a);
