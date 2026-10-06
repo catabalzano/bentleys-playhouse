@@ -7,6 +7,11 @@ urgent: false
 needs: adoption
 photos:
   - /assets/img/pawsome/zeus-and-star-2.jpg
+  - /assets/img/pawsome/zs-bed.jpg
+  - /assets/img/pawsome/zs-car.jpg
+  - /assets/img/pawsome/zs-smile.jpg
+  - /assets/img/pawsome/zs-chair.jpg
+  - /assets/img/pawsome/zs-couch.jpg
 photoAlt: Zeus and Star, two fluffy white Samoyeds, sitting side by side by a door
 tagline: A fluffy 4-year-old Samoyed whose family needs to rehome him. Can be adopted with Star or on his own.
 breed: Samoyed

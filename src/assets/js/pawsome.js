@@ -33,7 +33,7 @@
   /* ---------- pop-up profile ---------- */
   var dlg = $('[data-pp-dialog]');
   if (dlg && typeof dlg.showModal === 'function') {
-    var body = $('[data-pp-body]', dlg), lastFocus = null, openSlug = null;
+    var body = $('[data-pp-body]', dlg), lastFocus = null, openSlug = null, backUrl = null;
     function open(slug, push) {
       var tpl = document.getElementById('pp-tpl-' + slug);
       if (!tpl) return false;
@@ -46,12 +46,14 @@
       dlg.showModal();
       body.scrollTop = 0;
       openSlug = slug;
-      if (push) try { history.pushState({ pp: slug }, '', '#' + slug); } catch (e) { /* ignore */ }
+      // give each open pup its own real address, so a copied/shared link shows that dog's photo
+      if (push) try { backUrl = location.pathname + location.search; history.pushState({ pp: slug }, '', '/pawsome-pooches/' + slug + '/'); } catch (e) { /* ignore */ }
       return true;
     }
     function close() { if (dlg.open) dlg.close(); }
     dlg.addEventListener('close', function () {
-      if (openSlug && location.hash === '#' + openSlug) try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ }
+      if (openSlug && (history.state || {}).pp === openSlug) try { history.back(); } catch (e) { /* ignore */ }
+      else if (openSlug && location.hash === '#' + openSlug) try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ }
       openSlug = null;
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     });
@@ -62,7 +64,7 @@
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
       if (open(a.getAttribute('data-pp-open'), true)) e.preventDefault();
     });
-    window.addEventListener('popstate', function () { var s = location.hash.slice(1); if (s && document.getElementById('pp-tpl-' + s)) open(s, false); else close(); });
+    window.addEventListener('popstate', function () { var st = history.state || {}; if (st.pp && document.getElementById('pp-tpl-' + st.pp)) { if (!dlg.open) open(st.pp, false); } else if (dlg.open) { openSlug = null; dlg.close(); } });
     var start = location.hash.slice(1);
     if (start && document.getElementById('pp-tpl-' + start)) open(start, false);
   }
