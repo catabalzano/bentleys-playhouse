@@ -252,3 +252,13 @@
   dlg.addEventListener('close', function () { if (last && last.focus) last.focus(); });
   if (location.hash === '#donate') dlg.showModal();
 })();
+
+/* Rescue stories polaroids: tap to flip to the story on the back */
+(function () {
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-pol]');
+    if (!b) return;
+    var on = b.getAttribute('aria-pressed') === 'true';
+    b.setAttribute('aria-pressed', String(!on));
+  });
+})();

@@ -444,16 +444,23 @@ export function dogCard(d) {
   </article>`;
 }
 export function storyCard(st) {
-  const tags = Array.isArray(st.tags) ? st.tags : [];
-  return `<article class="pp-card pp-card--story">
-    <div class="pp-card__link">
-      <span class="pp-card__photo">${st.photo ? `<img src="${img(st.photo, 'img/stories/')}" alt="${esc(st.photoAlt || st.title)}" loading="lazy">` : `<span class="pp-card__nophoto">${paw()}</span>`}<span class="pp-ribbon pp-ribbon--home">${icon('heart', { size: 14 })} Rehomed</span></span>
-      <span class="pp-card__body">
-        <h3 class="pp-card__name">${esc(st.title)}</h3>
-        ${tags.length ? `<span class="pp-card__chips">${tags.map((t) => `<span class="pp-chip">${esc(t)}</span>`).join('')}</span>` : ''}
-        <span class="pp-card__story">${esc(st.summary || '')}</span>
+  const name = esc(st.title);
+  return `<article class="pol">
+    <button type="button" class="pol__btn" aria-pressed="false" data-pol aria-label="${name}: tap to read the story">
+      <span class="pol__flip">
+        <span class="pol__face pol__front">
+          <span class="pol__ph">${st.photo ? `<img src="${img(st.photo, 'img/stories/')}" alt="${esc(st.photoAlt || st.title)}" loading="lazy">` : paw()}</span>
+          <span class="pol__nm">${name}</span>
+          <span class="pol__home">${icon('heart', { size: 13 })} Rehomed</span>
+          <span class="pol__tap">Tap for story</span>
+        </span>
+        <span class="pol__face pol__back">
+          <span class="pol__bnm">${name}</span>
+          <span class="pol__story">${esc(st.summary || '')}</span>
+          <span class="pol__tap">Tap to flip back</span>
+        </span>
       </span>
-    </div>
+    </button>
   </article>`;
 }
 export function dogPage(d) {
@@ -548,7 +555,7 @@ export function story(data) {
 </section>
 <div class="wrap wrap--text story">
   ${secs.filter((s) => !isEmptyBody(s.body)).map((s, i) => `<section class="story-sec" id="${s.id}"><h2 class="section-h">${esc(s.title)}</h2><div class="prose">${md(s.body)}</div></section>${i === 0 ? `<div class="photo-row"><figure class="photo-slot photo-slot--blue photo-slot--img"><img src="${asset('img/bentley-colosseum.jpg')}" alt="Bentley, a black brindle French Bulldog, smiling in front of the Colosseum in Rome" width="1000" height="1250" loading="lazy"><figcaption>Bentley</figcaption></figure><figure class="photo-slot photo-slot--orange photo-slot--img"><img src="${asset('img/romeo-stick.jpg')}" alt="Romeo, a merle French Bulldog puppy, sitting in the grass with a big stick in his mouth" width="1000" height="1250" loading="lazy"><figcaption>Romeo</figcaption></figure><figure class="photo-slot photo-slot--violet photo-slot--img"><img src="${asset('img/kiara-sleeping.jpg')}" alt="Kiara, a fluffy husky in a pink harness that says Blind, asleep in a dog bed with Bentley curled up against her" width="1000" height="1250" loading="lazy"><figcaption>Kiara</figcaption></figure></div>` : ''}`).join('')}
-  ${data.stories.length ? `<section class="story-sec story-sec--stories" data-reveal><h2 class="section-h">Rescue stories</h2><p class="story-sec__lede">A few of the pups who came through the playhouse and went on to families of their own.</p><div class="story-grid">${data.stories.map(storyCard).join('')}</div></section>` : `<section class="story-sec"><h2 class="section-h">Rescue stories</h2><div class="empty"><div><p>Stories of the dogs who have come through the playhouse will be shared here, with their families' permission.</p>${previewNote('Add stories as files in <code>content/stories/</code>. There is a template in <code>_template.md</code>.')}</div></div></section>`}
+  ${data.stories.length ? `<section class="story-sec story-sec--stories" data-reveal><h2 class="section-h">Rescue stories</h2><p class="story-sec__lede">A few of the pups who came through the playhouse and went on to families of their own. Tap a photo to read their story.</p><div class="story-grid">${data.stories.map(storyCard).join('')}</div></section>` : `<section class="story-sec"><h2 class="section-h">Rescue stories</h2><div class="empty"><div><p>Stories of the dogs who have come through the playhouse will be shared here, with their families' permission.</p>${previewNote('Add stories as files in <code>content/stories/</code>. There is a template in <code>_template.md</code>.')}</div></div></section>`}
 </div>`;
 }
 
