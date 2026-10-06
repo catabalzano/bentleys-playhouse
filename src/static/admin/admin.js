@@ -253,6 +253,7 @@
   function loadMe() {
     return api('/auth/me').then(function (me) {
       S.me = me;
+      if (!me.username && location.hash !== '#profile') { location.hash = '#profile'; toast('Choose a username for signing in, then click Save profile.'); }
       var n = $('[data-myname]'); if (n) n.textContent = me.name || me.username || 'My profile';
       var av = $('[data-avatar]'); if (av) av.innerHTML = me.photo ? '<img alt="" src="' + esc(me.photo) + '">' : esc(((me.name || me.username || '?').trim()[0] || '?').toUpperCase());
       return me;
