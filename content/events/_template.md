@@ -1,5 +1,5 @@
 ---
-# Copy this file to add an event by hand (or use the admin: Community calendar).
+# Copy this file to add an event by hand (or use the admin: Community Calendar).
 # Files starting with "_" are ignored. category: spay | walk | adopt | clinic | fund
 title: Event name
 category: adopt

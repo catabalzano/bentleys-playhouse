@@ -1,4 +1,4 @@
-// Community calendar: /events/ (mini month calendar + "Coming up" list, rendered by assets/js/events.js)
+// Community Calendar: /events/ (mini month calendar + "Coming up" list, rendered by assets/js/events.js)
 import { ctx, esc, href, md, tag, breadcrumb, icon } from './core.mjs';
 
 export const EVENT_CATS = {
@@ -36,9 +36,9 @@ export function eventsPage(events) {
   const cats = Object.entries(EVENT_CATS);
   return `
 <section class="page-head"><div class="wrap wrap--text">
-  ${breadcrumb([['Home', ''], ['Community calendar', '']])}
+  ${breadcrumb([['Home', ''], ['Community Calendar', '']])}
   <p class="eyebrow">${tag('South Florida', 'violet')}</p>
-  <h1 class="page-h">Community calendar</h1>
+  <h1 class="page-h">Community Calendar</h1>
   <p class="page-lede">Free and low-cost dog events across Miami-Dade and Broward: spay/neuter clinics, vaccine days, adoption events and dog walks.</p>
 </div></section>
 <div class="wrap">

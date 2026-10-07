@@ -182,7 +182,7 @@
     },
   };
   COLS.events = {
-    label: 'Community calendar', one: 'event', icon: '📅', titleKey: 'title',
+    label: 'Community Calendar', one: 'event', icon: '📅', titleKey: 'title',
     intro: 'Dog events around South Florida shown on the Events page. Past events drop off on their own.',
     thumb: function () { return null; }, ph: function () { return '📅'; },
     sub: function (d) { return [d.date, d.time, d.city, EVC[d.category]].filter(Boolean).join(' · '); },

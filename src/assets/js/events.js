@@ -1,4 +1,4 @@
-/* Community calendar: mini month calendar + "Coming up" list */
+/* Community Calendar: mini month calendar + "Coming up" list */
 (function () {
   var root = document.querySelector('[data-events]');
   var raw = document.getElementById('ev-data');
