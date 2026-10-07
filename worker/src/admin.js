@@ -66,6 +66,7 @@ async function appInstallationToken(env, app) {
   if (!inst) {
     const owner = String(env.GITHUB_REPO).split('/')[0];
     const r = await fetch(`${API}/repos/${env.GITHUB_REPO}/installation`, { headers: hdr });
+    if (r.status === 401) throw fail('GitHub didn\'t accept that key file. Check the App ID (5218672) and choose the newest .pem file from Downloads.', 400);
     if (!r.ok) throw fail(`The GitHub App isn't installed on ${env.GITHUB_REPO} yet (owner ${owner}).`, 400);
     inst = (await r.json()).id;
   }
