@@ -56,7 +56,7 @@
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.title) + '&dates=' + s + '/' + en + '&details=' + encodeURIComponent(details) + '&location=' + encodeURIComponent([e.venue, e.address, e.city].filter(Boolean).join(', '));
   }
   function row(e) {
-    var c = CATS[e.cat], d = new Date(e.date + 'T12:00:00'), where = [e.venue, e.address, e.city].filter(Boolean).join(', ');
+    var c = CATS[e.cat], d = new Date(e.date + 'T12:00:00'), where = [e.venue, e.address, e.address && e.city && e.address.toLowerCase().indexOf(e.city.toLowerCase()) > -1 ? '' : e.city].filter(Boolean).join(', ');
     var multi = e.endDate && e.endDate !== e.date ? ' – ' + MONTHS[new Date(e.endDate + 'T12:00:00').getMonth()].slice(0, 3) + ' ' + new Date(e.endDate + 'T12:00:00').getDate() : '';
     return '<li class="ev-item" style="--c:' + c.color + ';--ink:' + c.ink + ';--tint:' + c.tint + '">' +
       '<div class="ev-item__date"><span>' + DOW[d.getDay()].slice(0, 3) + '</span><b>' + d.getDate() + '</b><span>' + MONTHS[d.getMonth()].slice(0, 3) + '</span></div>' +
