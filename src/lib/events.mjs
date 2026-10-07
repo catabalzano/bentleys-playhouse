@@ -54,7 +54,7 @@ export function eventsPage(events) {
     <div class="ev-list">
       <div class="ev-list__head"><h2 class="ev-list__h" data-ev-heading>Coming up</h2><button type="button" class="ev-list__all" data-ev-all hidden>Show the whole month</button></div>
       <ul class="ev-items" role="list" data-ev-list>${upcoming.map(rowHtml).join('') || `<li class="ev-empty">No events listed yet. Check back soon.</li>`}</ul>
-      <div class="ev-submit"><p><b>Know about a free or low-cost dog event in South Florida?</b> Email it to <a href="mailto:${esc(ctx.site.contact.email)}">${esc(ctx.site.contact.email)}</a> and we'll add it.</p><a class="btn btn--ghost" href="mailto:${esc(ctx.site.contact.email)}?subject=${encodeURIComponent('Event for the Community Calendar')}">Email us an event</a></div>
+      <div class="ev-submit"><div class="ev-submit__text"><p class="ev-submit__h">Know about a free or low-cost dog event in South Florida?</p><p>Email us at <a href="mailto:${esc(ctx.site.contact.email)}?subject=${encodeURIComponent('Event for the Community Calendar')}">${esc(ctx.site.contact.email)}</a> and we'll add it.</p></div><a class="btn btn--ghost" href="${href('contact/')}?topic=event">Contact form</a></div>
       <p class="ev-note">We list events run by shelters, clinics, rescues and community groups. Details can change, so please confirm with the organizer before you go.</p>
     </div>
   </div>
