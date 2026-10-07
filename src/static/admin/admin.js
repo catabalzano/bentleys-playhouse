@@ -181,7 +181,28 @@
       ]]],
     },
   };
-  var ORDER = ['pawsome', 'stories', 'rescues', 'dogs', 'money'];
+  COLS.events = {
+    label: 'Community calendar', one: 'event', icon: '📅', titleKey: 'title',
+    intro: 'Dog events around South Florida shown on the Events page. Past events drop off on their own.',
+    thumb: function () { return null; }, ph: function () { return '📅'; },
+    sub: function (d) { return [d.date, d.time, d.city, EVC[d.category]].filter(Boolean).join(' · '); },
+    sort: function (a, b) { return String(b.data.date || '').localeCompare(a.data.date || ''); },
+    slugFrom: function (d) { return (d.date || today()) + '-' + slugify(d.title).slice(0, 40); },
+    defaults: function () { return { date: today(), category: 'adopt', price: 'Free' }; },
+    groups: [['Event', [
+      { k: 'title', label: 'Event name', req: true, hint: 'e.g. "Free spay/neuter clinic"' },
+      { k: 'category', label: 'Kind of event', type: 'chips1', req: true, options: [['spay', 'Spay/neuter'], ['walk', 'Dog walk'], ['adopt', 'Adoption'], ['clinic', 'Vaccines & chips'], ['fund', 'Fundraiser']] },
+      { k: 'date', label: 'Date', type: 'date', req: true }, { k: 'endDate', label: 'Last day (only if it runs several days)', type: 'date' },
+      { k: 'time', label: 'Time', hint: 'e.g. "9am–2pm"' }, { k: 'price', label: 'Cost', hint: 'e.g. "Free", "$20", "Reduced fees"' },
+      { k: 'venue', label: 'Place name', hint: 'e.g. "Tropical Park"' }, { k: 'city', label: 'City or neighborhood', hint: 'e.g. "Coral Gables"' },
+      { k: 'address', label: 'Street address', wide: true },
+      { k: 'organizer', label: 'Hosted by' }, { k: 'link', label: 'Event link', hint: 'The organizer\'s page or post for this event' },
+      { k: 'hidden', label: 'Hide this event from the website', type: 'bool' },
+      { k: 'body', label: 'Description', type: 'markdown', wide: true },
+    ]]],
+  };
+  var EVC = { spay: 'Spay/neuter', walk: 'Dog walk', adopt: 'Adoption', clinic: 'Vaccines & chips', fund: 'Fundraiser' };
+  var ORDER = ['pawsome', 'events', 'stories', 'rescues', 'dogs', 'money'];
 
   // ---------- sign-in ----------
   function card(inner) { app.className = ''; app.innerHTML = '<div class="gate"><div class="gate__card"><div class="card-top"></div><img class="gate__logo" src="../assets/img/logo-main.png" alt="">' + inner + '</div></div>'; }

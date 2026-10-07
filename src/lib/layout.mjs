@@ -5,6 +5,7 @@ const NAV = [
   ['nav.help', 'get-help/'],
   ['nav.adopt', 'adopt-foster/'],
   ['nav.resources', 'resources/'],
+  ['nav.events', 'events/'],
   ['nav.story', 'our-story/'],
   ['nav.involved', 'get-involved/'],
 ];

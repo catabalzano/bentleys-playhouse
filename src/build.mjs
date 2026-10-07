@@ -12,6 +12,7 @@ import * as P2 from './lib/pages2.mjs';
 import * as P3 from './lib/pages3.mjs';
 import * as PS from './lib/pawsome-submit.mjs';
 import { renderShare } from './lib/covers.mjs';
+import { prepEvents, eventsPage } from './lib/events.mjs';
 import { parse as parseCSV } from 'csv-parse/sync';
 
 const args = process.argv.slice(2);
@@ -41,6 +42,7 @@ const mdas = readJSON('mdas.json');
 ctx.mdas = mdas;
 const pooches = P3.prepPooches(readCollection('pawsome'));
 const rescues = readCollection('rescues');
+const events = prepEvents(readCollection('events'));
 
 // ---------- finances (Transparency page) ----------
 function loadFinances() {
@@ -128,6 +130,7 @@ for (const a of articles) emit(`resources/${a.slug}/`, { shareKicker: catLabel(a
 for (const c of checklists) emit(`resources/checklists/${c.slug}/`, { shareKicker: 'Printable checklist', shareCategory: c.category, shareIcon: c.icon || 'list', sharePhoto: c.cover && 'assets/img/covers/' + c.cover, title: c.title, description: c.intro, bodyClass: 'is-checklist', body: () => P.checklist(c) });
 emit('resources/flyer-builder/', { title: 'Lost & Found Flyer Builder', description: 'Make a printable lost or found dog flyer. Your photo stays on your device.', bodyClass: 'is-flyer', body: () => P.flyer(), scripts: ['js/flyer.js'] });
 emit('resources/vet-clinics/', { title: 'Vet Clinic Directory', description: 'Miami-Dade vet clinics and 24/7 emergency hospitals: hours, walk-in policies, phone numbers and addresses.', bodyClass: 'is-clinics', body: () => P2.clinics(clinicData), scripts: ['js/clinics.js'] });
+emit('events/', { title: 'Community Calendar', shareTitle: 'Dog events in South Florida', shareKicker: 'Community calendar', description: 'Free and low-cost dog events in Miami-Dade and Broward: spay/neuter clinics, vaccine days, adoption events and dog walks.', bodyClass: 'is-events', body: () => eventsPage(events), scripts: ['js/events.js'] });
 emit('transparency/', { title: 'Where the Money Goes', description: "Every expense Bentley's Playhouse makes, with receipts: food, spay/neuter, medical care, toys and support for other rescues.", bodyClass: 'is-fin', body: () => P2.transparency(finances), scripts: ['js/transparency.js'] });
 emit('our-story/', { title: 'Our Story', description: pages.story.summary, body: () => P.story(data) });
 emit('get-involved/', { title: 'Get Involved', description: 'Volunteer, foster, donate supplies, share rescue information or offer your skills to Bentley\'s Playhouse.', body: () => P.involved(data) });

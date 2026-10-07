@@ -127,6 +127,7 @@
   /* ---------- forms: real endpoint only, honeypot + timing check ---------- */
   $$('form[data-form]').forEach(function (form) {
     var started = Date.now();
+    try { if (/[?&]topic=event\b/.test(location.search)) { var tp = form.querySelector('select[name="topic"]'); if (tp) { tp.value = 'A community event for the calendar'; var mg = form.querySelector('textarea[name="message"]'); if (mg && !mg.value) mg.placeholder = 'Event name, date, time, place, cost, who runs it and a link if there is one.'; } } } catch (e) {}
     var statusEl = $('.form__status', form);
     var route = '<a href="https://www.instagram.com/bentleysplayhouse/" target="_blank" rel="noopener">' + (CFG.preferredRoute || 'Instagram') + '</a>';
     function say(msg, kind) { msg = msg.replace('{email}', '<strong>' + (CFG.email || 'us on Instagram') + '</strong>'); statusEl.innerHTML = msg; statusEl.className = 'form__status' + (kind ? ' is-' + kind : ''); }
