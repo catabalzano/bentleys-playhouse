@@ -73,7 +73,7 @@ async function appInstallationToken(env, app) {
   const r = await fetch(`${API}/app/installations/${inst}/access_tokens`, { method: 'POST', headers: hdr });
   if (!r.ok) throw fail('GitHub didn\'t accept the app key. Please upload the newest key file.', 400);
   const j = await r.json();
-  return { token: j.token, expiresAt: j.expires_at, installationId: inst };
+  return { token: j.token, expiresAt: j.expires_at, installationId: inst, permissions: j.permissions || {} };
 }
 export async function githubToken(env) {
   const app = await env.SUBMISSIONS.get('cfg:ghApp', 'json');
@@ -245,7 +245,7 @@ export async function handleAuth(req, env, url) {
     const privateKey = String(body.privateKey || '').trim();
     if (!appId || !/-----BEGIN [A-Z ]*PRIVATE KEY-----/.test(privateKey)) throw fail('Please choose the .pem key file you downloaded from GitHub.', 400);
     const t = await appInstallationToken(env, { appId, privateKey });
-    if (!(await tokenCanPush(env, t.token))) throw fail('The GitHub App can\'t edit the site yet. It needs Contents: Read and write and to be installed on bentleys-playhouse.', 400);
+    if (t.permissions.contents !== 'write') throw fail('The GitHub App can\'t edit the site yet. It needs Contents: Read and write and to be installed on bentleys-playhouse.', 400);
     await env.SUBMISSIONS.put('cfg:ghApp', JSON.stringify({ appId, installationId: t.installationId, privateKey, connectedAt: new Date().toISOString() }));
     await env.SUBMISSIONS.put('cache:ghAppToken', JSON.stringify({ token: t.token, expiresAt: t.expiresAt }), { expirationTtl: 3600 });
     return json({ ok: true });
