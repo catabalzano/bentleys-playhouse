@@ -17,7 +17,7 @@
   // multi-day events cover each day from date to endDate
   function days(e) {
     var out = [], d = new Date(e.date + 'T12:00:00'), end = new Date((e.endDate || e.date) + 'T12:00:00'), n = 0;
-    while (d <= end && n++ < 60) { out.push(iso(d.getFullYear(), d.getMonth(), d.getDate())); d.setDate(d.getDate() + 1); }
+    while (d <= end && n++ < 120) { if (!(e.weekdays && e.weekdays.length) || e.weekdays.indexOf(d.getDay()) > -1) out.push(iso(d.getFullYear(), d.getMonth(), d.getDate())); d.setDate(d.getDate() + 1); }
     return out;
   }
   var byDay = {};

@@ -1,16 +1,24 @@
 {
   "_readme": "Miami-Dade Animal Services adoption info for the Adopt & Foster page. Re-check fees and hours on the MDAS adoption page every few months. To spotlight a specific MDAS dog, add a file in content/dogs/ with source: mdas, animalId and inquiryUrl.",
-  "checked": "2026-10-06",
+  "checked": "2026-10-07",
   "searchUrl": "https://24petconnect.com/miad",
   "adoptionPage": "https://www.miamidade.gov/global/service.page?Mduid_service=ser159925122910773",
   "fees": [
     "Dogs over 4 months: $65",
     "Puppies under 4 months: $85"
   ],
-  "included": "Vaccines, microchip, spay/neuter surgery and deworming.",
+  "included": "Dogs 4 months and up: vaccines, microchip, spay/neuter surgery, deworming and a heartworm test (over 6 months). Puppies under 4 months: first vaccines, deworming and a microchip; spay/neuter is scheduled within 30 days.",
   "locations": [
-    { "name": "Pet Adoption and Protection Center", "address": "3599 NW 79th Ave, Doral, FL 33122", "hours": "Mon–Fri 10 AM–6:30 PM · Sat–Sun 9 AM–5 PM" },
-    { "name": "Medley shelter", "address": "7401 NW 74th St, Medley, FL 33166", "hours": "Sat–Sun 1–4 PM" }
+    {
+      "name": "Pet Adoption and Protection Center",
+      "address": "3599 NW 79th Ave, Doral, FL 33122",
+      "hours": "Mon–Fri 10 AM–6:30 PM · Sat–Sun 9 AM–5 PM"
+    },
+    {
+      "name": "Medley shelter",
+      "address": "7401 NW 74th St, Medley, FL 33166",
+      "hours": "Sat–Sun 1–4 PM"
+    }
   ],
   "steps": [
     "Search online by dog, age, size and gender, and note the Animal ID of any dog you'd like to meet.",

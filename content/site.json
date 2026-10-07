@@ -167,8 +167,8 @@
   "tagline": "Rescue. Rehab. Rehome. Repeat.",
   "foster": {
     "applicationUrl": "https://docs.google.com/forms/d/1WfFiNT0acpZ4y0JCJoW3EWcqrOf8fzfM3LwHHVxHI04/viewform",
-    "verified": false,
-    "_note": "Our YouTube links an /edit address for this Google Form, which visitors can't open. Confirm this /viewform link works when signed out, then set verified to true."
+    "verified": true,
+    "_note": "Checked Oct 7, 2026: the /viewform link opens for signed-out visitors. The form itself still lists the old gmail address as its contact."
   },
   "founded": "August 2022",
   "pawsome": {

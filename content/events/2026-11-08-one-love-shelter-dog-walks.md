@@ -1,5 +1,5 @@
 ---
-title: Social walks for shelter dogs
+title: Social Walks for Shelter Dogs
 category: walk
 date: 2026-11-08
 time: 11:30am–3pm

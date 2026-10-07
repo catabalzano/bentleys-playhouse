@@ -1,5 +1,5 @@
 ---
-title: Silver Bluff Dog Park grand opening
+title: Silver Bluff Dog Park Grand Opening
 category: walk
 date: 2026-10-20
 time: 5:30pm

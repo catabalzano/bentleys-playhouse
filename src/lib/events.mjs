@@ -20,6 +20,7 @@ export function prepEvents(list) {
       time: e.time || '', cat: EVENT_CATS[e.category] ? e.category : 'fund', venue: e.venue || '', city: e.city || '',
       address: e.address || '', price: e.price || '', link: e.link || '', organizer: e.organizer || '',
       desc: e.body && e.body.trim() ? md(e.body) : '',
+      weekdays: Array.isArray(e.weekdays) ? e.weekdays.map(Number).filter((n) => n >= 0 && n <= 6) : [],
     }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
 }

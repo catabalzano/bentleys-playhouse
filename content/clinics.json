@@ -1,6 +1,6 @@
 {
   "_readme": "Vet clinic directory (shown at /resources/vet-clinics/). kind: emergency | clinic. emergency: yes | limited | no. walkIns: yes | appointment | no | ask. hours: \"24/7\" or per-day lists of [open, close] in 24h time ([] = closed). Re-check every clinic's hours every few months and update 'checked'. Listing a clinic is not an endorsement or partnership.",
-  "checked": "2026-10-06",
+  "checked": "2026-10-07",
   "clinics": [
     {
       "id": "veg-miami",
@@ -78,8 +78,8 @@
       "area": "South Miami",
       "phone": "(305) 666-4142",
       "hours": "24/7",
-      "hoursNote": "Listed as open 24 hours. We confirmed this from a directory listing, not the hospital's own page, so please call to confirm.",
-      "confirm": "Hours, address and walk-in policy came from a directory listing because the hospital's page didn't load for us.",
+      "hoursNote": "Open 24 hours, every day, for emergencies (confirmed on Thrive's own page). Call on the way.",
+      "confirm": "Thrive's page confirms 24/7 emergency care; the address and phone come from directory listings, so call to confirm.",
       "website": "https://www.thrivepetcare.com/locations/florida/miami/miami-specialty-emergency",
       "source": "https://www.petinsurancereview.com/find-a-vet/fl/miami/thrive-pet-healthcare-specialists-miami"
     },
@@ -188,7 +188,7 @@
         "sun": []
       },
       "hoursNote": "Wellness exams, vaccines, diagnostics, dental care and surgery.",
-      "confirm": "Walk-in and emergency policy aren't stated on the clinic's website.",
+      "confirm": "Hours confirmed on the clinic's website. Walk-in and emergency policy aren't stated, so call first.",
       "website": "https://miamianimalclinic.net/",
       "source": "https://miamianimalclinic.net/services/"
     },
@@ -308,7 +308,7 @@
         "sun": []
       },
       "hoursNote": "Exams, vaccines, spay/neuter, microchips. Emergencies are referred to an emergency hospital.",
-      "eligibility": "Miami-Dade residents 18+. Discounted prices with proof of public benefits.",
+      "eligibility": "Miami-Dade residents 18+ with proof of an eligible public assistance program.",
       "confirm": "Hours come from Miami-Dade County's 311 information page; the ASPCA's own page doesn't list them.",
       "website": "https://clinic.aspca.org/clinics/miami/liberty-city",
       "source": "https://secure.miamidade.gov/internal/calltaker-faq.page?Mduid_faq=faq162370190355563"
@@ -320,7 +320,7 @@
       "type": "County shelter wellness clinic (low cost)",
       "emergency": "no",
       "walkIns": "yes",
-      "walkInNote": "Walk-ins only for vaccines and microchips. Spay/neuter needs an appointment.",
+      "walkInNote": "Walk-in only for vaccines and wellness services, no appointments. Spay/neuter is by appointment only (walk-ins suspended); book online or call 311.",
       "address": "3599 NW 79th Ave, Doral, FL 33122",
       "area": "Doral",
       "phone": "311 or (305) 468-5900",
@@ -371,7 +371,7 @@
       "hoursNote": "Closed on county holidays. Vaccines, rabies, microchips, spay/neuter.",
       "eligibility": "Pets must be registered in Miami-Dade County and at least 4 months old. Lower rabies price with proof of public benefits.",
       "website": "https://www.miamidade.gov/global/service.page?Mduid_service=ser1599264624594140",
-      "source": "https://www.miamidade.gov/global/animals/contact.page"
+      "source": "https://www.miamidade.gov/global/service.page?Mduid_service=ser1599264624594140"
     },
     {
       "id": "south-kendall",
@@ -483,7 +483,7 @@
         ]
       },
       "hoursNote": "Open 7 days, with evening hours on weekdays.",
-      "confirm": "Walk-in and urgent-care policies aren't stated on the hospital's page.",
+      "confirm": "Hours confirmed on VCA's page. Walk-in and urgent-care policy aren't stated, so call first.",
       "website": "https://vcahospitals.com/alton-road",
       "source": "https://vcahospitals.com/alton-road"
     }
