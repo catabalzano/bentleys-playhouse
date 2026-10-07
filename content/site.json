@@ -161,7 +161,7 @@
     "_readme": "Messages from these forms go to the private inbox in the admin (Admin → Messages).",
     "contactEndpoint": "https://bentleys-playhouse-submissions.catabalzanoinc.workers.dev/message?form=contact",
     "involvedEndpoint": "https://bentleys-playhouse-submissions.catabalzanoinc.workers.dev/message?form=involved",
-    "turnstileSiteKey": "",
+    "turnstileSiteKey": "0x4AAAAAAFP28G-e8WRi5AR6",
     "_turnstile": "Cloudflare Turnstile spam check for the Contact, Get Involved and pup submission forms. Paste the widget's Site Key here; the Secret Key goes in the GitHub repository secret TURNSTILE_SECRET."
   },
   "tagline": "Rescue. Rehab. Rehome. Repeat.",
