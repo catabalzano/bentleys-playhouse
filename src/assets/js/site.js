@@ -1,3 +1,4 @@
+var T = window.BP_T || function (s) { return s; };
 /* Bentley's Playhouse — small, dependency-free enhancements. Every page works without this file. */
 (function () {
   'use strict';
@@ -41,7 +42,7 @@
     b.addEventListener('click', function () { copy(location.href.split('#')[0], b, S.copied || 'Link copied'); });
   });
   $$('[data-copy]').forEach(function (b) {
-    b.addEventListener('click', function () { copy(b.getAttribute('data-copy'), b, 'Copied'); });
+    b.addEventListener('click', function () { copy(b.getAttribute('data-copy'), b, T('Copied')); });
   });
   $$('[data-print]').forEach(function (b) {
     b.addEventListener('click', function () {
@@ -76,7 +77,7 @@
       });
       blocks.forEach(function (b) { b.hidden = !$$('.rcard:not([hidden])', b).length; });
       countEl.textContent = shown;
-      labelEl.textContent = shown === 1 ? 'result' : 'results';
+      labelEl.textContent = shown === 1 ? T('result') : T('results');
       empty.hidden = shown > 0;
       clear.hidden = !q.value;
       chips.forEach(function (ch) { ch.setAttribute('aria-pressed', String(ch.getAttribute('data-topic') === topic)); });
@@ -127,7 +128,7 @@
   /* ---------- forms: real endpoint only, honeypot + timing check ---------- */
   $$('form[data-form]').forEach(function (form) {
     var started = Date.now();
-    try { if (/[?&]topic=event\b/.test(location.search)) { var tp = form.querySelector('select[name="topic"]'); if (tp) { tp.value = 'A community event for the calendar'; var mg = form.querySelector('textarea[name="message"]'); if (mg && !mg.value) mg.placeholder = 'Event name, date, time, place, cost, who runs it and a link if there is one.'; } } } catch (e) {}
+    try { if (/[?&]topic=event\b/.test(location.search)) { var tp = form.querySelector('select[name="topic"]'); if (tp) { tp.value = 'A community event for the calendar'; var mg = form.querySelector('textarea[name="message"]'); if (mg && !mg.value) mg.placeholder = T('Event name, date, time, place, cost, who runs it and a link if there is one.'); } } } catch (e) {}
     var statusEl = $('.form__status', form);
     var route = '<a href="https://www.instagram.com/bentleysplayhouse/" target="_blank" rel="noopener">' + (CFG.preferredRoute || 'Instagram') + '</a>';
     function say(msg, kind) { msg = msg.replace('{email}', '<strong>' + (CFG.email || 'us on Instagram') + '</strong>'); statusEl.innerHTML = msg; statusEl.className = 'form__status' + (kind ? ' is-' + kind : ''); }
@@ -142,7 +143,7 @@
         var li = document.createElement('li'); li.className = 'file-list__item';
         var nm = document.createElement('span'); nm.className = 'file-list__name'; nm.textContent = f.name;
         var sz = document.createElement('span'); sz.className = 'file-list__size'; sz.textContent = kb(f.size);
-        var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'file-list__rm'; rm.textContent = 'Remove'; rm.setAttribute('aria-label', 'Remove ' + f.name);
+        var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'file-list__rm'; rm.textContent = T('Remove'); rm.setAttribute('aria-label', T('Remove') + ' ' + f.name);
         rm.onclick = function () { picked.splice(i, 1); drawFiles(); };
         li.appendChild(nm); li.appendChild(sz); li.appendChild(rm); fileList.appendChild(li);
       });
@@ -150,9 +151,9 @@
     function addFiles(list) {
       var bad = [];
       Array.prototype.forEach.call(list, function (f) {
-        if (!(OKTYPE.test(f.type) || OKEXT.test(f.name))) bad.push('"' + f.name + '" isn\'t a PDF or photo.');
-        else if (f.size > 8 * 1048576) bad.push('"' + f.name + '" is over 8 MB.');
-        else if (picked.length >= 3) bad.push('You can attach up to 3 files.');
+        if (!(OKTYPE.test(f.type) || OKEXT.test(f.name))) bad.push('"' + f.name + '" ' + T("isn't a PDF or photo."));
+        else if (f.size > 8 * 1048576) bad.push('"' + f.name + '" ' + T('is over 8 MB.'));
+        else if (picked.length >= 3) bad.push(T('You can attach up to 3 files.'));
         else picked.push(f);
       });
       drawFiles(); say(bad.length ? bad[0] : '', bad.length ? 'error' : '');
@@ -178,14 +179,14 @@
         f.setAttribute('aria-invalid', bad ? 'true' : 'false');
         if (bad && !firstBad) firstBad = f;
       });
-      if (firstBad) { say('Please check the highlighted fields.', 'error'); firstBad.focus(); return; }
+      if (firstBad) { say(T('Please check the highlighted fields.'), 'error'); firstBad.focus(); return; }
       // spam checks: honeypot filled, or submitted faster than a person could type
       var hp = form.querySelector('[name="website"]');
       if ((hp && hp.value) || Date.now() - started < 3000) { say(S['form.spam'] || 'Not sent.', 'error'); return; }
       var tsBox = form.querySelector('.cf-turnstile');
-      if (tsBox) { var tok = form.querySelector('[name="cf-turnstile-response"]'); if (!tok || !tok.value) { say('Please complete the "I am human" check above the Send button.', 'error'); return; } }
+      if (tsBox) { var tok = form.querySelector('[name="cf-turnstile-response"]'); if (!tok || !tok.value) { say(T('Please complete the "I am human" check above the Send button.'), 'error'); return; } }
       var btnEl = form.querySelector('[type="submit"]');
-      btnEl.disabled = true; say(picked.length ? 'Sending your message and files…' : (S['form.sending'] || 'Sending…'));
+      btnEl.disabled = true; say(picked.length ? T('Sending your message and files…') : (S['form.sending'] || T('Sending…')));
       var data = new FormData(form); data.delete('website'); data.delete('_started'); data.delete('files');
       picked.forEach(function (f) { data.append('files', f, f.name); });
       fetch(form.getAttribute('data-endpoint'), { method: 'POST', body: data, headers: { Accept: 'application/json' } })
@@ -205,7 +206,7 @@
   var grid = document.querySelector('[data-ig-feed]');
   if (!grid || !window.fetch) return;
   // Sticky-note label: the post's first sentence when it's short, otherwise a friendly rotating label
-  var LABELS = ['Tap to read', 'Playhouse life', 'New pup news!', 'Go say hi!', 'Read the story', 'Must see!'];
+  var LABELS = [T('Tap to read'), T('Playhouse life'), T('New pup news!'), T('Go say hi!'), T('Read the story'), T('Must see!')];
   function shortCap(c, i) {
     var t = String(c).split(/\n/)[0].replace(/[#@][\w.]+/g, '').replace(/\s+/g, ' ').trim();
     t = t.split(/(?<=[.!?])\s/)[0];
@@ -227,7 +228,7 @@
         a.className = 'ig-post'; a.href = p.permalink; a.target = '_blank'; a.rel = 'noopener';
         var img = document.createElement('img');
         img.src = src; img.loading = 'lazy';
-        var cap = (p.altText || p.prunedCaption || p.caption || 'Instagram post').replace(/\s+/g, ' ').trim();
+        var cap = (p.altText || p.prunedCaption || p.caption || T('Instagram post')).replace(/\s+/g, ' ').trim();
         img.alt = cap.length > 120 ? cap.slice(0, 117) + '…' : cap;
         var tape = document.createElement('span'); tape.className = 'ig-post__tape'; tape.setAttribute('aria-hidden', 'true');
         a.appendChild(tape);
@@ -235,8 +236,8 @@
         var note = document.createElement('span'); note.className = 'ig-post__note'; note.setAttribute('aria-hidden', 'true');
         note.textContent = shortCap(p.prunedCaption || p.caption || '', i);
         if (note.textContent) a.appendChild(note);
-        if (p.mediaType === 'VIDEO') { var b = document.createElement('span'); b.className = 'ig-post__badge'; b.textContent = 'Video'; a.appendChild(b); }
-        var sr = document.createElement('span'); sr.className = 'visually-hidden'; sr.textContent = ' (opens Instagram in a new tab)'; a.appendChild(sr);
+        if (p.mediaType === 'VIDEO') { var b = document.createElement('span'); b.className = 'ig-post__badge'; b.textContent = T('Video'); a.appendChild(b); }
+        var sr = document.createElement('span'); sr.className = 'visually-hidden'; sr.textContent = T(' (opens Instagram in a new tab)'); a.appendChild(sr);
         grid.appendChild(a);
       });
     })
@@ -281,7 +282,7 @@
       var amt = t.getAttribute('data-amount');
       tiers.forEach(function (o) { o.setAttribute('aria-checked', String(o === t)); });
       pays.forEach(function (a) { var tpl = a.getAttribute('data-pay-tpl'); if (tpl && tpl !== '#') a.href = amt ? tpl.replace('{amount}', amt) : a.getAttribute('data-pay-base'); });
-      if (label) label.textContent = 'Donate' + (amt ? ' $' + amt : '') + (go && go.getAttribute('data-name') ? ' with ' + go.getAttribute('data-name') : '');
+      if (label) label.textContent = T('Donate') + (amt ? ' $' + amt : '') + (go && go.getAttribute('data-name') ? T(' with ') + go.getAttribute('data-name') : '');
     }
     tiers.forEach(function (t, i) {
       t.addEventListener('click', function () { pick(t); });
@@ -326,13 +327,13 @@
   function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
   function clearGA() { document.cookie.split(';').forEach(function (c) { var n = c.split('=')[0].trim(); if (/^_ga/.test(n)) { ['', '; domain=' + location.hostname, '; domain=.' + location.hostname.replace(/^www\./, '')].forEach(function (d) { document.cookie = n + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d; }); } }); }
   function choose(v) { set(v); if (v === 'yes') window.bpLoadGA(); else clearGA(); var b = document.querySelector('.cookie-note'); if (b) b.remove(); sync(); }
-  function sync() { var st = document.querySelector('[data-cookie-status]'); if (!st) return; var v = get(); st.textContent = v === 'yes' ? 'You’re allowing analytics cookies.' : v === 'no' ? 'You’ve turned analytics cookies off.' : 'You haven’t made a choice yet.'; }
+  function sync() { var st = document.querySelector('[data-cookie-status]'); if (!st) return; var v = get(); st.textContent = v === 'yes' ? T('You’re allowing analytics cookies.') : v === 'no' ? T('You’ve turned analytics cookies off.') : T('You haven’t made a choice yet.'); }
   document.addEventListener('click', function (e) { var t = e.target.closest('[data-cookie-choice]'); if (t) choose(t.getAttribute('data-cookie-choice')); });
   sync();
   if (get() || document.querySelector('[data-cookie-page]')) return;
   var base = (document.querySelector('link[rel="stylesheet"][href*="css/site.css"]') || {}).getAttribute ? document.querySelector('link[rel="stylesheet"][href*="css/site.css"]').getAttribute('href').replace(/assets\/css\/site\.css.*$/, '') : '/';
   var n = document.createElement('div');
-  n.className = 'cookie-note'; n.setAttribute('role', 'region'); n.setAttribute('aria-label', 'Cookie choice');
-  n.innerHTML = '<p><svg class="doodle cookie-note__icon" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38.6 24.3c.6 8.2-6.1 15.5-14.5 15.8C15.7 40.5 8.5 34 8.2 25.5 7.9 17 14.4 9.6 22.8 9.3c-.4 3.6 2.2 6.6 5.6 6.6.3 3.5 3.2 6.1 6.8 5.8.3 1.1 1.8 2.3 3.4 2.6z"/><path class="d-acc" stroke-width="4" d="M17 20.2v.1M25.5 27.2v.1M16.5 30.5v.1M30.8 31.9v.1M21.7 35.4v.1"/></svg> We use a few analytics cookies to see which guides help people most. Nothing else, and never for ads. <a href="' + base + 'cookies/">Cookie policy</a></p><div class="cookie-note__btns"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">Accept</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">No thanks</button></div>';
+  n.className = 'cookie-note'; n.setAttribute('role', 'region'); n.setAttribute('aria-label', T('Cookie choice'));
+  n.innerHTML = '<p><svg class="doodle cookie-note__icon" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38.6 24.3c.6 8.2-6.1 15.5-14.5 15.8C15.7 40.5 8.5 34 8.2 25.5 7.9 17 14.4 9.6 22.8 9.3c-.4 3.6 2.2 6.6 5.6 6.6.3 3.5 3.2 6.1 6.8 5.8.3 1.1 1.8 2.3 3.4 2.6z"/><path class="d-acc" stroke-width="4" d="M17 20.2v.1M25.5 27.2v.1M16.5 30.5v.1M30.8 31.9v.1M21.7 35.4v.1"/></svg> ' + T('We use a few analytics cookies to see which guides help people most. Nothing else, and never for ads.') + ' <a href="' + base + (window.BP_LANG === 'es' ? 'es/' : '') + 'cookies/">' + T('Cookie policy') + '</a></p><div class="cookie-note__btns"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">' + T('Accept') + '</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">' + T('No thanks') + '</button></div>';
   document.body.appendChild(n);
 })();

@@ -1,3 +1,4 @@
+var T = window.BP_T || function (s) { return s; };
 /* Pawsome Pooches "submit a pup" form: photo picker (resized in the browser), required checks, send to the submissions service. */
 (function () {
   'use strict';
@@ -18,7 +19,7 @@
   function syncOrg() {
     var need = ['rescue', 'foster', 'other'].indexOf(loc.value) > -1, isRescue = loc.value === 'rescue';
     org.hidden = !need; org.querySelector('input').required = need;
-    if (orgLabel) orgLabel.textContent = isRescue ? 'Rescue name' : 'Name of the rescue or organization';
+    if (orgLabel) orgLabel.textContent = isRescue ? T('Rescue name') : T('Name of the rescue or organization');
     if (url) { url.hidden = !isRescue; if (!isRescue) url.querySelector('input').value = ''; }
   }
   loc.addEventListener('change', syncOrg); syncOrg();
@@ -42,23 +43,23 @@
     thumbs.innerHTML = '';
     photos.forEach(function (p, i) {
       var li = document.createElement('li');
-      li.innerHTML = '<img alt="Photo ' + (i + 1) + '"><span class="pps-thumbs__tag">' + (i ? (i + 1) : 'Main') + '</span><button type="button" aria-label="Remove photo ' + (i + 1) + '">✕</button>';
+      li.innerHTML = '<img alt="' + T('Photo') + ' ' + (i + 1) + '"><span class="pps-thumbs__tag">' + (i ? (i + 1) : T('Main')) + '</span><button type="button" aria-label="' + T('Remove photo') + ' ' + (i + 1) + '">✕</button>';
       li.querySelector('img').src = p.url;
       li.querySelector('button').addEventListener('click', function () { URL.revokeObjectURL(p.url); photos.splice(i, 1); render(); });
       thumbs.appendChild(li);
     });
-    form.querySelector('.pps-drop strong').textContent = photos.length ? (photos.length < MAX ? 'Add more photos (' + photos.length + ' of ' + MAX + ')' : '5 photos added') : 'Tap to add photos';
+    form.querySelector('.pps-drop strong').textContent = photos.length ? (photos.length < MAX ? T('Add more photos (') + photos.length + T(' of ') + MAX + ')' : T('5 photos added')) : T('Tap to add photos');
     input.disabled = photos.length >= MAX;
   }
   input.addEventListener('change', function () {
     var files = Array.prototype.slice.call(input.files || []); input.value = '';
     var room = MAX - photos.length;
-    if (files.length > room) say('You can add up to 5 photos. We kept the first ' + room + '.');
+    if (files.length > room) say(T('You can add up to 5 photos. We kept the first ') + room + '.');
     else say('');
     files.slice(0, room).reduce(function (p, f) {
       return p.then(function () {
         return shrink(f).then(function (b) { photos.push({ blob: b, url: URL.createObjectURL(b), name: f.name }); render(); })
-          .catch(function () { say('We couldn\'t read "' + f.name + '". Please use a JPG or PNG photo (on iPhone, share it from Photos as "Most Compatible").'); });
+          .catch(function () { say(T('We couldn\'t read') + ' "' + f.name + '". ' + T('Please use a JPG or PNG photo (on iPhone, share it from Photos as "Most Compatible").')); });
       });
     }, Promise.resolve());
   });
@@ -68,23 +69,23 @@
     if (!form.action) return;
     form.querySelectorAll('[aria-invalid]').forEach(function (el) { el.removeAttribute('aria-invalid'); });
     var bad = Array.prototype.filter.call(form.elements, function (el) { return el.willValidate && !el.checkValidity(); });
-    if (!photos.length) { say('Please add at least one clear photo of the pup.'); input.focus(); return; }
+    if (!photos.length) { say(T('Please add at least one clear photo of the pup.')); input.focus(); return; }
     if (bad.length) {
       bad.forEach(function (el) { el.setAttribute('aria-invalid', 'true'); });
-      say('Please fill in every field (only the shelter ID is optional).');
+      say(T('Please fill in every field (only the shelter ID is optional).'));
       bad[0].focus(); return;
     }
     var fd = new FormData(form);
     fd.delete('photos');
     photos.forEach(function (p, i) { fd.append('photos', p.blob, 'photo-' + (i + 1) + '.jpg'); });
     var btn = form.querySelector('button[type="submit"]'); btn.disabled = true;
-    say('Sending… this can take a moment with photos.', true);
+    say(T('Sending… this can take a moment with photos.'), true);
     fetch(form.action, { method: 'POST', body: fd }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (res) {
-        if (!res.ok || !res.j.ok) throw new Error(res.j.error || 'Something went wrong.');
+        if (!res.ok || !res.j.ok) throw new Error(res.j.error || T('Something went wrong.'));
         form.hidden = true; done.hidden = false; done.focus(); window.scrollTo({ top: done.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
       })
-      .catch(function (err) { say(err.message || 'We couldn\'t send that. Please check your connection and try again.'); btn.disabled = false; if (window.turnstile) try { window.turnstile.reset(); } catch (x) { /* ignore */ } });
+      .catch(function (err) { say(err.message || T('We couldn\'t send that. Please check your connection and try again.')); btn.disabled = false; if (window.turnstile) try { window.turnstile.reset(); } catch (x) { /* ignore */ } });
   });
 
   if (form.querySelector('.cf-turnstile')) { var s = document.createElement('script'); s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'; s.async = true; s.defer = true; document.head.appendChild(s); }

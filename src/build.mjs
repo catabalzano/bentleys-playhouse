@@ -170,8 +170,32 @@ for (const j of shareJobs) {
   const ok = (await renderShare({ ...j, photo }, j.file)) || (photo && (await renderShare({ ...j, photo: undefined }, j.file)));
   if (!ok) fs.copyFileSync(path.join(ROOT, 'src/assets/img/og-image.png'), j.file);
 }
-// sitemap + robots
+// Spanish site (/es/): translate every indexable English page with content/i18n/es.json
 const base = ctx.site.siteUrl.replace(/\/$/, '');
+const CONTENT_DIR = path.join(ROOT, 'content');
+const esOn = (ctx.site.languages || []).some((l) => l.code === 'es' && l.enabled) || process.argv.includes('--es');
+const esRoutes = [];
+if (esOn && fs.existsSync(path.join(CONTENT_DIR, 'i18n/es.json'))) {
+  const { translatePage, collect } = await import('./lib/i18n.mjs');
+  const dict = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'i18n/es.json'), 'utf8'));
+  const jsDict = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'i18n/es-js.json'), 'utf8'));
+  fs.writeFileSync(path.join(OUT, 'assets/js/i18n-es.js'), `window.BP_ES=${JSON.stringify(jsDict)};window.BP_T=function(s){return (window.BP_ES&&window.BP_ES[s])||s;};\n`);
+  const all = new Set();
+  for (const r of sitemap) {
+    const src = path.join(OUT, r, 'index.html');
+    const html = fs.readFileSync(src, 'utf8');
+    collect(html, all);
+    const outFile = path.join(OUT, 'es', r, 'index.html');
+    fs.mkdirSync(path.dirname(outFile), { recursive: true });
+    fs.writeFileSync(outFile, translatePage(html, dict, r, base, (ctx.links === 'pretty' ? '/' : '../'.repeat(r.split('/').filter(Boolean).length + 1)) + 'assets/js/i18n-es.js'));
+    esRoutes.push('es/' + r);
+  }
+  const missing = [...all].filter((k) => !dict[k]);
+  fs.writeFileSync(path.join(ROOT, 'tmp-missing-es.json'), JSON.stringify(Object.fromEntries(missing.map((k) => [k, ''])), null, 1));
+  console.log(`Spanish: ${esRoutes.length} pages, ${all.size - missing.length}/${all.size} strings translated${missing.length ? ` (${missing.length} missing → tmp-missing-es.json)` : ''}`);
+}
+sitemap.push(...esRoutes);
+// sitemap + robots
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.map((r) => `  <url><loc>${base}/${r}</loc></url>`).join('\n')}\n</urlset>\n`);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), ctx.mode === 'live' ? `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n` : 'User-agent: *\nDisallow: /\n');
 

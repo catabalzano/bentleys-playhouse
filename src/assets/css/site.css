@@ -1340,3 +1340,7 @@ fieldset.field { align-content: start; }
 .file-list__size { color: var(--muted); font-size: .88rem; }
 .file-list__rm { border: 0; background: none; padding: .2rem .3rem; font: 700 .88rem var(--font-body); color: var(--link); text-decoration: underline; cursor: pointer; }
 .form .cf-turnstile { margin: .25rem 0 .5rem; min-height: 65px; }
+
+/* language switch */
+.lang-switch { display: inline-flex; align-items: center; gap: .3rem; }
+.lang-switch .icon { flex: none; }

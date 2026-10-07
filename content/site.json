@@ -17,7 +17,7 @@
     {
       "code": "es",
       "label": "Español",
-      "enabled": false
+      "enabled": true
     }
   ],
   "hero": {

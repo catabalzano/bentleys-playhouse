@@ -4,3 +4,4 @@ live/
 tmp/
 worker/node_modules/
 worker/.wrangler/
+tmp-missing-es.json

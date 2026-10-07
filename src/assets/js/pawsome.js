@@ -1,3 +1,4 @@
+var T = window.BP_T || function (s) { return s; };
 /* Pawsome Pooches: profile pop-up, photo gallery, share, carousel arrows and filters. Every link still works without this file. */
 (function () {
   'use strict';
@@ -25,12 +26,12 @@
     $$('[data-pp-share]', root).forEach(function (b) {
       b.addEventListener('click', function () {
         var slug = b.getAttribute('data-pp-share');
-        var url = location.origin + '/pawsome-pooches/' + slug + '/';
+        var url = location.origin + (window.BP_LANG === 'es' ? '/es' : '') + '/pawsome-pooches/' + slug + '/';
         var status = b.parentNode.querySelector('.pp-share__status');
         var say = function (m) { if (status) { status.textContent = m; setTimeout(function () { status.textContent = ''; }, 4000); } };
-        var title = b.getAttribute('data-title') + ' is looking for a home';
+        var title = b.getAttribute('data-title') + T(' is looking for a home');
         if (navigator.share) { navigator.share({ title: title, url: url }).catch(function () {}); return; }
-        if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { say('Link copied. Paste it anywhere to share.'); }, function () { say(url); });
+        if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { say(T('Link copied. Paste it anywhere to share.')); }, function () { say(url); });
         else say(url);
       });
     });

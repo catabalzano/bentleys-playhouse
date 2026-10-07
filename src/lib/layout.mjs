@@ -22,9 +22,9 @@ function donateLink(cls = 'btn btn--donate') {
 }
 
 function langSwitch() {
-  const langs = ctx.site.languages.filter((l) => l.enabled);
-  if (langs.length < 2) return '';
-  return `<div class="lang" role="group" aria-label="Language">${langs.map((l) => `<a href="#" lang="${l.code}">${l.label}</a>`).join('')}</div>`;
+  const es = ctx.site.languages.find((l) => l.code === 'es' && l.enabled);
+  if (!es || ctx.route.endsWith('.html')) return '';
+  return `<a class="lang-switch" data-lang-switch href="${href('es/' + ctx.route)}" hreflang="es" lang="es">${icon('globe', { size: 16 })}<span>Español</span></a>`;
 }
 
 export function header({ home = false } = {}) {
@@ -57,7 +57,7 @@ ${ctx.mode === 'preview' ? `<aside class="preview-ribbon" aria-label="Preview no
       <ul class="nav__list">${navLinks()}${donateVisible() ? `<li class="nav__donate">${donateLink()}</li>` : ''}</ul>
       <div class="nav__extra">
         <a class="nav__link nav__contact" href="${href('transparency/')}">Transparency</a>
-        <a class="nav__link nav__contact" href="${href('contact/')}">${t('nav.contact')}</a>
+        <a class="nav__link nav__contact" href="${href('contact/')}">${t('nav.contact')}</a>${langSwitch().replace('class="lang-switch"', 'class="lang-switch nav__link nav__contact"')}
       </div>
     </nav>
   </div>
@@ -97,6 +97,12 @@ export function footer() {
 </footer>`;
 }
 
+function langAlternates() {
+  const es = ctx.site.languages.find((l) => l.code === 'es' && l.enabled);
+  if (!es || ctx.route.endsWith('.html')) return '';
+  const b = ctx.site.siteUrl;
+  return `\n<link rel="alternate" hreflang="en" href="${esc(b + '/' + ctx.route)}">\n<link rel="alternate" hreflang="es" href="${esc(b + '/es/' + ctx.route)}">\n<link rel="alternate" hreflang="x-default" href="${esc(b + '/' + ctx.route)}">`;
+}
 export function page({ title, seoTitle, description, body, home = false, bodyClass = '', noindex = false, scripts = [], ogImage = 'img/og-image.png', ogType = 'website', modified }) {
   const s = ctx.site;
   // Search results show about 60 characters: drop the site-name suffix when it would push the title past that.
@@ -109,7 +115,7 @@ export function page({ title, seoTitle, description, body, home = false, bodyCla
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(description)}">
 ${robots}
-<link rel="canonical" href="${esc(canonical)}">
+<link rel="canonical" href="${esc(canonical)}">${langAlternates()}
 <meta property="og:site_name" content="${esc(s.name)}">
 <meta property="og:title" content="${esc(home ? s.name : title)}">
 <meta property="og:description" content="${esc(description)}">
@@ -139,7 +145,7 @@ ${body}
 </main>
 ${footer()}
 ${donateDialog()}
-<script>window.BP_CONFIG=${JSON.stringify({ forms: s.forms, route: ctx.route, mode: ctx.mode, preferredRoute: s.contact.preferredRoute, email: s.contact.emailVerified ? s.contact.email : '', strings: pick(ctx.t.all, /^(form|search|copied|copyFailed)/) })};</script>
+<script>window.BP_LANG="en";window.BP_CONFIG=${JSON.stringify({ forms: s.forms, route: ctx.route, mode: ctx.mode, preferredRoute: s.contact.preferredRoute, email: s.contact.emailVerified ? s.contact.email : '', strings: pick(ctx.t.all, /^(form|search|copied|copyFailed)/) })};</script>
 <script src="${asset('js/site.js')}" defer></script>
 ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')}`;
   const html = `<!doctype html>

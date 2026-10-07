@@ -1,3 +1,4 @@
+var T = window.BP_T || function (s) { return s; };
 /* Transparency ledger: filters recalculate totals and the category chart. */
 (function () {
   'use strict';
@@ -33,7 +34,7 @@
       list.appendChild(b);
     });
     $('.bars-empty').hidden = any;
-    $('[data-fin-status]').textContent = n === rows.length ? '' : 'Showing ' + n + ' of ' + rows.length + ' entries';
+    $('[data-fin-status]').textContent = n === rows.length ? '' : T('Showing ') + n + T(' of ') + rows.length + T(' entries');
   }
   [year, type, cat].forEach(function (el) { el.addEventListener('change', apply); });
   q.addEventListener('input', apply);
