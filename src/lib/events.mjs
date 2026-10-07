@@ -2,11 +2,11 @@
 import { ctx, esc, href, asset, md, tag, breadcrumb, icon } from './core.mjs';
 
 export const EVENT_CATS = {
-  spay: { label: 'Spay/neuter', color: '#FF914D', ink: '#B4500F', tint: '#FFEADC' },
+  spay: { label: 'Spay/neuter', color: '#FF914D', ink: '#FF914D', tint: '#FFEADC' },
   walk: { label: 'Dog walks', color: '#2F45C8', ink: '#2F45C8', tint: '#DDE4FF' },
   adopt: { label: 'Adoption', color: '#8C52FF', ink: '#6A35D6', tint: '#F0E8FF' },
   clinic: { label: 'Vaccines & chips', color: '#1B6E45', ink: '#1B6E45', tint: '#E2F4EA' },
-  fund: { label: 'Fundraisers', color: '#C2560D', ink: '#A94A0B', tint: '#FFF3DC' },
+  fund: { label: 'Fundraisers', color: '#FFBD59', ink: '#E5A23A', tint: '#FFF4DE' },
 };
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
