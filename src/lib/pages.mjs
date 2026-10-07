@@ -95,6 +95,28 @@ export function home(data) {
 </section>
 </div>
 
+<section class="fenix-panel" aria-labelledby="fenix-h">
+  <div class="wrap">
+    <div class="fenix-panel__in">
+      <div class="fenix-panel__main">
+        <p class="fenix-panel__by"><img src="${asset('img/fenix-logo.png')}" alt="" width="40" height="40" loading="lazy"> By Bentley's Playhouse</p>
+        <h2 id="fenix-h" class="fenix-panel__h">Fénix Animal Project</h2>
+        <p class="fenix-panel__p">A free, global portal for animals in need: find rescues and shelters, find a vet, and post or search lost and found dogs. Free for everyone.</p>
+        <div class="fenix-panel__btns">
+          <a class="btn fenix-panel__go" href="${FENIX_LF}" target="_blank" rel="noopener">${icon('found', { size: 20 })}<span>Post a lost or found dog</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+          <a class="btn fenix-panel__ghost" href="https://fenixanimalproject.org/?v=check" target="_blank" rel="noopener"><span>Explore Fénix</span>${icon('external', { size: 16 })}<span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+      <ul class="fenix-panel__list" role="list">
+        <li><a href="https://fenixanimalproject.org/?v=check#grid" target="_blank" rel="noopener">${icon('home', { size: 20 })}<span>Rescues &amp; shelters directory</span></a></li>
+        <li><a href="https://fenixanimalproject.org/?v=check#medical" target="_blank" rel="noopener">${icon('med', { size: 20 })}<span>Vets &amp; emergency clinics</span></a></li>
+        <li><a href="${FENIX_LF}" target="_blank" rel="noopener">${icon('paw', { size: 20 })}<span>Lost &amp; Found board</span></a></li>
+        <li><a href="https://fenixanimalproject.org/?v=check#resources" target="_blank" rel="noopener">${icon('globe', { size: 20 })}<span>Disaster relief for animals</span></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="guides" aria-labelledby="guides-h">
   <div class="wrap">
     <div class="section-head">
