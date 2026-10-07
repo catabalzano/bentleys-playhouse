@@ -1233,8 +1233,9 @@ fieldset.field { align-content: start; }
 /* Homepage: Fénix Animal Project dark panel */
 .fenix-panel { padding-block: clamp(2rem, 5vw, 3.5rem) 0; }
 .fenix-panel__in { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 2.5rem); align-items: center; background: #1F1D2B; color: #fff; border-radius: 32px; padding: clamp(1.6rem, 4vw, 2.6rem) clamp(1.4rem, 4vw, 2.8rem); }
-.fenix-panel__by { display: flex; align-items: center; gap: .6rem; margin: 0 0 .4rem; color: var(--gold); font-weight: 800; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
-.fenix-panel__by img { width: 56px; height: 56px; display: block; }
+.fenix-panel__by { margin: 0 0 .6rem; color: var(--gold); font-weight: 800; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
+.fenix-panel__title { display: flex; align-items: center; gap: .8rem; }
+.fenix-panel__title img { width: clamp(48px, 5vw, 64px); height: auto; flex: none; display: block; }
 .fenix-panel__h { margin: 0; font-family: Fredoka, sans-serif; font-size: clamp(1.8rem, 3.4vw, 2.4rem); line-height: 1.1; color: #fff; }
 .fenix-panel__p { margin: .7rem 0 0; color: #D9D7E6; line-height: 1.6; max-width: 46ch; }
 .fenix-panel__btns { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.3rem; }
