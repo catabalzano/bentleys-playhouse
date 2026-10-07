@@ -136,7 +136,7 @@ ${dogs.length ? `
 </div></section>` : `
 <section class="dogs-home" aria-labelledby="dogs-h"><div class="wrap">
   <div class="empty empty--wide">
-    <img src="${asset('img/bentley-head.png')}" alt="" width="120" height="139" loading="lazy" class="empty__bentley">
+    <img src="${asset('img/adopt-westie.png')}" alt="" width="160" height="220" loading="lazy" class="empty__dog">
     <div>
       <h2 id="dogs-h" class="section-h">Looking for a dog to adopt?</h2>
       <p>Profiles of our current dogs will live here. For now, our adoptable dogs are listed on RescueMe, and our day-to-day rescue work is on Instagram.</p>

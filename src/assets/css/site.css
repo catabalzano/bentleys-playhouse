@@ -309,6 +309,8 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
 .empty h2, .empty h3 { margin-top: 0; }
 .empty p:last-child { margin-bottom: 0; }
 @media (max-width: 560px) { .empty { flex-direction: column; align-items: flex-start; } }
+.dogs-home .empty img.empty__dog { width: clamp(110px, 13vw, 160px); height: auto; }
+@media (max-width: 560px) { .dogs-home .empty img.empty__dog { width: 120px; } }
 .dogs-home { padding-block: 1rem clamp(3rem, 6vw, 4rem); }
 
 /* ---------- ways to help ---------- */
