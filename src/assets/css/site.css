@@ -1342,5 +1342,6 @@ fieldset.field { align-content: start; }
 .form .cf-turnstile { margin: .25rem 0 .5rem; min-height: 65px; }
 
 /* language switch */
-.lang-switch { display: inline-flex; align-items: center; gap: .3rem; }
+.utility .lang-switch { display: inline-flex; align-items: center; gap: .3rem; }
+.nav__extra .lang-switch .icon { display: none; }
 .lang-switch .icon { flex: none; }
