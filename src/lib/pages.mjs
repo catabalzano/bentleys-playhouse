@@ -3,6 +3,7 @@ import {
   breadcrumb, sourcesList, icon, paw, pawTrail, fmtDate, strip, slugify, isEmptyBody, logo,
 } from './core.mjs';
 import { mdasBlock } from './pages2.mjs';
+import { doodle } from './doodles.mjs';
 import { pawsomeHome, img } from './pages3.mjs';
 import { heroDoorway, photoSlot } from './art.mjs';
 import { giftBlock, donateVisible } from './donate.mjs';
@@ -99,7 +100,7 @@ export function home(data) {
   <div class="wrap">
     <div class="fenix-panel__in">
       <div class="fenix-panel__main">
-        <p class="fenix-panel__by"><img src="${asset('img/fenix-logo.png')}" alt="" width="40" height="40" loading="lazy"> By Bentley's Playhouse</p>
+        <p class="fenix-panel__by"><img src="${asset('img/fenix-logo.png')}" alt="" width="56" height="56" loading="lazy"> By Bentley's Playhouse</p>
         <h2 id="fenix-h" class="fenix-panel__h">Fénix Animal Project</h2>
         <p class="fenix-panel__p">A free, global portal for animals in need: find rescues and shelters, find a vet, and post or search lost and found dogs. Free for everyone.</p>
         <div class="fenix-panel__btns">
@@ -108,10 +109,10 @@ export function home(data) {
         </div>
       </div>
       <ul class="fenix-panel__list" role="list">
-        <li><a href="https://fenixanimalproject.org/?v=check#grid" target="_blank" rel="noopener">${icon('home', { size: 20 })}<span>Rescues &amp; shelters directory</span></a></li>
-        <li><a href="https://fenixanimalproject.org/?v=check#medical" target="_blank" rel="noopener">${icon('med', { size: 20 })}<span>Vets &amp; emergency clinics</span></a></li>
-        <li><a href="${FENIX_LF}" target="_blank" rel="noopener">${icon('paw', { size: 20 })}<span>Lost &amp; Found board</span></a></li>
-        <li><a href="https://fenixanimalproject.org/?v=check#resources" target="_blank" rel="noopener">${icon('globe', { size: 20 })}<span>Disaster relief for animals</span></a></li>
+        <li><a href="https://fenixanimalproject.org/?v=check#grid" target="_blank" rel="noopener">${doodle('home')}<span>Rescues &amp; shelters directory</span></a></li>
+        <li><a href="https://fenixanimalproject.org/?v=check#medical" target="_blank" rel="noopener">${doodle('vet')}<span>Vets &amp; emergency clinics</span></a></li>
+        <li><a href="${FENIX_LF}" target="_blank" rel="noopener">${doodle('lostfound')}<span>Lost &amp; Found board</span></a></li>
+        <li><a href="https://fenixanimalproject.org/?v=check#resources" target="_blank" rel="noopener">${doodle('globe')}<span>Disaster relief for animals</span></a></li>
       </ul>
     </div>
   </div>

@@ -1,5 +1,6 @@
 // Donate pop-up ("gift card") and the same block on the Donate page.
 // Amounts + "where it goes" come from content/site.json → donate.tiers; payment options from donate.methods.
+import { doodle, doodleFor } from './doodles.mjs';
 import { ctx, esc, href, asset, icon } from './core.mjs';
 
 const NOTE = "Donation to Bentley's Playhouse";
@@ -40,7 +41,7 @@ export function giftBlock({ inDialog = false } = {}) {
   const goLabel = (m) => `Donate${amt ? ` $${amt}` : ''}${m ? ` with ${esc(m.name)}` : ''}`;
   const pid = inDialog ? 'gift-title' : 'gift-title-page';
   const tierHtml = tiers.map((t) => `<button type="button" class="gift-tier" role="radio" aria-checked="${t === def}" data-amount="${esc(t.amount || '')}">
-      <b class="gift-tier__amt">${t.amount ? `$${esc(t.amount)}` : 'Any'}</b><span class="gift-tier__what"><span aria-hidden="true">${esc(t.emoji || '')}</span> ${esc(t.label)}</span></button>`).join('');
+      <b class="gift-tier__amt">${t.amount ? `$${esc(t.amount)}` : 'Any'}</b><span class="gift-tier__what">${doodle(doodleFor(t.emoji), { size: 26, cls: 'gift-tier__icon' })} ${esc(t.label)}</span></button>`).join('');
   const payHtml = methods.filter((m) => m !== primary).map((m) => {
     const h = (m.handle || '').trim(); const sub = h ? esc(m.type === 'venmo' ? '@' + h.replace(/^@/, '') : m.type === 'cashapp' ? '$' + h.replace(/^\$/, '') : h) : '<em>handle needed</em>';
     if (m.type === 'zelle') return `<button type="button" class="gift-pay" data-copy="${esc(m.handle || '')}"><b>${esc(m.name)}</b><span>${sub} · Copy</span></button>`;

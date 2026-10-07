@@ -164,7 +164,7 @@
   var grid = document.querySelector('[data-ig-feed]');
   if (!grid || !window.fetch) return;
   // Sticky-note label: the post's first sentence when it's short, otherwise a friendly rotating label
-  var LABELS = ['Tap to read ❤', 'Playhouse life 🐾', 'New pup news!', 'Go say hi!', 'Read the story', 'Must see 🐶'];
+  var LABELS = ['Tap to read', 'Playhouse life', 'New pup news!', 'Go say hi!', 'Read the story', 'Must see!'];
   function shortCap(c, i) {
     var t = String(c).split(/\n/)[0].replace(/[#@][\w.]+/g, '').replace(/\s+/g, ' ').trim();
     t = t.split(/(?<=[.!?])\s/)[0];
@@ -292,6 +292,6 @@
   var base = (document.querySelector('link[rel="stylesheet"][href*="css/site.css"]') || {}).getAttribute ? document.querySelector('link[rel="stylesheet"][href*="css/site.css"]').getAttribute('href').replace(/assets\/css\/site\.css.*$/, '') : '/';
   var n = document.createElement('div');
   n.className = 'cookie-note'; n.setAttribute('role', 'region'); n.setAttribute('aria-label', 'Cookie choice');
-  n.innerHTML = '<p>🍪 We use a few analytics cookies to see which guides help people most. Nothing else, and never for ads. <a href="' + base + 'cookies/">Cookie policy</a></p><div class="cookie-note__btns"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">Accept</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">No thanks</button></div>';
+  n.innerHTML = '<p><svg class="doodle cookie-note__icon" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38.6 24.3c.6 8.2-6.1 15.5-14.5 15.8C15.7 40.5 8.5 34 8.2 25.5 7.9 17 14.4 9.6 22.8 9.3c-.4 3.6 2.2 6.6 5.6 6.6.3 3.5 3.2 6.1 6.8 5.8.3 1.1 1.8 2.3 3.4 2.6z"/><path class="d-acc" stroke-width="4" d="M17 20.2v.1M25.5 27.2v.1M16.5 30.5v.1M30.8 31.9v.1M21.7 35.4v.1"/></svg> We use a few analytics cookies to see which guides help people most. Nothing else, and never for ads. <a href="' + base + 'cookies/">Cookie policy</a></p><div class="cookie-note__btns"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">Accept</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">No thanks</button></div>';
   document.body.appendChild(n);
 })();
