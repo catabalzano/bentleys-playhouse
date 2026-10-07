@@ -56,7 +56,7 @@ export function home(data) {
     <div class="hero__frame">${heroImg}</div>
     <div class="hero__card">
       <p class="eyebrow">${tag('Miami-based Dog Rescue &amp; Advocacy Organization', 'gold')}</p>
-      <h1 id="hero-h" class="hero__h">We support the pups, and <span class="hl">the heroes who help them.</span></h1>
+      <h1 id="hero-h" class="hero__h">We Support the Pups, and <span class="hl">the Heroes Who Help Them.</span></h1>
       <p class="hero__lede">${esc(s.name)} rescues, rehabilitates and rehomes dogs in South Florida. We also work to support other animal rescues in the country through volunteer work and donations, as well as sharing clear, practical help for anyone who has just found, lost or rescued a dog and isn't sure what to do next.</p>
       <div class="hero__ctas">
         ${button('Find help', 'get-help/', { ic: 'search' })}
@@ -640,6 +640,7 @@ export function involved(data) {
 }
 
 // ============ FORMS ============
+export const turnstileKey = () => (ctx.site.forms && ctx.site.forms.turnstileSiteKey) || (ctx.site.pawsome && ctx.site.pawsome.turnstileSiteKey) || '';
 export function form(kind) {
   const s = ctx.site;
   const endpoint = kind === 'contact' ? s.forms.contactEndpoint : s.forms.involvedEndpoint;
@@ -658,9 +659,14 @@ export function form(kind) {
     : `<div class="field"><label for="${id('topic')}">What's this about?</label><select id="${id('topic')}" name="topic"><option>Adopting one of our dogs</option><option>Fostering or volunteering</option><option>I found or rescued a dog</option><option>Partnership or media</option><option value="A community event for the calendar">A community event for the calendar</option><option>Something else</option></select></div>`}
     <div class="field"><label for="${id('msg')}">${kind === 'involved' ? 'Anything we should know? Skills, availability, experience' : 'Your message'} ${kind === 'contact' ? `<span class="req">(${ctx.t('form.required')})</span>` : `<span class="opt">(${ctx.t('form.optional')})</span>`}</label><textarea id="${id('msg')}" name="message" rows="5" maxlength="2000"${kind === 'contact' ? ' required' : ''}></textarea>
       ${kind === 'contact' ? `<p class="hint">Please don't include a home address or financial details. If an animal is hurt or in danger, don't wait for us: <a href="${href('get-help/emergency/')}">use the emergency steps</a>.</p>` : ''}</div>
+    ${kind === 'contact' ? `<div class="field field--files"><span class="lbl-like">Attach a flyer or PDF <span class="opt">(${ctx.t('form.optional')})</span></span>
+      <label class="file-drop" for="${id('files')}">${icon('upload', { size: 22 })}<span><b>Choose files</b> or drop them here</span><input id="${id('files')}" name="files" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,application/pdf,image/jpeg,image/png,image/webp,image/heic" class="visually-hidden-file" data-files></label>
+      <p class="hint">Event invites, flyers or photos. Up to 3 files (PDF, JPG, PNG or HEIC), 8 MB each.</p>
+      <ul class="file-list" data-file-list role="list"></ul></div>` : ''}
     <div class="hp" aria-hidden="true"><label for="${id('website')}">Leave this empty</label><input id="${id('website')}" name="website" type="text" tabindex="-1" autocomplete="off"></div>
     <input type="hidden" name="_started" value="">
     <div class="check-line"><input type="checkbox" id="${id('consent')}" name="consent" required><label for="${id('consent')}">I'm OK with ${esc(s.name)} using these details only to reply to me. <a href="${href('privacy/')}">Privacy</a></label></div>
+    ${turnstileKey() ? `<div class="cf-turnstile" data-sitekey="${esc(turnstileKey())}" data-theme="light" data-size="flexible"></div>` : ''}
     <div class="form__actions"><button class="btn btn--primary" type="submit"${connected ? '' : ' disabled aria-disabled="true"'}>${icon('mail', { size: 20 })}<span>${connected ? 'Send' : 'Send (not connected yet)'}</span></button></div>
     <p class="form__status" role="status" aria-live="polite"></p>
   </form>`;
@@ -770,7 +776,7 @@ export function privacy() {
   <h2>Who helps us run the site</h2>
   <p>We use a few trusted services to run the website. They process data only to provide their service to us:</p>
   <ul>
-    <li><strong>Cloudflare</strong> stores form messages and pup submissions privately until we delete them.</li>
+    <li><strong>Cloudflare</strong> stores form messages, attachments and pup submissions privately until we delete them, and runs the "I am human" spam check on our forms (Turnstile). That check looks at your browser, not at what you type, and doesn't use advertising cookies.</li>
     <li><strong>GitHub</strong> hosts the website and its published content.</li>
     <li><strong>Google</strong> provides our fonts${ga ? ' and, if you accept cookies, Google Analytics' : ''}.</li>
     <li><strong>Behold</strong> and <strong>Instagram</strong> show our latest Instagram posts on the homepage. Your browser loads those images from them.</li>

@@ -47,6 +47,7 @@ const group = (label, inner, hint = '') => `<fieldset class="field"><legend>${la
 
 export function pawsomeSubmitPage() {
   const p = ctx.site.pawsome || {};
+  const tsKey = (ctx.site.forms && ctx.site.forms.turnstileSiteKey) || p.turnstileSiteKey || '';
   const live = !!p.submitEndpoint;
   return `
 <section class="page-head page-head--pawsome"><div class="wrap wrap--text">
@@ -114,7 +115,7 @@ export function pawsomeSubmitPage() {
     </div>
     <label class="pick pick--block"><input type="checkbox" name="consent" value="yes" required><span>I have permission to share these photos and this information, and it's accurate to the best of my knowledge.</span></label>
     <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-    ${p.turnstileSiteKey ? `<div class="cf-turnstile" data-sitekey="${esc(p.turnstileSiteKey)}" data-theme="light"></div>` : ''}
+    ${tsKey ? `<div class="cf-turnstile" data-sitekey="${esc(tsKey)}" data-theme="light"></div>` : ''}
     <p class="form__status" data-pps-status role="status" aria-live="polite"></p>
     <div class="btn-row"><button class="btn btn--primary" type="submit"${live ? '' : ' disabled'}>${icon('paw', { size: 20 })}<span>Submit pup for review</span></button></div>
   </form>

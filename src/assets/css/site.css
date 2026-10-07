@@ -588,7 +588,7 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .seg label { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 52px; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; cursor: pointer; }
 .seg input:checked + label { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
 .seg input:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 3px; }
-.file-drop { display: flex; gap: .8rem; align-items: center; padding: 1rem; border: 2px dashed var(--line); border-radius: var(--r-md); cursor: pointer; }
+.file-drop { font-weight: 500; display: flex; gap: .8rem; align-items: center; padding: 1rem; border: 2px dashed var(--line); border-radius: var(--r-md); cursor: pointer; }
 .file-drop:hover { border-color: var(--blue); }
 #f-photo:focus-visible + .file-drop, .file-drop:focus-within { outline: 3px solid var(--focus); }
 .field--indent { padding-left: 2.1rem; }
@@ -1324,3 +1324,19 @@ fieldset.field { align-content: start; }
   .ev-filters { flex-direction: row; flex-wrap: wrap; gap: .5rem 1rem; }
 }
 @media (max-width: 420px) { .ev-day { width: 36px; height: 36px; } .ev-item { grid-template-columns: 48px 4px 1fr; gap: .8rem; } }
+
+/* ---------- form attachments + spam check ---------- */
+.lbl-like { display: block; font-weight: 700; margin-bottom: .4rem; }
+.file-drop { font-weight: 500; display: flex; align-items: center; gap: .75rem; padding: 1rem 1.2rem; border: 2px dashed var(--line); border-radius: var(--r-sm, 14px); background: var(--paper); color: var(--muted); cursor: pointer; position: relative; transition: border-color .15s, background .15s; }
+.file-drop b { color: var(--link); }
+.file-drop .icon { color: var(--link); flex: none; }
+.file-drop:hover, .file-drop.is-over { border-color: var(--blue); background: var(--tint-blue); }
+.file-drop:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+.field--files .hint { margin-top: .45rem; }
+.file-list { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .4rem; }
+.file-list:empty { display: none; }
+.file-list__item { display: flex; align-items: center; gap: .75rem; padding: .5rem .8rem; border-radius: 12px; background: var(--tint-blue); }
+.file-list__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.file-list__size { color: var(--muted); font-size: .88rem; }
+.file-list__rm { border: 0; background: none; padding: .2rem .3rem; font: 700 .88rem var(--font-body); color: var(--link); text-decoration: underline; cursor: pointer; }
+.form .cf-turnstile { margin: .25rem 0 .5rem; min-height: 65px; }

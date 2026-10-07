@@ -131,6 +131,43 @@
     var statusEl = $('.form__status', form);
     var route = '<a href="https://www.instagram.com/bentleysplayhouse/" target="_blank" rel="noopener">' + (CFG.preferredRoute || 'Instagram') + '</a>';
     function say(msg, kind) { msg = msg.replace('{email}', '<strong>' + (CFG.email || 'us on Instagram') + '</strong>'); statusEl.innerHTML = msg; statusEl.className = 'form__status' + (kind ? ' is-' + kind : ''); }
+    // attachments: show what's picked, allow drag & drop, check size/type before sending
+    var fileInput = form.querySelector('[data-files]'), fileList = form.querySelector('[data-file-list]'), picked = [];
+    var OKTYPE = /^(application\/pdf|image\/(jpeg|png|webp|heic|heif))$/, OKEXT = /\.(pdf|jpe?g|png|webp|heic|heif)$/i;
+    function kb(n) { return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+    function drawFiles() {
+      if (!fileList) return;
+      fileList.innerHTML = '';
+      picked.forEach(function (f, i) {
+        var li = document.createElement('li'); li.className = 'file-list__item';
+        var nm = document.createElement('span'); nm.className = 'file-list__name'; nm.textContent = f.name;
+        var sz = document.createElement('span'); sz.className = 'file-list__size'; sz.textContent = kb(f.size);
+        var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'file-list__rm'; rm.textContent = 'Remove'; rm.setAttribute('aria-label', 'Remove ' + f.name);
+        rm.onclick = function () { picked.splice(i, 1); drawFiles(); };
+        li.appendChild(nm); li.appendChild(sz); li.appendChild(rm); fileList.appendChild(li);
+      });
+    }
+    function addFiles(list) {
+      var bad = [];
+      Array.prototype.forEach.call(list, function (f) {
+        if (!(OKTYPE.test(f.type) || OKEXT.test(f.name))) bad.push('"' + f.name + '" isn\'t a PDF or photo.');
+        else if (f.size > 8 * 1048576) bad.push('"' + f.name + '" is over 8 MB.');
+        else if (picked.length >= 3) bad.push('You can attach up to 3 files.');
+        else picked.push(f);
+      });
+      drawFiles(); say(bad.length ? bad[0] : '', bad.length ? 'error' : '');
+    }
+    if (fileInput) {
+      fileInput.addEventListener('change', function () { addFiles(fileInput.files); fileInput.value = ''; });
+      var drop = fileInput.closest('.file-drop');
+      ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (ev) { ev.preventDefault(); drop.classList.add('is-over'); }); });
+      ['dragleave', 'drop'].forEach(function (t) { drop.addEventListener(t, function (ev) { ev.preventDefault(); drop.classList.remove('is-over'); }); });
+      drop.addEventListener('drop', function (ev) { if (ev.dataTransfer && ev.dataTransfer.files) addFiles(ev.dataTransfer.files); });
+    }
+    if (form.querySelector('.cf-turnstile') && !document.querySelector('script[src*="challenges.cloudflare.com/turnstile"]')) {
+      var ts = document.createElement('script'); ts.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'; ts.async = true; ts.defer = true; document.head.appendChild(ts);
+    }
+    function resetTs() { if (window.turnstile && form.querySelector('.cf-turnstile')) try { window.turnstile.reset(form.querySelector('.cf-turnstile')); } catch (x) {} }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (form.hasAttribute('data-disconnected')) { say((S['form.notConnected'] || '').replace('{route}', route), 'error'); return; }
@@ -145,16 +182,19 @@
       // spam checks: honeypot filled, or submitted faster than a person could type
       var hp = form.querySelector('[name="website"]');
       if ((hp && hp.value) || Date.now() - started < 3000) { say(S['form.spam'] || 'Not sent.', 'error'); return; }
+      var tsBox = form.querySelector('.cf-turnstile');
+      if (tsBox) { var tok = form.querySelector('[name="cf-turnstile-response"]'); if (!tok || !tok.value) { say('Please complete the "I am human" check above the Send button.', 'error'); return; } }
       var btnEl = form.querySelector('[type="submit"]');
-      btnEl.disabled = true; say(S['form.sending'] || 'Sending…');
-      var data = new FormData(form); data.delete('website'); data.delete('_started');
+      btnEl.disabled = true; say(picked.length ? 'Sending your message and files…' : (S['form.sending'] || 'Sending…'));
+      var data = new FormData(form); data.delete('website'); data.delete('_started'); data.delete('files');
+      picked.forEach(function (f) { data.append('files', f, f.name); });
       fetch(form.getAttribute('data-endpoint'), { method: 'POST', body: data, headers: { Accept: 'application/json' } })
         .then(function (res) {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          form.reset(); say(S['form.sent'] || 'Sent.', 'ok');
+          if (!res.ok) return res.json().catch(function () { return {}; }).then(function (j) { var er = new Error(j.error || ''); er.pub = !!j.error; throw er; });
+          form.reset(); picked = []; drawFiles(); say(S['form.sent'] || 'Sent.', 'ok');
         })
-        .catch(function () { say((S['form.error'] || 'Not sent.').replace('{route}', route), 'error'); })
-        .then(function () { btnEl.disabled = false; });
+        .catch(function (er) { say(er && er.pub ? er.message.replace(/[<>]/g, '') : (S['form.error'] || 'Not sent.').replace('{route}', route), 'error'); })
+        .then(function () { btnEl.disabled = false; resetTs(); });
     });
   });
 })();

@@ -115,7 +115,7 @@ function emit(route, opts) {
   count++;
 }
 
-emit('', { home: true, bodyClass: 'home', title: 'Home', shareTitle: 'We support the pups, and the heroes who help them', shareKicker: 'Miami dog rescue',
+emit('', { home: true, bodyClass: 'home', title: 'Home', shareTitle: 'We Support the Pups, and the Heroes Who Help Them', shareKicker: 'Miami dog rescue',
   description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data), scripts: ['js/pawsome.js'] });
 emit('pawsome-pooches/', { shareTitle: 'Pawsome Pooches: dogs in our community who need a home', shareKicker: 'Updated weekly', shareCategory: 'adopt-foster', sharePhoto: (() => { const d = pooches.find((x) => x.status !== 'adopted' && x.photos[0]); return d && (d.sharePhoto || d.photos[0]); })(), title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js'] });
 for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, shareTitle: d.status === 'adopted' ? `${d.name} found a home!` : `Meet ${d.name}`, shareKicker: d.status === 'adopted' ? 'Pawsome Pooches · Happy tail' : 'Pawsome Pooches · Adopt me', shareCategory: 'adopt-foster', sharePhoto: d.sharePhoto || d.photos[0], description: d.tagline || `Meet ${d.name}, looking for a home.`, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js'] });

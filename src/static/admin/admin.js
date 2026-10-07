@@ -598,10 +598,23 @@
           '<p class="msg-email"><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></p>' +
           (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('') + '</dl>' : '') +
           (m.message ? '<p class="msg-body">' + esc(m.message) + '</p>' : '') +
+          ((m.files || []).length ? '<div class="msg-files"><b>📎 Attachments</b>' + m.files.map(function (f) { return '<button type="button" class="btn btn--ghost btn--sm" data-file="' + f.n + '">' + esc(f.name) + ' <span class="hint">' + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB') + '</span></button>'; }).join('') + '</div>' : '') +
           '<div class="row__act" style="justify-content:flex-start;margin-top:10px"><button class="btn btn--ghost btn--sm" data-rd>' + (m.read ? 'Mark as unread' : 'Mark as read') + '</button><button class="btn btn--danger btn--sm" data-dl>Delete</button></div></section>';
       }).join('');
       $$('.msg-card').forEach(function (card) {
         var id = card.getAttribute('data-id'), m = S.msgs.filter(function (x) { return x.id === id; })[0];
+        $$('[data-file]', card).forEach(function (b) {
+          b.onclick = function () {
+            var n = Number(b.getAttribute('data-file')), f = m.files.filter(function (x) { return x.n === n; })[0], w = window.open('', '_blank');
+            b.disabled = true;
+            api('/api/messages/' + id + '/file/' + n).then(function (blob) {
+              var url = URL.createObjectURL(new Blob([blob], { type: f.type }));
+              if (w && /^(application\/pdf|image\/(jpeg|png|webp))$/.test(f.type)) w.location = url;
+              else { if (w) w.close(); var a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); }
+              setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+            }).catch(function (e) { if (w) w.close(); alert(e.message); }).then(function () { b.disabled = false; });
+          };
+        });
         $('[data-rd]', card).onclick = function () { api('/api/messages/' + id + '/read', { method: 'POST', json: { read: !m.read } }).then(function () { m.read = !m.read; msgCount(); draw(); }).catch(function (e) { alert(e.message); }); };
         $('[data-dl]', card).onclick = function () { if (!confirm('Delete the message from ' + m.name + ' for good?')) return; api('/api/messages/' + id, { method: 'DELETE' }).then(function () { S.msgs = S.msgs.filter(function (x) { return x.id !== id; }); msgCount(); draw(); }).catch(function (e) { alert(e.message); }); };
       });

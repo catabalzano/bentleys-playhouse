@@ -184,3 +184,6 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .msg-dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:10px 0 0;font-size:14px}
 .msg-dl dt{color:var(--muted);font-weight:800}.msg-dl dd{margin:0}
 .msg-body{white-space:pre-wrap;background:#F6F5FF;border-radius:14px;padding:12px 14px;margin:12px 0 0}
+
+.msg-files { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.msg-files .hint { margin-left: 4px; }
