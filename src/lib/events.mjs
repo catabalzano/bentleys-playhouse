@@ -1,5 +1,5 @@
 // Community Calendar: /events/ (mini month calendar + "Coming up" list, rendered by assets/js/events.js)
-import { ctx, esc, href, md, tag, breadcrumb, icon } from './core.mjs';
+import { ctx, esc, href, asset, md, tag, breadcrumb, icon } from './core.mjs';
 
 export const EVENT_CATS = {
   spay: { label: 'Spay/neuter', color: '#FF914D', ink: '#B4500F', tint: '#FFEADC' },
@@ -35,12 +35,12 @@ export function eventsPage(events) {
   const upcoming = events.filter((e) => (e.endDate || e.date) >= today).slice(0, 12);
   const cats = Object.entries(EVENT_CATS);
   return `
-<section class="page-head"><div class="wrap wrap--text">
+<section class="page-head has-cover"><div class="wrap page-head__split"><div class="page-head__text">
   ${breadcrumb([['Home', ''], ['Community Calendar', '']])}
   <p class="eyebrow">${tag('South Florida', 'violet')}</p>
   <h1 class="page-h">Community Calendar</h1>
   <p class="page-lede">Free and low-cost dog events across Miami-Dade and Broward: spay/neuter clinics, vaccine days, adoption events and dog walks.</p>
-</div></section>
+</div><figure class="arch-cover"><img src="${asset('img/covers/events.jpg')}" alt="A happy white golden retriever sitting in tall green grass with its tongue out" width="800" height="880" fetchpriority="high"></figure></div></section>
 <div class="wrap">
   <div class="ev" data-events>
     <aside class="ev-cal" aria-label="Calendar">
@@ -54,7 +54,7 @@ export function eventsPage(events) {
     <div class="ev-list">
       <div class="ev-list__head"><h2 class="ev-list__h" data-ev-heading>Coming up</h2><button type="button" class="ev-list__all" data-ev-all hidden>Show the whole month</button></div>
       <ul class="ev-items" role="list" data-ev-list>${upcoming.map(rowHtml).join('') || `<li class="ev-empty">No events listed yet. Check back soon.</li>`}</ul>
-      <div class="ev-submit"><p><b>Know about a free or low-cost dog event in South Florida?</b> Tell us and we'll add it.</p><a class="btn btn--ghost" href="${href('contact/')}?topic=event">Share an event</a></div>
+      <div class="ev-submit"><p><b>Know about a free or low-cost dog event in South Florida?</b> Email it to <a href="mailto:${esc(ctx.site.contact.email)}">${esc(ctx.site.contact.email)}</a> and we'll add it.</p><a class="btn btn--ghost" href="mailto:${esc(ctx.site.contact.email)}?subject=${encodeURIComponent('Event for the Community Calendar')}">Email us an event</a></div>
       <p class="ev-note">We list events run by shelters, clinics, rescues and community groups. Details can change, so please confirm with the organizer before you go.</p>
     </div>
   </div>
