@@ -39,7 +39,50 @@ async function tokenCanPush(env, token) {
   const repo = r.ok ? await r.json() : null;
   return !!(repo && repo.permissions && repo.permissions.push);
 }
+// ---------- GitHub App (never expires): the worker mints a fresh 1-hour token from the app's private key ----------
+const b64url = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const b64urlStr = (s) => b64url(new TextEncoder().encode(s));
+function derLen(n) { if (n < 128) return [n]; const b = []; while (n) { b.unshift(n & 255); n >>= 8; } return [0x80 | b.length, ...b]; }
+function pemToPkcs8(pem) {
+  const raw = Uint8Array.from(atob(String(pem).replace(/-----[^-]+-----/g, '').replace(/\s+/g, '')), (c) => c.charCodeAt(0));
+  if (!/BEGIN RSA PRIVATE KEY/.test(pem)) return raw; // already PKCS#8
+  // wrap PKCS#1 in a PKCS#8 envelope: SEQUENCE { INTEGER 0, SEQUENCE { rsaEncryption, NULL }, OCTET STRING { key } }
+  const alg = [0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00];
+  const oct = [0x04, ...derLen(raw.length)];
+  const body = [0x02, 0x01, 0x00, ...alg, ...oct];
+  return new Uint8Array([0x30, ...derLen(body.length + raw.length), ...body, ...raw]);
+}
+async function appJwt(appId, pem) {
+  const key = await crypto.subtle.importKey('pkcs8', pemToPkcs8(pem), { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+  const now = Math.floor(Date.now() / 1000);
+  const data = b64urlStr(JSON.stringify({ alg: 'RS256', typ: 'JWT' })) + '.' + b64urlStr(JSON.stringify({ iat: now - 60, exp: now + 540, iss: String(appId) }));
+  return data + '.' + b64url(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(data)));
+}
+async function appInstallationToken(env, app) {
+  const API = env.GITHUB_API || 'https://api.github.com';
+  const jwt = await appJwt(app.appId, app.privateKey);
+  const hdr = { Authorization: `Bearer ${jwt}`, Accept: 'application/vnd.github+json', 'User-Agent': 'bentleys-playhouse-admin', 'X-GitHub-Api-Version': '2022-11-28' };
+  let inst = app.installationId;
+  if (!inst) {
+    const owner = String(env.GITHUB_REPO).split('/')[0];
+    const r = await fetch(`${API}/repos/${env.GITHUB_REPO}/installation`, { headers: hdr });
+    if (!r.ok) throw fail(`The GitHub App isn't installed on ${env.GITHUB_REPO} yet (owner ${owner}).`, 400);
+    inst = (await r.json()).id;
+  }
+  const r = await fetch(`${API}/app/installations/${inst}/access_tokens`, { method: 'POST', headers: hdr });
+  if (!r.ok) throw fail('GitHub didn\'t accept the app key. Please upload the newest key file.', 400);
+  const j = await r.json();
+  return { token: j.token, expiresAt: j.expires_at, installationId: inst };
+}
 export async function githubToken(env) {
+  const app = await env.SUBMISSIONS.get('cfg:ghApp', 'json');
+  if (app && app.privateKey) {
+    const cached = await env.SUBMISSIONS.get('cache:ghAppToken', 'json');
+    if (cached && Date.parse(cached.expiresAt) - Date.now() > 5 * 60 * 1000) return cached.token;
+    const t = await appInstallationToken(env, app);
+    await env.SUBMISSIONS.put('cache:ghAppToken', JSON.stringify({ token: t.token, expiresAt: t.expiresAt }), { expirationTtl: 3600 });
+    return t.token;
+  }
   const t = await env.SUBMISSIONS.get('cfg:ghToken');
   if (!t) throw fail('The admin isn\'t connected to the website yet. Open Settings and reconnect GitHub.', 503);
   return t;
@@ -194,6 +237,21 @@ export async function handleAuth(req, env, url) {
     self.salt = rand(16); self.hash = await hashPassword(body.password, self.salt); self.changedAt = new Date().toISOString();
     await saveUsers(env, users);
     return json({ ok: true });
+  }
+
+  if (action === 'github-app' && req.method === 'POST') {
+    const appId = String(body.appId || '').replace(/\D/g, '');
+    const privateKey = String(body.privateKey || '').trim();
+    if (!appId || !/-----BEGIN [A-Z ]*PRIVATE KEY-----/.test(privateKey)) throw fail('Please choose the .pem key file you downloaded from GitHub.', 400);
+    const t = await appInstallationToken(env, { appId, privateKey });
+    if (!(await tokenCanPush(env, t.token))) throw fail('The GitHub App can\'t edit the site yet. It needs Contents: Read and write and to be installed on bentleys-playhouse.', 400);
+    await env.SUBMISSIONS.put('cfg:ghApp', JSON.stringify({ appId, installationId: t.installationId, privateKey, connectedAt: new Date().toISOString() }));
+    await env.SUBMISSIONS.put('cache:ghAppToken', JSON.stringify({ token: t.token, expiresAt: t.expiresAt }), { expirationTtl: 3600 });
+    return json({ ok: true });
+  }
+  if (action === 'github-status' && req.method === 'GET') {
+    const app = await env.SUBMISSIONS.get('cfg:ghApp', 'json');
+    return json({ mode: app ? 'app' : 'token', appId: app ? app.appId : null, connectedAt: app ? app.connectedAt : null });
   }
 
   if (action === 'github' && req.method === 'POST') {
