@@ -1,4 +1,5 @@
 ---
+fenix: true
 cover: checklist-found-dog.jpg
 coverAlt: "A beagle standing in a backyard"
 coverCredit: "Anastasiia Adamenko on Pexels"
@@ -25,7 +26,7 @@ groups:
       - Filed a found report with Miami-Dade Animal Services' online Lost and Found Pet Form
   - title: Searching for the family
     items:
-      - Posted on Fénix Animal Project (fenixanimalproject.org)
+      - Posted the dog as found on the Fénix Animal Project Lost & Found (fenixanimalproject.org)
       - Posted on Petco Love Lost
       - Posted in local lost-and-found groups and Nextdoor
       - Put up flyers within about a mile of where the dog was found

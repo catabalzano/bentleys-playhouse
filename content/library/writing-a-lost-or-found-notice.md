@@ -1,4 +1,5 @@
 ---
+fenix: true
 cover: writing-a-lost-or-found-notice.jpg
 coverAlt: "A close-up of a dog’s collar with an ID tag"
 coverCredit: "Blue Bird on Pexels"
@@ -34,7 +35,7 @@ A good notice can be read from a moving car and acted on in seconds.
 
 - Within about a mile of where the dog was lost or found: intersections, dog parks, vet offices, pet stores, grocery store boards.
 - At children's eye level near schools (people walking with kids notice dogs).
-- Online: [Fénix Animal Project](https://fenixanimalproject.org/), [Petco Love Lost](https://petcolove.org/lost/), local lost-and-found groups and Nextdoor.
+- Online: [Fénix Animal Project](https://fenixanimalproject.org/?v=check#lf), [Petco Love Lost](https://petcolove.org/lost/), local lost-and-found groups and Nextdoor.
 
 ## Keep it fresh
 

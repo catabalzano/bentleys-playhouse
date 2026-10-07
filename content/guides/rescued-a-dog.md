@@ -1,4 +1,5 @@
 ---
+fenix: true
 cover: guide-rescued-a-dog.jpg
 coverAlt: "A rescued dog on a leash being comforted by a caregiver"
 coverCredit: "Dominik Gryzbon on Pexels"

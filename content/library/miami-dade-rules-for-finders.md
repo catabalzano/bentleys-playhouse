@@ -1,4 +1,5 @@
 ---
+fenix: true
 cover: miami-dade-rules-for-finders.jpg
 coverAlt: "A stray dog standing on a city sidewalk"
 coverCredit: "Syed Qaarif Andrabi on Pexels"

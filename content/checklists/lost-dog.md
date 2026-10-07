@@ -1,4 +1,5 @@
 ---
+fenix: true
 cover: checklist-lost-dog.jpg
 coverAlt: "A small dog on a leash sitting on a sidewalk"
 coverCredit: "Footage Kingdom on Pexels"
@@ -27,7 +28,7 @@ groups:
       - Searched at dawn and after dark with a flashlight and favorite food
   - title: Spreading the word
     items:
-      - Reported my dog lost on Fénix Animal Project (fenixanimalproject.org)
+      - Posted my dog as lost on the Fénix Animal Project Lost & Found (fenixanimalproject.org)
       - Made a flyer with a clear photo and "LOST DOG" in large letters
       - Put up flyers within about a mile (corners, dog parks, vets, pet stores)
       - Called nearby vet clinics and Broward County Animal Care (954-359-1313)

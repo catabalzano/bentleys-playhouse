@@ -1,4 +1,5 @@
 ---
+fenix: true
 cover: guide-found-a-dog.jpg
 coverAlt: "A brown stray dog walking down a sunny city street"
 coverCredit: "Yakup Polat on Pexels"
@@ -22,7 +23,7 @@ steps:
   - title: Get a free microchip scan
     body: Any vet clinic or animal shelter can scan for a chip, usually at no cost. **In Miami-Dade you must have the dog scanned within 72 hours.** If there's a chip, look up the number with the [AAHA lookup](https://www.aaha.org/for-veterinary-professionals/microchip-registry-lookup-tool-aaha-find-your-pets-microchip-registry/) and call the registry.
   - title: Report the dog as found
-    body: File a found-pet report with [Miami-Dade Animal Services](https://www.miamidade.gov/global/service.page?Mduid_service=ser1599347990362966), even if you're keeping the dog for now. It's required in Miami-Dade, and it's where the family will look. Then post the dog on [Fénix Animal Project](https://fenixanimalproject.org/), where families post and search lost and found animals, and on [Petco Love Lost](https://petcolove.org/lost/).
+    body: File a found-pet report with [Miami-Dade Animal Services](https://www.miamidade.gov/global/service.page?Mduid_service=ser1599347990362966), even if you're keeping the dog for now. It's required in Miami-Dade, and it's where the family will look. Then post the dog on [Fénix Animal Project](https://fenixanimalproject.org/?v=check#lf), where families post and search lost and found animals, and on [Petco Love Lost](https://petcolove.org/lost/).
   - title: Write down where and when
     body: Note the exact spot (cross streets), the date and time, and which way the dog was heading. Take clear photos from a few angles. Most lost dogs are found close to home.
   - title: Keep the dog apart and calm
@@ -44,7 +45,7 @@ sources:
   - { title: "What to do if you've found a lost or stray dog or cat", org: "Best Friends Animal Society", url: "https://bestfriends.org/pet-care-resources/what-do-if-youve-found-lost-stray-dog-or-cat" }
   - { title: "How to approach a shy, nervous or scared dog", org: "Best Friends Animal Society", url: "https://bestfriends.org/pet-care-resources/how-approach-shy-nervous-or-scared-dog" }
   - { title: "Microchip registry lookup", org: "AAHA", url: "https://www.aaha.org/for-veterinary-professionals/microchip-registry-lookup-tool-aaha-find-your-pets-microchip-registry/" }
-  - { title: "Lost & Found", org: "Fénix Animal Project", url: "https://fenixanimalproject.org/" }
+  - { title: "Lost & Found", org: "Fénix Animal Project", url: "https://fenixanimalproject.org/?v=check#lf" }
   - { title: "Lost & Found", org: "Broward County Animal Care", url: "https://www.broward.org/animal/generaInfo/LostandFound" }
 ---
 You did a kind thing by stopping. The steps below are in the order that matters most. You don't have to do everything at once.
@@ -77,7 +78,7 @@ If the chip was never registered, the lookup may show the manufacturer, who can 
 
 ## Making found notices that work
 
-- Post on [Fénix Animal Project](https://fenixanimalproject.org/), [Petco Love Lost](https://petcolove.org/lost/), local "lost and found pets" groups and Nextdoor.
+- Post on [Fénix Animal Project](https://fenixanimalproject.org/?v=check#lf), [Petco Love Lost](https://petcolove.org/lost/), local "lost and found pets" groups and Nextdoor.
 - Put up flyers within about a mile of where you found the dog: corners, dog parks, vet offices, pet stores.
 - Share the area and date, not your home address.
 - **Leave out one identifying detail**, like a marking or the collar color, so you can check that callers are the real family.

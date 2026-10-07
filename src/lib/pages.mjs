@@ -72,6 +72,7 @@ export function home(data) {
     <h2 id="brings-h" class="section-h section-h--center">What brings you here?</h2>
     ${choiceCards('h3')}
     <p class="brings__urgent">${icon('alert', { size: 20 })} <span>Is a dog hurt or in danger right now? <a href="${href('get-help/emergency/')}">Go to emergency steps</a>.</span></p>
+    <p class="brings__fenix">${icon('found', { size: 20 })} <span>Lost or found a dog? Post it on the <a href="${FENIX_LF}" target="_blank" rel="noopener">Fénix Animal Project Lost &amp; Found</a>.</span></p>
   </div>
 </section>
 
@@ -174,6 +175,7 @@ export function helpHub(data) {
     <span><strong>Is a dog injured, sick or in immediate danger?</strong><br>Start with the emergency steps.</span>
     ${icon('arrow', { size: 24 })}
   </a>
+  ${fenixCallout()}
   ${choiceCards('h2')}
 </section>
 <section class="wrap section-pad">
@@ -207,6 +209,16 @@ const coverFig = (x) => x.cover ? `<figure class="arch-cover"><img src="${asset(
 const splitOpen = (x, narrow = 'wrap--text') => x.cover ? '<div class="wrap page-head__split"><div class="page-head__text">' : `<div class="wrap ${narrow}">`;
 const splitClose = (x) => x.cover ? `</div>${coverFig(x)}</div>` : '</div>';
 
+
+// Lost & found: point people to the Fénix Animal Project Lost & Found board (our sister project)
+const FENIX_LF = 'https://fenixanimalproject.org/?v=check#lf';
+export const fenixCallout = (cls = '') => `<aside class="fenix-lf ${cls}" aria-label="Post on Fénix Lost &amp; Found">
+  <span class="fenix-lf__icon" aria-hidden="true">${icon('found', { size: 26 })}</span>
+  <div class="fenix-lf__text"><p class="fenix-lf__h">Lost or found a dog? Post it on Fénix Lost &amp; Found</p>
+  <p>Whether you lost a dog or found one, post it on the free Lost &amp; Found board at <strong>Fénix Animal Project</strong>, our sister project. People search it every day, and every post gives the dog a better chance of getting home.</p></div>
+  <a class="btn btn--primary btn--small fenix-lf__btn" href="${FENIX_LF}" target="_blank" rel="noopener">Post on Fénix ${icon('external', { size: 16 })}<span class="visually-hidden"> (opens in a new tab)</span></a>
+</aside>`;
+
 export function guide(g, data) {
   const { intro, sections: secs } = sections(g.body);
   const checklist = g.checklist && data.checklists.find((c) => c.slug === g.checklist);
@@ -232,6 +244,7 @@ export function guide(g, data) {
     ${splitClose(g)}
   </header>
   <div class="wrap wrap--text">
+    ${g.fenix ? fenixCallout() : ''}
     ${intro ? `<div class="prose guide__intro">${md(intro)}</div>` : ''}
     <section class="steps" aria-labelledby="steps-h">
       <h2 id="steps-h" class="steps__h">${ctx.t('quickSteps')}</h2>
@@ -320,6 +333,7 @@ export function article(a, data) {
     ${splitClose(a)}
   </header>
   <div class="wrap wrap--text">
+    ${a.fenix ? fenixCallout() : ''}
     ${secs.length > 2 ? `<nav class="toc" aria-label="${ctx.t('onThisPage')}"><h2 class="toc__h">${ctx.t('onThisPage')}</h2><ul>${secs.map((s) => `<li><a href="#${s.id}">${esc(s.title)}</a></li>`).join('')}</ul></nav>` : ''}
     <div class="prose">${md(intro)}${secs.map((s) => `<h2 id="${s.id}">${esc(s.title)}</h2>${md(s.body)}`).join('')}</div>
     ${a.preview ? previewNote(a.preview) : ''}
@@ -341,6 +355,7 @@ export function checklist(c) {
   ${splitClose(c)}
 </section>
 <div class="wrap wrap--text">
+  ${c.fenix ? fenixCallout('no-print') : ''}
   <div class="checklist" data-checklist="${c.slug}">
     <div class="checklist__bar no-print">
       <p class="checklist__progress" role="status" aria-live="polite"><span data-done>0</span> of <span data-total>0</span> done</p>
@@ -372,6 +387,7 @@ export function flyer() {
     <p class="page-lede">Make a clear, printable flyer in a few minutes. Your photo is processed in your browser and never uploaded or stored by us.</p>
   </div>
 </section>
+<div class="wrap no-print">${fenixCallout()}</div>
 <div class="wrap flyer-tool" data-flyer>
   <form class="flyer-form no-print" id="flyer-form" novalidate>
     <fieldset class="fgroup">
@@ -430,7 +446,7 @@ export function flyer() {
       <p class="flyer__temper"></p>
       <dl class="flyer__facts"><div><dt>Area</dt><dd class="flyer__where"></dd></div><div><dt class="flyer__when-l">Last seen</dt><dd class="flyer__when"></dd></div></dl>
       <div class="flyer__contact"></div>
-      <p class="flyer__foot">Also check Miami-Dade Animal Services, fenixanimalproject.org and Petco Love Lost.</p>
+      <p class="flyer__foot">Also posted on fenixanimalproject.org (Lost &amp; Found). Check Miami-Dade Animal Services and Petco Love Lost too.</p>
     </div>
   </div>
 </div>`;

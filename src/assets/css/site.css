@@ -1217,3 +1217,13 @@ fieldset.field { align-content: start; }
   .arch-cover img { aspect-ratio: 4 / 3; border-radius: 999px 999px var(--r-md) var(--r-md) / 70% 70% var(--r-md) var(--r-md); box-shadow: 7px 7px 0 var(--gold); }
 }
 @media print { .arch-cover { display: none; } .page-head__split { display: block; } }
+
+/* Fénix Lost & Found callout */
+.fenix-lf { display: grid; grid-template-columns: auto 1fr auto; gap: .9rem 1.1rem; align-items: center; background: #FFF1E6; border: 2px solid #FFD3B5; border-radius: var(--r-md, 18px); padding: 1rem 1.2rem; margin: 0 0 1.75rem; }
+.fenix-lf__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--orange, #FF914D); color: #fff; }
+.fenix-lf__h { margin: 0 0 .2rem; font-family: Fredoka, sans-serif; font-weight: 700; font-size: 1.12rem; color: var(--ink); }
+.fenix-lf__text p:last-child { margin: 0; font-size: .95rem; line-height: 1.5; }
+.fenix-lf__btn { white-space: nowrap; }
+@media (max-width: 640px) { .fenix-lf { grid-template-columns: auto 1fr; } .fenix-lf__btn { grid-column: 1 / -1; justify-self: start; } }
+.brings__fenix { display: flex; justify-content: center; align-items: center; gap: .5rem; margin: .6rem auto 0; text-align: center; color: var(--ink); }
+.brings__fenix a { font-weight: 700; }
