@@ -285,6 +285,7 @@
     app.innerHTML = '<div class="shell"><aside class="side" aria-label="Admin sections">' +
       '<a class="side__brand" href="#home"><img src="../assets/img/logo-main-dark.png" alt="Bentley\'s Playhouse"><small>Admin</small></a>' +
       '<a class="side__me" href="#profile" data-nav="profile"><span class="avatar" data-avatar></span><span><b data-myname>My profile</b><small>Profile &amp; security</small></span></a>' +
+      '<a class="side__site" href="../" target="_blank" rel="noopener">🌐 View the website <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>' +
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       '<a class="nav" href="#messages" data-nav="messages">📬 Messages <span class="count" data-msgcount></span></a>' +
@@ -335,7 +336,7 @@
   // ---------- home ----------
   function home() {
     var pending = (S.subs || []).filter(function (s) { return s.status === 'pending'; }).length;
-    main().innerHTML = '<div class="head"><div><h1>Hi ' + esc((S.me && (S.me.name || '').split(' ')[0]) || 'there') + '! 🐾</h1><p>Everything you save here goes live on the website in about 2 minutes.</p></div></div>' +
+    main().innerHTML = '<div class="head"><div><h1>Hi ' + esc((S.me && (S.me.name || '').split(' ')[0]) || 'there') + '! 🐾</h1><p>Everything you save here goes live on the website in about 2 minutes.</p></div><a class="btn btn--ghost" href="../" target="_blank" rel="noopener">View the website ↗</a></div>' +
       '<div class="home-cards">' +
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#messages"><span class="big">' + (S.msgs ? unread() : '…') + '</span><b>Messages</b><span>From the Contact and Get Involved forms</span></a>' +

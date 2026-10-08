@@ -152,7 +152,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?qh=1-5 previews quick-help card styles */try{var k=location.search.match(/[?&]qh=([1-5])/);if(k)document.documentElement.dataset.qh=k[1]}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?qd=1-5 previews desktop quick-help layouts */try{var k=location.search.match(/[?&]qd=([1-5])/);if(k)document.documentElement.dataset.qd=k[1]}catch(e){}</script>${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>
