@@ -163,7 +163,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?bd=1-5 previews board styles */try{var k=location.search.match(/[?&]bd=([1-5])/);if(k)document.documentElement.dataset.bd=k[1]}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>
