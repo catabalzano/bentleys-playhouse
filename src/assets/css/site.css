@@ -1493,3 +1493,34 @@ fieldset.field { align-content: start; }
 .follow__list a { display: inline-flex; align-items: center; gap: .45rem; padding: .5rem .95rem; border-radius: 999px; background: #fff; color: var(--ink); font-weight: 700; font-size: .95rem; text-decoration: none; box-shadow: 0 2px 0 rgba(31, 29, 43, .08); transition: transform .15s, box-shadow .15s; }
 .follow__list a:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 var(--gold); }
 .follow__list a svg { color: var(--link); }
+
+/* TEMPORARY: follow-button options, previewed with ?fl=1..5 */
+/* 1 round icon buttons only (labels hidden), email as its own pill */
+[data-fl="1"] .follow__list { gap: .6rem; align-items: center; }
+[data-fl="1"] .follow__list li:not(:last-child) a { width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%; }
+[data-fl="1"] .follow__list li:not(:last-child) a span:not(.visually-hidden) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+[data-fl="1"] .follow__list li:not(:last-child) a svg { width: 22px; height: 22px; }
+/* 2 brand-colored filled pills */
+[data-fl="2"] .follow__list a { color: #fff; box-shadow: none; }
+[data-fl="2"] .follow__list a svg { color: #fff; }
+[data-fl="2"] .follow__list li:nth-child(1) a { background: linear-gradient(45deg, #F58529, #DD2A7B 55%, #8134AF); }
+[data-fl="2"] .follow__list li:nth-child(2) a { background: #1877F2; }
+[data-fl="2"] .follow__list li:nth-child(3) a { background: #111; }
+[data-fl="2"] .follow__list li:nth-child(4) a { background: var(--orange); color: var(--ink); } [data-fl="2"] .follow__list li:nth-child(4) a svg { color: var(--ink); }
+/* 3 outlined pills, ink border + gold hover shadow (matches site buttons) */
+[data-fl="3"] .follow__list a { background: transparent; border: 2px solid var(--ink); box-shadow: none; }
+[data-fl="3"] .follow__list a svg { color: var(--ink); }
+[data-fl="3"] .follow__list a:hover { background: #fff; box-shadow: 4px 4px 0 var(--gold); }
+/* 4 one white card: socials as rows with handles */
+[data-fl="4"] .follow__list { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: 520px; background: #fff; border-radius: var(--r-md); overflow: hidden; box-shadow: 0 6px 18px rgba(31, 29, 43, .08); }
+[data-fl="4"] .follow__list a { border-radius: 0; box-shadow: none; width: 100%; padding: .85rem 1rem; }
+[data-fl="4"] .follow__list li:nth-child(odd) a { border-right: 1.5px solid var(--line); }
+[data-fl="4"] .follow__list li:nth-child(-n+2) a { border-bottom: 1.5px solid var(--line); }
+[data-fl="4"] .follow__list a:hover { transform: none; box-shadow: none; background: #FBFCFF; }
+[data-fl="4"] .follow__list li:nth-child(4) a span:not(.visually-hidden) { font-size: .82rem; }
+/* 5 taped sticky note with simple text links */
+[data-fl="5"] .follow { display: inline-block; position: relative; background: #fff; padding: 1.1rem 1.3rem 1rem; border-radius: 4px; box-shadow: 0 10px 24px rgba(31, 29, 43, .12); transform: rotate(-1.2deg); margin-top: 1.8rem; }
+[data-fl="5"] .follow::before { content: ""; position: absolute; top: -12px; left: 50%; width: 96px; height: 24px; margin-left: -48px; background: rgba(255, 189, 89, .8); transform: rotate(-3deg); }
+[data-fl="5"] .follow__list { gap: .2rem 1.1rem; }
+[data-fl="5"] .follow__list a { padding: .25rem 0; background: none; box-shadow: none; border-radius: 0; color: var(--link); }
+[data-fl="5"] .follow__list a:hover { transform: none; box-shadow: none; text-decoration: underline; }
