@@ -46,7 +46,8 @@ const P = {
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
   globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17"/>',
-  leaf: '<path d="M5 19c0-8 5-13.5 14.5-14-0.5 9.5-6 14.5-14 14z"/><path d="M5 19 13 11"/>'
+  leaf: '<path d="M5 19c0-8 5-13.5 14.5-14-0.5 9.5-6 14.5-14 14z"/><path d="M5 19 13 11"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="8.5" cy="14.5" r=".9"/><circle cx="12" cy="14.5" r=".9"/><circle cx="15.5" cy="14.5" r=".9"/>',
 };
 
 export function icon(name, { size = 24, label = '', cls = '' } = {}) {
