@@ -1421,3 +1421,36 @@ fieldset.field { align-content: start; }
   .menu-btn__open > span, .menu-btn__close > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .menu-btn svg { width: 32px; height: 32px; }
 }
+
+/* TEMPORARY: mobile photo-header options, previewed with ?ph=1..5 (remove the unchosen ones) */
+@media (max-width: 900px) {
+  /* 1 full-bleed banner tucked under the header; logo badge overlaps it */
+  [data-ph="1"] main > :first-child > .page-head.has-cover:first-child, [data-ph="1"] .page-head.has-cover { border-top-width: 0; padding-top: 0; }
+  [data-ph="1"] .arch-cover { justify-self: stretch; max-width: none; width: auto; margin-inline: calc(var(--gutter) * -1); }
+  [data-ph="1"] .arch-cover img { aspect-ratio: 16 / 11; border-radius: 0 0 var(--r-lg) var(--r-lg); box-shadow: none; }
+  /* 2 true arch, portrait, like desktop */
+  [data-ph="2"] .page-head.has-cover { padding-top: 1.5rem; }
+  [data-ph="2"] .arch-cover { max-width: 260px; }
+  [data-ph="2"] .arch-cover img { aspect-ratio: 4 / 5; border-radius: 999px 999px var(--r-md) var(--r-md); box-shadow: 8px 8px 0 var(--gold); }
+  /* 3 small round photo beside the breadcrumb + tag */
+  [data-ph="3"] .page-head.has-cover { padding-top: 1rem; }
+  [data-ph="3"] .page-head__split { position: relative; }
+  [data-ph="3"] .arch-cover { position: absolute; right: var(--gutter); top: 0; width: 104px; max-width: none; z-index: 1; }
+  [data-ph="3"] .arch-cover img { aspect-ratio: 1; border-radius: 50%; box-shadow: 4px 4px 0 var(--gold); }
+  [data-ph="3"] .arch-cover figcaption { display: none; }
+  [data-ph="3"] .page-head__text .breadcrumb, [data-ph="3"] .page-head__text .eyebrow { padding-right: 120px; }
+  [data-ph="3"] .page-head__text .page-h { margin-top: 1.4rem; }
+  /* 4 wide rounded card */
+  [data-ph="4"] .page-head.has-cover { padding-top: 1.25rem; }
+  [data-ph="4"] .arch-cover { justify-self: stretch; max-width: none; }
+  [data-ph="4"] .arch-cover img { aspect-ratio: 3 / 2; border-radius: var(--r-lg); box-shadow: 6px 6px 0 var(--gold); }
+  /* 5 polaroid, slightly tilted (matches the Our Story wall) */
+  [data-ph="5"] .page-head.has-cover { padding-top: 1.5rem; }
+  [data-ph="5"] .arch-cover { max-width: 290px; background: #fff; padding: 10px 10px 34px; border-radius: 6px; box-shadow: 0 10px 28px rgba(31, 29, 43, .16); transform: rotate(-2.5deg); }
+  [data-ph="5"] .arch-cover img { aspect-ratio: 1; border-radius: 3px; box-shadow: none; }
+}
+
+/* photo credit sits small and quiet inside the photo's bottom-right corner */
+.arch-cover figcaption { position: absolute; right: 12px; bottom: 10px; margin: 0; padding: .18rem .5rem; border-radius: 999px; background: rgba(20, 18, 30, .42); color: rgba(255, 255, 255, .92); font-size: .6rem; line-height: 1.3; letter-spacing: .01em; text-align: right; max-width: calc(100% - 24px); pointer-events: auto; }
+.arch-cover figcaption a { color: inherit; }
+[data-ph="5"] .arch-cover figcaption { right: 20px; bottom: 44px; }
