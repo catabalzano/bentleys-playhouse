@@ -24,9 +24,11 @@ goodWithKids: "yes"
 location:
   type: rescue
   name: Joy and Love Rescue
+  url: "@joyandloverescue"
   city: Miami
 contact:
-  instagram: bentleysplayhouse
+  instagram: joyandloverescue
+  website: https://www.adoptapet.com/shelter/239158-joy-and-love-rescue-homestead-florida
 submissionId: 20261007-79e27e3c
 size: Large
 ---
