@@ -152,7 +152,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?qm=1-5 previews phone sticky-note styles */try{var k=location.search.match(/[?&]qm=([1-5])/);if(k)document.documentElement.dataset.qm=k[1]}catch(e){}</script>${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>
