@@ -1251,7 +1251,7 @@ fieldset.field { align-content: start; }
 .brings__fenix a { font-weight: 700; }
 
 /* Homepage: Fénix Animal Project dark panel */
-.fenix-panel { padding-block: clamp(2rem, 5vw, 3.5rem) 0; }
+.fenix-panel { padding-block: clamp(2rem, 5vw, 3.5rem) 0; background: var(--paper); }
 .fenix-panel__in { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 2.5rem); align-items: center; background: #1F1D2B; color: #fff; border-radius: 32px; padding: clamp(1.6rem, 4vw, 2.6rem) clamp(1.4rem, 4vw, 2.8rem); }
 .fenix-panel__by { margin: 0 0 .6rem; color: var(--gold); font-weight: 800; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
 .fenix-panel__title { display: flex; align-items: center; gap: .8rem; }
