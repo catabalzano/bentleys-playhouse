@@ -611,9 +611,13 @@ export function involved(data) {
 <section class="page-head page-head--involved">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Get Involved', '']])}
-    <h1 class="page-h">Get involved</h1>
+    <h1 class="page-h">Get Involved</h1>
     <p class="page-lede">Rescue runs on ordinary people doing one helpful thing. Here's what's open now, and where you can raise your hand for what's next.</p>
     <p class="legend"><span class="pill pill--open">Open now</span> you can do this today · <span class="pill pill--interest">Interest list</span> tell us, and we'll reach out when there's a fit · <span class="pill pill--soon">Coming soon</span> not set up yet</p>
+    <div class="follow follow--after-legend">
+      <p class="follow__h">Follow along and say hi:</p>
+      ${socialButtons()}
+    </div>
   </div>
 </section>
 <div class="wrap">
@@ -704,6 +708,10 @@ export function contact(data) {
   ${breadcrumb([['Home', ''], ['Contact & FAQ', '']])}
   <h1 class="page-h">Contact &amp; FAQ</h1>
   <p class="page-lede">How to reach us, what we can help with and what to do when something can't wait.</p>
+  <div class="follow">
+    <p class="follow__h">Follow along and say hi:</p>
+    ${socialButtons()}
+  </div>
 </div></section>
 <div class="wrap">
   <div class="contact-grid">

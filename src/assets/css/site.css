@@ -1489,6 +1489,8 @@ fieldset.field { align-content: start; }
 
 /* Our Story: follow us (social handles + email) */
 .follow { margin-top: 1.4rem; }
+.follow--after-legend { margin-top: 1.6rem; }
+.page-lede + .legend { margin-top: 1rem; }
 .follow__h { margin: 0 0 .6rem; font-weight: 700; color: var(--ink); }
 /* Social icon buttons (site-wide): round white circles with blue icons, label on hover */
 .soc { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; }
