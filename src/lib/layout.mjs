@@ -153,7 +153,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?sh=1-5 Our Story header options, ?sc=1 centered text */try{var q=location.search,a=q.match(/[?&]sh=([1-5])/),c=q.match(/[?&]sc=1/);if(a)document.documentElement.dataset.sh=a[1];if(c)document.documentElement.dataset.sc="1"}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>

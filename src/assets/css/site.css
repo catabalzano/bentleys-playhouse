@@ -1463,33 +1463,14 @@ fieldset.field { align-content: start; }
   .qh + .qh { border-top: 1.5px dashed var(--line); }
 }
 
-/* TEMPORARY: Our Story header options (?sh=1..5, desktop) and centered article (?sc=1) */
+/* Our Story (desktop): compact header — smaller photo, text vertically centered beside it */
 @media (min-width: 761px) {
-  [data-sh] .story-hero { padding-block: 1.5rem 2.5rem; }
-  /* 1 compact: smaller photo, text vertically centered */
-  [data-sh="1"] .story-hero__in { grid-template-columns: minmax(0, 1fr) 300px; align-items: center; gap: 3rem; }
-  /* 2 text on top-left, photo aligned to top, smaller */
-  [data-sh="2"] .story-hero__in { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
-  [data-sh="2"] .story-hero__in > div:first-child { padding-top: 2.5rem; }
-  /* 3 wide landscape arch on the right, short */
-  [data-sh="3"] .story-hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
-  [data-sh="3"] .story-hero__art .arch { aspect-ratio: 5 / 4; }
-  [data-sh="3"] .story-hero__art .arch img { object-position: 50% 30%; }
-  /* 4 centered title + intro, round photo badge above */
-  [data-sh="4"] .story-hero__in { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 1rem; }
-  [data-sh="4"] .story-hero__art { order: -1; width: 200px; }
-  [data-sh="4"] .story-hero__art .arch { aspect-ratio: 1; border-radius: 50%; }
-  [data-sh="4"] .story-hero__in > div:first-child { max-width: 760px; }
-  [data-sh="4"] .breadcrumb ol { justify-content: center; }
-  /* 5 tilted polaroid beside centered-vertically text */
-  [data-sh="5"] .story-hero__in { grid-template-columns: minmax(0, 1fr) 320px; align-items: center; gap: 3.5rem; }
-  [data-sh="5"] .story-hero__art { background: #fff; padding: 12px 12px 44px; border-radius: 4px; box-shadow: 0 14px 30px rgba(31, 29, 43, .18); transform: rotate(2.5deg); position: relative; }
-  [data-sh="5"] .story-hero__art::before { content: ""; position: absolute; top: -12px; left: 50%; width: 100px; height: 24px; margin-left: -50px; background: rgba(255, 189, 89, .8); transform: rotate(-3deg); z-index: 2; }
-  [data-sh="5"] .story-hero__art .arch { aspect-ratio: 1; border-radius: 2px; box-shadow: none; }
+  .story-hero { padding-block: 1.5rem 2.5rem; }
+  .story-hero__in { grid-template-columns: minmax(0, 1fr) 300px; align-items: center; gap: 3rem; }
 }
-[data-sc] .wrap--text.story { max-width: 800px; margin-inline: auto; text-align: center; }
-[data-sc] .story > * { max-width: none; margin-inline: auto; }
-[data-sc] .story ul, [data-sc] .story ol { text-align: left; display: inline-block; }
+/* Our Story article: one centered column, text stays left-aligned */
+.story > * { margin-inline: auto; }
+.story > .story-sec--stories { max-width: none; }
 /* keep the desktop menu (with Home) on one line on smaller laptops */
 @media (min-width: 901px) and (max-width: 1240px) {
   .nav { gap: .5rem; }
