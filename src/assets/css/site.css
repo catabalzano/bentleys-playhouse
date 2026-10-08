@@ -1507,46 +1507,39 @@ fieldset.field { align-content: start; }
 .cal-cta__t { font-size: .97rem; line-height: 1.45; }
 .cal-cta__t strong { display: block; font-family: var(--font-display); font-size: 1.1rem; }
 .cal-cta__go { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--link); color: #fff; }
-/* TEMPORARY: ticket-style calendar note options, previewed with ?cn=1..5 */
-[data-cn] .cal-cta { --stub: 92px; --notch: #F2F5FF; grid-template-columns: var(--stub) 1fr auto; gap: 0; padding: 0; max-width: 31rem; border-radius: 14px; background: #fff; transform: rotate(-1deg); box-shadow: 0 10px 22px -8px rgb(31 29 43 / .28), 0 1px 2px rgb(31 29 43 / .08); }
-[data-cn] .cal-cta::before, [data-cn] .cal-cta::after { content: ""; position: absolute; left: var(--stub); width: 22px; height: 22px; border-radius: 50%; background: var(--notch); opacity: 1; transform: translateX(-50%); z-index: 2; }
+/* TEMPORARY: pinned/taped concert-ticket options, previewed with ?cn=1..5 */
+[data-cn] .cal-cta { --stub: calc(100% - 84px); --notch: #F2F5FF; grid-template-columns: auto 1fr 84px; gap: 0; padding: 0; max-width: 31rem; border-radius: 12px; background: #fff; transform: rotate(-1.5deg); box-shadow: 0 1px 1px rgb(31 29 43 / .12), 0 12px 20px -10px rgb(31 29 43 / .35); }
+[data-cn] .cal-cta::before, [data-cn] .cal-cta::after { content: ""; position: absolute; left: var(--stub); width: 22px; height: 22px; border-radius: 50%; background: var(--notch); opacity: 1; transform: translateX(-50%); z-index: 2; clip-path: none; }
 [data-cn] .cal-cta::before { top: -11px; box-shadow: inset 0 -3px 3px -1px rgb(31 29 43 / .1); }
 [data-cn] .cal-cta::after { bottom: -11px; box-shadow: inset 0 3px 3px -1px rgb(31 29 43 / .1); }
-[data-cn] .cal-cta__ic { align-self: stretch; width: auto; height: auto; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem; border-right: 2px dashed rgb(31 29 43 / .18); }
-[data-cn] .cal-cta__ic svg { width: 30px; height: 30px; }
-[data-cn] .cal-cta__ic::after { content: "Events"; font: 800 .62rem/1 var(--font-body); letter-spacing: .16em; text-transform: uppercase; }
-[data-cn] .cal-cta__t { padding: 1.15rem .9rem 1.15rem 1.3rem; }
+[data-cn] .cal-cta__ic { border: 0; border-radius: 0; background: none; color: var(--link); padding-left: 1.2rem; width: auto; height: auto; }
+[data-cn] .cal-cta__ic svg { width: 34px; height: 34px; }
+[data-cn] .cal-cta__t { padding: 1.2rem .9rem 1.15rem .9rem; }
 [data-cn] .cal-cta__t::before { content: "Admit one"; display: block; margin-bottom: .2rem; font: 800 .66rem/1 var(--font-body); letter-spacing: .16em; text-transform: uppercase; opacity: .6; }
 [data-cn] .cal-cta__t strong { font-size: 1.2rem; margin-bottom: .15rem; }
-[data-cn] .cal-cta__go { margin-right: 1.1rem; }
-[data-cn] .cal-cta:hover, [data-cn] .cal-cta:focus-visible { transform: rotate(0) translateY(-3px); box-shadow: 0 16px 26px -10px rgb(31 29 43 / .32), 4px 4px 0 var(--gold); }
-@media (max-width: 480px) { [data-cn] .cal-cta { --stub: 70px; } [data-cn] .cal-cta__t { padding-left: 1rem; } }
-/* 1 white ticket, blue stub */
-[data-cn="1"] .cal-cta__ic { background: #2F45C8; color: #fff; border-right-color: rgb(255 255 255 / .0); }
-[data-cn="1"] .cal-cta__t { border-left: 0; }
-/* 2 blue ticket, gold stub */
-[data-cn="2"] .cal-cta { background: #2F45C8; color: #fff; }
-[data-cn="2"] .cal-cta__ic { background: var(--gold); color: var(--ink); border-right-color: rgb(31 29 43 / .25); }
-[data-cn="2"] .cal-cta__t strong { color: #fff; }
-[data-cn="2"] .cal-cta__t::before { color: var(--gold); opacity: 1; }
-[data-cn="2"] .cal-cta__go { background: #fff; color: #2F45C8; }
-/* 3 carnival ticket: warm gold with orange stub and a dotted inner border */
-[data-cn="3"] .cal-cta { background: #FFD873; color: var(--ink); outline: 2px dashed rgb(31 29 43 / .25); outline-offset: -7px; }
-[data-cn="3"] .cal-cta__ic { background: var(--orange); color: var(--ink); border-right-color: rgb(31 29 43 / .3); }
-[data-cn="3"] .cal-cta__go { background: var(--ink); }
-/* 4 concert ticket: stub on the right with a barcode */
-[data-cn="4"] .cal-cta { --stub: calc(100% - 84px); grid-template-columns: auto 1fr 84px; }
-[data-cn="4"] .cal-cta__ic { border: 0; border-radius: 0; background: none; color: var(--link); padding-left: 1.2rem; }
-[data-cn="4"] .cal-cta__ic::after { display: none; }
-[data-cn="4"] .cal-cta__ic svg { width: 34px; height: 34px; }
-[data-cn="4"] .cal-cta__t { padding-left: .9rem; }
-[data-cn="4"] .cal-cta__go { align-self: stretch; width: auto; height: auto; margin: 0; border-radius: 0 14px 14px 0; border-left: 2px dashed rgb(31 29 43 / .18); background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 8px, var(--ink) 8px 11px, transparent 11px 13px) 50% calc(100% - 14px) / 46px 22px no-repeat, #EEF1FF; color: var(--link); align-content: center; padding-bottom: 22px; }
-[data-cn="4"] .cal-cta__go svg { width: 26px; height: 26px; }
-/* 5 lavender ticket, violet stub, gold tape */
-[data-cn="5"] .cal-cta { background: #F1EBFF; transform: rotate(1.5deg); }
-[data-cn="5"] .cal-cta__ic { background: #8C52FF; color: #fff; border-right-color: rgb(255 255 255 / 0); }
-[data-cn="5"] .cal-cta__go { background: #8C52FF; }
-[data-cn="5"] .cal-cta__t::after { content: ""; position: absolute; top: -9px; right: 28px; width: 76px; height: 20px; background: var(--gold); opacity: .8; transform: rotate(6deg); }
+[data-cn] .cal-cta__go { align-self: stretch; width: auto; height: auto; margin: 0; border-radius: 0 12px 12px 0; border-left: 2px dashed rgb(31 29 43 / .2); background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 8px, var(--ink) 8px 11px, transparent 11px 13px) 50% calc(100% - 14px) / 46px 22px no-repeat, #EEF1FF; color: var(--link); align-content: center; padding-bottom: 22px; }
+[data-cn] .cal-cta__go svg { width: 26px; height: 26px; }
+[data-cn] .cal-cta:hover, [data-cn] .cal-cta:focus-visible { transform: rotate(0) translateY(-3px); box-shadow: 0 1px 1px rgb(31 29 43 / .12), 0 18px 26px -12px rgb(31 29 43 / .4); }
+[data-cn] .cal-cta__t::after, [data-cn] .cal-cta__ic::before, [data-cn] .cal-cta__go::before { position: absolute; z-index: 3; pointer-events: none; }
+@media (max-width: 480px) { [data-cn] .cal-cta { --stub: calc(100% - 66px); grid-template-columns: auto 1fr 66px; } [data-cn] .cal-cta__ic { padding-left: .9rem; } [data-cn] .cal-cta__ic svg { width: 28px; height: 28px; } }
+/* 1 pink washi tape across the top-left corner */
+[data-cn="1"] .cal-cta__t::after { content: ""; top: 4px; left: -22px; width: 104px; height: 24px; transform: rotate(-32deg); background: linear-gradient(180deg, rgb(255 255 255 / .35), transparent 45%, rgb(0 0 0 / .05)), #FFB8D2; opacity: .82; clip-path: polygon(0 8%, 3% 0, 6% 10%, 9% 0, 97% 0, 100% 12%, 96% 25%, 100% 40%, 97% 55%, 100% 72%, 96% 86%, 100% 100%, 4% 100%, 0 88%, 4% 74%, 0 58%, 3% 42%, 0 26%); box-shadow: 0 1px 2px rgb(0 0 0 / .15); }
+/* 2 red push pin through the stub, ticket hanging at an angle */
+[data-cn="2"] .cal-cta { transform: rotate(2.5deg); }
+[data-cn="2"] .cal-cta__go::before { content: ""; top: 10px; right: 31px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgb(255 255 255 / .9) 0 2px, transparent 4px), radial-gradient(circle, #E8344E 0 55%, #9E1F33 100%); box-shadow: 3px 5px 3px -1px rgb(0 0 0 / .38); }
+/* 3 two washi strips, one on each end */
+[data-cn="3"] .cal-cta { transform: rotate(1deg); }
+[data-cn="3"] .cal-cta__t::after { content: ""; top: 50%; left: -26px; width: 64px; height: 22px; transform: translateY(-50%) rotate(-82deg); background: linear-gradient(180deg, rgb(255 255 255 / .35), transparent 45%, rgb(0 0 0 / .05)), #B9E3FF; opacity: .82; clip-path: polygon(0 8%, 3% 0, 6% 10%, 9% 0, 97% 0, 100% 12%, 96% 25%, 100% 40%, 97% 55%, 100% 72%, 96% 86%, 100% 100%, 4% 100%, 0 88%, 4% 74%, 0 58%, 3% 42%, 0 26%); box-shadow: 0 1px 2px rgb(0 0 0 / .15); }
+[data-cn="3"] .cal-cta__go::before { content: ""; top: 50%; right: -26px; width: 64px; height: 22px; transform: translateY(-50%) rotate(84deg); background: linear-gradient(180deg, rgb(255 255 255 / .35), transparent 45%, rgb(0 0 0 / .05)), #B9E3FF; opacity: .82; clip-path: polygon(0 8%, 3% 0, 6% 10%, 9% 0, 97% 0, 100% 12%, 96% 25%, 100% 40%, 97% 55%, 100% 72%, 96% 86%, 100% 100%, 4% 100%, 0 88%, 4% 74%, 0 58%, 3% 42%, 0 26%); box-shadow: 0 1px 2px rgb(0 0 0 / .15); }
+/* 4 yellow sticky-note paper, two blue pins */
+[data-cn="4"] .cal-cta { background: linear-gradient(180deg, #FFF9C9, #FFF1A0); transform: rotate(-1deg); }
+[data-cn="4"] .cal-cta__go { background-color: rgb(255 255 255 / .45); }
+[data-cn="4"] .cal-cta__ic::before { content: ""; top: 9px; left: 12px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgb(255 255 255 / .9) 0 2px, transparent 4px), radial-gradient(circle, #2F6BFF 0 55%, #1A3FA8 100%); box-shadow: 3px 5px 3px -1px rgb(0 0 0 / .38); }
+[data-cn="4"] .cal-cta__go::before { content: ""; top: 9px; right: 12px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgb(255 255 255 / .9) 0 2px, transparent 4px), radial-gradient(circle, #2F6BFF 0 55%, #1A3FA8 100%); box-shadow: 3px 5px 3px -1px rgb(0 0 0 / .38); }
+/* 5 gold tape over the perforation, like it was stuck down mid-tear */
+[data-cn="5"] .cal-cta { transform: rotate(-2deg); }
+[data-cn="5"] .cal-cta__go::before { content: ""; top: -12px; right: 48px; width: 76px; height: 26px; transform: rotate(8deg); background: linear-gradient(180deg, rgb(255 255 255 / .35), transparent 45%, rgb(0 0 0 / .05)), #FFD36B; opacity: .82; clip-path: polygon(0 8%, 3% 0, 6% 10%, 9% 0, 97% 0, 100% 12%, 96% 25%, 100% 40%, 97% 55%, 100% 72%, 96% 86%, 100% 100%, 4% 100%, 0 88%, 4% 74%, 0 58%, 3% 42%, 0 26%); box-shadow: 0 1px 2px rgb(0 0 0 / .15); }
+[data-cn="5"] .cal-cta__ic::before { content: ""; bottom: -10px; left: 18px; width: 70px; height: 24px; transform: rotate(-6deg); background: linear-gradient(180deg, rgb(255 255 255 / .35), transparent 45%, rgb(0 0 0 / .05)), #C8F2B5; opacity: .82; clip-path: polygon(0 8%, 3% 0, 6% 10%, 9% 0, 97% 0, 100% 12%, 96% 25%, 100% 40%, 97% 55%, 100% 72%, 96% 86%, 100% 100%, 4% 100%, 0 88%, 4% 74%, 0 58%, 3% 42%, 0 26%); box-shadow: 0 1px 2px rgb(0 0 0 / .15); }
 .footer__col .soc { display: flex; gap: .6rem; }
 .footer__col .soc a { width: 44px; height: 44px; }
 .footer__col .soc a svg { width: 20px; height: 20px; }
