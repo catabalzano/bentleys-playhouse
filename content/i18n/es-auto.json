@@ -78,5 +78,6 @@
  "<t2/><t1>Share Snow</t1>": "<t2/><t1>Comparte a Snow</t1>",
  "Medium": "Mediano",
  "Energy": "Energía",
- "Low": "Bajo"
+ "Low": "Bajo",
+ "<t1><t3/></t1>Microchipped<t2>: No</t2>": "<t1><t3/></t1>Microchipado<t2>: No</t2>"
 }
