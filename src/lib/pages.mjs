@@ -3,6 +3,7 @@ import {
   breadcrumb, sourcesList, icon, paw, pawTrail, fmtDate, strip, slugify, isEmptyBody, logo,
 } from './core.mjs';
 import { mdasBlock } from './pages2.mjs';
+import { socialButtons } from './layout.mjs';
 import { doodle } from './doodles.mjs';
 import { pawsomeHome, img } from './pages3.mjs';
 import { heroDoorway, photoSlot } from './art.mjs';
@@ -160,7 +161,7 @@ ${fenixPanel('ember')}
       <p class="eyebrow">${tag('Community')}</p>
       <h2 id="ig-h" class="section-h">Follow the playhouse</h2>
       <p>Rescue updates, vet bills and receipts, happy endings and the everyday business of dogs being dogs. Come say hi.</p>
-      ${button('@bentleysplayhouse on Instagram', s.social.instagram.url, { variant: 'primary', externalLink: true, ic: 'instagram' })}
+      ${socialButtons({ youtube: true })}
     </div>
     <div class="ig-board"><div class="community__grid"${ctx.instagram.length ? '' : ' aria-hidden="true"'}${s.social.instagram.feedUrl ? ` data-ig-feed="${esc(s.social.instagram.feedUrl)}"` : ''}>
       ${ctx.instagram.length
@@ -586,12 +587,7 @@ export function story(data) {
       <div class="page-lede prose">${md(intro)}</div>
       <div class="follow">
         <p class="follow__h">Follow along and say hi:</p>
-        <ul class="follow__list" role="list">
-          <li><a href="https://www.instagram.com/bentleysplayhouse/" target="_blank" rel="noopener">${icon('instagram', { size: 20 })}<span>Instagram</span><span class="visually-hidden"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.facebook.com/itsbentleysplayhouse/" target="_blank" rel="noopener">${icon('facebook', { size: 20 })}<span>Facebook</span><span class="visually-hidden"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.threads.com/@bentleysplayhouse" target="_blank" rel="noopener">${icon('threads', { size: 20 })}<span>Threads</span><span class="visually-hidden"> (opens in a new tab)</span></a></li>
-          <li><a href="mailto:hello@bentleysplayhouse.org">${icon('mail', { size: 20 })}<span>hello@bentleysplayhouse.org</span></a></li>
-        </ul>
+        ${socialButtons()}
       </div>
     </div>
     <div class="story-hero__art">

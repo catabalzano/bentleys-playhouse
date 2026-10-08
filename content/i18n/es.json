@@ -2697,5 +2697,6 @@
  "Follow along and say hi:": "Síguenos y escríbenos:",
  "<t1><t4/><t2>Instagram</t2><t3> (opens in a new tab)</t3></t1>": "<t1><t4/><t2>Instagram</t2><t3> (se abre en una pestaña nueva)</t3></t1>",
  "<t1><t4/><t2>Facebook</t2><t3> (opens in a new tab)</t3></t1>": "<t1><t4/><t2>Facebook</t2><t3> (se abre en una pestaña nueva)</t3></t1>",
- "<t1><t4/><t2>Threads</t2><t3> (opens in a new tab)</t3></t1>": "<t1><t4/><t2>Threads</t2><t3> (se abre en una pestaña nueva)</t3></t1>"
+ "<t1><t4/><t2>Threads</t2><t3> (opens in a new tab)</t3></t1>": "<t1><t4/><t2>Threads</t2><t3> (se abre en una pestaña nueva)</t3></t1>",
+ "<t1><t4/><t2>Email</t2><t3> hello@bentleysplayhouse.org</t3></t1>": "<t1><t4/><t2>Correo</t2><t3> hello@bentleysplayhouse.org</t3></t1>"
 }

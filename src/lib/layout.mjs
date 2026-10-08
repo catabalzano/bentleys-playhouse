@@ -65,13 +65,23 @@ ${ctx.mode === 'preview' ? `<aside class="preview-ribbon" aria-label="Preview no
 </header>`;
 }
 
+// Round white icon buttons (blue icons) used everywhere we link to our socials.
+export function socialButtons({ youtube = false, email = true } = {}) {
+  const s = ctx.site;
+  const t = ctx.t;
+  const ext = `<span class="visually-hidden"> (${t('externalLink')})</span>`;
+  const items = [['instagram', 'Instagram'], ['facebook', 'Facebook'], ['threads', 'Threads'], ...(youtube ? [['youtube', 'YouTube']] : [])]
+    .filter(([k]) => s.social[k] && show(s.social[k].verified))
+    .map(([k, label]) => `<li><a href="${esc(s.social[k].url)}" target="_blank" rel="noopener">${icon(k, { size: 22 })}<span class="soc__label">${label}</span>${ext}</a></li>`);
+  if (email) items.push(`<li><a href="mailto:${esc(s.contact.email)}">${icon('mail', { size: 22 })}<span class="soc__label">Email</span><span class="visually-hidden"> ${esc(s.contact.email)}</span></a></li>`);
+  return `<ul class="soc" role="list">${items.join('')}</ul>`;
+}
+
 export function footer() {
   const s = ctx.site;
   const t = ctx.t;
   const col = (title, links) => `<div class="footer__col"><h2 class="footer__h">${title}</h2><ul>${links.map(([l, r]) => `<li><a href="${href(r)}">${l}</a></li>`).join('')}</ul></div>`;
-  const social = [['instagram', s.social.instagram], ['facebook', s.social.facebook], ['youtube', s.social.youtube]]
-    .filter(([, v]) => v && show(v.verified))
-    .map(([k, v]) => `<li><a href="${esc(v.url)}" target="_blank" rel="noopener">${icon(k, { size: 18 })} ${{ instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube' }[k]}<span class="visually-hidden"> (${t('externalLink')})</span></a></li>`).join('');
+
   return `
 <footer class="site-footer">
   <div class="footer__wave" aria-hidden="true"></div>
@@ -84,7 +94,7 @@ export function footer() {
     ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
     ${col('Learn', [['Pawsome Pooches', 'pawsome-pooches/'], ['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists'], ['Rehoming a dog safely', 'resources/rehoming-a-dog-safely/']])}
     ${col(esc(s.name), [['Our Story', 'our-story/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : [])])}
-    <div class="footer__col"><h2 class="footer__h">Follow along</h2><ul class="footer__social">${social}</ul></div>
+    <div class="footer__col"><h2 class="footer__h">Follow along</h2>${socialButtons({ youtube: true })}</div>
   </div>
   <div class="wrap footer__notice">
     <p>${icon('alert', { size: 18 })} <span>${t('footer.notEmergency')} ${t('footer.emergency')}</span></p>
@@ -153,7 +163,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?fl=1-5 previews follow-button styles */try{var k=location.search.match(/[?&]fl=([1-5])/);if(k)document.documentElement.dataset.fl=k[1]}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?bd=1-5 previews board styles */try{var k=location.search.match(/[?&]bd=([1-5])/);if(k)document.documentElement.dataset.bd=k[1]}catch(e){}</script>${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>

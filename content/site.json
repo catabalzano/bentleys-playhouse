@@ -33,6 +33,14 @@
       "feedUrl": "https://feeds.behold.so/W2YGDyyPF85eLju0zHnb",
       "_feedNote": "To show your latest posts automatically: create a free Behold account (behold.so), connect @bentleysplayhouse, create a JSON feed and paste its URL here (looks like https://feeds.behold.so/XXXX). Free plan = latest 6 posts. Until then, the homepage uses content/instagram.json or brand tiles."
     },
+    "facebook": {
+      "url": "https://www.facebook.com/itsbentleysplayhouse/",
+      "verified": true
+    },
+    "threads": {
+      "url": "https://www.threads.com/@bentleysplayhouse",
+      "verified": true
+    },
     "youtube": {
       "url": "https://www.youtube.com/@BentleysPlayhouseTV",
       "handle": "@BentleysPlayhouseTV",
