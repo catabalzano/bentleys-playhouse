@@ -1500,3 +1500,7 @@ fieldset.field { align-content: start; }
 @media (min-width: 901px) and (max-width: 1040px) {
   .nav__link { padding: .45rem .45rem; font-size: .86rem; }
 }
+/* desktop: halve the empty space to the right of the menu/Donate button */
+@media (min-width: 901px) {
+  .site-header .nav { margin-right: calc(-.5 * (max(0px, (100vw - 1180px) / 2) + var(--gutter))); }
+}
