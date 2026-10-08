@@ -2,6 +2,7 @@ import { ctx, esc, href, asset, isCurrent, icon, show, paw, logo } from './core.
 import { donateVisible, donateDialog } from './donate.mjs';
 
 const NAV = [
+  ['nav.home', ''],
   ['nav.help', 'get-help/'],
   ['nav.adopt', 'adopt-foster/'],
   ['nav.resources', 'resources/'],
@@ -13,7 +14,7 @@ const NAV = [
 function navLinks() {
   const t = ctx.t;
   return NAV.map(([k, r]) =>
-    `<li><a class="nav__link" href="${href(r)}"${isCurrent(r) ? ' aria-current="page"' : ''}>${t(k)}</a></li>`).join('');
+    `<li><a class="nav__link" href="${href(r)}"${(r ? isCurrent(r) : ctx.route === '') ? ' aria-current="page"' : ''}>${t(k)}</a></li>`).join('');
 }
 
 function donateLink(cls = 'btn btn--donate') {
@@ -152,7 +153,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?sh=1-5 Our Story header options, ?sc=1 centered text */try{var q=location.search,a=q.match(/[?&]sh=([1-5])/),c=q.match(/[?&]sc=1/);if(a)document.documentElement.dataset.sh=a[1];if(c)document.documentElement.dataset.sc="1"}catch(e){}</script>${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>
