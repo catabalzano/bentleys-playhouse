@@ -230,10 +230,15 @@ if (esOn && fs.existsSync(path.join(CONTENT_DIR, 'i18n/es.json'))) {
     if (!fs.existsSync(d)) continue;
     for (const f of fs.readdirSync(d)) {
       if (!f.endsWith('.md') || f.startsWith('_')) continue;
-      const m = fs.readFileSync(path.join(d, f), 'utf8').match(/^name:\s*["']?(.+?)["']?\s*(#.*)?$/m);
+      const txt = fs.readFileSync(path.join(d, f), 'utf8');
+      const m = txt.match(/^name:\s*["']?(.+?)["']?\s*(#.*)?$/m);
       if (m) m[1].split(/\s*(?:&|,|\band\b)\s*/).forEach((n) => n.trim() && dogNames.add(n.trim()));
+      // rescue/shelter names (e.g. location.name "Joy and Love Rescue") must also come through exactly
+      for (const o of txt.matchAll(/^\s+name:\s*["']?(.+?)["']?\s*(#.*)?$/gm)) if (o[1].trim() && !/^(their|his|her|my|our)\b/i.test(o[1].trim())) dogNames.add(o[1].trim());
     }
   }
+  const rescDir = path.join(CONTENT_DIR, 'rescues');
+  if (fs.existsSync(rescDir)) for (const f of fs.readdirSync(rescDir)) if (f.endsWith('.md') && !f.startsWith('_')) { const m = fs.readFileSync(path.join(rescDir, f), 'utf8').match(/^name:\s*["']?(.+?)["']?\s*(#.*)?$/m); if (m) dogNames.add(m[1].trim()); }
   const storyDir = path.join(CONTENT_DIR, 'stories');
   if (fs.existsSync(storyDir)) for (const f of fs.readdirSync(storyDir)) if (f.endsWith('.md') && !f.startsWith('_')) { const n = f.replace(/\.md$/, '').split('-')[0]; dogNames.add(n.charAt(0).toUpperCase() + n.slice(1)); }
   fs.writeFileSync(path.join(OUT, 'i18n/names.json'), JSON.stringify([...dogNames].sort()));

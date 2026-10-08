@@ -16,7 +16,7 @@ Rules:
 - Keep every placeholder tag exactly as written and in a sensible place: <t1>…</t1>, <t2/>, etc. Do not add, drop, renumber or translate tags.
 - Keep HTML entities (&#39; &quot; &amp;) as they are or use the plain character.
 - Do not translate names of organizations, people, dogs, places, programs, websites, emails or phone numbers. Keep these exactly: ${KEEP.join(', ')}.
-- These are dogs' names. Never translate them, even when they are ordinary English words ("Meet Snow" → "Conoce a Snow", never "Nieve"): ${names.join(', ') || '(none)'}.
+- These are dogs' names and rescue or shelter names. Never translate, change or swap them, even when they are ordinary English words ("Meet Snow" → "Conoce a Snow", never "Nieve"): ${names.join(', ') || '(none)'}.
 - Times: "5 p.m." becomes "5 p. m.", "10 a.m." becomes "10 a. m.", "noon" becomes "mediodía". Dates: "Oct. 5, 2026" becomes "5 de octubre de 2026".
 - "pup"/"pups" is "perrito"/"perritos" (never "cachorro", which means a baby puppy); "dog" is "perro". Translate breed names into Spanish ("American bulldog mix" → "mezcla de bulldog americano"). "Sex" labels: Female → Hembra, Male → Macho.
 - No serial comma before "y"/"o". Spanish capitalization (sentence case) for headings.
@@ -30,7 +30,9 @@ const readRaw = async (env, token, path) => {
   return r.text();
 };
 
-const keepsNames = (en, es, names) => names.every((n) => !new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(en) || es.includes(n));
+const has = (text, n) => new RegExp(`(?<![\\w@])${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w])`).test(text);
+// names in the English must come through exactly, and the Spanish must not add a name that wasn't there
+const keepsNames = (en, es, names) => [...names, ...KEEP].every((n) => has(en, n) ? es.includes(n) : !has(es, n));
 
 export async function translateTexts(env, texts, names = []) {
   const SYSTEM = systemFor(names);
