@@ -2701,5 +2701,6 @@
  "<t1><t4/><t2>Email</t2><t3> hello@bentleysplayhouse.org</t3></t1>": "<t1><t4/><t2>Correo</t2><t3> hello@bentleysplayhouse.org</t3></t1>",
  "Adoption days, free vet clinics, pack walks and other dog events around South Florida, all in one place.": "Jornadas de adopción, clínicas veterinarias gratis, caminatas en grupo y otros eventos para perros en el sur de Florida, todo en un solo lugar.",
  "See Our Social Calendar": "Mira nuestro calendario social",
- "Admit one": "Pase de entrada"
+ "Admit one": "Pase de entrada",
+ "<t2/><t1>Share to Stories</t1>": "<t2/><t1>Compartir en Historias</t1>"
 }

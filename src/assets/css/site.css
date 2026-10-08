@@ -957,6 +957,10 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .pp-howto p { margin: 0; }
 .pp-share { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
 .pp-share__status { font-size: .9rem; color: var(--good); }
+.pp-story-btn svg { color: currentColor; }
+.pp-share__status { flex-basis: 100%; }
+/* TEMPORARY: story preview shown with ?st=1..5 */
+.pp-story-preview { display: block; width: min(100%, 300px); margin-top: 1rem; border-radius: 14px; box-shadow: 0 10px 24px rgb(31 29 43 / .2); }
 .pp-disclaimer { font-size: .85rem; color: var(--muted); margin: 1rem 0 0; }
 .pp-standalone { padding-block: 1.5rem 4rem; }
 .pp-standalone .breadcrumb { margin-bottom: 1.5rem; }

@@ -82,6 +82,12 @@ function howTo(d) {
   return `<p>Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a> and we'll put you in touch, or reach out to the rescue directly.${id}</p>`;
 }
 
+
+// Data for the "Share to Stories" image (drawn in the browser by js/story.js)
+const storyData = (d) => JSON.stringify({ slug: d.slug, name: d.name, age: d.age || '', sex: d.sex || '', breed: d.breed || '', size: d.size || '', needs: d.needs || 'adoption',
+  where: d.loc.type === 'rescue' && d.loc.name ? d.loc.name : d.loc.name || d.loc.meta.long || d.loc.meta.label, city: d.loc.city || '',
+  fixed: yn(d.fixed), vaccinated: yn(d.vaccinated), microchipped: yn(d.microchipped), good: d.good,
+  photo: img(d.sharePhoto || d.photos[0] || ''), focus: /^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || '')) ? d.photoFocus : '', logo: asset('img/logo-badge.png') });
 const HEALTH = [['fixed', 'Spayed or neutered'], ['vaccinated', 'Vaccines up to date'], ['microchipped', 'Microchipped'], ['heartworm', 'Heartworm negative']];
 
 export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
@@ -117,6 +123,7 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
     </div>
     <div class="pp-share">
       <button type="button" class="btn btn--ghost btn--small" data-pp-share="${esc(d.slug)}" data-title="${esc(d.name)}">${icon('share', { size: 18 })}<span>Share ${esc(d.name)}</span></button>
+      ${d.status !== 'adopted' ? `<button type="button" class="btn btn--primary btn--small pp-story-btn" data-pp-story="${esc(d.slug)}" data-story="${esc(storyData(d))}">${icon('instagram', { size: 18 })}<span>Share to Stories</span></button>` : ''}
       <span class="pp-share__status" role="status"></span>
     </div>
     <p class="pp-disclaimer">${ctx.site.name} shares community dogs to help them get seen. ${d.loc.type === 'family' ? 'We help screen and connect adopters with the family.' : `Adoptions are handled by ${esc(d.loc.name || d.loc.meta.label)}.`} Always meet the dog first and ask for vet records. Listed ${esc(fmtDate(d.featuredWeek || d.date || '2026-10-06'))}.</p>
