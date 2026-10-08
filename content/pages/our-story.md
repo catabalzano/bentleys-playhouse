@@ -9,14 +9,13 @@ Bentley's Playhouse is a grassroots Miami animal rescue founded by **Cata Balzan
 
 Bentley is Cata's French Bulldog, the face in our logo, and the rescue carries his name. He was our very first pup, and he warmly welcomed every dog who came after him into his home. That's how his home became a playhouse: a place for pups who needed a second chance.
 
-Bentley showed us that every dog has the potential to be a hero. He was one for Romeo and Kiara.
-
+Bentley showed us that every dog has the potential to be a hero. He was one for Romeo, Kiara and all the other furry friends who came for a safe bed and a warm plate of food and eventually found their own perfect home.
 
 ## How it started: Romeo
 
-Romeo was a young French Bulldog who had spent about six months with a backyard breeder before Cata found him. After rescuing him and seeing what he'd been through, we knew we had to help more pups in need.
+Romeo was a 7-month-old French Bulldog who had spent about his whole life with a backyard breeder before Cata rescued him from the home of an elderly couple who couldn't afford the financial responsibility of caring for a dog with health setbacks, but who took him in after their granddaughter learned her neighbors (the breeders) would be putting him down as he was "not sellable." Romeo came to the playhouse with a bad case of giardia, bald spots provoked by mange and a head tilt that ended up becoming his biggest quirk. After rescuing him and embarking on a long road to recovery, seeing what Romeo had been through in the hands of irresponsible breeders, we knew we had to help more pups in need.
 
-Romeo became Bentley's Playhouse's first rescue. His arrival is where the rescue work really started.
+Romeo became Bentley's Playhouse's first rescue. His arrival is where the rescue work really started and what inspired us to keep helping more pups in the community who are victims of neglect.
 
 ## Rescue, foster, rehabilitate, rehome
 
