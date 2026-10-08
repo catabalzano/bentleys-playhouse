@@ -152,7 +152,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?ph=1-5 previews mobile photo-header options */try{var m=location.search.match(/[?&]ph=([1-5])/);if(m)document.documentElement.dataset.ph=m[1]}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?ph=1-9 photo styles, ?pc=1-5 credit styles, ?qh=1-5 quick-help styles */try{var q=location.search,c=q.match(/[?&]pc=([1-5])/),h=q.match(/[?&]ph=([1-9])/),k=q.match(/[?&]qh=([1-5])/);if(h)document.documentElement.dataset.ph=h[1];if(k)document.documentElement.dataset.qh=k[1];if(c){document.documentElement.dataset.pc=c[1];document.addEventListener('DOMContentLoaded',function(){var f=document.querySelector('.arch-cover figcaption');if(!f)return;if(c[1]==='2'){f.tabIndex=0;f.setAttribute('aria-label',f.textContent)}if(c[1]==='5'){var p=document.createElement('p');p.className='photo-credit-end';p.textContent='Header '+f.textContent.charAt(0).toLowerCase()+f.textContent.slice(1);var mn=document.querySelector('main');(mn.querySelector('.wrap:last-of-type')||mn).appendChild(p);f.remove()}})}}catch(e){}</script>${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>
