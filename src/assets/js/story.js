@@ -225,7 +225,7 @@ var T = window.BP_T || function (s) { return s; };
       var b = document.createElement('button'); b.type = 'button'; b.className = 'pp-story-opt is-loading';
       b.innerHTML = '<span class="pp-story-opt__img"><img alt=""></span><span class="pp-story-opt__label">' + T(s[1]) + '</span>';
       b.setAttribute('aria-label', T('Share the') + ' ' + T(s[1]).toLowerCase() + ' ' + T('design to your story'));
-      b.addEventListener('click', function () { share(btn, s[0]); });
+      b.addEventListener('click', function () { if (window.bpTrack) window.bpTrack('share_to_stories_' + s[1].toLowerCase(), { pup: btn.getAttribute('data-pp-story'), design: s[1].toLowerCase() }); share(btn, s[0]); });
       row.appendChild(b);
       render(btn, s[0]).then(function (blob) { b.querySelector('img').src = URL.createObjectURL(blob); b.classList.remove('is-loading'); }, function () { b.classList.remove('is-loading'); });
     });

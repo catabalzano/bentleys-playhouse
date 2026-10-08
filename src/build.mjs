@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 //   --pretty           → links as /folder/ (use when hosting on Netlify, Cloudflare Pages, etc.)
 import fs from 'node:fs';
 import path from 'node:path';
-import { ctx, ROOT, readJSON, readCollection, md, strip, href, apHtml } from './lib/core.mjs';
+import { ctx, ROOT, readJSON, readCollection, md, strip, href, apHtml, apTitle } from './lib/core.mjs';
 import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
 import * as P2 from './lib/pages2.mjs';
@@ -100,6 +100,8 @@ const shareJobs = [];
 const catLabel = (id) => (ctx.categories.find((c) => c.id === id) || {}).label;
 function emit(route, opts) {
   ctx.route = route;
+  // page titles and link-preview titles in AP title case
+  opts = { ...opts, ...(opts.title ? { title: apTitle(opts.title) } : {}), ...(opts.shareTitle ? { shareTitle: apTitle(opts.shareTitle) } : {}), ...(opts.seoTitle ? { seoTitle: apTitle(opts.seoTitle) } : {}) };
   ctx.crumbs = null;
   // every page gets its own 1200×630 share image (title + topic art, or the dog's photo)
   if (!opts.noindex && !opts.ogImage) {
@@ -146,6 +148,26 @@ emit('404.html', { title: 'Page not found', description: 'Page not found.', noin
 
 // assets
 fs.cpSync(path.join(ROOT, 'src/assets'), path.join(OUT, 'assets'), { recursive: true });
+// lighter photos: big phone photos are resized (max 1600px) and recompressed in the published copy only
+await (async () => {
+  let sharp; try { sharp = (await import('sharp')).default; } catch (e) { console.log('Photos: sharp not installed, skipping'); return; }
+  const files = [];
+  const walk = (d) => { for (const f of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, f.name); if (f.isDirectory()) walk(p); else if (/\.(jpe?g|png|webp)$/i.test(f.name) && fs.statSync(p).size > 200 * 1024) files.push(p); } };
+  for (const dir of ['img', 'uploads']) if (fs.existsSync(path.join(OUT, 'assets', dir))) walk(path.join(OUT, 'assets', dir));
+  let before = 0, after = 0;
+  for (const f of files) {
+    try {
+      const buf = fs.readFileSync(f); const img = sharp(buf, { failOn: 'none' }).rotate(); const meta = await img.metadata();
+      if (/\.png$/i.test(f) && meta.hasAlpha) continue; // logos and cut-outs keep their transparency as is
+      let pipe = img.resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true });
+      pipe = /\.png$/i.test(f) ? pipe.png({ compressionLevel: 9, palette: true, quality: 85 }) : /\.webp$/i.test(f) ? pipe.webp({ quality: 78 }) : pipe.jpeg({ quality: 78, mozjpeg: true });
+      const out = await pipe.toBuffer();
+      before += buf.length;
+      if (out.length < buf.length) { fs.writeFileSync(f, out); after += out.length; } else after += buf.length;
+    } catch (e) { /* leave the original */ }
+  }
+  if (files.length) console.log(`Photos: ${files.length} resized, ${(before / 1048576).toFixed(1)} MB → ${(after / 1048576).toFixed(1)} MB`);
+})();
 // the public ledger CSV (live data only) and no example files on the live site
 fs.mkdirSync(path.join(OUT, 'assets/finances'), { recursive: true });
 if (!finances.isExample) {
@@ -181,7 +203,9 @@ const esOn = (ctx.site.languages || []).some((l) => l.code === 'es' && l.enabled
 const esRoutes = [];
 if (esOn && fs.existsSync(path.join(CONTENT_DIR, 'i18n/es.json'))) {
   const { translatePage, collect } = await import('./lib/i18n.mjs');
-  const dict = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'i18n/es.json'), 'utf8'));
+  // es.json = Spanish written or approved by a person; es-auto.json = automatic translations (worker/src/translate.js). People win.
+  const autoFile = path.join(CONTENT_DIR, 'i18n/es-auto.json');
+  const dict = { ...(fs.existsSync(autoFile) ? JSON.parse(fs.readFileSync(autoFile, 'utf8')) : {}), ...JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'i18n/es.json'), 'utf8')) };
   const jsDict = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'i18n/es-js.json'), 'utf8'));
   fs.writeFileSync(path.join(OUT, 'assets/js/i18n-es.js'), `window.BP_ES=${JSON.stringify(jsDict)};window.BP_T=function(s){return (window.BP_ES&&window.BP_ES[s])||s;};\n`);
   const all = new Set();
@@ -196,6 +220,9 @@ if (esOn && fs.existsSync(path.join(CONTENT_DIR, 'i18n/es.json'))) {
   }
   const missing = [...all].filter((k) => !dict[k]);
   fs.writeFileSync(path.join(ROOT, 'tmp-missing-es.json'), JSON.stringify(Object.fromEntries(missing.map((k) => [k, ''])), null, 1));
+  // public list of English text still waiting for Spanish; the worker translates it automatically
+  fs.mkdirSync(path.join(OUT, 'i18n'), { recursive: true });
+  fs.writeFileSync(path.join(OUT, 'i18n/missing-es.json'), JSON.stringify(missing));
   console.log(`Spanish: ${esRoutes.length} pages, ${all.size - missing.length}/${all.size} strings translated${missing.length ? ` (${missing.length} missing → tmp-missing-es.json)` : ''}`);
 }
 sitemap.push(...esRoutes);

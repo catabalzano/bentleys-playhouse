@@ -1,6 +1,7 @@
 // Bentley's Playhouse admin backend: password sign-in, sessions, and reading/writing the site's content files on GitHub.
 // Content stays in the repo (content/*.md / *.json), so the site build is unchanged. Every save is one commit; the site redeploys itself.
 import yaml from 'js-yaml';
+import { translateMissing, listTranslations, approveTranslations } from './translate.js';
 
 const enc = new TextEncoder();
 const hex = (buf) => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
@@ -409,6 +410,14 @@ export async function handleContent(req, env, url) {
   const token = await githubToken(env);
   const parts = url.pathname.split('/').filter(Boolean); // api, content|settings, collection, slug
   const kind = parts[1];
+
+  if (kind === 'translate') {
+    // Spanish: list automatic translations, approve/edit them, or translate new text now
+    if (parts[2] === 'list' && req.method === 'GET') return json({ items: await listTranslations(env) });
+    if (parts[2] === 'run' && req.method === 'POST') return json(await translateMissing(env, { limit: 80 }));
+    if (parts[2] === 'approve' && req.method === 'PUT') { const b = await req.json(); return json(await approveTranslations(env, b.items)); }
+    throw fail('Not found.', 404);
+  }
 
   if (kind === 'settings') {
     const text = await readFile(env, token, 'content/site.json');

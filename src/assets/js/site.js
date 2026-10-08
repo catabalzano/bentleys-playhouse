@@ -353,3 +353,22 @@ var T = window.BP_T || function (s) { return s; };
   n.innerHTML = '<p><svg class="doodle cookie-note__icon" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38.6 24.3c.6 8.2-6.1 15.5-14.5 15.8C15.7 40.5 8.5 34 8.2 25.5 7.9 17 14.4 9.6 22.8 9.3c-.4 3.6 2.2 6.6 5.6 6.6.3 3.5 3.2 6.1 6.8 5.8.3 1.1 1.8 2.3 3.4 2.6z"/><path class="d-acc" stroke-width="4" d="M17 20.2v.1M25.5 27.2v.1M16.5 30.5v.1M30.8 31.9v.1M21.7 35.4v.1"/></svg> ' + T('We use a few analytics cookies to see which guides help people most. Nothing else, and never for ads.') + ' <a href="' + base + (window.BP_LANG === 'es' ? 'es/' : '') + 'cookies/">' + T('Cookie policy') + '</a></p><div class="cookie-note__btns"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">' + T('Accept') + '</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">' + T('No thanks') + '</button></div>';
   document.body.appendChild(n);
 })();
+
+/* Click counting for Google Analytics (only sends anything after the visitor accepts analytics cookies).
+   Event names say what was tapped, so they show up as separate rows in GA4 → Reports → Engagement → Events. */
+(function () {
+  'use strict';
+  window.bpTrack = function (name, params) { try { if (window.gtag) window.gtag('event', name, params || {}); } catch (e) { /* ignore */ } };
+  var where = function (el) { return el.closest('.site-footer') ? 'footer' : el.closest('.utility') ? 'top_bar' : el.closest('.community') ? 'homepage' : 'page_header'; };
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a, button'); if (!a) return;
+    var page = location.pathname;
+    if (a.matches('.soc a, .utility__ig')) {
+      var h = a.getAttribute('href') || '';
+      var net = /instagram/.test(h) ? 'instagram' : /facebook/.test(h) ? 'facebook' : /threads/.test(h) ? 'threads' : /youtube/.test(h) ? 'youtube' : /^mailto:/.test(h) ? 'email' : 'other';
+      window.bpTrack('social_click_' + net, { network: net, location: where(a), page: page });
+    } else if (a.matches('.cal-cta')) window.bpTrack('calendar_ticket_click', { page: page });
+    else if (a.matches('[data-pp-story]')) window.bpTrack('share_to_stories_open', { pup: a.getAttribute('data-pp-story'), page: page });
+    else if (a.matches('[data-pp-share]')) window.bpTrack('share_pup_link', { pup: a.getAttribute('data-pp-share'), page: page });
+  }, true);
+})();

@@ -48,7 +48,7 @@
     opts.headers = Object.assign({}, opts.headers || {});
     if (S.session) opts.headers.Authorization = 'Session ' + S.session;
     if (opts.json !== undefined) { opts.body = JSON.stringify(opts.json); opts.headers['Content-Type'] = 'application/json'; delete opts.json; }
-    var publishes = /^(PUT|POST|DELETE)$/i.test(opts.method || '') && /^\/(api\/(content|settings)|admin\/approve)\//.test(path);
+    var publishes = /^(PUT|POST|DELETE)$/i.test(opts.method || '') && /^\/(api\/(content|settings|translate)|admin\/approve)\//.test(path);
     return fetch(API + path, opts).then(function (r) {
       if (publishes && r.ok) watchLive();
       var ct = r.headers.get('Content-Type') || '';
@@ -294,6 +294,8 @@
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
+      '<a class="nav" href="#spanish" data-nav="spanish">🌎 Spanish</a>' +
+      '<a class="nav" href="#style" data-nav="style">🎨 Style guide</a>' +
       '<div class="side__sep"></div><a class="nav" href="#users" data-nav="users">👥 Manage users</a><a class="nav" href="#profile" data-nav="profile">⚙️ Profile &amp; security</a>' +
       '<div class="side__foot"><a href="../" target="_blank" rel="noopener">View the website ↗</a></div></aside>' +
       '<div><div class="topbar"><button type="button" data-menu>☰ Menu</button><b>Admin</b></div><main class="main" id="main" tabindex="-1"></main></div></div>';
@@ -331,8 +333,82 @@
     if (h === 'messages') return messages();
     if (h === 'settings' || h === 'profile') return profile();
     if (h === 'users') return manageUsers();
+    if (p[0] === 'spanish') return spanish(decodeURIComponent(p.slice(1).join('/') || ''));
+    if (h === 'style') return styleGuide();
     if (p[0] === 'c' && COLS[p[1]]) return p[2] ? editor(p[1], p[2] === 'new' ? null : p[2]) : list(p[1]);
     location.hash = '#home';
+  }
+
+  // ---------- Spanish ----------
+  // The Spanish site translates new English text automatically (worker/src/translate.js, about every 20 minutes).
+  // Here a person can translate right away, fix anything that sounds off and approve it (approved Spanish always wins).
+  function spanish(q) {
+    main().innerHTML = '<div class="head"><div><h1>🌎 Spanish</h1><p>New text on the website is translated into Spanish automatically, usually within 20 minutes after it goes live. Read the automatic Spanish here, fix anything that sounds off and click Approve.</p></div><button class="btn btn--go" data-run>🌎 Translate new text now</button></div>' +
+      '<div class="card"><label for="sp-q"><b>Find text</b></label><input id="sp-q" type="search" placeholder="A pup\'s name, an event, a word…" value="' + esc(q || '') + '" style="width:100%;margin-top:6px"><p class="hint">Keep the little tags like &lt;t1&gt;…&lt;/t1&gt; in the Spanish text, in the same places. They are links and bold words.</p></div>' +
+      '<div data-sp><p class="empty">Loading…</p></div>';
+    var all = [], box = $('[data-sp]'), qi = $('#sp-q');
+    function draw() {
+      var term = qi.value.trim().toLowerCase();
+      var rows = all.filter(function (r) { return !term || r.en.toLowerCase().indexOf(term) > -1 || r.es.toLowerCase().indexOf(term) > -1; }).slice(0, 80);
+      if (!all.length) { box.innerHTML = '<p class="empty">No automatic translations yet. When new text goes live on the website, it shows up here.</p>'; return; }
+      if (!rows.length) { box.innerHTML = '<p class="empty">Nothing matches “' + esc(qi.value) + '” yet. If you just saved it, it shows up here after it\'s translated. Click “Translate new text now” about 2 minutes after saving.</p>'; return; }
+      box.innerHTML = (rows.some(function (r) { return !r.approved; }) ? '<p><button class="btn btn--ghost btn--sm" data-all>✓ Approve everything shown</button></p>' : '') + rows.map(function (r, i) {
+        return '<div class="card sp-row" data-i="' + i + '"><p class="sp-en"><span class="pill' + (r.approved ? ' ok' : ' warn') + '">' + (r.approved ? 'Approved' : 'Automatic') + '</span> ' + esc(r.en) + '</p><textarea rows="' + Math.min(8, Math.max(2, Math.ceil(r.es.length / 80))) + '" aria-label="Spanish">' + esc(r.es) + '</textarea><div class="actions"><button class="btn btn--go btn--sm" data-ok>✓ ' + (r.approved ? 'Save changes' : 'Approve') + '</button><span class="msg" data-msg role="status"></span></div></div>';
+      }).join('');
+      function save(list, btn) {
+        if (btn) btn.disabled = true;
+        return api('/api/translate/approve', { method: 'PUT', json: { items: list.map(function (x) { return { en: x.r.en, es: x.ta.value }; }) } }).then(function () {
+          list.forEach(function (x) { x.r.approved = true; x.r.es = x.ta.value; });
+          toast('Saved. The Spanish site updates in about 2 minutes.'); draw();
+        }, function (e) { if (btn) btn.disabled = false; toast(e.message); });
+      }
+      $$('.sp-row', box).forEach(function (el) {
+        var r = rows[+el.getAttribute('data-i')], ta = $('textarea', el);
+        $('[data-ok]', el).onclick = function () { save([{ r: r, ta: ta }], this); };
+      });
+      var allBtn = $('[data-all]', box);
+      if (allBtn) allBtn.onclick = function () { save($$('.sp-row', box).map(function (el) { return { r: rows[+el.getAttribute('data-i')], ta: $('textarea', el) }; }).filter(function (x) { return !x.r.approved; }), this); };
+    }
+    qi.addEventListener('input', draw);
+    function load() { return api('/api/translate/list').then(function (j) { all = j.items || []; draw(); }, function (e) { box.innerHTML = '<p class="empty">' + esc(e.message) + '</p>'; }); }
+    load();
+    $('[data-run]').onclick = function () {
+      var b = this; b.disabled = true; b.textContent = 'Translating…';
+      api('/api/translate/run', { method: 'POST' }).then(function (j) {
+        toast(j.translated ? 'Translated ' + j.translated + ' new ' + (j.translated === 1 ? 'piece' : 'pieces') + ' of text. The Spanish site updates in about 2 minutes.' : 'Everything on the website already has Spanish.');
+        b.disabled = false; b.textContent = '🌎 Translate new text now'; return load();
+      }, function (e) { toast(e.message); b.disabled = false; b.textContent = '🌎 Translate new text now'; });
+    };
+  }
+
+  // ---------- style guide ----------
+  function styleGuide() {
+    var sw = function (hex, name, use) { return '<div class="sg-sw"><span style="background:' + hex + '"></span><b>' + name + '</b><code>' + hex + '</code><small>' + use + '</small></div>'; };
+    main().innerHTML = '<div class="head"><div><h1>🎨 Style guide</h1><p>How Bentley\'s Playhouse looks and sounds. Start here before adding a new page, section or design, so everything keeps feeling like one place.</p></div></div>' +
+      '<section class="card"><h2>Colors</h2><div class="sg-sws">' +
+        sw('#2F45C8', 'Playhouse Blue', 'Buttons, links, header, footer') + sw('#5271FF', 'Bright Blue', 'Logo blue, accents') + sw('#FFBD59', 'Golden Shadow', 'Offset shadows, tape, tags') +
+        sw('#FF914D', 'Paw Orange', 'Small accents (never burnt orange)') + sw('#8C52FF', 'Violet', 'Sparingly') + sw('#F2F5FF', 'Cream Blue', 'Page background') + sw('#FFFFFF', 'Paper', 'Cards and notes') + sw('#1F1D2B', 'Ink', 'Text') +
+      '</div><p class="hint">Always light (no dark mode). No glows, no dark navy blocks, no grey pills on photos.</p></section>' +
+      '<section class="card"><h2>Fonts</h2><p class="sg-f1">Fredoka: Headings and Big Names</p><p class="sg-f2">Figtree: everything you read. Body text, buttons, labels.</p><p class="sg-f3">Caveat: handwritten notes, tape labels</p><p class="hint">Caveat is only for short handwritten touches, like the sticky notes on the photo board.</p></section>' +
+      '<section class="card"><h2>The look</h2><ul class="sg-list">' +
+        '<li><b>Scrapbook and bulletin board.</b> White notes, see-through washi tape with torn ends, polaroid-style photos, real cork with an oak frame, an event ticket for the calendar.</li>' +
+        '<li><b>Gold offset shadow</b> on things you can tap (buttons, round social buttons, notes on hover).</li>' +
+        '<li><b>Round white social buttons</b> with blue icons. The name shows when you hover.</li>' +
+        '<li><b>Photos:</b> wide and centered on phones; page header photos are arches. Photo credit is tiny vertical text along the right edge. Frame each pup\'s face with “Frame the main photo.”</li>' +
+        '<li><b>Text is left-aligned</b>, never centered like a poem. Logos can be centered.</li>' +
+        '<li><b>No emojis on the website</b> (hand-drawn doodles instead).</li>' +
+        '<li><b>Phones first:</b> nothing clumped together; give every block room.</li>' +
+      '</ul></section>' +
+      '<section class="card"><h2>Writing</h2><ul class="sg-list">' +
+        '<li><b>AP style.</b> The website fixes times, dates and common spellings for you when it publishes (5 p.m., 10 a.m. to 2 p.m., noon, Oct. 1, 2026).</li>' +
+        '<li><b>No Oxford comma:</b> “food, vet visits and toys.”</li>' +
+        '<li><b>Titles and headings in title case:</b> “What to Bring,” “The First 72 Hours.”</li>' +
+        '<li><b>Numbers:</b> spell out one to nine (“three days”), figures for 10 and up. Ages are always figures (“4 months old”).</li>' +
+        '<li><b>Breeds:</b> lowercase except names of places: “French bulldog,” “pit bull mix,” “German shepherd.”</li>' +
+        '<li><b>Spanish:</b> neutral Latin American Spanish, “tú,” warm and plain. New text is translated automatically; approve it in 🌎 Spanish.</li>' +
+        '<li><b>Voice:</b> warm, direct, practical. Say what to do, in order. No guilt.</li>' +
+        '<li><b>Keep as written:</b> menu labels “Adopt & Foster” and “Contact & FAQ,” the homepage tag and other groups\' event names.</li>' +
+      '</ul></section>';
   }
 
   // ---------- home ----------
@@ -404,7 +480,7 @@
 
       main().innerHTML = '<a class="back" href="#c/' + key + '">← ' + esc(C.label) + '</a><div class="head"><div><h1>' + esc(it ? (it.data[C.titleKey] || slug) : 'New ' + C.one) + '</h1></div>' + (it && key === 'pawsome' ? '<a class="btn btn--ghost btn--sm" target="_blank" rel="noopener" href="../pawsome-pooches/' + esc(slug) + '/">View on site ↗</a>' : '') + '</div>' +
         '<form novalidate data-form>' + C.groups.map(function (g) { return '<section class="card"><h2>' + esc(g[0]) + '</h2><div class="grid">' + g[1].map(fieldHtml).join('') + '</div></section>'; }).join('') +
-        '<div class="actions"><button class="btn btn--go" type="submit">💾 Save' + (it ? ' changes' : '') + '</button>' + (it ? '<button class="btn btn--danger" type="button" data-del>Delete</button>' : '') + '<span class="msg" data-msg role="status"></span></div></form>';
+        '<div class="actions"><button class="btn btn--go" type="submit">💾 Save' + (it ? ' changes' : '') + '</button>' + (it ? '<a class="btn btn--ghost" href="#spanish/' + encodeURIComponent(String(it.data[C.titleKey] || slug)) + '">🌎 Translate to Spanish</a>' : '') + (it ? '<button class="btn btn--danger" type="button" data-del>Delete</button>' : '') + '<span class="msg" data-msg role="status"></span></div></form>';
 
       function fieldHtml(f) {
         var id = 'f-' + f.k.replace(/\./g, '-'), v = f.k === 'body' ? data.body : get(data, f.k), cls = 'f' + (f.wide || ['images', 'markdown', 'focus'].indexOf(f.type) > -1 ? ' wide' : '');
@@ -536,6 +612,15 @@
           if (v == null || v === '' || (Array.isArray(v) && !v.length)) { missing.push(f.label); var el = $('[data-field="' + f.k + '"] input, [data-field="' + f.k + '"] select, [data-field="' + f.k + '"] textarea', form); if (el) el.setAttribute('aria-invalid', 'true'); }
         }); });
         if (missing.length) { msg.className = 'msg err'; msg.textContent = 'Please fill in: ' + missing.join(', ') + '.'; return; }
+        // AP style check: the website fixes times, dates, breeds and common spellings by itself when it publishes.
+        // A serial (Oxford) comma needs a person, because "A, B, and C" isn't always a list.
+        var texts = []; JSON.stringify(data, function (k2, v2) { if (typeof v2 === 'string' && !/^(upload:|data:|\/assets\/|https?:)/.test(v2)) texts.push(v2); return v2; });
+        var oxford = null; texts.some(function (t) { var m = /([\w'’-]+(?: [\w'’-]+){0,2}, [\w'’-]+(?: [\w'’-]+){0,2}), (and|or) [\w'’-]+/.exec(t); if (m) oxford = m[0]; return !!m; });
+        if (oxford && form.getAttribute('data-ap-ok') !== oxford) {
+          form.setAttribute('data-ap-ok', oxford);
+          msg.className = 'msg err'; msg.textContent = 'AP style check: “' + oxford + '” looks like an Oxford comma. If it\'s a list, remove the comma before “and”/“or” (“food, toys and beds”). If it\'s fine as is, click Save again.';
+          return;
+        }
         var body = data.body; var out = JSON.parse(JSON.stringify(data)); delete out.body;
         if (key === 'pawsome' && typeof out.count === 'number' && out.count <= 1) delete out.count;
         var newSlug = slug || (C.slugFrom ? C.slugFrom(out) : slugify(out[C.titleKey]));

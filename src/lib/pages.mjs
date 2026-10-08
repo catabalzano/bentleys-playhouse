@@ -485,7 +485,7 @@ export function dogCard(d) {
 export function storyCard(st) {
   const name = esc(st.title);
   return `<article class="pol">
-    <button type="button" class="pol__btn" aria-pressed="false" data-pol aria-label="${name}: tap to read the story">
+    <button type="button" class="pol__btn" aria-pressed="false" data-pol>
       <span class="pol__flip">
         <span class="pol__face pol__front">
           <span class="pol__ph">${st.photo ? `<img src="${img(st.photo, 'img/stories/')}" alt="${esc(st.photoAlt || st.title)}" loading="lazy">` : paw()}</span>

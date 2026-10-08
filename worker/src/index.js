@@ -1,5 +1,6 @@
 import { handleAuth, handleContent, sessionOk, githubToken } from './admin.js';
 import { receiveMessage, handleMessages } from './messages.js';
+import { translateMissing } from './translate.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -22,6 +23,8 @@ const YN = ['yes', 'no', 'unknown'];
 const YNS = ['yes', 'no', 'some', 'unknown'];
 
 export default {
+  // every 20 minutes: translate new English text on the site into Spanish (see translate.js)
+  async scheduled(event, env, ctx) { ctx.waitUntil(translateMissing(env, { limit: 60 }).catch((e) => console.log('translate', e && e.message))); },
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const cors = corsHeaders(req, env);

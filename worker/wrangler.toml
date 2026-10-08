@@ -18,3 +18,10 @@ NOTIFY_FROM = "Bentley's Playhouse <onboarding@resend.dev>"
 [[kv_namespaces]]
 binding = "SUBMISSIONS"
 id = "5608dc2b1e8d44a091479bf3d2ddde8a"
+
+# Workers AI: automatic Spanish translations (src/translate.js)
+[ai]
+binding = "AI"
+
+[triggers]
+crons = ["*/20 * * * *"]

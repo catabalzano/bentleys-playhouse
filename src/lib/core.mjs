@@ -53,9 +53,54 @@ export function apText(str) {
   if (!str) return str;
   return apTime(String(str).replace(/\b(January|February|August|September|October|November|December) (\d{1,2})\b(?!:)/g, (m, mo, d) => `${AP_LONG[mo]} ${d}`));
 }
+// AP title case for headings: capitalize principal words; lowercase a, an, the, and, but, or, for, nor and
+// prepositions of three letters or fewer (at, by, in, of, on, to, as, up…) unless first, last or after a colon.
+const AP_SMALL = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'at', 'by', 'in', 'of', 'on', 'to', 'as', 'if', 'vs.', 'vs', 'via', 'per']);
+const KEEP_CASE = /^[A-Z0-9]{2,}|[a-z][A-Z]|^\d|^[@#]|\.(org|com|gov)/;
+function capWord(w) {
+  if (KEEP_CASE.test(w)) return w;
+  if (w.includes('/')) return w.split('/').map(capWord).join('/');
+  if (w.includes('-') && !w.startsWith('-')) return w.split('-').map((p, i) => (i && AP_SMALL.has(p.toLowerCase()) ? p.toLowerCase() : capWord(p))).join('-');
+  const m = /^([("“'‘¿¡]*)(.*)$/.exec(w);
+  return m[2] && !KEEP_CASE.test(m[2]) ? m[1] + m[2][0].toUpperCase() + m[2].slice(1) : w;
+}
+export function apTitle(s) {
+  const words = String(s).split(' ');
+  return words.map((w, i) => {
+    if (!w) return w;
+    const bare = w.replace(/^[("“'‘¿¡]+|[)"”'’,.:;!?]+$/g, '').toLowerCase();
+    const afterColon = i > 0 && /[:—]$/.test(words[i - 1]);
+    if (KEEP_CASE.test(w.replace(/^[("“'‘]+/, ''))) return w;
+    if (i > 0 && i < words.length - 1 && !afterColon && AP_SMALL.has(bare) && !(bare.length === 1 && /^[A-Z]/.test(w)) && !w.startsWith('(')) return w.toLowerCase();
+    return capWord(w);
+  }).join(' ');
+}
+// Common AP fixes for anything typed into the admin or a submission form.
+const AP_WORDS = [
+  [/\b([Pp])re-(register|registration|registered|registering|approved|approval|order|ordered)\b/g, '$1re$2'],
+  [/\b([Rr])e-(share|shared|sharing|post|posted|home|homed|homing)\b/g, '$1e$2'],
+  [/\b([Nn])on-(profit|refundable|emergency|commercial|urgent|toxic|stop)\b/g, '$1on$2'],
+  [/\b([Ee])-mail(s|ed|ing)?\b/g, '$1mail$2'],
+  [/\b([Ww])eb ?site(s)?\b/g, '$1ebsite$2'],
+  [/\b([Tt])owards\b/g, '$1oward'],
+  [/\b([Oo])kay\b/g, (m, o) => (o === 'O' ? 'OK' : 'OK')],
+  [/\b(\d+) yrs?\b/g, (m, n) => `${n} ${n === '1' ? 'year' : 'years'}`],
+  [/\b(\d+) mos?\b/g, (m, n) => `${n} ${n === '1' ? 'month' : 'months'}`],
+  // breeds: lowercase the generic part (French bulldog, German shepherd, pit bull mix)
+  [/\b(American|French|English|German|Australian|Belgian|Siberian|Alaskan|Staffordshire|Labrador|Yorkshire|Boston|Jack Russell) (Bulldog|Shepherd|Terrier|Retriever|Husky|Malamute|Pointer|Mastiff|Sheepdog|Cattle Dog|Bull Terrier)(s)?\b/g, (m, a, b, s3) => `${a} ${b.toLowerCase()}${s3 || ''}`],
+  [/\b(bulldog|shepherd|terrier|retriever|husky|doodle|poodle|chihuahua|bull) Mix\b/g, '$1 mix'],
+  [/\b(?<![.!?] |^)Pit Bull(s)?\b/g, 'pit bull$1'],
+  [/(^|[.!?] )Pit Bull(s)?\b/g, '$1Pit bull$2'],
+  [/\b(?<![.!?] |^)(Golden Retriever|Golden Doodle|Goldendoodle|Labradoodle|Service Dog)(s)?\b/g, (m, a, s2) => a.toLowerCase().replace('golden doodle', 'goldendoodle') + (s2 || '')],
+];
+export function apFix(str) {
+  let s = apText(str);
+  for (const [re, rep] of AP_WORDS) s = s.replace(re, rep);
+  return s;
+}
 // Apply apText to the visible text of a whole page (skips tags, scripts and styles).
 export function apHtml(html) {
-  return html.replace(/(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]+>)|([^<]+)/g, (m, tag, text) => (tag ? tag : apText(text)));
+  return html.replace(/(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]+>)|([^<]+)/g, (m, tag, text) => (tag ? tag : apFix(text)));
 }
 
 // ---------- content loading ----------
@@ -103,7 +148,8 @@ export const isCurrent = (section) => ctx.route.startsWith(section);
 // ---------- markdown ----------
 const renderer = new marked.Renderer();
 renderer.heading = function ({ tokens, depth }) {
-  const text = this.parser.parseInline(tokens);
+  let text = this.parser.parseInline(tokens);
+  if (!/[<&]/.test(text)) text = apTitle(text); // headings in title case, whoever wrote them
   return `<h${depth} id="${slugify(strip(text))}">${text}</h${depth}>\n`;
 };
 renderer.link = function ({ href: h, title, tokens }) {
