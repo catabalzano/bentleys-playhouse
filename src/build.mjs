@@ -63,7 +63,8 @@ function loadFinances() {
     if (isNaN(amount)) warnings.push(`row ${i + 2}: amount isn't a number`);
     if (!valid.has(r.category)) warnings.push(`row ${i + 2}: unknown category "${r.category}"`);
     if (r.receipt && !/^https?:/.test(r.receipt) && !fs.existsSync(path.join(ROOT, 'src/assets/finances/receipts', r.receipt))) warnings.push(`row ${i + 2}: receipt file "${r.receipt}" not found`);
-    return { date: r.date, type, category: r.category, description: r.description, amount: amount || 0, party: r.paid_to_or_from, dog: r.dog, receipt: r.receipt, notes: r.notes };
+    const hideDate = r.hideDate === true || /^(yes|true|1)$/i.test(String(r.hide_date || ''));
+    return { date: r.date, hideDate, type, category: r.category, description: r.description, amount: amount || 0, party: r.paid_to_or_from, dog: r.dog, receipt: r.receipt, notes: r.notes };
   }).sort((a, b) => b.date.localeCompare(a.date));
   const docs = (isExample ? readJSON('finances/example-documents.json') : readJSON('finances/documents.json')).documents;
   warnings.forEach((w) => console.warn('  ⚠ ledger ' + w));
@@ -147,7 +148,7 @@ fs.cpSync(path.join(ROOT, 'src/assets'), path.join(OUT, 'assets'), { recursive: 
 fs.mkdirSync(path.join(OUT, 'assets/finances'), { recursive: true });
 if (!finances.isExample) {
   const q = (v) => (/[",\n]/.test(String(v ?? '')) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v ?? ''));
-  const csv = ['date,type,category,description,amount,paid_to_or_from,dog,receipt,notes', ...finances.rows.map((r) => [r.date, r.type, r.category, r.description, r.amount.toFixed(2), r.party, r.dog, r.receipt, r.notes].map(q).join(','))].join('\n') + '\n';
+  const csv = ['date,type,category,description,amount,paid_to_or_from,dog,receipt,notes', ...finances.rows.map((r) => [r.hideDate ? '' : r.date, r.type, r.category, r.description, r.amount.toFixed(2), r.party, r.dog, r.receipt, r.notes].map(q).join(','))].join('\n') + '\n';
   fs.writeFileSync(path.join(OUT, 'assets/finances/transactions.csv'), csv);
 }
 if (ctx.mode === 'live') for (const d of ['receipts', 'statements']) for (const f of fs.readdirSync(path.join(OUT, 'assets/finances', d))) if (f.startsWith('example-')) fs.rmSync(path.join(OUT, 'assets/finances', d, f));

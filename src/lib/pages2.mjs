@@ -18,7 +18,7 @@ export function transparency(fin) {
   const catRows = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
   const max = Math.max(1, ...catRows.map((c) => c[1]));
   const receiptHref = (r) => !r.receipt ? '' : /^https?:/.test(r.receipt) ? r.receipt : asset('finances/receipts/' + r.receipt);
-  const latest = rows[0]?.date;
+  const latest = rows.find((r) => !r.hideDate)?.date;
 
   const head = `
 <section class="page-head page-head--donate">
@@ -77,7 +77,7 @@ export function transparency(fin) {
         <thead><tr><th scope="col">Date</th><th scope="col">What it was for</th><th scope="col">Category</th><th scope="col" class="num-col">Amount</th><th scope="col">Receipt</th></tr></thead>
         <tbody>
           ${rows.map((r) => `<tr data-year="${r.date.slice(0, 4)}" data-type="${r.type}" data-cat="${r.category}" data-amount="${r.amount}" data-receipt="${r.receipt ? 1 : 0}" data-search="${esc([r.description, r.party, r.dog, r.notes, cats[r.category]].join(' ').toLowerCase())}">
-            <td data-label="Date"><time datetime="${r.date}">${new Date(r.date + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time></td>
+            <td data-label="Date">${r.hideDate ? '<span class="muted" title="Date kept private">—</span>' : `<time datetime="${r.date}">${new Date(r.date + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time>`}</td>
             <td data-label="What it was for"><strong>${esc(r.description)}</strong>${r.party || r.dog ? `<span class="ledger__sub">${[r.party && esc(r.party), r.dog && `for ${esc(r.dog)}`].filter(Boolean).join(' · ')}</span>` : ''}${r.notes ? `<span class="ledger__sub">${esc(r.notes)}</span>` : ''}${isExample ? ' <span class="confirm-chip">Example</span>' : ''}</td>
             <td data-label="Category"><span class="cat-pill cat-pill--${r.type}">${esc(cats[r.category] || r.category)}</span></td>
             <td data-label="Amount" class="num-col amt amt--${r.type}">${r.type === 'income' ? '+' : '−'}${usd(r.amount)}</td>
@@ -87,7 +87,7 @@ export function transparency(fin) {
       </table>
     </div>
     <p class="lib-count" role="status" aria-live="polite" data-fin-status></p>
-    <p class="muted small">Last entry: <time datetime="${latest}">${fmtDate(latest)}</time>. Amounts in US dollars.</p>
+    <p class="muted small">${latest ? `Last entry: <time datetime="${latest}">${fmtDate(latest)}</time>. ` : ''}Amounts in US dollars.</p>
   </section>
 
   <section class="fin-docs" aria-labelledby="docs-h">
