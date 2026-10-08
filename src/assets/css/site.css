@@ -208,7 +208,24 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
   .nav__extra { flex-direction: column; align-items: stretch; margin-top: .3rem; }
   .utility__urgent span { display: none; }
 }
-@media (max-width: 420px) { .utility__right a:not(.utility__ig) { display: none; } }
+/* phones + tablets: one tidy row — SOS link left; language pill + Instagram right (Transparency and Contact live in the Menu) */
+.lang-switch__short { display: none; }
+@media (max-width: 900px) {
+  .utility__in { min-height: 48px; gap: .75rem; flex-wrap: nowrap; }
+  .utility__urgent { white-space: nowrap; min-width: 0; }
+  .utility__urgent strong { white-space: nowrap; }
+  .utility__right { gap: .5rem; flex: none; }
+  .utility__right > a:not(.utility__ig):not(.lang-switch) { display: none; }
+  .utility .lang-switch { gap: .3rem; padding: .3rem .7rem; border: 1.5px solid #C9D1F5; border-radius: 999px; background: #fff; font-weight: 800; font-size: .8rem; letter-spacing: .04em; line-height: 1; }
+  .utility .lang-switch:hover { text-decoration: none; border-color: var(--deep, #2F45C8); }
+  .utility .lang-switch__long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .utility .lang-switch__short { display: inline; }
+  .utility__ig { padding: .35rem; }
+}
+@media (max-width: 400px) {
+  .utility__ig { display: none; }
+  .utility__urgent { gap: .45em; font-size: .85rem; }
+}
 
 /* ---------- hero ---------- */
 .hero { padding-block: .5rem 0; background: linear-gradient(#FFFFFF, #FFFFFF 78%, var(--cream)) border-box; --hero-wall: #FFF1E6; --hero-stripe: #FFE7D6; --hero-floor: #FECCAD; }
@@ -222,7 +239,11 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
 .hl { background: linear-gradient(transparent 68%, var(--tint-orange) 68%, var(--tint-orange) 92%, transparent 92%); padding-inline: .05em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .hero__lede { font-size: 1.15rem; max-width: 60ch; margin-inline: auto; color: var(--muted); }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: .9rem; justify-content: center; margin-top: 1.4rem; }
+.br-m { display: none; }
 @media (max-width: 640px) {
+  .br-m { display: inline; }
+  .hero__card p.eyebrow--hero { justify-content: center; }
+  .eyebrow--hero .tag { text-align: center; line-height: 1.55; padding: .5em 1.1em .5em .7em; }
   .hero__frame { aspect-ratio: 4 / 3; border-radius: 50% 50% var(--r-md) var(--r-md) / 42% 42% var(--r-md) var(--r-md); box-shadow: 6px 6px 0 var(--gold); }
   .hero__card { margin-top: -32px; text-align: left; }
   .hero__card .eyebrow, .hero__ctas { justify-content: flex-start; }

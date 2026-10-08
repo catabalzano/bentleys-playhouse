@@ -55,7 +55,7 @@ export function home(data) {
   <div class="wrap">
     <div class="hero__frame">${heroImg}</div>
     <div class="hero__card">
-      <p class="eyebrow">${tag('Miami-based Dog Rescue &amp; Advocacy Organization', 'gold')}</p>
+      <p class="eyebrow eyebrow--hero">${tag('Miami-based Dog Rescue &amp;<br class="br-m"> Advocacy Organization', 'gold')}</p>
       <h1 id="hero-h" class="hero__h">We Support the Pups, and <span class="hl">the Heroes Who Help Them.</span></h1>
       <p class="hero__lede">${esc(s.name)} rescues, rehabilitates and rehomes dogs in South Florida. We also work to support other animal rescues in the country through volunteer work and donations, as well as sharing clear, practical help for anyone who has just found, lost or rescued a dog and isn't sure what to do next.</p>
       <div class="hero__ctas">

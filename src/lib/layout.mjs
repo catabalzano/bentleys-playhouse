@@ -24,7 +24,7 @@ function donateLink(cls = 'btn btn--donate') {
 function langSwitch() {
   const es = ctx.site.languages.find((l) => l.code === 'es' && l.enabled);
   if (!es || ctx.route.endsWith('.html')) return '';
-  return `<a class="lang-switch" data-lang-switch href="${href('es/' + ctx.route)}" hreflang="es" lang="es">${icon('globe', { size: 16 })}<span>Español</span></a>`;
+  return `<a class="lang-switch" data-lang-switch href="${href('es/' + ctx.route)}" hreflang="es" lang="es">${icon('globe', { size: 16 })}<span class="lang-switch__long">Español</span><span class="lang-switch__short" aria-hidden="true">ES</span></a>`;
 }
 
 export function header({ home = false } = {}) {

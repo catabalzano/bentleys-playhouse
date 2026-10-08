@@ -156,6 +156,7 @@ fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
 {
   const fin = readJSON('finances/settings.json');
   const cats = [...fin.expenseCategories.map((c) => ({ value: c.id, label: 'Spending · ' + c.label })), ...fin.incomeCategories.map((c) => ({ value: c.id, label: 'Income · ' + c.label }))];
+  fs.writeFileSync(path.join(OUT, 'build.json'), JSON.stringify({ t: Date.now() }));
   fs.writeFileSync(path.join(OUT, 'admin/config.js'), `window.BP_ADMIN=${JSON.stringify({ api: (ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '', categories: cats })};\n`);
   // cache-bust the admin's own files so browsers always load the newest version
   const ah = path.join(OUT, 'admin/index.html');

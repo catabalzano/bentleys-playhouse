@@ -18,6 +18,29 @@
   function get(o, path) { return path.split('.').reduce(function (a, k) { return a == null ? undefined : a[k]; }, o); }
   function set(o, path, v) { var ks = path.split('.'), last = ks.pop(); var t = ks.reduce(function (a, k) { if (a[k] == null || typeof a[k] !== 'object') a[k] = {}; return a[k]; }, o); t[last] = v; }
   function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3800); }
+  // After a save, watch for the website to finish publishing (the build writes /build.json with its time).
+  var live = { since: 0, timer: null, el: null };
+  function liveBadge(text, done) {
+    if (!live.el) { live.el = document.createElement('div'); live.el.className = 'live-badge'; live.el.setAttribute('role', 'status'); document.body.appendChild(live.el); }
+    live.el.className = 'live-badge' + (done ? ' is-done' : '');
+    live.el.innerHTML = done ? text : '<span class="live-dot"></span>' + text;
+  }
+  function watchLive() {
+    live.since = Date.now(); var started = live.since;
+    liveBadge('Publishing to the website… (about 2 minutes)');
+    clearTimeout(live.timer);
+    (function check() {
+      fetch('/build.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (b) {
+        if (started !== live.since) return;
+        if (b && b.t > live.since) {
+          liveBadge('✅ Live on the website now. Reload the page (Cmd + Shift + R) to see it.', true);
+          live.timer = setTimeout(function () { if (live.el) { live.el.remove(); live.el = null; } }, 20000);
+        } else if (Date.now() - started > 10 * 60 * 1000) {
+          liveBadge('Still publishing. This is taking longer than usual; check the site again in a few minutes.', true);
+        } else live.timer = setTimeout(check, 10000);
+      });
+    })();
+  }
   function imgSrc(p) { if (!p) return ''; if (S.preview[p]) return S.preview[p]; return /^https?:|^data:/.test(p) ? p : (p.charAt(0) === '/' ? p : '/assets/img/' + p).replace(/^\/assets\//, '../assets/'); }
 
   function api(path, opts) {
@@ -25,7 +48,9 @@
     opts.headers = Object.assign({}, opts.headers || {});
     if (S.session) opts.headers.Authorization = 'Session ' + S.session;
     if (opts.json !== undefined) { opts.body = JSON.stringify(opts.json); opts.headers['Content-Type'] = 'application/json'; delete opts.json; }
+    var publishes = /^(PUT|POST|DELETE)$/i.test(opts.method || '') && /^\/(api\/(content|settings)|admin\/approve)\//.test(path);
     return fetch(API + path, opts).then(function (r) {
+      if (publishes && r.ok) watchLive();
       var ct = r.headers.get('Content-Type') || '';
       if (ct.indexOf('json') > -1) return r.json().then(function (j) { if (!r.ok) { var e = new Error(j.error || 'Something went wrong.'); e.status = r.status; throw e; } return j; });
       if (!r.ok) throw new Error('Something went wrong (' + r.status + ').');
