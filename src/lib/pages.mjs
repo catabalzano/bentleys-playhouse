@@ -72,10 +72,6 @@ export function home(data) {
   <div class="wrap">
     <h2 id="brings-h" class="section-h section-h--center">What brings you here?</h2>
     ${choiceCards('h3')}
-    <div class="brings__notes">
-      <a class="note-card note-card--alert" href="${href('get-help/emergency/')}"><span class="note-card__icon" aria-hidden="true">${icon('alert', { size: 22 })}</span><span class="note-card__txt"><b>Is a dog hurt or in danger right now?</b><span>Go to emergency steps</span></span><span class="note-card__go" aria-hidden="true">${icon('arrow', { size: 20 })}</span></a>
-      <a class="note-card note-card--fenix" href="${FENIX_LF}" target="_blank" rel="noopener"><span class="note-card__icon" aria-hidden="true">${icon('found', { size: 22 })}</span><span class="note-card__txt"><b>Lost or found a dog?</b><span>Post it on the Fénix Animal Project Lost &amp; Found<span class="visually-hidden"> (opens in a new tab)</span></span></span><span class="note-card__go" aria-hidden="true">${icon('external', { size: 18 })}</span></a>
-    </div>
   </div>
 </section>
 
@@ -97,6 +93,15 @@ export function home(data) {
   </div>
 </section>
 </div>
+
+<section class="quick-help" aria-label="Quick help">
+  <div class="wrap">
+    <div class="quick-help__grid">
+      <a class="qh qh--alert" href="${href('get-help/emergency/')}"><span class="qh__icon" aria-hidden="true">${icon('alert', { size: 20 })}</span><b class="qh__t">Dog hurt or in danger?</b><span class="qh__go">Get help ${icon('arrow', { size: 16 })}</span></a>
+      <a class="qh qh--fenix" href="${FENIX_LF}" target="_blank" rel="noopener"><span class="qh__icon" aria-hidden="true">${icon('found', { size: 20 })}</span><b class="qh__t">Lost or found a dog?</b><span class="qh__go">Post on Fénix ${icon('external', { size: 14 })}<span class="visually-hidden"> (opens in a new tab)</span></span></a>
+    </div>
+  </div>
+</section>
 
 <section class="guides" aria-labelledby="guides-h">
   <div class="wrap">
