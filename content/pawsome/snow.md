@@ -5,8 +5,8 @@ featuredWeek: 2026-10-07
 urgent: false
 needs: both
 photos:
-  - /assets/img/pawsome/snow.jpg
   - /assets/img/pawsome/snow-2.jpg
+  - /assets/img/pawsome/snow.jpg
   - /assets/img/pawsome/snow-3.jpg
   - /assets/img/pawsome/snow-4.jpg
 photoAlt: Snow, American Bulldog Mix
