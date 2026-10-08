@@ -10,13 +10,15 @@ const AUTO = 'content/i18n/es-auto.json';
 const HUMAN = 'content/i18n/es.json';
 const KEEP = ["Bentley's Playhouse", 'Pawsome Pooches', 'Fénix Animal Project', 'Miami-Dade Animal Services', 'MDAS', 'Instagram', 'Facebook', 'Threads', 'YouTube'];
 
-const SYSTEM = `You translate website text for Bentley's Playhouse, a small Miami dog rescue, from English into Spanish.
+const systemFor = (names) => `You translate website text for Bentley's Playhouse, a small Miami dog rescue, from English into Spanish.
 Rules:
 - Neutral Latin American Spanish, warm and plain. Address the reader as "tú", never "usted".
 - Keep every placeholder tag exactly as written and in a sensible place: <t1>…</t1>, <t2/>, etc. Do not add, drop, renumber or translate tags.
 - Keep HTML entities (&#39; &quot; &amp;) as they are or use the plain character.
 - Do not translate names of organizations, people, dogs, places, programs, websites, emails or phone numbers. Keep these exactly: ${KEEP.join(', ')}.
+- These are dogs' names. Never translate them, even when they are ordinary English words ("Meet Snow" → "Conoce a Snow", never "Nieve"): ${names.join(', ') || '(none)'}.
 - Times: "5 p.m." becomes "5 p. m.", "10 a.m." becomes "10 a. m.", "noon" becomes "mediodía". Dates: "Oct. 5, 2026" becomes "5 de octubre de 2026".
+- "pup"/"pups" is "perrito"/"perritos" (never "cachorro", which means a baby puppy); "dog" is "perro". Translate breed names into Spanish ("American bulldog mix" → "mezcla de bulldog americano"). "Sex" labels: Female → Hembra, Male → Macho.
 - No serial comma before "y"/"o". Spanish capitalization (sentence case) for headings.
 - Return ONLY a JSON array of strings: the translations, in the same order, same count as the input.`;
 
@@ -28,7 +30,10 @@ const readRaw = async (env, token, path) => {
   return r.text();
 };
 
-export async function translateTexts(env, texts) {
+const keepsNames = (en, es, names) => names.every((n) => !new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(en) || es.includes(n));
+
+export async function translateTexts(env, texts, names = []) {
+  const SYSTEM = systemFor(names);
   if (!env.AI) throw Object.assign(new Error('Automatic translation is not switched on yet.'), { status: 503, publicMessage: 'Automatic translation is not switched on yet.' });
   const out = [];
   for (let i = 0; i < texts.length; i += 12) {
@@ -44,7 +49,7 @@ export async function translateTexts(env, texts) {
     }
     batch.forEach((en, k) => {
       const es = arr && arr[k] ? arr[k].trim() : '';
-      out.push(es && tagsOf(es) === tagsOf(en) && es !== en ? es : null); // skip anything that lost its formatting
+      out.push(es && tagsOf(es) === tagsOf(en) && es !== en && keepsNames(en, es, names) ? es : null); // skip anything that lost its formatting or changed a dog's name
     });
   }
   return out;
@@ -56,12 +61,14 @@ export async function translateMissing(env, { limit = 60 } = {}) {
   const r = await fetch(`${site}/i18n/missing-es.json?t=${Date.now()}`, { cf: { cacheTtl: 0 } });
   if (!r.ok) return { translated: 0, remaining: 0 };
   const missing = (await r.json()).filter((s) => typeof s === 'string' && s.length < 4000);
+  const nr = await fetch(`${site}/i18n/names.json?t=${Date.now()}`, { cf: { cacheTtl: 0 } });
+  const names = nr.ok ? (await nr.json()).filter((n) => typeof n === 'string' && n) : [];
   const token = await githubToken(env);
   const autoText = await readRaw(env, token, AUTO);
   const auto = autoText ? JSON.parse(autoText) : {};
   const todo = missing.filter((s) => !auto[s]).slice(0, limit);
   if (!todo.length) return { translated: 0, remaining: 0 };
-  const es = await translateTexts(env, todo);
+  const es = await translateTexts(env, todo, names);
   let n = 0;
   todo.forEach((en, i) => { if (es[i]) { auto[en] = es[i]; n++; } });
   if (n) await commitFiles(env, token, `Spanish: translate ${n} new ${n === 1 ? 'string' : 'strings'} automatically`, [{ path: AUTO, content: JSON.stringify(auto, null, 1) + '\n' }]);

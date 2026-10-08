@@ -223,6 +223,20 @@ if (esOn && fs.existsSync(path.join(CONTENT_DIR, 'i18n/es.json'))) {
   // public list of English text still waiting for Spanish; the worker translates it automatically
   fs.mkdirSync(path.join(OUT, 'i18n'), { recursive: true });
   fs.writeFileSync(path.join(OUT, 'i18n/missing-es.json'), JSON.stringify(missing));
+  // dog names must stay as they are in Spanish (Snow is not "Nieve"); the worker rejects translations that drop one
+  const dogNames = new Set();
+  for (const dir of ['pawsome', 'dogs']) {
+    const d = path.join(CONTENT_DIR, dir);
+    if (!fs.existsSync(d)) continue;
+    for (const f of fs.readdirSync(d)) {
+      if (!f.endsWith('.md') || f.startsWith('_')) continue;
+      const m = fs.readFileSync(path.join(d, f), 'utf8').match(/^name:\s*["']?(.+?)["']?\s*(#.*)?$/m);
+      if (m) m[1].split(/\s*(?:&|,|\band\b)\s*/).forEach((n) => n.trim() && dogNames.add(n.trim()));
+    }
+  }
+  const storyDir = path.join(CONTENT_DIR, 'stories');
+  if (fs.existsSync(storyDir)) for (const f of fs.readdirSync(storyDir)) if (f.endsWith('.md') && !f.startsWith('_')) { const n = f.replace(/\.md$/, '').split('-')[0]; dogNames.add(n.charAt(0).toUpperCase() + n.slice(1)); }
+  fs.writeFileSync(path.join(OUT, 'i18n/names.json'), JSON.stringify([...dogNames].sort()));
   console.log(`Spanish: ${esRoutes.length} pages, ${all.size - missing.length}/${all.size} strings translated${missing.length ? ` (${missing.length} missing → tmp-missing-es.json)` : ''}`);
 }
 sitemap.push(...esRoutes);
