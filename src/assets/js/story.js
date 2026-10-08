@@ -11,10 +11,6 @@ var T = window.BP_T || function (s) { return s; };
   var HAND = '"Caveat", "Comic Sans MS", cursive';
   var cache = {};
 
-  function style() {
-    var s = document.documentElement.getAttribute('data-st');
-    return s && /^[1-5]$/.test(s) ? Number(s) : 1;
-  }
 
   /* ---------- helpers ---------- */
   function loadImg(src) {
@@ -127,61 +123,7 @@ var T = window.BP_T || function (s) { return s; };
 
   /* ---------- 5 designs ---------- */
   var DESIGNS = {
-    // 1 corkboard: oak frame, cork, taped polaroid, sticky note
-    1: function (c, d, w, img, logo) {
-      c.fillStyle = '#B07A45'; c.fillRect(0, 0, W, H);
-      for (var i = 0; i < 160; i++) { c.fillStyle = i % 2 ? 'rgba(80,45,15,.10)' : 'rgba(255,225,180,.08)'; c.fillRect(0, (i * 37) % H, W, 2 + (i % 3)); }
-      var F = 46; c.fillStyle = '#C99A63'; c.fillRect(F, F, W - 2 * F, H - 2 * F);
-      specks(c, F, F, W - 2 * F, H - 2 * F, 9000, ['rgba(90,50,20,.35)', 'rgba(255,232,195,.35)', 'rgba(120,70,30,.3)'], 2.2, 11);
-      var g = c.createLinearGradient(0, F, 0, F + 40); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(F, F, W - 2 * F, 40);
-      // header strip
-      rot(c, W / 2, 205, -2, function () {
-        shadow(c, 10, 4, 0.25); c.fillStyle = '#fff'; c.fillRect(-330, -62, 660, 124); noShadow(c);
-        if (logo) c.drawImage(logo, -310, -52, 104, 104);
-        c.fillStyle = INK; font(c, 700, 52, DISPLAY); c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText('Pawsome Pooches', -190, 4); c.textBaseline = 'alphabetic';
-      });
-      // polaroid
-      rot(c, W / 2, 760, -3, function () {
-        shadow(c, 26, 14, 0.4); c.fillStyle = '#fff'; c.fillRect(-380, -420, 760, 870); noShadow(c);
-        cover(c, img, -350, -390, 700, 700, d.focus);
-        c.fillStyle = INK; fit(c, w.hi, 680, 700, 96, HAND, 50); c.textAlign = 'center'; c.fillText(w.hi, 0, 405);
-      });
-      tape(c, W / 2, 352, 230, 54, -4, '#FFB8D2');
-      // sticky note
-      rot(c, W / 2 + 10, 1500, 2, function () {
-        shadow(c, 18, 12, 0.32); c.fillStyle = '#FFE873'; c.fillRect(-410, -230, 820, 460); noShadow(c);
-        var gg = c.createLinearGradient(0, -230, 0, 230); gg.addColorStop(0, 'rgba(255,255,255,.35)'); gg.addColorStop(1, 'rgba(0,0,0,.04)'); c.fillStyle = gg; c.fillRect(-410, -230, 820, 460);
-        c.fillStyle = '#D9532A'; font(c, 700, 92, HAND); c.textAlign = 'left'; c.fillText(w.ask, -365, -125);
-        c.fillStyle = INK; var y = -45; infoLines(w).forEach(function (l) { fit(c, l, 730, 600, 40, BODY, 28); c.fillText(l, -365, y); y += 58; });
-      });
-      tape(c, W / 2 + 10, 1268, 170, 46, 3, '#B9E3FF');
-      // link label
-      rot(c, W / 2, 1745, -1, function () {
-        shadow(c, 12, 6, 0.3); c.fillStyle = '#fff'; rr(c, -420, -62, 840, 124, 18); c.fill(); noShadow(c);
-        c.fillStyle = 'rgba(31,29,43,.6)'; font(c, 800, 26, BODY); c.textAlign = 'center'; c.fillText(T('MEET ME AT').split('').join(String.fromCharCode(8202)), 0, -16);
-        c.fillStyle = BLUE; fit(c, w.url, 780, 700, 40, DISPLAY, 24); c.fillText(w.url, 0, 34);
-      });
-    },
-    // 2 brand: blue to violet, arch photo with gold shadow
-    2: function (c, d, w, img, logo) {
-      var g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, BLUE); g.addColorStop(1, VIOLET); c.fillStyle = g; c.fillRect(0, 0, W, H);
-      [[110, 520, 70], [960, 380, 56], [990, 1250, 80], [80, 1500, 60], [900, 1820, 64]].forEach(function (p) { paw(c, p[0], p[1], p[2], 'rgba(255,255,255,.08)'); });
-      if (logo) c.drawImage(logo, 80, 175, 130, 130);
-      c.fillStyle = '#fff'; font(c, 700, 50, DISPLAY); c.textAlign = 'left'; c.fillText('Pawsome Pooches', 232, 238);
-      c.fillStyle = 'rgba(255,255,255,.75)'; font(c, 600, 30, BODY); c.fillText("Bentley's Playhouse", 234, 282);
-      var ax = 150, ay = 360, aw = 780, ah = 860;
-      c.fillStyle = GOLD; arch(c, ax + 24, ay + 24, aw, ah, 30); c.fill();
-      c.save(); arch(c, ax, ay, aw, ah, 30); c.clip(); cover(c, img, ax, ay, aw, ah, d.focus); c.restore();
-      // ask pill
-      font(c, 700, 46, DISPLAY); var pw = c.measureText(w.ask).width + 80;
-      c.fillStyle = GOLD; rr(c, ax, 1290, pw, 84, 42); c.fill(); c.fillStyle = INK; c.textAlign = 'center'; c.fillText(w.ask, ax + pw / 2, 1348);
-      c.fillStyle = '#fff'; fit(c, w.name, 800, 700, 150, DISPLAY, 70); c.textAlign = 'left'; c.fillText(w.name, ax - 4, 1520);
-      var y = 1590; c.fillStyle = 'rgba(255,255,255,.92)';
-      [w.facts, w.where, w.good].filter(Boolean).forEach(function (l) { fit(c, l, 800, 500, 40, BODY, 26); c.fillText(l, ax, y); y += 54; });
-      c.fillStyle = '#fff'; rr(c, ax, 1745, 780, 92, 46); c.fill();
-      c.fillStyle = BLUE; fit(c, w.url, 720, 700, 38, DISPLAY, 22); c.textAlign = 'center'; c.fillText(w.url, ax + 390, 1804);
-    },
-    // 3 paper scrapbook: cream paper, taped photo, ADOPT ME stamp, handwriting
+    // 3 scrapbook: cream paper, taped photo, ADOPT ME stamp, handwriting
     3: function (c, d, w, img, logo) {
       c.fillStyle = '#FBF6EA'; c.fillRect(0, 0, W, H);
       c.fillStyle = 'rgba(47,69,200,.10)'; for (var yy = 30; yy < H; yy += 48) for (var xx = 30; xx < W; xx += 48) { c.beginPath(); c.arc(xx, yy, 2.4, 0, 7); c.fill(); }
@@ -206,7 +148,7 @@ var T = window.BP_T || function (s) { return s; };
       c.fillStyle = 'rgba(31,29,43,.65)'; font(c, 700, 44, HAND); c.fillText(T('Meet me at'), 250, 1690);
       c.fillStyle = BLUE; fit(c, w.url, 720, 700, 38, DISPLAY, 22); c.fillText(w.url, 250, 1745);
     },
-    // 4 event ticket: white ticket, notches, barcode stub, gold washi tape
+    // 4 ticket: white ticket, notches, barcode stub, gold washi tape
     4: function (c, d, w, img, logo) {
       c.fillStyle = '#F2F5FF'; c.fillRect(0, 0, W, H);
       c.fillStyle = 'rgba(47,69,200,.07)'; for (var yy = 24; yy < H; yy += 40) for (var xx = 24; xx < W; xx += 40) { c.beginPath(); c.arc(xx, yy, 2.2, 0, 7); c.fill(); }
@@ -231,7 +173,7 @@ var T = window.BP_T || function (s) { return s; };
       barcode(c, x + 220, sy + 172, 300, 34, INK);
       tape(c, W / 2, y - 6, 260, 60, -2, '#FFD36B');
     },
-    // 5 full-bleed poster
+    // 5 poster
     5: function (c, d, w, img, logo) {
       cover(c, img, 0, 0, W, H, d.focus);
       var g = c.createLinearGradient(0, 0, 0, 520); g.addColorStop(0, 'rgba(20,18,40,.55)'); g.addColorStop(1, 'rgba(20,18,40,0)'); c.fillStyle = g; c.fillRect(0, 0, W, 520);
@@ -250,10 +192,12 @@ var T = window.BP_T || function (s) { return s; };
     }
   };
 
-  function render(btn) {
-    var st = style(), key = btn.getAttribute('data-pp-story') + ':' + st;
+  var STYLES = [[3, 'Scrapbook'], [4, 'Ticket'], [5, 'Poster']];
+  function data(btn) { return JSON.parse(btn.getAttribute('data-story')); }
+  function render(btn, st) {
+    var key = btn.getAttribute('data-pp-story') + ':' + st;
     if (cache[key]) return cache[key];
-    var d; try { d = JSON.parse(btn.getAttribute('data-story')); } catch (e) { return Promise.reject(e); }
+    var d; try { d = data(btn); } catch (e) { return Promise.reject(e); }
     cache[key] = Promise.all([loadImg(d.photo), loadImg(d.logo), fontsReady()]).then(function (r) {
       var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
       var c = cv.getContext('2d'); c.textBaseline = 'alphabetic';
@@ -263,33 +207,49 @@ var T = window.BP_T || function (s) { return s; };
     cache[key].catch(function () { delete cache[key]; });
     return cache[key];
   }
+  function warmAll(btn) { STYLES.forEach(function (s) { render(btn, s[0]).catch(function () {}); }); }
 
   function say(btn, msg) {
-    var s = btn.parentNode.querySelector('.pp-share__status'); if (!s) return;
-    s.textContent = msg; clearTimeout(s._t); s._t = setTimeout(function () { s.textContent = ''; }, 9000);
+    var s = btn.closest('.pp-share').querySelector('.pp-share__status'); if (!s) return;
+    s.textContent = msg; clearTimeout(s._t); s._t = setTimeout(function () { s.textContent = ''; }, 10000);
   }
-  function preview(btn) {
-    if (!document.documentElement.hasAttribute('data-st')) return;
-    render(btn).then(function (b) {
-      var box = btn.parentNode.parentNode.querySelector('.pp-story-preview');
-      if (!box) { box = document.createElement('img'); box.className = 'pp-story-preview'; box.alt = ''; btn.parentNode.parentNode.insertBefore(box, btn.parentNode.nextSibling); }
-      box.src = URL.createObjectURL(b);
+  // the style picker: three tappable previews; tapping one shares that design
+  function picker(btn) {
+    var wrap = btn.closest('.pp-share'), panel = wrap.nextElementSibling;
+    if (panel && panel.classList.contains('pp-story-pick')) return panel;
+    var id = 'pp-story-pick-' + btn.getAttribute('data-pp-story');
+    panel = document.createElement('div'); panel.className = 'pp-story-pick'; panel.id = id; panel.hidden = true;
+    panel.innerHTML = '<p class="pp-story-pick__h">' + T('Pick a design, then tap it to share') + '</p><div class="pp-story-pick__row" role="group" aria-label="' + T('Story designs') + '"></div>';
+    var row = panel.querySelector('.pp-story-pick__row');
+    STYLES.forEach(function (s) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'pp-story-opt is-loading';
+      b.innerHTML = '<span class="pp-story-opt__img"><img alt=""></span><span class="pp-story-opt__label">' + T(s[1]) + '</span>';
+      b.setAttribute('aria-label', T('Share the') + ' ' + T(s[1]).toLowerCase() + ' ' + T('design to your story'));
+      b.addEventListener('click', function () { share(btn, s[0]); });
+      row.appendChild(b);
+      render(btn, s[0]).then(function (blob) { b.querySelector('img').src = URL.createObjectURL(blob); b.classList.remove('is-loading'); }, function () { b.classList.remove('is-loading'); });
     });
+    wrap.parentNode.insertBefore(panel, wrap.nextSibling);
+    btn.setAttribute('aria-controls', id);
+    return panel;
   }
   function prep(root) {
     Array.prototype.forEach.call((root || document).querySelectorAll('[data-pp-story]'), function (btn) {
       if (btn._story) return; btn._story = true;
-      var warm = function () { render(btn).catch(function () {}); };
-      if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); warm(); preview(btn); } }); io.observe(btn); } else warm();
-      btn.addEventListener('pointerdown', warm);
-      btn.addEventListener('click', function () { share(btn); });
+      btn.setAttribute('aria-expanded', 'false');
+      btn.addEventListener('pointerdown', function () { warmAll(btn); });
+      btn.addEventListener('click', function () {
+        var p = picker(btn), open = p.hidden;
+        p.hidden = !open; btn.setAttribute('aria-expanded', String(open));
+        if (open) { var first = p.querySelector('.pp-story-opt'); if (first) first.focus({ preventScroll: true }); p.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      });
     });
   }
-  function share(btn) {
-    var d = JSON.parse(btn.getAttribute('data-story'));
+  function share(btn, st) {
+    var d = data(btn);
     var link = location.origin + (window.BP_LANG === 'es' ? '/es' : '') + '/pawsome-pooches/' + d.slug + '/';
     var copied = navigator.clipboard ? navigator.clipboard.writeText(link).then(function () { return true; }, function () { return false; }) : Promise.resolve(false);
-    render(btn).then(function (blob) {
+    render(btn, st).then(function (blob) {
       var file = new File([blob], d.slug + '-story.png', { type: 'image/png' });
       var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
       if (touch && navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -309,7 +269,7 @@ var T = window.BP_T || function (s) { return s; };
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
   }
 
-  window.BPStory = { prep: prep, render: render };
+  window.BPStory = { prep: prep, render: render, styles: STYLES };
   prep(document);
   if ('MutationObserver' in window) new MutationObserver(function () { prep(document); }).observe(document.body, { childList: true, subtree: true });
 })();

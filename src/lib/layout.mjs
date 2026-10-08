@@ -163,7 +163,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?st=1-5 previews Instagram story designs */try{var k=location.search.match(/[?&]st=([1-5])/);if(k)document.documentElement.setAttribute("data-st",k[1])}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>

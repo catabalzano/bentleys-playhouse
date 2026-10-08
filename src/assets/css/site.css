@@ -959,8 +959,20 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .pp-share__status { font-size: .9rem; color: var(--good); }
 .pp-story-btn svg { color: currentColor; }
 .pp-share__status { flex-basis: 100%; }
-/* TEMPORARY: story preview shown with ?st=1..5 */
-.pp-story-preview { display: block; width: min(100%, 300px); margin-top: 1rem; border-radius: 14px; box-shadow: 0 10px 24px rgb(31 29 43 / .2); }
+/* Share to Stories picker: three tappable story previews */
+.pp-story-pick { margin-top: 1rem; padding: 1rem; border-radius: var(--r-md); background: #fff; box-shadow: 0 6px 18px rgb(31 29 43 / .1); }
+.pp-story-pick__h { margin: 0 0 .75rem; font-weight: 700; font-size: .95rem; }
+.pp-story-pick__row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; max-width: 26rem; }
+.pp-story-opt { display: grid; gap: .45rem; padding: 0; border: 0; background: none; cursor: pointer; text-align: center; font: inherit; color: var(--ink); }
+.pp-story-opt__img { display: block; aspect-ratio: 9 / 16; border-radius: 10px; overflow: hidden; background: #EEF1FF; box-shadow: 0 2px 6px rgb(31 29 43 / .15); transition: transform .15s, box-shadow .15s; }
+.pp-story-opt__img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pp-story-opt.is-loading .pp-story-opt__img { background: linear-gradient(100deg, #EEF1FF 30%, #F8F9FF 50%, #EEF1FF 70%) 0 0 / 300% 100%; animation: ppShimmer 1.2s linear infinite; }
+.pp-story-opt.is-loading img { visibility: hidden; }
+@keyframes ppShimmer { to { background-position: -150% 0; } }
+.pp-story-opt:hover .pp-story-opt__img, .pp-story-opt:focus-visible .pp-story-opt__img { transform: translateY(-3px); box-shadow: 4px 4px 0 var(--gold), 0 2px 6px rgb(31 29 43 / .15); }
+.pp-story-opt:focus-visible { outline: none; }
+.pp-story-opt__label { font-weight: 700; font-size: .9rem; }
+@media (prefers-reduced-motion: reduce) { .pp-story-opt.is-loading .pp-story-opt__img { animation: none; } }
 .pp-disclaimer { font-size: .85rem; color: var(--muted); margin: 1rem 0 0; }
 .pp-standalone { padding-block: 1.5rem 4rem; }
 .pp-standalone .breadcrumb { margin-bottom: 1.5rem; }
