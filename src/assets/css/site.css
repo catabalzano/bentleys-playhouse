@@ -1507,6 +1507,39 @@ fieldset.field { align-content: start; }
 .cal-cta__t { font-size: .97rem; line-height: 1.45; }
 .cal-cta__t strong { display: block; font-family: var(--font-display); font-size: 1.1rem; }
 .cal-cta__go { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--link); color: #fff; }
+/* TEMPORARY: calendar note options, previewed with ?cn=1..5 */
+[data-cn] .cal-cta { transition: transform .2s, box-shadow .2s; }
+/* 1 yellow sticky note, handwritten title, curled corner */
+[data-cn="1"] .cal-cta { max-width: 25rem; background: linear-gradient(180deg, #FFF6A8, #FFE873); border-radius: 2px 2px 2px 18px / 2px 2px 2px 10px; box-shadow: 0 1px 1px rgb(0 0 0 / .12), 6px 10px 14px -6px rgb(0 0 0 / .3); transform: rotate(-2deg); }
+[data-cn="1"] .cal-cta::before { width: 96px; top: -12px; background: #fff; opacity: .55; box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
+[data-cn="1"] .cal-cta__t strong { font: 700 1.75rem/1.05 Caveat, cursive; margin-bottom: .2rem; }
+[data-cn="1"] .cal-cta__ic { background: rgb(255 255 255 / .55); }
+[data-cn="1"] .cal-cta:hover { transform: rotate(0) translateY(-2px); box-shadow: 0 1px 1px rgb(0 0 0 / .12), 8px 14px 18px -6px rgb(0 0 0 / .32); }
+/* 2 tear-off calendar page */
+[data-cn="2"] .cal-cta { transform: none; border-radius: 6px 6px 14px 14px; padding: 1.4rem 1.2rem 1.1rem; box-shadow: 0 2px 0 #E9E6F2, 0 4px 0 #fff, 0 6px 0 #E9E6F2, 0 12px 20px -6px rgb(31 29 43 / .25); }
+[data-cn="2"] .cal-cta::before { top: 0; left: 0; width: 100%; height: 12px; transform: none; opacity: 1; border-radius: 6px 6px 0 0; background: radial-gradient(circle at 50% 50%, #fff 0 3px, transparent 3.5px) 10px 50% / 22px 12px repeat-x, #E8344E; }
+[data-cn="2"] .cal-cta__ic { width: 58px; height: 62px; border-radius: 8px; background: linear-gradient(#2F45C8 0 34%, #fff 34%); box-shadow: inset 0 0 0 2px #2F45C8; align-content: end; padding-bottom: 6px; color: var(--ink); }
+[data-cn="2"] .cal-cta__ic svg { width: 26px; height: 26px; }
+[data-cn="2"] .cal-cta:hover { transform: translateY(-2px); }
+/* 3 event ticket with notches */
+[data-cn="3"] .cal-cta { transform: rotate(-1deg); border-radius: 12px; background: radial-gradient(circle at 0 50%, #F2F5FF 0 13px, transparent 13.5px), radial-gradient(circle at 100% 50%, #F2F5FF 0 13px, transparent 13.5px), #fff; padding-inline: 1.6rem; }
+[data-cn="3"] .cal-cta::before { display: none; }
+[data-cn="3"] .cal-cta__go { position: relative; width: 52px; height: 100%; min-height: 64px; border-radius: 0; background: none; color: var(--link); border-left: 2px dashed #C9CEEA; padding-left: 1rem; }
+[data-cn="3"] .cal-cta__go svg { width: 26px; height: 26px; }
+[data-cn="3"] .cal-cta__t strong { text-transform: uppercase; letter-spacing: .08em; font-size: .95rem; color: var(--link); }
+/* 4 lined index card with push pin */
+[data-cn="4"] .cal-cta { max-width: 27rem; border-radius: 3px; transform: rotate(1.5deg); padding: 1.3rem 1.2rem 1rem 1.4rem; background: linear-gradient(90deg, transparent 0 2.6rem, rgb(232 52 78 / .45) 2.6rem calc(2.6rem + 1.5px), transparent 0), repeating-linear-gradient(180deg, transparent 0 23px, rgb(47 69 200 / .16) 23px 24px) 0 34px / 100% 100% no-repeat, #fff; box-shadow: 0 1px 1px rgb(0 0 0 / .15), 4px 10px 16px -6px rgb(0 0 0 / .3); }
+[data-cn="4"] .cal-cta::before { top: -7px; width: 20px; height: 20px; border-radius: 50%; transform: translateX(-50%); opacity: 1; background: radial-gradient(circle at 35% 30%, rgb(255 255 255 / .9) 0 2px, transparent 4px), radial-gradient(circle, #E8344E 0 55%, #9E1F33 100%); box-shadow: 3px 5px 3px -1px rgb(0 0 0 / .35); }
+[data-cn="4"] .cal-cta__ic { background: none; }
+[data-cn="4"] .cal-cta__t strong { font: 700 1.7rem/1.1 Caveat, cursive; }
+[data-cn="4"] .cal-cta__t { line-height: 24px; }
+[data-cn="4"] .cal-cta:hover { transform: rotate(0) translateY(-2px); }
+/* 5 kraft paper tag with string hole */
+[data-cn="5"] .cal-cta { max-width: 27rem; transform: rotate(-1.5deg); border-radius: 10px 6px 6px 10px; padding-left: 2.6rem; background: radial-gradient(circle at 1.15rem 50%, #F2F5FF 0 6px, #8B5A2B 6.5px 8px, transparent 8.5px), linear-gradient(135deg, #D9B98C, #C8A06C); color: #2E2116; box-shadow: 0 1px 1px rgb(0 0 0 / .15), 4px 10px 16px -6px rgb(0 0 0 / .35); }
+[data-cn="5"] .cal-cta::before { display: none; }
+[data-cn="5"] .cal-cta__ic { background: rgb(255 255 255 / .45); color: #5A3A1C; }
+[data-cn="5"] .cal-cta__t strong { font: 700 1.7rem/1.05 Caveat, cursive; }
+[data-cn="5"] .cal-cta__go { background: #2E2116; }
 .footer__col .soc { display: flex; gap: .6rem; }
 .footer__col .soc a { width: 44px; height: 44px; }
 .footer__col .soc a svg { width: 20px; height: 20px; }
