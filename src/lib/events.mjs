@@ -1,5 +1,6 @@
 // Community Calendar: /events/ (mini month calendar + "Coming up" list, rendered by assets/js/events.js)
 import { ctx, esc, href, asset, md, tag, breadcrumb, icon } from './core.mjs';
+import { socialButtons } from './layout.mjs';
 
 export const EVENT_CATS = {
   spay: { label: 'Spay/neuter', color: '#FF914D', ink: '#FF914D', tint: '#FFEADC' },
@@ -41,6 +42,10 @@ export function eventsPage(events) {
   <p class="eyebrow">${tag('South Florida', 'violet')}</p>
   <h1 class="page-h">Community Calendar</h1>
   <p class="page-lede">Free and low-cost dog events across Miami-Dade and Broward: spay/neuter clinics, vaccine days, adoption events and dog walks.</p>
+  <div class="follow">
+    <p class="follow__h">Follow along and say hi:</p>
+    ${socialButtons()}
+  </div>
 </div><figure class="arch-cover"><img src="${asset('img/covers/events.jpg')}" alt="A happy white golden retriever sitting in tall green grass with its tongue out" width="800" height="880" fetchpriority="high"></figure></div></section>
 <div class="wrap">
   <div class="ev" data-events>
