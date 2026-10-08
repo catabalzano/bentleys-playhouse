@@ -1463,10 +1463,10 @@ fieldset.field { align-content: start; }
   .qh + .qh { border-top: 1.5px dashed var(--line); }
 }
 
-/* Our Story (desktop): compact header — smaller photo, text vertically centered beside it */
+/* Our Story (desktop): full-size photo, text vertically centered beside it */
 @media (min-width: 761px) {
   .story-hero { padding-block: 1.5rem 2.5rem; }
-  .story-hero__in { grid-template-columns: minmax(0, 1fr) 300px; align-items: center; gap: 3rem; }
+  .story-hero__in { align-items: center; gap: 3rem; }
 }
 /* Our Story article: one centered column, text stays left-aligned */
 .story > * { margin-inline: auto; }
