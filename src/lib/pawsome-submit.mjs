@@ -102,7 +102,7 @@ export function pawsomeSubmitPage() {
       <div class="field"><label for="pps-id">Shelter or animal ID number <span class="opt">(if you have it)</span></label><input id="pps-id" name="animalId" type="text" maxlength="60" autocomplete="off" placeholder="e.g. A1234567"></div>
       ${group('Looking for', radios('needs', [['adoption', 'An adopter'], ['foster', 'A foster'], ['both', 'Either']]))}
     </div>
-    ${field('pps-about', 'Tell us about them', `<textarea id="pps-about" name="about" rows="6" maxlength="3000" required placeholder="Personality, energy level, what they love, anything an adopter should know, and why they need a home."></textarea>`)}
+    ${field('pps-about', 'Tell us about them', `<textarea id="pps-about" name="about" rows="6" maxlength="3000" required placeholder="Personality, energy level, what they love, anything an adopter should know and why they need a home."></textarea>`)}
 
     <h2 class="pps__h">${icon('hands', { size: 22 })} About you</h2>
     <p class="hint">Only Bentley's Playhouse sees this. It's never shown on the site.</p>

@@ -8,7 +8,7 @@ category: laws-travel
 area: general
 order: 4
 featured: true
-summary: How UK and EU pet travel rules work, why Britain is strict about rabies, and step-by-step paperwork for flying your dog from Miami to the UK or Europe.
+summary: How UK and EU pet travel rules work, why Britain is strict about rabies and step-by-step paperwork for flying your dog from Miami to the UK or Europe.
 lastReviewed: 2026-10-06
 keywords: [uk pet travel, great britain dog import, pet travel scheme, rabies quarantine, animal health certificate, ahc, eu pet passport, eu health certificate, tapeworm treatment, usda aphis endorsement, heathrow animal reception centre, eurotunnel dog, eurostar dog, northern ireland pet travel document, flying dog to europe]
 related: [international-pet-travel, microchips-explained]
@@ -34,7 +34,7 @@ sources:
   - { title: "Travelling with your pet", org: "Eurostar", url: "https://www.eurostar.com/us-en/travel-info/travel-planning/travel-with-pets" }
   - { title: "Taking your pet abroad", org: "Eurotunnel LeShuttle", url: "https://www.leshuttle.com/uk-en/discover/traveller-guides/taking-your-pet-abroad" }
 ---
-Taking your dog to London, Paris or Rome is very doable, but it runs on paperwork and precise timing. Great Britain and the European Union each have their own rules, and since Brexit they no longer share one system. A missed tapeworm window or a certificate endorsed one day too early can mean your dog is refused entry or held in quarantine at your expense. This guide explains how the rules work, why the UK is so careful, and the steps for the trips Miami families ask us about most.
+Taking your dog to London, Paris or Rome is very doable, but it runs on paperwork and precise timing. Great Britain and the European Union each have their own rules, and since Brexit they no longer share one system. A missed tapeworm window or a certificate endorsed one day too early can mean your dog is refused entry or held in quarantine at your expense. This guide explains how the rules work, why the UK is so careful and the steps for the trips Miami families ask us about most.
 
 ## Why the UK is so strict
 
@@ -50,7 +50,7 @@ From 1 January 2012 the UK aligned its rules with the standard EU pet movement c
 
 ### What happens if the rules are not met
 
-GOV.UK says a pet that does not meet the rules may be put into quarantine for up to 4 months, or refused entry if you traveled by sea, and you are responsible for any fees or charges. A pet that fails the checks may have to go into quarantine, be sent back to the country it came from, or be put down. Quarantine must be with a carrier and premises authorised by Defra, and you pay all costs. GOV.UK also notes that since 8 September 2025, pets that need rabies quarantine can no longer arrive at Portsmouth port.
+GOV.UK says a pet that does not meet the rules may be put into quarantine for up to 4 months, or refused entry if you traveled by sea, and you are responsible for any fees or charges. A pet that fails the checks may have to go into quarantine, be sent back to the country it came from or be put down. Quarantine must be with a carrier and premises authorised by Defra, and you pay all costs. GOV.UK also notes that since 8 September 2025, pets that need rabies quarantine can no longer arrive at Portsmouth port.
 
 ## Getting into Great Britain from the U.S., step by step
 
@@ -88,7 +88,7 @@ Brexit changed this route. GOV.UK says that if you live in England, Scotland or 
 
 ## Coming back into Great Britain
 
-GOV.UK says a dog returning from an EU country can use a pet passport issued in an EU country, an AHC issued in Great Britain in the last 6 months, a Great Britain pet health certificate, or a pet passport issued in Great Britain before 1 January 2021. You must still use an approved route, and your dog needs tapeworm treatment 24 to 120 hours before arrival, unless you are coming directly from Finland, Ireland, Northern Ireland, Malta or Norway. For short trips of 5 days or less, GOV.UK advises treating your dog again within 28 days of getting home.
+GOV.UK says a dog returning from an EU country can use a pet passport issued in an EU country, an AHC issued in Great Britain in the last 6 months, a Great Britain pet health certificate or a pet passport issued in Great Britain before 1 January 2021. You must still use an approved route, and your dog needs tapeworm treatment 24 to 120 hours before arrival, unless you are coming directly from Finland, Ireland, Northern Ireland, Malta or Norway. For short trips of 5 days or less, GOV.UK advises treating your dog again within 28 days of getting home.
 
 ## Traveling around Europe with your dog
 
@@ -128,7 +128,7 @@ Dogs arriving from outside the EU, including from the U.S. and Great Britain, ne
 |---|---|---|
 | U.S. to Great Britain | ISO microchip, rabies vaccine, Great Britain pet health certificate endorsed by USDA APHIS, declaration | 21 days after primary rabies vaccine; arrive within 10 days of APHIS endorsement; tapeworm 24 to 120 hours before arrival; approved route, dogs fly as cargo |
 | Great Britain to the EU (GB resident) | Microchip, rabies vaccine, AHC from an official vet | Enter EU within 10 days of issue; 6 months onward travel and re-entry to GB; new AHC every trip |
-| EU back to Great Britain | EU pet passport, GB-issued AHC from last 6 months, or GB pet health certificate | Tapeworm 24 to 120 hours before arrival (except direct from Finland, Ireland, NI, Malta, Norway); approved route |
+| EU back to Great Britain | EU pet passport, GB-issued AHC from last 6 months or GB pet health certificate | Tapeworm 24 to 120 hours before arrival (except direct from Finland, Ireland, NI, Malta, Norway); approved route |
 | Great Britain to Northern Ireland | Northern Ireland pet travel document, microchip | Free, lasts the pet's lifetime; tell DAERA 10 working days before flying |
 | U.S. to the EU | Microchip, rabies vaccine, EU health certificate endorsed by USDA APHIS, owner declaration | APHIS endorsement within 10 days of arrival; 6 months onward travel in the EU |
 | Within the EU (EU resident) | EU pet passport | Tapeworm 24 to 120 hours before entering Finland, Ireland, Malta, Northern Ireland or Norway |

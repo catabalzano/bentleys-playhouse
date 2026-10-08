@@ -8,7 +8,7 @@ category: laws-travel
 area: national
 order: 2
 featured: true
-summary: The main U.S. federal animal laws in plain language, what they cover, what they don't, and where to report a federal violation.
+summary: The main U.S. federal animal laws in plain language, what they cover, what they don't and where to report a federal violation.
 lastReviewed: 2026-10-06
 keywords: [federal law, PACT Act, Animal Welfare Act, dog fighting, animal fighting, PAWS Act, PETS Act, service animals, emotional support animals, dog import, CDC, USDA, APHIS, cruelty]
 related: [florida-animal-laws, reporting-animal-cruelty]
@@ -49,7 +49,7 @@ The **Preventing Animal Cruelty and Torture (PACT) Act** became law on **Novembe
 
 - It covers "animal crushing": purposely crushing, burning, drowning, suffocating, impaling or otherwise causing serious bodily injury to a living mammal, bird, reptile or amphibian.
 - It also bans creating or distributing animal crush videos.
-- The penalty is a fine, **up to 7 years in prison**, or both.
+- The penalty is a fine, **up to 7 years in prison** or both.
 - There are exceptions, including normal veterinary and agricultural practices, slaughter for food, hunting and fishing, pest control, medical research, protecting life or property, and humane euthanasia.
 
 **Important limit:** the PACT Act only applies when the conduct affects interstate or foreign commerce, or happens on federal property or in other areas of federal jurisdiction. It also says plainly that it does not override state or local animal protection laws. A neighbor abusing a dog in a backyard in Hialeah is normally a **state** case.

@@ -7,7 +7,7 @@ title: Writing a lost or found notice that works
 category: lost-found
 area: general
 order: 4
-summary: What to include, what to leave out, and where to post so the right people see it.
+summary: What to include, what to leave out and where to post so the right people see it.
 lastReviewed: 2026-10-05
 keywords: [flyer, poster, notice, post, social media, nextdoor, facebook]
 related: [returning-a-found-dog-safely, lost-my-dog, found-a-dog]
@@ -39,6 +39,6 @@ A good notice can be read from a moving car and acted on in seconds.
 
 ## Keep it fresh
 
-Replace faded flyers, re-share posts every few days, and take everything down once the dog is home.
+Replace faded flyers, re-share posts every few days and take everything down once the dog is home.
 
 Ready to make one? Try the [flyer builder](/resources/flyer-builder/).

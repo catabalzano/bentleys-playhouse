@@ -8,7 +8,7 @@ category: lost-found
 area: general
 order: 2
 featured: true
-summary: What a microchip does and doesn't do, how a lookup works, and the one step most owners forget.
+summary: What a microchip does and doesn't do, how a lookup works and the one step most owners forget.
 lastReviewed: 2026-10-05
 keywords: [microchip, chip, scan, registry, aaha, lookup, id]
 related: [found-a-dog, lost-my-dog]

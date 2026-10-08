@@ -3,7 +3,7 @@
   "ways": [
     {
       "id": "share", "icon": "share", "status": "open", "title": "Share rescue information",
-      "body": "This one is open to everyone, today. Share our guides when a friend finds or loses a dog. Re-share lost and found posts in your neighborhood. Follow us on Instagram and pass along dogs looking for homes.\n\n**Share well:** use the original post so updates reach people, avoid adding guesses about a dog's history, and never share a finder's or owner's home address.",
+      "body": "This one is open to everyone, today. Share our guides when a friend finds or loses a dog. Re-share lost and found posts in your neighborhood. Follow us on Instagram and pass along dogs looking for homes.\n\n**Share well:** use the original post so updates reach people, avoid adding guesses about a dog's history and never share a finder's or owner's home address.",
       "action": { "label": "Follow @bentleysplayhouse", "url": "https://www.instagram.com/bentleysplayhouse/", "external": true }
     },
     {

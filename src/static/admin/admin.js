@@ -735,7 +735,7 @@
   }
 
   function donations() {
-    main().innerHTML = '<div class="head"><div><h1>💛 Donations</h1><p>Your payment handles, the amounts people can pick, and whether the Donate button shows on the site.</p></div></div><div data-don><p class="empty">Loading…</p></div>';
+    main().innerHTML = '<div class="head"><div><h1>💛 Donations</h1><p>Your payment handles, the amounts people can pick and whether the Donate button shows on the site.</p></div></div><div data-don><p class="empty">Loading…</p></div>';
     api('/api/settings').then(function (st) {
       var d = st.donate || {}; var methods = d.methods || []; var tiers = d.tiers || [];
       var PH = { paypal: 'your paypal.me name', venmo: 'your Venmo @username', zelle: 'email or phone for Zelle', cashapp: 'your Cash App $tag' };

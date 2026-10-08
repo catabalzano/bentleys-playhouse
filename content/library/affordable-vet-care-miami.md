@@ -38,4 +38,4 @@ These organizations are not affiliated with Bentley's Playhouse. Prices and elig
 
 ## Talking to your vet about cost
 
-It's OK to ask for an estimate, to ask which treatments are most urgent, and whether a payment plan is possible. Vets would rather know up front.
+It's OK to ask for an estimate, to ask which treatments are most urgent and whether a payment plan is possible. Vets would rather know up front.

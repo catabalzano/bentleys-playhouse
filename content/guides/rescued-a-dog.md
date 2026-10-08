@@ -46,7 +46,7 @@ Expect the dog to sleep a lot, eat little or nothing on the first day, or seem s
 
 ## The first few weeks
 
-The ASPCA describes a **3-3-3 guideline**: about three days to decompress, three weeks to learn the routine, and three months to feel at home. It's a rough guide, not a rule. Some dogs move faster, and dogs coming out of hard situations often need longer. Read more in [the first three months](/resources/the-first-three-months/).
+The ASPCA describes a **3-3-3 guideline**: about three days to decompress, three weeks to learn the routine and three months to feel at home. It's a rough guide, not a rule. Some dogs move faster, and dogs coming out of hard situations often need longer. Read more in [the first three months](/resources/the-first-three-months/).
 
 ## Introducing other pets
 
@@ -54,14 +54,14 @@ Wait until a vet has cleared the dog. Then introduce dogs on neutral ground with
 
 ## Signs to call the vet promptly
 
-Call a vet if the dog isn't drinking, has vomiting or diarrhea that doesn't settle, seems weak or in pain, has trouble breathing, or you're simply worried. You know when something isn't right. Don't give any human medication unless a vet tells you to.
+Call a vet if the dog isn't drinking, has vomiting or diarrhea that doesn't settle, seems weak or in pain, has trouble breathing or you're simply worried. You know when something isn't right. Don't give any human medication unless a vet tells you to.
 
 ## Deciding what's next
 
 You have options:
 
 - **Keep the dog.** Once the holding and reporting steps are done, and if no family comes forward, ask Animal Services how ownership works for you.
-- **Rehome the dog responsibly.** Never give a dog away for free or unaltered. Screen adopters carefully, meet them more than once, and ask a vet or rescue for advice. Follow every step in [rehoming a dog safely](/resources/rehoming-a-dog-safely/). Our [adoption guidance](/adopt-foster/) explains what a good match looks like.
+- **Rehome the dog responsibly.** Never give a dog away for free or unaltered. Screen adopters carefully, meet them more than once and ask a vet or rescue for advice. Follow every step in [rehoming a dog safely](/resources/rehoming-a-dog-safely/). Our [adoption guidance](/adopt-foster/) explains what a good match looks like.
 - **Ask a rescue for help.** Most are full, but many can advise or share your post. [Tell us](/contact/) what you're working with.
 
 ## Look after yourself too

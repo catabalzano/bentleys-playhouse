@@ -592,7 +592,7 @@ fieldset.field legend { margin-bottom: .5rem; padding: 0; }
 .arch--blue { background: var(--blue); }
 .arch img { width: 76%; }
 .story-sec { margin-bottom: 2.5rem; }
-.story .prose p strong:first-child { font-family: var(--font-display); font-size: 1.15em; font-weight: 600; }
+.story .prose p strong { font-family: var(--font-display); font-size: 1.15em; font-weight: 600; }
 
 /* ---------- donate ---------- */
 .donate-box { padding: 2rem; border-radius: var(--r-lg); background: var(--paper); border: 1px solid var(--line); }
@@ -1456,32 +1456,9 @@ fieldset.field { align-content: start; }
   .dog-hero { margin-inline: auto; }
 }
 
-/* TEMPORARY: phone sticky-note options, previewed with ?qm=1..5 */
+/* Quick help on phones: one white sticky note, slightly tilted, gold tape on top */
 @media (max-width: 760px) {
-  [data-qm] .quick-help__grid { position: relative; border: 0; border-radius: 4px; box-shadow: 0 12px 28px rgba(31, 29, 43, .14); overflow: visible; }
-  [data-qm] .qh + .qh { border-top: 1.5px dashed var(--line); }
-  /* 1 one white note, tilted, tape on top */
-  [data-qm="1"] .quick-help__grid { transform: rotate(-1.5deg); margin-top: .8rem; }
-  [data-qm="1"] .quick-help__grid::before { content: ""; position: absolute; height: 24px; background: rgba(255, 189, 89, .8); z-index: 2; top: -12px; left: 50%; width: 110px; margin-left: -55px; transform: rotate(-3deg); }
-  /* 2 one note, two pieces of tape on the corners */
-  [data-qm="2"] .quick-help__grid { transform: rotate(1deg); margin-top: .8rem; }
-  [data-qm="2"] .quick-help__grid::before, [data-qm="2"] .quick-help__grid::after { content: ""; position: absolute; height: 24px; background: rgba(255, 189, 89, .8); z-index: 2; top: -10px; width: 74px; }
-  [data-qm="2"] .quick-help__grid::before { left: -12px; transform: rotate(-35deg); }
-  [data-qm="2"] .quick-help__grid::after { right: -12px; transform: rotate(35deg); background: rgba(255, 145, 77, .6); }
-  /* 3 two separate stacked notes, alternating tilt, each taped (like desktop) */
-  [data-qm="3"] .quick-help__grid { background: none; box-shadow: none; display: grid; gap: 1.6rem; }
-  [data-qm="3"] .quick-help__h { text-align: center; padding: 0 0 .3rem; }
-  [data-qm="3"] .qh { position: relative; background: #fff; border-radius: 4px; box-shadow: 0 10px 24px rgba(31, 29, 43, .12); padding: 1.3rem 1.1rem 1.1rem; }
-  [data-qm="3"] .qh + .qh { border-top: 0; }
-  [data-qm="3"] .qh--alert { transform: rotate(-1.5deg); } [data-qm="3"] .qh--fenix { transform: rotate(1.3deg); }
-  [data-qm="3"] .qh::before { content: ""; position: absolute; height: 24px; background: rgba(255, 189, 89, .8); z-index: 2; top: -11px; left: 50%; width: 86px; margin-left: -43px; transform: rotate(-3deg); }
-  /* 4 lined notebook page with a pushpin */
-  [data-qm="4"] .quick-help__grid { background: #fff repeating-linear-gradient(transparent 0 31px, #E6EAFB 31px 32px); border-left: 0; transform: rotate(-1deg); margin-top: .8rem; }
-  [data-qm="4"] .quick-help__grid::before { content: ""; position: absolute; top: -9px; left: 50%; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #FFB27A, #E8662C); box-shadow: 0 3px 5px rgba(0,0,0,.25); z-index: 2; }
-  [data-qm="4"] .qh { background: transparent; }
-  [data-qm="4"] .qh + .qh { border-top: 0; }
-  /* 5 note with a folded (dog-eared) corner and tape */
-  [data-qm="5"] .quick-help__grid { transform: rotate(-1deg); margin-top: .8rem; background: linear-gradient(225deg, transparent 0 26px, #fff 26px); }
-  [data-qm="5"] .quick-help__grid::after { content: ""; position: absolute; top: 0; right: 0; width: 37px; height: 37px; background: linear-gradient(225deg, transparent 50%, #E9ECF7 50%); border-bottom-left-radius: 6px; box-shadow: -2px 2px 4px rgba(0,0,0,.08); }
-  [data-qm="5"] .quick-help__grid::before { content: ""; position: absolute; height: 24px; background: rgba(255, 189, 89, .8); z-index: 2; top: -12px; left: 28px; width: 96px; transform: rotate(-6deg); }
+  .quick-help__grid { position: relative; border: 0; border-radius: 4px; box-shadow: 0 12px 28px rgba(31, 29, 43, .14); overflow: visible; transform: rotate(-1.5deg); margin-top: .8rem; }
+  .quick-help__grid::before { content: ""; position: absolute; top: -12px; left: 50%; width: 110px; height: 24px; margin-left: -55px; background: rgba(255, 189, 89, .8); transform: rotate(-3deg); z-index: 2; }
+  .qh + .qh { border-top: 1.5px dashed var(--line); }
 }

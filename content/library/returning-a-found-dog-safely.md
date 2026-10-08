@@ -8,7 +8,7 @@ category: lost-found
 area: general
 order: 3
 featured: true
-summary: How to check that someone is really the owner, protect your own information, and avoid scams.
+summary: How to check that someone is really the owner, protect your own information and avoid scams.
 lastReviewed: 2026-10-05
 keywords: [verify, ownership, owner, proof, scam, privacy, claim, return]
 related: [found-a-dog, writing-a-lost-or-found-notice]

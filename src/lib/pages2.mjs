@@ -30,7 +30,7 @@ export function transparency(fin) {
 </section>`;
   const promises = `
 <ul class="promises" role="list">
-  <li>${icon('list', { size: 22 })}<div><strong>Every expense, itemized</strong><span>Date, what it was for, who was paid, and which dog it helped.</span></div></li>
+  <li>${icon('list', { size: 22 })}<div><strong>Every expense, itemized</strong><span>Date, what it was for, who was paid and which dog it helped.</span></div></li>
   <li>${icon('image', { size: 22 })}<div><strong>Receipts attached</strong><span>Tap “Receipt” on any line to see the original, with card and account numbers blacked out.</span></div></li>
   <li>${icon('shield', { size: 22 })}<div><strong>Donors stay private</strong><span>We list money received as totals. We never publish donors' names unless they ask us to.</span></div></li>
   <li>${icon('chat', { size: 22 })}<div><strong>Ask us anything</strong><span>If something doesn't add up, <a href="${href('contact/')}">ask</a>. We'll answer.</span></div></li>
@@ -174,7 +174,7 @@ export function clinics(data) {
 
   <section class="clinic-group" id="emergency" aria-labelledby="em-h">
     <h2 id="em-h" class="section-h">Emergency care</h2>
-    <p class="muted">For injuries, poisoning, trouble breathing, collapse, or anything that can't wait. Five of these are open 24/7; one takes emergency walk-ins until 9 PM. Expect to be seen in order of how urgent it is, and ask for a cost estimate if that's a concern.</p>
+    <p class="muted">For injuries, poisoning, trouble breathing, collapse or anything that can't wait. Five of these are open 24/7; one takes emergency walk-ins until 9 PM. Expect to be seen in order of how urgent it is, and ask for a cost estimate if that's a concern.</p>
     <div class="clinic-grid">${em.map((c) => clinicCard(c, checked)).join('')}</div>
   </section>
   <section class="clinic-group" id="everyday" aria-labelledby="cl-h">

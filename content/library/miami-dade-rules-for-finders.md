@@ -7,7 +7,7 @@ title: What Miami-Dade requires when you find a dog
 category: rescue-basics
 area: local
 order: 1
-summary: The 72-hour reporting and scanning rule, how long the shelter holds strays, and what state law does and doesn't say.
+summary: The 72-hour reporting and scanning rule, how long the shelter holds strays and what state law does and doesn't say.
 lastReviewed: 2026-10-05
 keywords: [law, rule, ordinance, report, 72 hours, holding period, stray hold, florida statute]
 related: [found-a-dog, microchips-explained]

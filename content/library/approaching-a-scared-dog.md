@@ -7,7 +7,7 @@ title: Approaching a scared or unfamiliar dog
 category: rescue-basics
 area: general
 order: 2
-summary: Body language to watch for, how to make yourself less scary, and when to step back and call for help.
+summary: Body language to watch for, how to make yourself less scary and when to step back and call for help.
 lastReviewed: 2026-10-05
 keywords: [approach, scared, frightened, shy, body language, bite, catch, stray]
 related: [found-a-dog, lost-my-dog]
@@ -32,7 +32,7 @@ Toss strong-smelling food a little way from you, then a little closer. Let the d
 
 ## Signs to back off
 
-- Stiff body, freezing, or a hard stare.
+- Stiff body, freezing or a hard stare.
 - Growling, a lifted lip or snapping.
 - Tail tucked tight, ears pinned, trying to escape.
 - Showing the whites of its eyes.

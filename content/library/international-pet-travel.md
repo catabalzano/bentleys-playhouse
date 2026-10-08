@@ -50,7 +50,7 @@ Two U.S. agencies handle most of this:
 - **USDA APHIS** handles dogs **leaving** the U.S. It publishes each destination's requirements and endorses (officially signs off on) the health certificate your veterinarian issues.
 - **The CDC** sets the rules for dogs **entering or returning to** the U.S. Every dog needs a CDC Dog Import Form receipt, and dogs that have been in a high-risk rabies country in the past 6 months need more.
 
-Your airline adds its own layer: whether dogs can fly in the cabin, in the hold, or not at all, plus fees, carrier sizes and breed limits.
+Your airline adds its own layer: whether dogs can fly in the cabin, in the hold or not at all, plus fees, carrier sizes and breed limits.
 
 ## Part A: Leaving the U.S. with your dog
 
@@ -88,7 +88,7 @@ APHIS says to contact a USDA-accredited veterinarian as soon as you decide to tr
 
 ## The health certificate, explained
 
-A **pet health certificate** is an official document confirming your dog was examined, appeared healthy, and meets the destination's requirements (microchip, rabies vaccine, tests, treatments). A few key points:
+A **pet health certificate** is an official document confirming your dog was examined, appeared healthy and meets the destination's requirements (microchip, rabies vaccine, tests, treatments). A few key points:
 
 - **Who signs it:** a USDA-accredited veterinarian issues it. APHIS then **endorses** it, which is the government signature and seal foreign officials look for.
 - **Which form:** most countries have their own **country-specific certificate**, found on that country's APHIS page. APHIS only endorses the certificate the destination requires. You may also need **APHIS Form 7001**, a general U.S. health certificate, if your airline asks for one.

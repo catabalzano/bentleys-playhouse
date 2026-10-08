@@ -28,7 +28,7 @@ Free and unaltered dogs attract the people who should never have one. Humane soc
 - **Dog fighters**, who look for free dogs to use as "bait" to train their fighting dogs. Bait dogs are badly injured or killed.
 - **Backyard breeders and puppy mills**, who want unspayed and unneutered dogs to breed over and over, litter after litter, often in filthy conditions, until the dog is worn out and discarded.
 - **Resellers**, who take free dogs and sell them to whoever pays, with no questions asked.
-- **People who want to hurt animals.** There are people who sexually abuse dogs, mutilate them, beat them, burn them, tie them to trees, or leave them chained outside with no shelter.
+- **People who want to hurt animals.** There are people who sexually abuse dogs, mutilate them, beat them, burn them, tie them to trees or leave them chained outside with no shelter.
 
 These people look friendly. They answer the ad quickly, say all the right things and are happy to pick the dog up today. That's why a rushed, free handoff is so risky.
 
@@ -42,13 +42,13 @@ An unaltered dog is exactly what a backyard breeder is looking for. Once your do
 
 Follow every step. Each one exists to keep your dog away from the people described above.
 
-1. **Talk to rescues first.** Before you post anything, contact local rescues, including [us](/contact/), for help or advice. A rescue may have space, may share your dog's listing, or may help with vet care, training or screening. Even when there's no space, they can tell you what to watch for.
+1. **Talk to rescues first.** Before you post anything, contact local rescues, including [us](/contact/), for help or advice. A rescue may have space, may share your dog's listing or may help with vet care, training or screening. Even when there's no space, they can tell you what to watch for.
 2. **Spay or neuter.** No exceptions. See the section above.
 3. **Get a full vet check.** Have a vet examine your dog and bring them fully up to date on care, so you know they're healthy and can be honest with adopters about any medical needs. Keep copies of every record to hand over.
 4. **Vaccinate: rabies and DHPP.** Rabies vaccination is required by Florida law for dogs 4 months and older. DHPP is the combination vaccine that protects against distemper, hepatitis (adenovirus), parvovirus and parainfluenza; distemper, adenovirus and parvovirus are core vaccines every dog should have.
 5. **Set an adoption fee: about $150 to $300.** A fee helps cover part or all of the spay/neuter and vaccines, and it discourages people who want a free dog to use or resell. People who are serious about a dog understand a fee. Be wary of anyone who pushes hard to get your dog for nothing.
 6. **Background-check anyone interested.** Ask for their full name, address and photo ID. Call their current or past vet to confirm they've cared for pets. If they rent, confirm with the landlord that dogs are allowed. Look at their public social media. Trust your instincts: if anything feels off, say no.
-7. **Do a home check.** Visit where your dog will actually live. See where they'll sleep, where they'll spend the day, whether the yard is fenced, and whether they'll be kept indoors. Meet everyone who lives there.
+7. **Do a home check.** Visit where your dog will actually live. See where they'll sleep, where they'll spend the day, whether the yard is fenced and whether they'll be kept indoors. Meet everyone who lives there.
 8. **Meet and greet with the people.** Meet the adopters in person, more than once if you can, and watch how they handle your dog. Bring a friend.
 9. **Meet and greet with their pets.** Introduce your dog to every pet the adopters already have, slowly and on neutral ground first. See [introducing dogs](/resources/introducing-dogs/).
 

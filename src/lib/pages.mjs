@@ -12,7 +12,7 @@ const CHOICES = [
   { k: 'found', title: 'I found a dog', sub: 'Stay safe, check for a chip, report it and find the family.', to: 'get-help/found-a-dog/', tone: 'blue' },
   { k: 'lost', title: 'I lost my dog', sub: 'What to do in the first hours, and how to keep searching.', to: 'get-help/lost-my-dog/', tone: 'orange' },
   { k: 'rescued', title: 'I rescued a dog', sub: 'Vet visit, a calm space and the first few weeks.', to: 'get-help/rescued-a-dog/', tone: 'violet' },
-  { k: 'adopt', title: 'I want to adopt or foster', sub: 'How to choose well, prepare, and settle in.', to: 'adopt-foster/', tone: 'gold' },
+  { k: 'adopt', title: 'I want to adopt or foster', sub: 'How to choose well, prepare and settle in.', to: 'adopt-foster/', tone: 'gold' },
 ];
 
 function choiceCards(headingLevel = 'h3') {
@@ -159,7 +159,7 @@ ${fenixPanel('ember')}
     <div class="community__text">
       <p class="eyebrow">${tag('Community')}</p>
       <h2 id="ig-h" class="section-h">Follow the playhouse</h2>
-      <p>Rescue updates, vet bills and receipts, happy endings, and the everyday business of dogs being dogs. Come say hi.</p>
+      <p>Rescue updates, vet bills and receipts, happy endings and the everyday business of dogs being dogs. Come say hi.</p>
       ${button('@bentleysplayhouse on Instagram', s.social.instagram.url, { variant: 'primary', externalLink: true, ic: 'instagram' })}
     </div>
     <div class="ig-board"><div class="community__grid"${ctx.instagram.length ? '' : ' aria-hidden="true"'}${s.social.instagram.feedUrl ? ` data-ig-feed="${esc(s.social.instagram.feedUrl)}"` : ''}>
@@ -697,7 +697,7 @@ export function contact(data) {
 <section class="page-head page-head--contact"><div class="wrap">
   ${breadcrumb([['Home', ''], ['Contact & FAQ', '']])}
   <h1 class="page-h">Contact &amp; FAQ</h1>
-  <p class="page-lede">How to reach us, what we can help with, and what to do when something can't wait.</p>
+  <p class="page-lede">How to reach us, what we can help with and what to do when something can't wait.</p>
 </div></section>
 <div class="wrap">
   <div class="contact-grid">
@@ -749,13 +749,13 @@ const mail = () => `<a href="mailto:${esc(ctx.site.contact.email)}">${esc(ctx.si
 
 export function privacy() {
   const ga = ctx.site.analytics && ctx.site.analytics.ga4;
-  return `${legalHead('Privacy Policy', 'The short version: we collect as little as we can, we use it only to help dogs and the people helping them, and we never sell it.', 'Privacy Policy')}
+  return `${legalHead('Privacy Policy', 'The short version: we collect as little as we can, we use it only to help dogs and the people helping them and we never sell it.', 'Privacy Policy')}
 <div class="wrap wrap--text prose legal">
-  <p>This policy explains what ${esc(ctx.site.name)} ("we", "us") collects through bentleysplayhouse.org, why, and the choices you have. Questions? Email ${mail()}.</p>
+  <p>This policy explains what ${esc(ctx.site.name)} ("we", "us") collects through bentleysplayhouse.org, why and the choices you have. Questions? Email ${mail()}.</p>
 
   <h2>What we collect</h2>
   <h3>Messages and interest forms</h3>
-  <p>When you use our Contact form or the "Raise your hand" form on Get Involved, we receive what you type: your name, email, and anything optional you add (phone, neighborhood or ZIP, interests, your message). We use it only to reply to you and coordinate the help you asked about.</p>
+  <p>When you use our Contact form or the "Raise your hand" form on Get Involved, we receive what you type: your name, email and anything optional you add (phone, neighborhood or ZIP, interests, your message). We use it only to reply to you and coordinate the help you asked about.</p>
   <h3>"Submit a pup" for Pawsome Pooches</h3>
   <p>When you submit a dog, we receive the dog's details and photos, plus your name, social media handle, phone and email. Your contact details are only for us: they are never shown on the website. If we approve the listing, the dog's details and photos are published on the site. If we don't, we delete the photos.</p>
   <h3>Donations</h3>
@@ -763,7 +763,7 @@ export function privacy() {
   <h3>Things that stay on your device</h3>
   <p>The flyer builder runs entirely in your browser: your photo and details are never uploaded. Checklist ticks and your cookie choice are saved only in your own browser. You can clear them any time in your browser settings.</p>
   ${ga ? `<h3>Website analytics (only if you accept)</h3>
-  <p>If you click "Accept" on our cookie notice, we use Google Analytics to understand how people find and use the site, such as which guides are read most. It collects things like pages visited, approximate location (city or region), device and browser type, and how you reached the site. It doesn't tell us who you are, and we never send it anything you type into our forms. If you say no, Google Analytics doesn't load at all. See our <a href="${href('cookies/')}">Cookie Policy</a>.</p>` : ''}
+  <p>If you click "Accept" on our cookie notice, we use Google Analytics to understand how people find and use the site, such as which guides are read most. It collects things like pages visited, approximate location (city or region), device and browser type and how you reached the site. It doesn't tell us who you are, and we never send it anything you type into our forms. If you say no, Google Analytics doesn't load at all. See our <a href="${href('cookies/')}">Cookie Policy</a>.</p>` : ''}
 
   <h2>Who helps us run the site</h2>
   <p>We use a few trusted services to run the website. They process data only to provide their service to us:</p>
@@ -808,7 +808,7 @@ export function terms() {
   <p>We're a small, volunteer-run rescue, not an emergency service or animal control agency. If an animal is hurt or in danger, contact an emergency vet or your local animal services right away. In Miami-Dade, call 311 or 305-468-5900.</p>
 
   <h2>Pawsome Pooches and other listings</h2>
-  <p>Pawsome Pooches features community dogs to help them get seen. Many are not in our care: they're at shelters, with other rescues, or with families. Listing details come from shelters, rescues and the people who submit them, and we can't guarantee they're complete or accurate. Each adoption or foster is handled by whoever has the dog, under their own process and policies. Please meet the dog and ask your own questions before you commit.</p>
+  <p>Pawsome Pooches features community dogs to help them get seen. Many are not in our care: they're at shelters, with other rescues or with families. Listing details come from shelters, rescues and the people who submit them, and we can't guarantee they're complete or accurate. Each adoption or foster is handled by whoever has the dog, under their own process and policies. Please meet the dog and ask your own questions before you commit.</p>
 
   <h2>What you send us</h2>
   <p>When you submit a dog, photos or a message, you confirm that the information is true to the best of your knowledge and that you have the right to share the photos. You give us permission to use, edit and publish what you submit about the dog (never your contact details) on this site and our social media to help the dog find a home. We may edit, decline or remove any submission or listing at any time.</p>

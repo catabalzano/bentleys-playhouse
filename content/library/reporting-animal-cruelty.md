@@ -6,7 +6,7 @@ title: Reporting animal cruelty in Miami-Dade
 category: rescuers
 area: local
 order: 2
-summary: Who to call, what to write down, and how to make a report that can be acted on.
+summary: Who to call, what to write down and how to make a report that can be acted on.
 lastReviewed: 2026-10-05
 keywords: [cruelty, abuse, neglect, report, tethering, chained, police]
 related: [emergency, toolkit-for-independent-rescuers]

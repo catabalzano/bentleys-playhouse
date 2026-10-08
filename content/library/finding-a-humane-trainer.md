@@ -31,7 +31,7 @@ The American Veterinary Society of Animal Behavior recommends reward-based train
 
 ## When to talk to a vet first
 
-Sudden behavior changes, aggression out of nowhere, or serious anxiety can have medical causes. A vet check is a good first step, and some cases need a veterinary behaviorist.
+Sudden behavior changes, aggression out of nowhere or serious anxiety can have medical causes. A vet check is a good first step, and some cases need a veterinary behaviorist.
 
 ## Free reading
 

@@ -17,7 +17,7 @@ keywords: [stray, loose, found dog, microchip, scan, report, shelter, owner]
 related: [returning-a-found-dog-safely, microchips-explained, miami-dade-rules-for-finders, approaching-a-scared-dog]
 steps:
   - title: Keep yourself and the dog safe
-    body: Don't step into traffic. Move slowly, stand side-on and let the dog come to you. If the dog is scared, growling or keeps running, stop, keep it in sight if you can, and call Miami-Dade Animal Services at **311** or **305-468-5900**. If the dog is hurt, go to the [emergency steps](/get-help/emergency/).
+    body: Don't step into traffic. Move slowly, stand side-on and let the dog come to you. If the dog is scared, growling or keeps running, stop, keep it in sight if you can and call Miami-Dade Animal Services at **311** or **305-468-5900**. If the dog is hurt, go to the [emergency steps](/get-help/emergency/).
   - title: Look for tags
     body: Check the collar for a name tag, a rabies tag (it lists the vet clinic) or a county license tag. Call any number you find. Keep the collar on the dog.
   - title: Get a free microchip scan
@@ -60,7 +60,7 @@ Scared dogs can run into traffic or bite, even if they're friendly at home. Give
 - Watch for stiffening, growling, a tucked tail or lifted lip. If you see these, back off.
 - Don't drive with an unrestrained dog loose in your car.
 
-If you can't safely get close, that's OK. Call **311** or **305-468-5900**, share the location, and keep an eye on the dog from a distance if you can. For a dog on an expressway, call Florida Highway Patrol at ***347**.
+If you can't safely get close, that's OK. Call **311** or **305-468-5900**, share the location and keep an eye on the dog from a distance if you can. For a dog on an expressway, call Florida Highway Patrol at ***347**.
 
 ## If the dog is hurt or in danger
 
@@ -99,7 +99,7 @@ Most people who call are exactly who they say they are. A few aren't. Before you
 
 A dirty, thin or collarless dog may still have a family looking for it. Dogs slip out of gates and through storms, and people search for weeks. In almost every state, the finder doesn't become the owner just by finding the dog. The legal holding period and a real effort to find the family come first.
 
-If you'd like to keep or rehome the dog, report it, search properly, and ask Animal Services how the process works for you. If you rehome, follow the steps in [rehoming a dog safely](/resources/rehoming-a-dog-safely/).
+If you'd like to keep or rehome the dog, report it, search properly and ask Animal Services how the process works for you. If you rehome, follow the steps in [rehoming a dog safely](/resources/rehoming-a-dog-safely/).
 
 ## If you can keep the dog for now
 

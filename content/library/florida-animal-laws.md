@@ -49,9 +49,9 @@ Florida has some of the strongest animal-protection laws in the country, and the
 
 Florida's main cruelty law is [section 828.12](https://www.flsenate.gov/Laws/Statutes/2025/828.12).
 
-**Animal cruelty** covers anyone who unnecessarily overloads, overdrives, torments, deprives of necessary sustenance or shelter, unnecessarily mutilates, or kills an animal. It is a **first-degree misdemeanor**, with a fine of up to **$5,000**, jail, or both.
+**Animal cruelty** covers anyone who unnecessarily overloads, overdrives, torments, deprives of necessary sustenance or shelter, unnecessarily mutilates or kills an animal. It is a **first-degree misdemeanor**, with a fine of up to **$5,000**, jail or both.
 
-**Aggravated animal cruelty** is an intentional act that results in a cruel death, or in excessive or repeated unnecessary pain or suffering. It is a **third-degree felony**, with a fine of up to **$10,000**, prison, or both.
+**Aggravated animal cruelty** is an intentional act that results in a cruel death, or in excessive or repeated unnecessary pain or suffering. It is a **third-degree felony**, with a fine of up to **$10,000**, prison or both.
 
 Extra rules for the worst cases:
 
@@ -79,7 +79,7 @@ The statutes above do not create a separate "hot car" crime for pets. But confin
 4. Use **no more force than necessary** to get in and get the animal out.
 5. **Stay with the animal** in a safe place near the car until police or another first responder arrives.
 
-Practical tip: call 911 first, take a photo or video of the scene, and stay put.
+Practical tip: call 911 first, take a photo or video of the scene and stay put.
 
 ## Tethering and natural disasters (Trooper's Law)
 
@@ -138,7 +138,7 @@ Both 2026 bills passed the Legislature unanimously.
 
 - Puppies and kittens **under 8 weeks old** cannot be offered for sale.
 - Each animal for sale needs an **official certificate of veterinary inspection** listing vaccines and deworming and stating it shows no sign of contagious disease.
-- If a vet certifies the animal is unfit because of illness, disease or parasites (now within **30 days**, see SB 1004), or a congenital or hereditary disorder (within **1 year**), you can generally **return it for a refund, exchange it, or keep it** and be reimbursed for vet costs.
+- If a vet certifies the animal is unfit because of illness, disease or parasites (now within **30 days**, see SB 1004), or a congenital or hereditary disorder (within **1 year**), you can generally **return it for a refund, exchange it or keep it** and be reimbursed for vet costs.
 - Act fast: deadlines to notify the dealer are short, so get your new pet to a vet right away and keep every record.
 
 Adopting from a shelter or rescue? See [Adopt, don't shop](/resources/adopt-dont-shop/).
@@ -179,4 +179,4 @@ If a dog already classified as dangerous attacks without provocation, the owner 
 - **Tethering concerns:** **311 or 305-743-7433**.
 - **A dog without food, water or shelter:** **305-476-5423**.
 
-Give as much detail as you can: the location, what you saw, a description of the animal, and photos. [Miami-Dade Animal Services](https://www.miamidade.gov/global/service.page?Mduid_service=ser1599239379649110) For a step-by-step guide, see [Reporting animal cruelty in Miami-Dade](/resources/reporting-animal-cruelty/).
+Give as much detail as you can: the location, what you saw, a description of the animal and photos. [Miami-Dade Animal Services](https://www.miamidade.gov/global/service.page?Mduid_service=ser1599239379649110) For a step-by-step guide, see [Reporting animal cruelty in Miami-Dade](/resources/reporting-animal-cruelty/).

@@ -55,7 +55,7 @@ Losing a dog is frightening. Lots of dogs come home, sometimes after weeks or ev
 
 ## If you see your dog but can't catch them
 
-Stop. Don't run toward them. Sit or crouch, look away, talk softly, and toss food near you. Many frightened dogs come closer when no one is moving toward them. If the dog keeps returning to one spot, set out food and water, and consider a motion-activated camera. Animal control or a rescue may be able to lend a humane trap.
+Stop. Don't run toward them. Sit or crouch, look away, talk softly and toss food near you. Many frightened dogs come closer when no one is moving toward them. If the dog keeps returning to one spot, set out food and water, and consider a motion-activated camera. Animal control or a rescue may be able to lend a humane trap.
 
 ## Searching at the right times
 
@@ -75,7 +75,7 @@ Lost-pet scams are common. Some scammers pretend to be shelter staff and say the
 
 - Ask for a current photo, or a description of the detail you held back.
 - Don't pay anything before you have your dog. Don't send gift cards or app payments.
-- If someone claims to be from a shelter, hang up, look up the shelter's number yourself, and call it directly.
+- If someone claims to be from a shelter, hang up, look up the shelter's number yourself and call it directly.
 - Meet in a busy public place and bring a friend.
 
 ## Keep going

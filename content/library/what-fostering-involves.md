@@ -6,7 +6,7 @@ title: What fostering a dog involves
 category: adopt-foster
 area: general
 order: 3
-summary: How long placements last, what organizations usually cover, and questions to ask before you say yes.
+summary: How long placements last, what organizations usually cover and questions to ask before you say yes.
 lastReviewed: 2026-10-05
 keywords: [foster, fostering, temporary, foster home, volunteer]
 related: [the-first-three-months, introducing-dogs]

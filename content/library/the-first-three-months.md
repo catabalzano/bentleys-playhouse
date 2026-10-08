@@ -18,7 +18,7 @@ The ASPCA describes a **3-3-3 guideline** for new dogs. Think of it as a loose m
 
 ## The first 3 days: decompress
 
-Your dog may be nervous, overwhelmed, or not interested in food or play. Keep things quiet. Stick to a simple routine, give them a safe space like a crate or a quiet room, and don't force interaction or invite lots of visitors.
+Your dog may be nervous, overwhelmed or not interested in food or play. Keep things quiet. Stick to a simple routine, give them a safe space like a crate or a quiet room and don't force interaction or invite lots of visitors.
 
 ## The first 3 weeks: learn the routine
 

@@ -137,7 +137,7 @@ export function pawsomeHome(pooches) {
       <div>
         <p class="pawsome__kicker">${paw()} Community spotlight ${week ? `· week of ${esc(fmtDate(week))}` : ''}</p>
         <h2 id="pawsome-h" class="pawsome__title">Pawsome <span>Pooches</span></h2>
-        <p class="pawsome__lede">Every week we spotlight dogs in our community who need a home: at Miami-Dade Animal Services, the Broward shelter, local rescues, and families who need to rehome safely. Tap a pup to meet them.</p>
+        <p class="pawsome__lede">Every week we spotlight dogs in our community who need a home: at Miami-Dade Animal Services, the Broward shelter, local rescues and families who need to rehome safely. Tap a pup to meet them.</p>
       </div>
       <div class="pawsome__stats" aria-label="This week at a glance">
         <p><strong>${pups(live)}</strong><span>${pups(live) === 1 ? 'pup' : 'pups'} this week</span></p>
@@ -174,7 +174,7 @@ export function pawsomePage(pooches) {
     ${breadcrumb([['Home', ''], ['Pawsome Pooches', '']])}
     <p class="pawsome__kicker">${paw()} Updated weekly ${week ? `· week of ${esc(fmtDate(week))}` : ''}</p>
     <h1 class="pawsome__title pawsome__title--page">Pawsome <span>Pooches</span></h1>
-    <p class="page-lede">Every week we feature dogs who are ready for adoption or foster in our community: at Miami-Dade Animal Services in Doral and Medley, the Broward County shelter, local rescues doing the work every day, and families who need to rehome safely.</p>
+    <p class="page-lede">Every week we feature dogs who are ready for adoption or foster in our community: at Miami-Dade Animal Services in Doral and Medley, the Broward County shelter, local rescues doing the work every day and families who need to rehome safely.</p>
     <div class="pawsome__stats pawsome__stats--page">
       <p><strong>${pups(live)}</strong><span>${pups(live) === 1 ? 'pup' : 'pups'} looking</span></p>
       ${(() => {

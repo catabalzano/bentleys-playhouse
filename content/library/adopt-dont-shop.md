@@ -6,7 +6,7 @@ title: Why we say "adopt, don't shop"
 category: adopt-foster
 area: general
 order: 2
-summary: What puppy mills are, why pet-store and online puppies are risky, and how adoption helps.
+summary: What puppy mills are, why pet-store and online puppies are risky and how adoption helps.
 lastReviewed: 2026-10-05
 keywords: [adopt dont shop, puppy mill, pet store, breeder, online puppy]
 related: [questions-to-ask-a-rescue]
@@ -33,4 +33,4 @@ The ASPCA says most pet-store puppies come from puppy mills through brokers, and
 
 ## If you choose a breeder
 
-Visit in person, meet the puppy's mother, and see where the dogs live. Never buy a puppy you haven't seen in its home, and never meet at a parking lot or other third-party location.
+Visit in person, meet the puppy's mother and see where the dogs live. Never buy a puppy you haven't seen in its home, and never meet at a parking lot or other third-party location.

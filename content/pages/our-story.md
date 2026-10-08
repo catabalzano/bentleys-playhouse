@@ -19,13 +19,13 @@ Romeo became Bentley's Playhouse's first rescue. His arrival is where the rescue
 
 ## Rescue, foster, rehabilitate, rehome
 
-After Romeo, the rescue settled into the way it still works today: **rescue, foster, rehabilitate, rehome**. Whether a dog needs medical treatment, training, or just a lot of love and attention, we do everything we can to help them heal and thrive before they meet their family.
+After Romeo, the rescue settled into the way it still works today: **rescue, foster, rehabilitate, rehome**. Whether a dog needs medical treatment, training or just a lot of love and attention, we do everything we can to help them heal and thrive before they meet their family.
 
 Not every dog takes that last step. **Kiara**, a blind, special-needs senior Husky, never went through rehoming; she stayed with the family. **Fénix** was rescued with the same intention as every other dog, but couldn't safely be rehomed by the rescue, and a group of heroes stepped in to help. While we weren't able to give Fénix the ending we've given all the dogs that have stopped by the rescue, we love him, and we named our animal welfare portal after him: [Fénix Animal Project](https://fenixanimalproject.org/).
 
 ## Meet Cata
 
-Cata Balzano is a full-time journalist who runs Bentley's Playhouse in her free time, as a volunteer. Her work as a journalist shapes how the rescue runs: research, verify, ask questions, and find the right people. It's also why the guides on this site cite their sources.
+Cata Balzano is a full-time journalist who runs Bentley's Playhouse in her free time, as a volunteer. Her work as a journalist shapes how the rescue runs: research, verify, ask questions and find the right people. It's also why the guides on this site cite their sources.
 
 {{preview: Add a photo of Cata and anything else you'd like to share about yourself.}}
 

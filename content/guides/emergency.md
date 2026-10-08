@@ -7,7 +7,7 @@ eyebrow: Get Help · Emergency
 tone: orange
 order: 0
 category: emergency
-summary: Who to call and how to stay safe when a dog is injured, very sick, poisoned, being hurt, or in traffic.
+summary: Who to call and how to stay safe when a dog is injured, very sick, poisoned, being hurt or in traffic.
 scope: Miami-Dade numbers, general safety guidance
 lastReviewed: 2026-10-05
 featured: true
@@ -56,7 +56,7 @@ Pain, fear and confusion can make any dog unpredictable. Veterinarians advise:
 
 ## Heat and South Florida weather
 
-Heat is dangerous for dogs, especially flat-faced breeds, older dogs and dogs left in cars or without shade. Move the dog to shade, offer water, and call a vet promptly if the dog is panting hard, weak, confused or collapsing.
+Heat is dangerous for dogs, especially flat-faced breeds, older dogs and dogs left in cars or without shade. Move the dog to shade, offer water and call a vet promptly if the dog is panting hard, weak, confused or collapsing.
 
 ## Paying for emergency care
 

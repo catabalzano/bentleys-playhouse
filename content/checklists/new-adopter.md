@@ -16,7 +16,7 @@ groups:
       - Everyone in the household agrees and knows the house rules
       - A quiet spot set up with a bed or crate, away from busy areas
       - Food the rescue has been using, plus bowls
-      - Collar or harness, ID tag with my phone number, and a leash
+      - Collar or harness, ID tag with my phone number and a leash
       - Dog-proofed the home (cords, trash, medications, small objects, cleaning products)
       - Checked fences, gates and door habits for escape routes
       - Chosen a vet

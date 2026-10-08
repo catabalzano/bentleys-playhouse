@@ -39,7 +39,7 @@ A shared note or spreadsheet with each dog's name, where and when they were foun
 
 Never list a dog as "free to a good home." The full checklist, and why it matters, is in [rehoming a dog safely](/resources/rehoming-a-dog-safely/).
 
-- Screen adopters: meet them more than once, ask about their home and other pets, and check references.
+- Screen adopters: meet them more than once, ask about their home and other pets and check references.
 - Spay/neuter, vaccinate and microchip before placement if you can, and transfer the chip registration.
 - Use a simple written adoption agreement, and ask adopters to return the dog to you if things don't work out.
 
@@ -51,4 +51,4 @@ Never list a dog as "free to a good home." The full checklist, and why it matter
 
 ## Look after yourself
 
-Rescue can be heavy. Set limits on how many dogs you take on, lean on other rescuers, and take breaks. Saying "I can't right now" is part of doing this for the long haul.
+Rescue can be heavy. Set limits on how many dogs you take on, lean on other rescuers and take breaks. Saying "I can't right now" is part of doing this for the long haul.

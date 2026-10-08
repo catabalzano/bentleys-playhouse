@@ -21,7 +21,7 @@ A dog can be part of your life for 10 to 15 years. Before you fall for a face, t
 
 - **Time.** Who will walk, feed and train the dog every day? What happens on long workdays and trips?
 - **Space and housing.** Does your lease or building allow dogs, and what size or breed limits apply?
-- **Budget.** Food, vet care, preventives, license, grooming, and a cushion for surprises.
+- **Budget.** Food, vet care, preventives, license, grooming and a cushion for surprises.
 - **Household.** Are there children, other pets, allergies or people who'd rather not have a dog?
 - **Energy match.** A dog that needs miles of exercise isn't a fit for a quiet routine, and that's no one's fault.
 
@@ -33,11 +33,11 @@ Ask about the dog's history, how they do with other animals and children, energy
 
 ## Preparing your home
 
-Set up a quiet space with a bed or crate, get the food the dog has been eating, and add an ID tag with your phone number to a well-fitted collar or harness. Walk through your home at dog height: cords, trash, medications, cleaning products and gaps in fences or gates. Choose a vet before the dog arrives.
+Set up a quiet space with a bed or crate, get the food the dog has been eating and add an ID tag with your phone number to a well-fitted collar or harness. Walk through your home at dog height: cords, trash, medications, cleaning products and gaps in fences or gates. Choose a vet before the dog arrives.
 
 ## The first three months
 
-The ASPCA describes a **3-3-3 guideline**: about three days to decompress, three weeks to learn the routine, three months to feel at home. Many rescue dogs need longer. Keep a simple routine, give your dog a place to retreat, and use reward-based training. [What to expect, month by month](/resources/the-first-three-months/).
+The ASPCA describes a **3-3-3 guideline**: about three days to decompress, three weeks to learn the routine, three months to feel at home. Many rescue dogs need longer. Keep a simple routine, give your dog a place to retreat and use reward-based training. [What to expect, month by month](/resources/the-first-three-months/).
 
 ## Fostering
 
@@ -47,4 +47,4 @@ Fostering is a wonderful way to help if you can't commit to a dog for life, or w
 
 ## Other ways to help
 
-Not able to adopt or foster? You can still make a real difference: share a dog's profile, help with transport, donate supplies, or lend a professional skill. Everything counts.
+Not able to adopt or foster? You can still make a real difference: share a dog's profile, help with transport, donate supplies or lend a professional skill. Everything counts.

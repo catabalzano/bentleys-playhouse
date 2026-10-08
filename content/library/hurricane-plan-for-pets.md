@@ -7,7 +7,7 @@ category: emergency
 area: local
 order: 1
 featured: true
-summary: What to pack, where to go, and the Miami-Dade rules for evacuating with pets.
+summary: What to pack, where to go and the Miami-Dade rules for evacuating with pets.
 lastReviewed: 2026-10-05
 keywords: [hurricane, storm, evacuation, disaster, kit, emergency, shelter]
 related: [poison-and-emergency-contacts, microchips-explained]
@@ -22,7 +22,7 @@ As the Red Cross puts it, if it isn't safe for you to stay home, it isn't safe f
 ## Pack a go-kit
 
 - Leash, harness and a sturdy carrier or crate.
-- Food and water for several days, bowls, and a manual can opener.
+- Food and water for several days, bowls and a manual can opener.
 - Medications, and medical and vaccine records in a waterproof bag.
 - A recent photo of you with your dog (proof of ownership if you're separated).
 - Microchip number, your vet's name and number, feeding and medication notes.
