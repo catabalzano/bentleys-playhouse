@@ -242,8 +242,7 @@ main > :first-child:not(:has(> .page-head:first-child)), main > :first-child > .
 .br-m { display: none; }
 @media (max-width: 640px) {
   .br-m { display: inline; }
-  .hero__card p.eyebrow--hero { justify-content: center; }
-  .eyebrow--hero .tag { text-align: center; line-height: 1.55; padding: .5em 1.1em .5em .7em; }
+  .eyebrow--hero .tag { text-align: left; line-height: 1.55; padding: .5em 1.1em .5em .7em; }
   .hero__frame { aspect-ratio: 4 / 3; border-radius: 50% 50% var(--r-md) var(--r-md) / 42% 42% var(--r-md) var(--r-md); box-shadow: 6px 6px 0 var(--gold); }
   .hero__card { margin-top: -32px; text-align: left; }
   .hero__card .eyebrow, .hero__ctas { justify-content: flex-start; }

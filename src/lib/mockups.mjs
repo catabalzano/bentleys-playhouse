@@ -54,13 +54,27 @@ export function adoptMobileMockups() {
 .mk-tile { display: flex; flex-direction: column; justify-content: space-between; gap: .6rem; min-height: 112px; padding: .9rem; border-radius: var(--r-md); background: var(--paper); border: 2px solid var(--line); color: var(--ink); text-decoration: none; }
 .mk-tile b { font-size: .98rem; line-height: 1.25; }
 .mk-tile small { color: var(--muted); font-size: .8rem; display: block; font-weight: 600; }
+.mk .hero__card { container-type: inline-size; }
+.mk-oneline { white-space: nowrap; font-size: min(.74rem, calc(100cqi / 36)); letter-spacing: .03em; }
 .mk-tile .go { color: var(--link); display: inline-flex; align-items: center; gap: .3rem; font-weight: 800; font-size: .88rem; }
 </style>
 <section class="mockups"><div class="wrap">
   <div class="mockups__intro">
-    <h1 class="section-h">"Looking for a dog to adopt?" on phones</h1>
-    <p>Four options for the mobile layout only. The desktop version stays as it is. Tell Claude which letter you like.</p>
+    <h1 class="section-h">Phone design options</h1>
+    <p>Mobile layout only; desktop stays as it is. Tell Claude which number and letter you like.</p>
   </div>
+  <div class="mockups__intro"><h2 class="section-h">Homepage tag: 1 line or 2 lines</h2><p>Both left-aligned. The live site shows the 2-line version right now.</p></div>
+  ${opt('1', 'One line', 'Smaller letters so the whole tag fits on one line.', `
+    <div class="hero__card" style="margin:0;text-align:left">
+      <p class="eyebrow" style="justify-content:flex-start"><span class="tag tag--gold mk-oneline"><span class="tag__hole" aria-hidden="true"></span>Miami-based Dog Rescue &amp; Advocacy Organization</span></p>
+      <h2 class="hero__h" style="font-size:2.2rem">We Support the Pups, and the Heroes Who Help Them.</h2>
+    </div>`)}
+  ${opt('2', 'Two lines (live now)', 'Same size as the other tags on the site, split after the “&”.', `
+    <div class="hero__card" style="margin:0;text-align:left">
+      <p class="eyebrow" style="justify-content:flex-start"><span class="tag tag--gold" style="text-align:left;line-height:1.55;padding:.5em 1.1em .5em .7em"><span class="tag__hole" aria-hidden="true"></span>Miami-based Dog Rescue &amp;<br> Advocacy Organization</span></p>
+      <h2 class="hero__h" style="font-size:2.2rem">We Support the Pups, and the Heroes Who Help Them.</h2>
+    </div>`)}
+  <div class="mockups__intro"><h2 class="section-h">“Looking for a dog to adopt?”</h2></div>
   ${opt('A', 'Centered and stacked', 'Westie centered on top, everything centered, three full-width buttons of equal width.', `
     <div class="mkA"><div class="box">
       <img src="${westie}" alt="" width="160" height="220">
