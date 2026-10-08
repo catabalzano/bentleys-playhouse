@@ -13,7 +13,7 @@ Bentley showed us that every dog has the potential to be a hero. He was one for 
 
 ## How it started: Romeo
 
-Romeo was a 7-month-old French Bulldog who had spent about his whole life with a backyard breeder before Cata rescued him from the home of an elderly couple who couldn't afford the financial responsibility of caring for a dog with health setbacks, but who took him in after their granddaughter learned her neighbors (the breeders) would be putting him down as he was "not sellable." Romeo came to the playhouse with a bad case of giardia, bald spots provoked by mange and a head tilt that ended up becoming his biggest quirk. After rescuing him and embarking on a long road to recovery, seeing what Romeo had been through in the hands of irresponsible breeders, we knew we had to help more pups in need.
+Romeo was a 7-month-old French Bulldog who had spent about his whole life in a cage, at the hands of a backyard breeder. Cata picked him up from the home of an elderly couple who couldn't afford the financial responsibility of caring for a dog with health setbacks, but who took him in after their granddaughter learned her neighbors (the breeders) would be putting him down as he was "not sellable." Romeo came to the playhouse with a bad case of giardia, bald spots provoked by mange and a head tilt that ended up becoming his biggest quirk. After rescuing him and embarking on a long road to recovery, seeing what Romeo had been through in the hands of irresponsible breeders, we knew we had to help more pups in need.
 
 Romeo became Bentley's Playhouse's first rescue. His arrival is where the rescue work really started and what inspired us to keep helping more pups in the community who are victims of neglect.
 
