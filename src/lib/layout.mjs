@@ -163,7 +163,7 @@ ${scripts.map((src) => `<script src="${asset(src)}" defer></script>`).join('\n')
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>/* temporary: ?cn=1-6 previews calendar note styles */try{var k=location.search.match(/[?&]cn=([1-6])/);if(k)document.documentElement.dataset.cn=k[1]}catch(e){}</script>${headInner}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">${headInner}
 </head>
 <body class="${bodyClass}">${bodyInner}
 </body>

@@ -162,7 +162,7 @@ ${fenixPanel('ember')}
       <h2 id="ig-h" class="section-h">Follow the playhouse</h2>
       <p>Rescue updates, vet bills and receipts, happy endings and the everyday business of dogs being dogs. Come say hi.</p>
       ${socialButtons({ youtube: true })}
-      <a class="cal-cta" href="${href('events/')}"><span class="cal-cta__ic">${icon('calendar', { size: 24 })}</span><span class="cal-cta__t"><strong>See Our Social Calendar</strong> Adoption days, free vet clinics, pack walks and other dog events around South Florida, all in one place.</span><span class="cal-cta__go" aria-hidden="true">${icon('arrow', { size: 18 })}</span></a>
+      <a class="cal-cta" href="${href('events/')}"><span class="cal-cta__ic">${icon('calendar', { size: 24 })}</span><span class="cal-cta__t"><span class="cal-cta__k">Admit one</span><strong>See Our Social Calendar</strong> Adoption days, free vet clinics, pack walks and other dog events around South Florida, all in one place.</span><span class="cal-cta__go" aria-hidden="true">${icon('arrow', { size: 26 })}</span></a>
     </div>
     <div class="ig-board"><div class="community__grid"${ctx.instagram.length ? '' : ' aria-hidden="true"'}${s.social.instagram.feedUrl ? ` data-ig-feed="${esc(s.social.instagram.feedUrl)}"` : ''}>
       ${ctx.instagram.length
