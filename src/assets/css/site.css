@@ -1478,3 +1478,9 @@ fieldset.field { align-content: start; }
   [data-qd="3"] .qh { padding-right: .55rem; }
 
 }
+
+/* phones: Our Story and dog-profile arch photos are wide and centered, like the other page photos */
+@media (max-width: 760px) {
+  .story-hero__art { max-width: 400px; width: 100%; justify-self: center; margin-inline: auto; }
+  .dog-hero { margin-inline: auto; }
+}
