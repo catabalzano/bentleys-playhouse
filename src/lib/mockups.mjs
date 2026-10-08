@@ -1,5 +1,6 @@
 // Design options shown to Cata on the live site (noindex, not in the sitemap). Delete once a choice is made.
 import { ctx, asset, icon } from './core.mjs';
+import { fenixPanel } from './pages.mjs';
 
 export function adoptMobileMockups() {
   const s = ctx.site;
@@ -114,5 +115,12 @@ export function adoptMobileMockups() {
         <a class="mk-tile" href="${broward}"${ext}><span><b>Broward County Animal Care</b><small>Fort Lauderdale</small></span><span class="go">See dogs ${icon('external', { size: 15 })}</span></a>
       </div>
     </div></div>`)}
-</div></section>`;
+</div></section>
+<section class="mockups"><div class="wrap"><div class="mockups__intro"><h2 class="section-h">Fénix panel colors</h2><p>Same content, four color treatments that match the site. It now sits right after Pawsome Pooches. Each one also works on desktop.</p></div></div></section>
+${[['cream', 'F1', 'Warm cream', 'Cream card with a soft peach border, white link tiles, orange icons. Calm and friendly; sits well after the cream Pawsome section.'],
+   ['blue', 'F2', 'Soft blue', 'Light blue like the rest of the homepage, white tiles, blue outline button.'],
+   ['violet', 'F3', 'Brand gradient', 'Same blue-to-violet as the header. Bold, keeps the “featured” feel.'],
+   ['ember', 'F4', 'White with Fénix ember stripe', 'Clean white card with a thin orange-red stripe taken from the Fénix logo colors.']]
+  .map(([v, id, name, note]) => `<div class="wrap" style="margin-top:2.5rem"><p class="mk__label"><b>Option ${id}</b> · ${name}</p><p class="mk__note">${note}</p></div>${fenixPanel(v)}`).join('')}
+<div style="height:4rem"></div>`;
 }
