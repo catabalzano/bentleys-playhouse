@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 //   --pretty           → links as /folder/ (use when hosting on Netlify, Cloudflare Pages, etc.)
 import fs from 'node:fs';
 import path from 'node:path';
-import { ctx, ROOT, readJSON, readCollection, md, strip, href } from './lib/core.mjs';
+import { ctx, ROOT, readJSON, readCollection, md, strip, href, apHtml } from './lib/core.mjs';
 import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
 import * as P2 from './lib/pages2.mjs';
@@ -107,7 +107,9 @@ function emit(route, opts) {
     opts = { ...opts, ogImage: `og/${name}.png` };
     shareJobs.push({ file: path.join(OUT, 'assets', opts.ogImage), title: opts.shareTitle || opts.title, kicker: opts.shareKicker || "Bentley's Playhouse", category: opts.shareCategory || 'default', icon: opts.shareIcon, photo: opts.sharePhoto });
   }
-  const { html, fragment } = page({ ...opts, body: typeof opts.body === 'function' ? opts.body() : opts.body });
+  const out = page({ ...opts, body: typeof opts.body === 'function' ? opts.body() : opts.body });
+  // AP style everywhere: 5 p.m., 10:30 a.m., noon; Oct. 1, 2026
+  const html = apHtml(out.html), fragment = out.fragment && apHtml(out.fragment);
   const file = route.endsWith('.html') ? path.join(OUT, route) : path.join(OUT, route, 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, html);

@@ -26,7 +26,8 @@ var T = window.BP_T || function (s) { return s; };
 
   var TEMPER = { shy: T("Shy: please don't chase. Call with the location."), friendly: T('Friendly. May come to you.'), meds: T('Needs daily medication.') };
   function kind() { for (var i = 0; i < els.kind.length; i++) if (els.kind[i].checked) return els.kind[i].value; return 'lost'; }
-  function fmtDate(v) { if (!v) return ''; var d = new Date(v + 'T12:00:00'); return isNaN(d) ? v : d.toLocaleDateString(window.BP_LANG === 'es' ? 'es-US' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+  var AP = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
+  function fmtDate(v) { if (!v) return ''; var d = new Date(v + 'T12:00:00'); if (isNaN(d)) return v; return window.BP_LANG === 'es' ? d.toLocaleDateString('es-US', { month: 'short', day: 'numeric', year: 'numeric' }) : AP[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
   function contactLines() {
     var lines = [];
     if (els.cPhone.checked && els.fPhone.value.trim()) lines.push((els.cText.checked ? T('Text ') : T('Call or text ')) + els.fPhone.value.trim());

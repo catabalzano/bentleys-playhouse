@@ -2,7 +2,7 @@
 cover: finding-a-humane-trainer.jpg
 coverAlt: "A dog gently taking a treat from a hand during training"
 coverCredit: "Anton Kudryashov on Pexels"
-title: Finding a humane trainer
+title: Finding a Humane Trainer
 category: behavior
 area: national
 order: 3
@@ -18,21 +18,21 @@ sources:
 ---
 Rescued dogs sometimes come with fears or habits that need patient help. The right trainer makes a huge difference.
 
-## Reward-based training
+## Reward-Based Training
 
 The American Veterinary Society of Animal Behavior recommends reward-based training only. It advises against aversive methods and tools such as shock (e-) collars, prong collars, choke chains and leash "corrections," which can increase fear and aggression. Dogs learn best when they feel safe.
 
-## Finding a trainer
+## Finding a Trainer
 
 - Search the [CCPDT directory](https://www.ccpdt.org/dog-owners/certified-dog-trainer-directory/) for certified trainers near you.
 - Ask how they'd handle your dog's specific issue, and what tools they use.
 - Watch a class or session first if you can.
 - Be wary of promises of quick fixes or guaranteed results.
 
-## When to talk to a vet first
+## When to Talk to a Vet First
 
 Sudden behavior changes, aggression out of nowhere or serious anxiety can have medical causes. A vet check is a good first step, and some cases need a veterinary behaviorist.
 
-## Free reading
+## Free Reading
 
 The ASPCA's [common dog behavior issues](https://www.aspca.org/pet-care/dog-care/common-dog-behavior-issues) covers barking, chewing, resource guarding, separation anxiety and more.

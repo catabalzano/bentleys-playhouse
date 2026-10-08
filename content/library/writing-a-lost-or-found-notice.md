@@ -3,7 +3,7 @@ fenix: true
 cover: writing-a-lost-or-found-notice.jpg
 coverAlt: "A close-up of a dog’s collar with an ID tag"
 coverCredit: "Blue Bird on Pexels"
-title: Writing a lost or found notice that works
+title: Writing a Lost or Found Notice That Works
 category: lost-found
 area: general
 order: 4
@@ -25,20 +25,20 @@ A good notice can be read from a moving car and acted on in seconds.
 - The general area (cross streets or a park) and the date.
 - One way to reach you.
 
-## Leave out
+## Leave Out
 
 - Your home address.
 - One identifying detail, so you can check callers.
 - Long paragraphs. Save the story for online posts.
 
-## Where to post
+## Where to Post
 
 - Within about a mile of where the dog was lost or found: intersections, dog parks, vet offices, pet stores, grocery store boards.
 - At children's eye level near schools (people walking with kids notice dogs).
 - Online: [Fénix Animal Project](https://fenixanimalproject.org/?v=check#lf), [Petco Love Lost](https://petcolove.org/lost/), local lost-and-found groups and Nextdoor.
 
-## Keep it fresh
+## Keep It Fresh
 
-Replace faded flyers, re-share posts every few days and take everything down once the dog is home.
+Replace faded flyers, reshare posts every few days and take everything down once the dog is home.
 
 Ready to make one? Try the [flyer builder](/resources/flyer-builder/).

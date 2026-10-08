@@ -2,7 +2,7 @@
 cover: rehoming-a-dog-safely.jpg
 coverAlt: "A mother and daughter petting a golden dog in a park"
 coverCredit: "RDNE Stock project on Pexels"
-title: "Rehoming a dog safely: why \"free to a good home\" is dangerous"
+title: "Rehoming a Dog Safely: Why \"Free to a Good Home\" Is Dangerous"
 seoTitle: "Rehoming a Dog Safely: Why \"Free to a Good Home\" Is Risky"
 category: adopt-foster
 area: general
@@ -21,7 +21,7 @@ sources:
 
 If you've tried everything and you truly must find your dog a new home, **please don't rush it, and never give your dog away for free.** How you rehome your dog decides who ends up with them.
 
-## Why "free to a good home" is so dangerous
+## Why "Free to a Good Home" Is So Dangerous
 
 Free and unaltered dogs attract the people who should never have one. Humane societies have warned for years that "free to a good home" listings are answered by people who lie to get animals they can use or sell. That includes:
 
@@ -34,11 +34,11 @@ These people look friendly. They answer the ad quickly, say all the right things
 
 **Your dog trusted you their whole life. Don't put them in that position because you're in a hurry.** Taking a few extra weeks to do this properly is the last and most important thing you can do for them.
 
-## Why spaying or neutering comes first
+## Why Spaying or Neutering Comes First
 
 An unaltered dog is exactly what a backyard breeder is looking for. Once your dog leaves your home, you have no control over whether they're bred again and again. **Spay or neuter your dog before they go to a new home**, every time. It protects your dog, and it means no puppies are born into the same uncertain future. If cost is a worry, see [affordable vet care in Miami](/resources/affordable-vet-care-miami/).
 
-## The steps to rehome your dog safely
+## The Steps to Rehome Your Dog Safely
 
 Follow every step. Each one exists to keep your dog away from the people described above.
 
@@ -52,13 +52,13 @@ Follow every step. Each one exists to keep your dog away from the people describ
 8. **Meet and greet with the people.** Meet the adopters in person, more than once if you can, and watch how they handle your dog. Bring a friend.
 9. **Meet and greet with their pets.** Introduce your dog to every pet the adopters already have, slowly and on neutral ground first. See [introducing dogs](/resources/introducing-dogs/).
 
-## When you hand your dog over
+## When You Hand Your Dog Over
 
 - Give the new family all vet records, the microchip number and your dog's routine, favorite foods and quirks.
 - **Transfer the microchip registration** to the new owner so it's never left in your name.
 - Put the agreement in writing, and ask the new family to return the dog **to you** (never to a shelter or a stranger) if it doesn't work out.
 - Check in after a few days and again after a few weeks.
 
-## If you see something wrong
+## If You See Something Wrong
 
 If you suspect a dog you rehomed, or any dog, is being hurt or neglected, report it. See [reporting animal cruelty in Miami-Dade](/resources/reporting-animal-cruelty/). In an emergency, call **911**.

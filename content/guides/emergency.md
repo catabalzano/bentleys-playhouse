@@ -2,7 +2,7 @@
 cover: guide-emergency.jpg
 coverAlt: "A dog wearing a recovery cone resting on the ground"
 coverCredit: "Rachael Holzman on Pexels"
-title: A dog is hurt or in danger
+title: A Dog Is Hurt or in Danger
 eyebrow: Get Help · Emergency
 tone: orange
 order: 0
@@ -14,15 +14,15 @@ featured: true
 keywords: [emergency, injured, hurt, hit by car, poison, cruelty, abuse, danger, bleeding, heat]
 related: [reporting-animal-cruelty, poison-and-emergency-contacts, affordable-vet-care-miami]
 steps:
-  - title: Make sure you're safe first
+  - title: Make Sure You're Safe First
     body: Don't step into traffic or put yourself between fighting animals. A dog in pain may bite, even a friendly one.
-  - title: If a person is in danger or cruelty is happening now, call 911
+  - title: If a Person Is in Danger or Cruelty Is Happening Now, Call 911
     body: For animal cruelty in progress in Miami-Dade, call **911**. For other cruelty or neglect, call Animal Services at **311** or **305-468-5900**.
-  - title: For a hurt or loose dog, call Animal Services
+  - title: For a Hurt or Loose Dog, Call Animal Services
     body: Call **311** or **305-468-5900** with the exact location. For a dog on an expressway, call Florida Highway Patrol at ***347**. Near a school, Miami-Dade Schools Police is **305-995-2677**.
-  - title: If you can safely transport the dog, call an emergency vet first
+  - title: If You Can Safely Transport the Dog, Call an Emergency Vet First
     body: Find a 24/7 hospital in our [vet clinic directory](/resources/vet-clinics/#emergency) and call before you leave so they're ready. Ask about costs up front if that's a concern.
-  - title: Possible poisoning? Call a poison line
+  - title: Possible Poisoning? Call a Poison Line
     body: ASPCA Animal Poison Control, **(888) 426-4435**, or Pet Poison Helpline, **(855) 764-7661**. Both are open 24/7 and charge a fee. Don't try home remedies unless they tell you to.
 local:
   label: Please know
@@ -38,7 +38,7 @@ sources:
 ---
 Stay as calm as you can. The steps below are the fastest way to get the right people involved.
 
-## Handling an injured dog safely
+## Handling an Injured Dog Safely
 
 Pain, fear and confusion can make any dog unpredictable. Veterinarians advise:
 
@@ -47,21 +47,21 @@ Pain, fear and confusion can make any dog unpredictable. Veterinarians advise:
 - If the dog tries to bite, a soft muzzle can protect you both, but **never muzzle a dog that's vomiting** or struggling to breathe. If you can't do it safely, don't. Wait for help.
 - For transport, keep the dog confined. A large dog can be moved on a board or a firm blanket used as a stretcher.
 
-## What to tell the people you call
+## What to Tell the People You Call
 
 - The exact location: cross streets, landmarks, which side of the road.
 - What you can see: injuries, behavior, whether the dog is moving.
 - Whether the dog is contained or loose.
 - Your phone number, and whether you can stay nearby.
 
-## Heat and South Florida weather
+## Heat and South Florida Weather
 
 Heat is dangerous for dogs, especially flat-faced breeds, older dogs and dogs left in cars or without shade. Move the dog to shade, offer water and call a vet promptly if the dog is panting hard, weak, confused or collapsing.
 
-## Paying for emergency care
+## Paying for Emergency Care
 
 Emergency care can be expensive. Ask the clinic for an estimate and payment options. Grants like [RedRover Relief](https://redrover.org/relief/) sometimes help with urgent care. See [affordable vet care](/resources/affordable-vet-care-miami/) for more.
 
-## After the emergency
+## After the Emergency
 
 If the dog isn't yours, it still needs to be scanned for a microchip and reported. Continue with [I found a dog](/get-help/found-a-dog/).

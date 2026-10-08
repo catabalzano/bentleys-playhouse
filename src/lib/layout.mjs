@@ -1,4 +1,4 @@
-import { ctx, esc, href, asset, isCurrent, icon, show, paw, logo } from './core.mjs';
+import { ctx, esc, href, asset, isCurrent, icon, show, paw, logo, fmtDate } from './core.mjs';
 import { donateVisible, donateDialog } from './donate.mjs';
 
 const NAV = [
@@ -94,13 +94,13 @@ export function footer() {
     ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
     ${col('Learn', [['Pawsome Pooches', 'pawsome-pooches/'], ['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists'], ['Rehoming a dog safely', 'resources/rehoming-a-dog-safely/']])}
     ${col(esc(s.name), [['Our Story', 'our-story/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : [])])}
-    <div class="footer__col"><h2 class="footer__h">Follow along</h2>${socialButtons({ youtube: true })}</div>
+    <div class="footer__col"><h2 class="footer__h">Follow Along</h2>${socialButtons({ youtube: true })}</div>
   </div>
   <div class="wrap footer__notice">
     <p>${icon('alert', { size: 18 })} <span>${t('footer.notEmergency')} ${t('footer.emergency')}</span></p>
   </div>
   <div class="wrap footer__base">
-    <p>© ${new Date('2026-10-05').getFullYear()} ${esc(s.name)}. Guidance last reviewed <time datetime="${s.lastReviewed}">${new Date(s.lastReviewed + 'T12:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>.</p>
+    <p>© ${new Date('2026-10-05').getFullYear()} ${esc(s.name)}. Guidance last reviewed <time datetime="${s.lastReviewed}">${fmtDate(s.lastReviewed)}</time>.</p>
     <p class="footer__legal"><a href="${href('privacy/')}">Privacy</a><a href="${href('terms/')}">Terms</a><a href="${href('cookies/')}">Cookies</a></p>
     <p class="footer__credit">Design by <a href="https://byposhpixel.com/" target="_blank" rel="noopener">Posh Pixel<span class="visually-hidden"> (${t('externalLink')})</span></a></p>
     <p class="footer__paws" aria-hidden="true">${paw()}${paw()}${paw()}</p>

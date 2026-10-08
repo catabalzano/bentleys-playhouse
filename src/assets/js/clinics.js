@@ -14,7 +14,7 @@ var T = window.BP_T || function (s) { return s; };
     } catch (e) { var d = new Date(); return { day: KEYS[d.getDay()], mins: d.getHours() * 60 + d.getMinutes() }; }
   }
   var toMin = function (hm) { var p = hm.split(':'); return +p[0] * 60 + +p[1]; };
-  function fmt(hm) { var p = hm.split(':'), h = +p[0], m = +p[1], ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + (m ? ':' + String(m).padStart(2, '0') : '') + ' ' + ap; }
+  function fmt(hm) { var p = hm.split(':'), h = +p[0], m = +p[1]; if (h === 12 && !m) return T('noon'); if ((h === 0 || h === 24) && !m) return T('midnight'); var ap = h >= 12 && h < 24 ? 'p.m.' : 'a.m.'; if (window.BP_LANG === 'es') ap = ap.replace('.m.', '. m.'); h = h % 12 || 12; return h + (m ? ':' + String(m).padStart(2, '0') : '') + ' ' + ap; }
   function status(hours, now) {
     if (hours === '24/7') return { open: true, text: T('Open 24/7') };
     var today = hours[now.day] || [];

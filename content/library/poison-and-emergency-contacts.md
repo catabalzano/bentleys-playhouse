@@ -2,7 +2,7 @@
 cover: poison-and-emergency-contacts.jpg
 coverAlt: "A gloved hand comforting a dog lying on an exam table"
 coverCredit: "Tima Miroshnichenko on Pexels"
-title: Emergency numbers to save now
+title: Emergency Numbers to Save Now
 category: emergency
 area: local
 order: 2
@@ -29,14 +29,14 @@ Take two minutes to add these to your phone.
 | Miami-Dade Schools Police | 305-995-2677 | A loose dog near a school |
 | State Attorney Animal Cruelty Unit | 305-547-0520 | Cruelty cases |
 
-## Poison lines (24/7, fees apply)
+## Poison Lines (24/7, Fees Apply)
 
 | Who | Number |
 |---|---|
 | ASPCA Animal Poison Control | (888) 426-4435 |
 | Pet Poison Helpline | (855) 764-7661 |
 
-## Add your own
+## Add Your Own
 
 - Your regular vet.
 - The nearest 24-hour emergency vet hospital.

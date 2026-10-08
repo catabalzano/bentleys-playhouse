@@ -3,7 +3,7 @@ fenix: true
 cover: miami-dade-rules-for-finders.jpg
 coverAlt: "A stray dog standing on a city sidewalk"
 coverCredit: "Syed Qaarif Andrabi on Pexels"
-title: What Miami-Dade requires when you find a dog
+title: What Miami-Dade Requires When You Find a Dog
 category: rescue-basics
 area: local
 order: 1
@@ -22,21 +22,21 @@ preview: "Have a local attorney or MDAS confirm this summary and the current cod
 ---
 This is a plain-language summary to help you act quickly. It isn't legal advice, and rules can change, so check with Miami-Dade Animal Services (311) if you're unsure.
 
-## If you find a dog in Miami-Dade
+## If You Find a Dog in Miami-Dade
 
 - **Report it and scan it within 72 hours.** The county requires anyone who finds a lost dog or cat to notify Animal Services and have the animal scanned for a microchip within 72 hours.
 - **If there's a chip, contact the owner within 24 hours.**
 - **You may care for the dog** while you try to find the family.
 - **Use the official form.** MDAS says the approved way to report a found pet is its online Lost and Found Pet Form. Not reporting can bring a civil penalty.
 
-## How long the shelter holds strays
+## How Long the Shelter Holds Strays
 
-Under the county code, impounded animals are generally held for **three days** before they can be adopted or otherwise placed. MDAS's own Lost & Found page says dogs over six months can be held only three days. Shorter or different holds apply in some cases (for example, young puppies). This is why fast reporting matters for families.
+Under the county code, impounded animals are generally held for **three days** before they can be adopted or otherwise placed. MDAS's own Lost & Found page says dogs over 6 months can be held only three days. Shorter or different holds apply in some cases (for example, young puppies). This is why fast reporting matters for families.
 
-## What about state law?
+## What About State Law?
 
 Florida's lost-property law (chapter 705) asks finders of lost property to report it to law enforcement, but it doesn't mention animals, and it's unclear whether it applies to dogs. The clear, specific rule for Miami-Dade finders is the county's 72-hour rule above.
 
-## Licenses and rabies
+## Licenses and Rabies
 
-Dogs over four months must be vaccinated against rabies (Florida law) and wear a Miami-Dade license tag. A tag is often the fastest way home for a lost dog.
+Dogs over 4 months must be vaccinated against rabies (Florida law) and wear a Miami-Dade license tag. A tag is often the fastest way home for a lost dog.

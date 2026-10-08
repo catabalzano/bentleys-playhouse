@@ -2,7 +2,7 @@
 cover: hurricane-plan-for-pets.jpg
 coverAlt: "A dog walking through puddles on a rainy road"
 coverCredit: "Thái Trường Giang on Pexels"
-title: A hurricane plan for your dog
+title: A Hurricane Plan for Your Dog
 category: emergency
 area: local
 order: 1
@@ -19,7 +19,7 @@ sources:
 ---
 As the Red Cross puts it, if it isn't safe for you to stay home, it isn't safe for your pets either. Florida's emergency managers are just as clear: don't leave pets behind.
 
-## Pack a go-kit
+## Pack a Go-Kit
 
 - Leash, harness and a sturdy carrier or crate.
 - Food and water for several days, bowls and a manual can opener.
@@ -28,21 +28,21 @@ As the Red Cross puts it, if it isn't safe for you to stay home, it isn't safe f
 - Microchip number, your vet's name and number, feeding and medication notes.
 - Poop bags, cleaning supplies, a familiar blanket or toy.
 
-## Miami-Dade pet-friendly evacuation centers
+## Miami-Dade Pet-Friendly Evacuation Centers
 
-- **No pre-registration needed.**
+- **No preregistration needed.**
 - Bring proof that you live in an evacuation zone, plus vaccination records.
 - Dogs need a current rabies vaccine and a visible Miami-Dade license tag.
 - Up to four pets per household. At least one family member stays at the center with the pets.
 - Check the [county's pet preparedness page](https://www8.miamidade.gov/global/emergency/hurricane/pet-preparedness.page) for the current list of what to bring.
 
-## Plan ahead
+## Plan Ahead
 
 - Find pet-friendly hotels or friends outside your area before storm season.
 - Arrange a neighbor who can help if you're not home.
 - Keep your microchip details and license current.
 - Practice getting your dog into the car or carrier calmly.
 
-## After the storm
+## After the Storm
 
 Fences and gates may be damaged, and familiar smells washed away. Keep your dog on a leash, and check the yard for debris and standing water. If your dog goes missing, start with [I lost my dog](/get-help/lost-my-dog/).

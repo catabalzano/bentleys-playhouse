@@ -2,7 +2,7 @@
 cover: questions-to-ask-a-rescue.jpg
 coverAlt: "A smiling woman kneeling beside a dog wearing an adopt-me bandana"
 coverCredit: "Barbara Reis on Pexels"
-title: Questions to ask before you adopt
+title: Questions to Ask Before You Adopt
 category: adopt-foster
 area: general
 order: 1
@@ -17,7 +17,7 @@ sources:
 ---
 A good rescue wants the match to last as much as you do. These questions are our own list, drawn from experience. Ask them, and expect honest answers, including "we don't know yet."
 
-## About the dog
+## About the Dog
 
 - What do you know about where this dog came from?
 - How does the dog do with other dogs, cats, children and visitors?
@@ -27,7 +27,7 @@ A good rescue wants the match to last as much as you do. These questions are our
 - Are there any known health issues, medications or ongoing costs?
 - What has the dog's foster or kennel staff noticed? What does the dog love?
 
-## About the process
+## About the Process
 
 - What's included in the adoption: vaccines, spay/neuter, microchip?
 - Can we meet more than once, and can my other dog meet this dog?
@@ -35,6 +35,6 @@ A good rescue wants the match to last as much as you do. These questions are our
 - What support do you offer after adoption?
 - If it doesn't work out, what happens? Most good rescues will ask you to bring the dog back to them.
 
-## About you
+## About You
 
 Be honest with the rescue, and with yourself, about your schedule, your space, your budget and your experience. The right dog for you isn't always the one in the first photo you fell for.

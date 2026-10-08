@@ -2,7 +2,7 @@
 cover: adopt-dont-shop.jpg
 coverAlt: "A dog resting behind the bars of a shelter kennel"
 coverCredit: "Critical Smith on Pexels"
-title: Why we say "adopt, don't shop"
+title: Why We Say "Adopt, Don't Shop"
 category: adopt-foster
 area: general
 order: 2
@@ -17,20 +17,20 @@ sources:
 ---
 "Adopt, don't shop" is one of our core values. It isn't about judging anyone. It's about where demand goes, and what it pays for.
 
-## What a puppy mill is
+## What a Puppy Mill Is
 
-Humane World for Animals describes a puppy mill as an inhumane, high-volume dog-breeding operation that puts profit ahead of the dogs' welfare. It estimates there are about 10,000 puppy mills in the US. Breeding dogs often spend their lives in cages.
+Humane World for Animals describes a puppy mill as an inhumane, high-volume dog-breeding operation that puts profit ahead of the dogs' welfare. It estimates there are about 10,000 puppy mills in the U.S. Breeding dogs often spend their lives in cages.
 
-## Where mill puppies end up
+## Where Mill Puppies End Up
 
 The ASPCA says most pet-store puppies come from puppy mills through brokers, and that a USDA license doesn't guarantee humane conditions. Mill puppies are also sold online, through classified ads and at flea markets.
 
-## Why adoption helps
+## Why Adoption Helps
 
 - Every adoption opens a space for another dog in a shelter or foster home.
 - Adoption fees usually cover vaccines, spay/neuter and a microchip.
 - Shelters and rescues can help you find a dog whose personality fits your home, including adult dogs who are already house-trained.
 
-## If you choose a breeder
+## If You Choose a Breeder
 
 Visit in person, meet the puppy's mother and see where the dogs live. Never buy a puppy you haven't seen in its home, and never meet at a parking lot or other third-party location.

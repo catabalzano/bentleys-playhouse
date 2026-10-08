@@ -71,7 +71,7 @@ export function home(data) {
 <div class="stack">
 <section class="brings" aria-labelledby="brings-h">
   <div class="wrap">
-    <h2 id="brings-h" class="section-h section-h--center">What brings you here?</h2>
+    <h2 id="brings-h" class="section-h section-h--center">What Brings You Here?</h2>
     ${choiceCards('h3')}
   </div>
 </section>
@@ -81,8 +81,8 @@ export function home(data) {
     <div class="rrr__intro" data-reveal style="--d:.35s">
       <span class="logo rrr__wordmark"><img class="logo__l" src="${asset('img/logo-wordmark.png')}" alt="" width="900" height="322" loading="lazy"><img class="logo__d" src="${asset('img/logo-wordmark-dark.png')}" alt="" width="900" height="322" loading="lazy"></span>
       <p class="eyebrow">${tag('Who we are')}</p>
-      <h2 id="rrr-h" class="section-h">A playhouse with a purpose</h2>
-      <p>Since August 2022, journalist Cata Balzano has been taking dogs out of abuse, neglect and backyard breeding into her Miami home and helping them heal, by raising funds through her social media accounts while covering any additional costs out-of-pocket. The rescue is named after Bentley, her French Bulldog, who has welcomed every one of those pups into his playhouse.</p>
+      <h2 id="rrr-h" class="section-h">A Playhouse With a Purpose</h2>
+      <p>Since August 2022, journalist Cata Balzano has been taking dogs out of abuse, neglect and backyard breeding into her Miami home and helping them heal, by raising funds through her social media accounts while covering any additional costs out of pocket. The rescue is named after Bentley, her French bulldog, who has welcomed every one of those pups into his playhouse.</p>
       <p><a class="arrow-link" href="${href('our-story/')}">Read our story ${icon('arrow', { size: 18 })}</a></p>
     </div>
     <ol class="rrr__steps" data-steps>
@@ -108,7 +108,7 @@ export function home(data) {
 <section class="guides" aria-labelledby="guides-h">
   <div class="wrap">
     <div class="section-head">
-      <div><p class="eyebrow">${tag('Resource Library')}</p><h2 id="guides-h" class="section-h">Guides people use most</h2></div>
+      <div><p class="eyebrow">${tag('Resource Library')}</p><h2 id="guides-h" class="section-h">Guides People Use Most</h2></div>
       <a class="arrow-link" href="${href('resources/')}">See all resources ${icon('arrow', { size: 18 })}</a>
     </div>
     <div class="rgrid rgrid--home">${featured.map((i) => card(i, { headingLevel: 'h3' })).join('')}</div>
@@ -118,14 +118,14 @@ export function home(data) {
 <div class="stack stack--pawsome">
 ${dogs.length ? `
 <section class="dogs-home" aria-labelledby="dogs-h"><div class="wrap">
-  <h2 id="dogs-h" class="section-h">Meet the dogs</h2>
+  <h2 id="dogs-h" class="section-h">Meet the Dogs</h2>
   <div class="dog-grid">${dogs.map(dogCard).join('')}</div>
 </div></section>` : `
 <section class="dogs-home" aria-labelledby="dogs-h"><div class="wrap">
   <div class="empty empty--wide">
     <img src="${asset('img/adopt-westie.png')}" alt="" width="160" height="220" loading="lazy" class="empty__dog">
     <div>
-      <h2 id="dogs-h" class="section-h">Looking for a dog to adopt?</h2>
+      <h2 id="dogs-h" class="section-h">Looking for a Dog to Adopt?</h2>
       <p>Profiles of our current dogs will live here. For now, our adoptable dogs are listed on RescueMe, and our day-to-day rescue work is on Instagram.</p>
       <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}${button('Dogs at Miami-Dade Animal Services', 'adopt-foster/#mdas', { variant: 'ghost' })}${button('Dogs at Broward County Animal Care', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { variant: 'ghost', externalLink: true })}</div>
       <ul class="adopt-list" role="list">
@@ -145,12 +145,12 @@ ${fenixPanel('ember')}
 <section class="help-ways" aria-labelledby="ways-h">
   <div class="wrap">
     <p class="eyebrow">${tag('Get involved', 'violet')}</p>
-    <h2 id="ways-h" class="section-h">Small things that make a big difference</h2>
+    <h2 id="ways-h" class="section-h">Small Things That Make a Big Difference</h2>
     <ul class="ways" role="list">
-      <li class="way"><span class="way__icon">${icon('share')}</span><h3>Share what helps</h3><p>Pass a guide to a neighbor, or share a lost or found post in your area.</p><a href="${href('get-involved/#share')}">How to share well</a></li>
-      <li class="way"><span class="way__icon">${icon('hands')}</span><h3>Lend a hand</h3><p>Tell us about your time and skills, from transport to photography.</p><a href="${href('get-involved/#volunteer')}">Volunteer interest</a></li>
-      <li class="way"><span class="way__icon">${icon('home')}</span><h3>Open your home</h3><p>Fostering gives a dog a quiet place to heal while they wait for family.</p><a href="${href('adopt-foster/#fostering')}">What fostering involves</a></li>
-      <li class="way"><span class="way__icon">${icon('gift')}</span><h3>Send supplies</h3><p>Food, bedding and enrichment toys keep rehab going.</p><a href="${href('get-involved/#supplies')}">Supply donations</a></li>
+      <li class="way"><span class="way__icon">${icon('share')}</span><h3>Share What Helps</h3><p>Pass a guide to a neighbor, or share a lost or found post in your area.</p><a href="${href('get-involved/#share')}">How to share well</a></li>
+      <li class="way"><span class="way__icon">${icon('hands')}</span><h3>Lend a Hand</h3><p>Tell us about your time and skills, from transport to photography.</p><a href="${href('get-involved/#volunteer')}">Volunteer interest</a></li>
+      <li class="way"><span class="way__icon">${icon('home')}</span><h3>Open Your Home</h3><p>Fostering gives a dog a quiet place to heal while they wait for family.</p><a href="${href('adopt-foster/#fostering')}">What fostering involves</a></li>
+      <li class="way"><span class="way__icon">${icon('gift')}</span><h3>Send Supplies</h3><p>Food, bedding and enrichment toys keep rehab going.</p><a href="${href('get-involved/#supplies')}">Supply donations</a></li>
     </ul>
   </div>
 </section>
@@ -159,7 +159,7 @@ ${fenixPanel('ember')}
   <div class="wrap community__in">
     <div class="community__text">
       <p class="eyebrow">${tag('Community')}</p>
-      <h2 id="ig-h" class="section-h">Follow the playhouse</h2>
+      <h2 id="ig-h" class="section-h">Follow the Playhouse</h2>
       <p>Rescue updates, vet bills and receipts, happy endings and the everyday business of dogs being dogs. Come say hi.</p>
       ${socialButtons({ youtube: true })}
       <a class="cal-cta" href="${href('events/')}"><span class="cal-cta__card"><span class="cal-cta__ic">${icon('calendar', { size: 24 })}</span><span class="cal-cta__t"><span class="cal-cta__k">Admit one</span><strong>See Our Social Calendar</strong> Adoption days, free vet clinics, pack walks and other dog events around South Florida, all in one place.</span><span class="cal-cta__go" aria-hidden="true">${icon('arrow', { size: 26 })}</span></span></a>
@@ -182,7 +182,7 @@ export function helpHub(data) {
 <section class="page-head page-head--help">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Get Help', '']])}
-    <h1 class="page-h">Get help</h1>
+    <h1 class="page-h">Get Help</h1>
     <p class="page-lede">Take a breath. Pick the situation that fits, and we'll walk you through the next steps in order.</p>
   </div>
 </section>
@@ -198,12 +198,12 @@ export function helpHub(data) {
 <section class="wrap section-pad">
   <div class="two-col">
     <div>
-      <h2 class="section-h">Printable checklists</h2>
+      <h2 class="section-h">Printable Checklists</h2>
       <p>Each guide has a matching one-page checklist you can tick off on your phone or print.</p>
       <ul class="link-list">${data.checklists.map((c) => `<li><a href="${href('resources/checklists/' + c.slug + '/')}">${icon('list', { size: 20 })} ${esc(c.title)}</a></li>`).join('')}</ul>
     </div>
     <div>
-      <h2 class="section-h">Make a lost or found flyer</h2>
+      <h2 class="section-h">Make a Lost or Found Flyer</h2>
       <p>Add a photo and the key details, choose what contact information to show, then print or save it. Your photo stays on your device.</p>
       ${button('Open the flyer builder', 'resources/flyer-builder/', { ic: 'image' })}
     </div>
@@ -213,7 +213,7 @@ export function helpHub(data) {
   <a class="cta-tile cta-tile--wide" href="${href('resources/vet-clinics/')}">${icon('med', { size: 30 })}<span><strong>Vet clinic directory</strong><br>Emergency hospitals and everyday clinics in Miami-Dade, with hours, walk-in policies and phone numbers.</span>${icon('arrow', { size: 22 })}</a>
 </section>
 <section class="wrap section-pad">
-  <h2 class="section-h">Local agencies in South Florida</h2>
+  <h2 class="section-h">Local Agencies in South Florida</h2>
   <p class="muted">These are public agencies, not partners of ${esc(ctx.site.name)}. Check hours before you go.</p>
   <div class="rgrid">${local.map((i) => card(i)).join('')}</div>
 </section>`;
@@ -292,16 +292,16 @@ export function library(data) {
 <section class="page-head page-head--lib">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Resources', '']])}
-    <h1 class="page-h">Resource library</h1>
+    <h1 class="page-h">Resource Library</h1>
     <p class="page-lede">Practical guides, printable tools and trusted outside resources, with Miami and South Florida first. Search, or browse by topic.</p>
   </div>
 </section>
 <section class="wrap" id="checklists" aria-labelledby="tools-h">
-  <h2 id="tools-h" class="section-h section-h--sm">Tools you can use right now</h2>
+  <h2 id="tools-h" class="section-h section-h--sm">Tools You Can Use Right Now</h2>
   <ul class="tools" role="list">${tools.map((t) => `<li><a class="tool" href="${href(t.route)}">${icon(t.type === 'tool' ? 'image' : 'list', { size: 26 })}<span><strong>${esc(t.title)}</strong><span class="tool__sub">${esc(t.short || t.summary)}</span></span></a></li>`).join('')}</ul>
 </section>
 <section class="wrap section-pad library" aria-labelledby="browse-h" data-library>
-  <h2 id="browse-h" class="visually-hidden">Browse and search</h2>
+  <h2 id="browse-h" class="visually-hidden">Browse and Search</h2>
   <form class="lib-controls" role="search" onsubmit="return false">
     <div class="search">
       <label for="lib-q" class="search__label">${ctx.t('search.label')}</label>
@@ -400,7 +400,7 @@ export function flyer() {
 <section class="page-head no-print">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Resources', 'resources/'], ['Flyer builder', '']])}
-    <h1 class="page-h">Lost &amp; found flyer builder</h1>
+    <h1 class="page-h">Lost &amp; Found Flyer Builder</h1>
     <p class="page-lede">Make a clear, printable flyer in a few minutes. Your photo is processed in your browser and never uploaded or stored by us.</p>
   </div>
 </section>
@@ -533,7 +533,7 @@ export function adopt(data) {
 <section class="page-head page-head--adopt">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Adopt & Foster', '']])}
-    <h1 class="page-h">Adopt &amp; foster</h1>
+    <h1 class="page-h">Adopt &amp; Foster</h1>
     <p class="page-lede">${esc(data.pages.adopt.summary)}</p>
     <nav class="jump" aria-label="${ctx.t('onThisPage')}"><ul>
       <li><a href="#our-dogs">Our dogs</a></li><li><a href="#mdas">County shelter dogs</a></li><li><a href="#why-adoption-matters">Why adopt</a></li><li><a href="#is-it-the-right-time">Right time?</a></li><li><a href="#questions-to-ask-a-rescue">Questions to ask</a></li><li><a href="#preparing-your-home">Preparing</a></li><li><a href="#the-first-three-months">First months</a></li><li><a href="#fostering">Fostering</a></li><li><a href="#other-ways-to-help">Other ways</a></li>
@@ -543,22 +543,22 @@ export function adopt(data) {
 <div class="wrap">
   <aside class="pp-xlink pp-xlink--adopt"><p class="pawsome__kicker">${paw()} Updated weekly</p><h2 class="section-h">Pawsome Pooches</h2><p>Dogs from Miami-Dade Animal Services, the Broward shelter, local rescues and families rehoming safely, all in one place.</p><p><a class="arrow-link" href="${href('pawsome-pooches/')}">Meet this week's pups ${icon('arrow', { size: 18 })}</a></p></aside>
   <section class="adopt-sec" id="our-dogs" aria-labelledby="our-dogs-h">
-    <h2 id="our-dogs-h" class="section-h">Our dogs</h2>
+    <h2 id="our-dogs-h" class="section-h">Our Dogs</h2>
     ${ours.length ? `<div class="dog-grid">${ours.map(dogCard).join('')}</div>` : `
     <div class="empty empty--wide">
       <img src="${asset('img/bentley-head.png')}" alt="" width="110" height="127" class="empty__bentley">
       <div>
-        <h3>No profiles here yet</h3>
+        <h3>No Profiles Here Yet</h3>
         <p>We're moving our dog profiles onto this site. Until then, you'll find our current adoptable dogs on RescueMe, and updates on Instagram.</p>
         <div class="btn-row">${button('RescueMe listings', s.social.rescueme.url, { externalLink: true })}${button('Instagram', s.social.instagram.url, { variant: 'ghost', externalLink: true, ic: 'instagram' })}</div>
       </div>
     </div>`}
     <div class="adopt-process">
-      <h3 class="section-h section-h--sm">How adopting from us works</h3>
+      <h3 class="section-h section-h--sm">How Adopting From Us Works</h3>
       <ol class="process">${s.adoption.process.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>
       ${show(s.adoption.applicationVerified) ? `<div class="btn-row">${button('Start an adoption application', s.adoption.applicationUrl, { externalLink: true, ic: 'adopt' })}</div>` : ''}
     </div>
-    ${partner.length ? `<h3 class="section-h section-h--sm">Partner listings</h3><p class="muted">Dogs listed by other rescues we know. Their adoption process is their own.</p><div class="dog-grid">${partner.map(dogCard).join('')}</div>` : ''}
+    ${partner.length ? `<h3 class="section-h section-h--sm">Partner Listings</h3><p class="muted">Dogs listed by other rescues we know. Their adoption process is their own.</p><div class="dog-grid">${partner.map(dogCard).join('')}</div>` : ''}
     ${mdasBlock(data.mdas, data.dogs.filter((d) => d.source === 'mdas' && d.status !== 'adopted'), dogCard)}
     <p class="muted">In Broward? <a href="https://www.broward.org/Animal/Pages/default.aspx" target="_blank" rel="noopener">Broward County Animal Care<span class="visually-hidden"> (opens in a new tab)</span></a> has dogs waiting too.</p>
   </section>
@@ -592,13 +592,13 @@ export function story(data) {
       </div>
     </div>
     <div class="story-hero__art">
-      <div class="arch arch--blue arch--photo"><img src="${asset('img/cata-romeo-bentley.jpg')}" alt="Cata laughing between Romeo, a merle French Bulldog, and Bentley, a black brindle French Bulldog" width="1000" height="1250"></div>
+      <div class="arch arch--blue arch--photo"><img src="${asset('img/cata-romeo-bentley.jpg')}" alt="Cata laughing between Romeo, a merle French bulldog, and Bentley, a black brindle French bulldog" width="1000" height="1250"></div>
     </div>
   </div>
 </section>
 <div class="wrap wrap--text story">
-  ${secs.filter((s) => !isEmptyBody(s.body)).map((s, i) => `<section class="story-sec" id="${s.id}"><h2 class="section-h">${esc(s.title)}</h2><div class="prose">${md(s.body)}</div></section>${i === 0 ? `<div class="photo-row"><figure class="photo-slot photo-slot--blue photo-slot--img"><img src="${asset('img/bentley-colosseum.jpg')}" alt="Bentley, a black brindle French Bulldog, smiling in front of the Colosseum in Rome" width="1000" height="1250" loading="lazy"><figcaption>Bentley</figcaption></figure><figure class="photo-slot photo-slot--orange photo-slot--img"><img src="${asset('img/romeo-stick.jpg')}" alt="Romeo, a merle French Bulldog puppy, sitting in the grass with a big stick in his mouth" width="1000" height="1250" loading="lazy"><figcaption>Romeo</figcaption></figure><figure class="photo-slot photo-slot--violet photo-slot--img"><img src="${asset('img/kiara-sleeping.jpg')}" alt="Kiara, a fluffy husky in a pink harness that says Blind, asleep in a dog bed with Bentley curled up against her" width="1000" height="1250" loading="lazy"><figcaption>Kiara</figcaption></figure></div>` : ''}`).join('')}
-  ${data.stories.length ? `<section class="story-sec story-sec--stories" data-reveal><h2 class="section-h">Rescue stories</h2><p class="story-sec__lede">A few of the pups who came through the playhouse and went on to families of their own. Tap a photo to read their story.</p><div class="story-grid">${data.stories.map(storyCard).join('')}</div></section>` : `<section class="story-sec"><h2 class="section-h">Rescue stories</h2><div class="empty"><div><p>Stories of the dogs who have come through the playhouse will be shared here, with their families' permission.</p>${previewNote('Add stories as files in <code>content/stories/</code>. There is a template in <code>_template.md</code>.')}</div></div></section>`}
+  ${secs.filter((s) => !isEmptyBody(s.body)).map((s, i) => `<section class="story-sec" id="${s.id}"><h2 class="section-h">${esc(s.title)}</h2><div class="prose">${md(s.body)}</div></section>${i === 0 ? `<div class="photo-row"><figure class="photo-slot photo-slot--blue photo-slot--img"><img src="${asset('img/bentley-colosseum.jpg')}" alt="Bentley, a black brindle French bulldog, smiling in front of the Colosseum in Rome" width="1000" height="1250" loading="lazy"><figcaption>Bentley</figcaption></figure><figure class="photo-slot photo-slot--orange photo-slot--img"><img src="${asset('img/romeo-stick.jpg')}" alt="Romeo, a merle French bulldog puppy, sitting in the grass with a big stick in his mouth" width="1000" height="1250" loading="lazy"><figcaption>Romeo</figcaption></figure><figure class="photo-slot photo-slot--violet photo-slot--img"><img src="${asset('img/kiara-sleeping.jpg')}" alt="Kiara, a fluffy husky in a pink harness that says Blind, asleep in a dog bed with Bentley curled up against her" width="1000" height="1250" loading="lazy"><figcaption>Kiara</figcaption></figure></div>` : ''}`).join('')}
+  ${data.stories.length ? `<section class="story-sec story-sec--stories" data-reveal><h2 class="section-h">Rescue Stories</h2><p class="story-sec__lede">A few of the pups who came through the playhouse and went on to families of their own. Tap a photo to read their story.</p><div class="story-grid">${data.stories.map(storyCard).join('')}</div></section>` : `<section class="story-sec"><h2 class="section-h">Rescue Stories</h2><div class="empty"><div><p>Stories of the dogs who have come through the playhouse will be shared here, with their families' permission.</p>${previewNote('Add stories as files in <code>content/stories/</code>. There is a template in <code>_template.md</code>.')}</div></div></section>`}
 </div>`;
 }
 
@@ -632,9 +632,9 @@ export function involved(data) {
       ${w.preview ? previewNote(w.preview) : ''}
     </li>`).join('')}
   </ul>
-  <aside class="pp-xlink"><p class="pawsome__kicker">${paw()} Help beyond our own dogs</p><h2 class="section-h">Rescues you can help</h2><p>Local rescues and shelters doing the hard work every day, and how you can support them.</p><p><a class="arrow-link" href="${href('rescues-you-can-help/')}">See rescues you can help ${icon('arrow', { size: 18 })}</a> <a class="arrow-link" href="${href('pawsome-pooches/')}">Meet this week's Pawsome Pooches ${icon('arrow', { size: 18 })}</a></p></aside>
+  <aside class="pp-xlink"><p class="pawsome__kicker">${paw()} Help beyond our own dogs</p><h2 class="section-h">Rescues You Can Help</h2><p>Local rescues and shelters doing the hard work every day, and how you can support them.</p><p><a class="arrow-link" href="${href('rescues-you-can-help/')}">See rescues you can help ${icon('arrow', { size: 18 })}</a> <a class="arrow-link" href="${href('pawsome-pooches/')}">Meet this week's Pawsome Pooches ${icon('arrow', { size: 18 })}</a></p></aside>
   <section class="form-wrap" id="interest-form" aria-labelledby="int-h">
-    <h2 id="int-h" class="section-h">Raise your hand</h2>
+    <h2 id="int-h" class="section-h">Raise Your Hand</h2>
     <p>Tell us how you'd like to help. This doesn't sign you up for anything or guarantee a placement. It lets us reach out when there's a good fit.</p>
     ${form('involved')}
   </section>
@@ -663,7 +663,7 @@ export function form(kind) {
       ${kind === 'contact' ? `<p class="hint">Please don't include a home address or financial details. If an animal is hurt or in danger, don't wait for us: <a href="${href('get-help/emergency/')}">use the emergency steps</a>.</p>` : ''}</div>
     ${kind === 'contact' ? `<div class="field field--files"><span class="lbl-like">Attach a flyer or PDF <span class="opt">(${ctx.t('form.optional')})</span></span>
       <label class="file-drop" for="${id('files')}">${icon('upload', { size: 22 })}<span><b>Choose files</b> or drop them here</span><input id="${id('files')}" name="files" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,application/pdf,image/jpeg,image/png,image/webp,image/heic" class="visually-hidden-file" data-files></label>
-      <p class="hint">Event invites, flyers or photos. Up to 3 files (PDF, JPG, PNG or HEIC), 8 MB each.</p>
+      <p class="hint">Event invites, flyers or photos. Up to three files (PDF, JPG, PNG or HEIC), 8 MB each.</p>
       <ul class="file-list" data-file-list role="list"></ul></div>` : ''}
     <div class="hp" aria-hidden="true"><label for="${id('website')}">Leave this empty</label><input id="${id('website')}" name="website" type="text" tabindex="-1" autocomplete="off"></div>
     <input type="hidden" name="_started" value="">
@@ -680,7 +680,7 @@ export function donate() {
   return `
 <section class="page-head page-head--donate"><div class="wrap wrap--text">
   ${breadcrumb([['Home', ''], ['Donate', '']])}
-  <h1 class="page-h">Support the playhouse</h1>
+  <h1 class="page-h">Support the Playhouse</h1>
   <p class="page-lede">Every dog we help needs vet care, food, a safe place to land and time. Donations keep that going.</p>
 </div></section>
 <div class="wrap wrap--text donate-page">
@@ -688,13 +688,13 @@ export function donate() {
     <div class="empty empty--wide">
       <img src="${asset('img/bentley-head.png')}" alt="" width="110" height="127" class="empty__bentley">
       <div>
-        <h2>Online donations are coming soon</h2>
+        <h2>Online Donations Are Coming Soon</h2>
         <p>We'll add our donation options here once they're ready. We won't ask you to send money anywhere that isn't listed on this page or our official Instagram.</p>
         <p>You'll be able to see exactly how every dollar is spent on our <a href="${href('transparency/')}">transparency page</a>.</p>
         ${button('Other ways to help', 'get-involved/', { ic: 'hands' })}
       </div>
     </div>`}
-  ${d.legal.verified ? `<div class="legal"><h2 class="section-h section-h--sm">Our details</h2><p>${esc(d.legal.legalName)}${d.legal.status ? ` · ${esc(d.legal.status)}` : ''}${d.legal.ein ? ` · EIN ${esc(d.legal.ein)}` : ''}</p>${d.legal.taxStatement ? `<p>${esc(d.legal.taxStatement)}</p>` : ''}</div>` : ''}
+  ${d.legal.verified ? `<div class="legal"><h2 class="section-h section-h--sm">Our Details</h2><p>${esc(d.legal.legalName)}${d.legal.status ? ` · ${esc(d.legal.status)}` : ''}${d.legal.ein ? ` · EIN ${esc(d.legal.ein)}` : ''}</p>${d.legal.taxStatement ? `<p>${esc(d.legal.taxStatement)}</p>` : ''}</div>` : ''}
 </div>`;
 }
 
@@ -716,7 +716,7 @@ export function contact(data) {
 <div class="wrap">
   <div class="contact-grid">
     <section class="urgent-panel" aria-labelledby="urg-h">
-      <h2 id="urg-h">${icon('alert', { size: 24 })} If an animal needs help right now</h2>
+      <h2 id="urg-h">${icon('alert', { size: 24 })} If an Animal Needs Help Right Now</h2>
       <p>${esc(ctx.t('footer.notEmergency'))} Please don't wait on a message to us.</p>
       <ul class="urgent-list">
         <li><strong>Animal cruelty happening now, or danger to people:</strong> call <span class="num">911</span>.</li>
@@ -728,7 +728,7 @@ export function contact(data) {
       <p><a class="arrow-link" href="${href('get-help/emergency/')}">Full emergency steps ${icon('arrow', { size: 18 })}</a></p>
     </section>
     <section aria-labelledby="reach-h" class="reach">
-      <h2 id="reach-h" class="section-h section-h--sm">Reach us</h2>
+      <h2 id="reach-h" class="section-h section-h--sm">Reach Us</h2>
       <ul class="reach__list">
         <li>${icon('instagram')}<div><strong>Instagram direct message</strong><br>${ext(s.social.instagram.url, esc(s.social.instagram.handle))}</div></li>
         ${emailOk ? `<li>${icon('mail')}<div><strong>Email</strong> ${needsConfirm()}<br><span class="copyable">${esc(s.contact.email)}</span> <button type="button" class="btn-link" data-copy="${esc(s.contact.email)}">Copy</button></div></li>` : ctx.mode === 'preview' ? `<li>${icon('mail')}<div><strong>Email</strong> ${needsConfirm()}<br><span class="muted">Add your public contact email in <code>content/site.json</code>.</span></div></li>` : ''}
@@ -741,11 +741,11 @@ export function contact(data) {
     </section>
   </div>
   <section class="form-wrap" aria-labelledby="msg-h">
-    <h2 id="msg-h" class="section-h">Send a message</h2>
+    <h2 id="msg-h" class="section-h">Send a Message</h2>
     ${form('contact')}
   </section>
   <section class="faq" aria-labelledby="faq-h">
-    <h2 id="faq-h" class="section-h">Frequently asked questions</h2>
+    <h2 id="faq-h" class="section-h">Frequently Asked Questions</h2>
     ${data.faq.filter((f) => show(f.verified !== false)).map((f) => `<details class="acc" id="${slugify(f.q)}"><summary><span>${esc(f.q)}</span>${icon('arrow', { size: 20, cls: 'acc__chev' })}</summary><div class="acc__body prose">${md(f.a)}${f.verified === false ? needsConfirm() : ''}</div></details>`).join('')}
   </section>
 </div>`;
@@ -767,19 +767,19 @@ export function privacy() {
 <div class="wrap wrap--text prose legal">
   <p>This policy explains what ${esc(ctx.site.name)} ("we", "us") collects through bentleysplayhouse.org, why and the choices you have. Questions? Email ${mail()}.</p>
 
-  <h2>What we collect</h2>
-  <h3>Messages and interest forms</h3>
-  <p>When you use our Contact form or the "Raise your hand" form on Get Involved, we receive what you type: your name, email and anything optional you add (phone, neighborhood or ZIP, interests, your message). We use it only to reply to you and coordinate the help you asked about.</p>
-  <h3>"Submit a pup" for Pawsome Pooches</h3>
+  <h2>What We Collect</h2>
+  <h3>Messages and Interest Forms</h3>
+  <p>When you use our Contact form or the "Raise Your Hand" form on Get Involved, we receive what you type: your name, email and anything optional you add (phone, neighborhood or ZIP, interests, your message). We use it only to reply to you and coordinate the help you asked about.</p>
+  <h3>"Submit a Pup" for Pawsome Pooches</h3>
   <p>When you submit a dog, we receive the dog's details and photos, plus your name, social media handle, phone and email. Your contact details are only for us: they are never shown on the website. If we approve the listing, the dog's details and photos are published on the site. If we don't, we delete the photos.</p>
   <h3>Donations</h3>
   <p>Donations go through the payment app you choose (such as PayPal, Venmo, Zelle or Cash App). We don't see or store your card or bank details. That app's own privacy policy applies, and we receive what it shares with recipients, usually your name and the amount.</p>
-  <h3>Things that stay on your device</h3>
+  <h3>Things That Stay on Your Device</h3>
   <p>The flyer builder runs entirely in your browser: your photo and details are never uploaded. Checklist ticks and your cookie choice are saved only in your own browser. You can clear them any time in your browser settings.</p>
-  ${ga ? `<h3>Website analytics (only if you accept)</h3>
+  ${ga ? `<h3>Website Analytics (Only if You Accept)</h3>
   <p>If you click "Accept" on our cookie notice, we use Google Analytics to understand how people find and use the site, such as which guides are read most. It collects things like pages visited, approximate location (city or region), device and browser type and how you reached the site. It doesn't tell us who you are, and we never send it anything you type into our forms. If you say no, Google Analytics doesn't load at all. See our <a href="${href('cookies/')}">Cookie Policy</a>.</p>` : ''}
 
-  <h2>Who helps us run the site</h2>
+  <h2>Who Helps Us Run the Site</h2>
   <p>We use a few trusted services to run the website. They process data only to provide their service to us:</p>
   <ul>
     <li><strong>Cloudflare</strong> stores form messages, attachments and pup submissions privately until we delete them, and runs the "I am human" spam check on our forms (Turnstile). That check looks at your browser, not at what you type, and doesn't use advertising cookies.</li>
@@ -789,10 +789,10 @@ export function privacy() {
   </ul>
   <p>We don't sell, rent or trade your information, and we don't use it for advertising. We'd only share it if the law required us to, or with your permission (for example, to connect you with a rescue about a specific dog).</p>
 
-  <h2>How long we keep it</h2>
+  <h2>How Long We Keep It</h2>
   <p>We keep messages and submissions only as long as we need them to help, then delete them. You can ask us to delete yours at any time.</p>
 
-  <h2>Your choices</h2>
+  <h2>Your Choices</h2>
   <ul>
     <li>Ask what information we have about you, or ask us to correct or delete it, by emailing ${mail()}.</li>
     <li>Change your cookie choice any time on the <a href="${href('cookies/')}">Cookie Policy</a> page.</li>
@@ -802,7 +802,7 @@ export function privacy() {
   <h2>Children</h2>
   <p>This site isn't directed to children under 13, and we don't knowingly collect their information. If you think a child has sent us something, email us and we'll delete it.</p>
 
-  <h2>Keeping yourself safe</h2>
+  <h2>Keeping Yourself Safe</h2>
   <p>When you post about a lost or found dog, share general areas rather than your home address, and consider a separate email or text-only number. Never send money to someone you haven't verified.</p>
 
   <h2>Changes</h2>
@@ -815,35 +815,35 @@ export function terms() {
 <div class="wrap wrap--text prose legal">
   <p>By using bentleysplayhouse.org you agree to these terms. If you don't agree, please don't use the site. Questions? Email ${mail()}.</p>
 
-  <h2>Our information is general guidance</h2>
+  <h2>Our Information Is General Guidance</h2>
   <p>Our guides, checklists and directories are here to help, but they're general information, not veterinary, legal or professional advice. Every dog and situation is different: please talk to a veterinarian or the right professional about your specific case. We work hard to keep things accurate and up to date, but details like clinic hours or shelter policies can change, so please confirm before you go.</p>
 
   <h2>Emergencies</h2>
   <p>We're a small, volunteer-run rescue, not an emergency service or animal control agency. If an animal is hurt or in danger, contact an emergency vet or your local animal services right away. In Miami-Dade, call 311 or 305-468-5900.</p>
 
-  <h2>Pawsome Pooches and other listings</h2>
+  <h2>Pawsome Pooches and Other Listings</h2>
   <p>Pawsome Pooches features community dogs to help them get seen. Many are not in our care: they're at shelters, with other rescues or with families. Listing details come from shelters, rescues and the people who submit them, and we can't guarantee they're complete or accurate. Each adoption or foster is handled by whoever has the dog, under their own process and policies. Please meet the dog and ask your own questions before you commit.</p>
 
-  <h2>What you send us</h2>
+  <h2>What You Send Us</h2>
   <p>When you submit a dog, photos or a message, you confirm that the information is true to the best of your knowledge and that you have the right to share the photos. You give us permission to use, edit and publish what you submit about the dog (never your contact details) on this site and our social media to help the dog find a home. We may edit, decline or remove any submission or listing at any time.</p>
 
   <h2>Donations</h2>
-  <p>Donations are voluntary gifts that support our rescue work, and are generally non-refundable. If you think a donation was made in error, email us and we'll do our best to help. We'll say clearly on our Donate page whether donations are tax-deductible.</p>
+  <p>Donations are voluntary gifts that support our rescue work, and are generally nonrefundable. If you think a donation was made in error, email us and we'll do our best to help. We'll say clearly on our Donate page whether donations are tax-deductible.</p>
 
-  <h2>Using the site fairly</h2>
+  <h2>Using the Site Fairly</h2>
   <p>Please don't misuse the site: no spam, false or harmful submissions, attempts to break or overload it, or scraping it for other purposes.</p>
 
-  <h2>Our content</h2>
+  <h2>Our Content</h2>
   <p>The text, logo, illustrations and design of this site belong to ${esc(ctx.site.name)} or are used with permission. You're welcome to share links to our pages and print our checklists and flyers for personal or rescue use. Please ask before reusing anything else.</p>
 
-  <h2>Links to other sites</h2>
+  <h2>Links to Other Sites</h2>
   <p>We link to shelters, rescues, clinics and other helpful sites. We don't control them and aren't responsible for their content or practices.</p>
 
-  <h2>Limits on our responsibility</h2>
-  <p>The site is provided "as is". To the extent the law allows, ${esc(ctx.site.name)} and its volunteers aren't liable for any loss or harm that comes from using the site or relying on its information, or from any adoption, foster or arrangement made through a listing.</p>
+  <h2>Limits on Our Responsibility</h2>
+  <p>The site is provided "as is." To the extent the law allows, ${esc(ctx.site.name)} and its volunteers aren't liable for any loss or harm that comes from using the site or relying on its information, or from any adoption, foster or arrangement made through a listing.</p>
 
-  <h2>Governing law</h2>
-  <p>These terms are governed by the laws of the State of Florida, USA.</p>
+  <h2>Governing Law</h2>
+  <p>These terms are governed by the laws of the state of Florida.</p>
 
   <h2>Changes</h2>
   <p>We may update these terms. The date at the top of this page shows when they last changed.</p>
@@ -854,13 +854,13 @@ export function cookies() {
   const ga = ctx.site.analytics && ctx.site.analytics.ga4;
   return `${legalHead('Cookie Policy', 'Which cookies and similar storage this site uses, and how to change your choice.', 'Cookie Policy')}
 <div class="wrap wrap--text prose legal">
-  <h2>Your choice</h2>
+  <h2>Your Choice</h2>
   <div class="cookie-choice" data-cookie-page>
     <p data-cookie-status>${ga ? 'You haven’t made a choice yet.' : 'This site doesn’t use analytics cookies right now.'}</p>
     ${ga ? `<div class="btn-row"><button type="button" class="btn btn--primary btn--small" data-cookie-choice="yes">Allow analytics cookies</button><button type="button" class="btn btn--ghost btn--small" data-cookie-choice="no">No analytics cookies</button></div>` : ''}
   </div>
 
-  <h2>What we use</h2>
+  <h2>What We Use</h2>
   <table class="legal-table">
     <thead><tr><th scope="col">Name</th><th scope="col">What it's for</th><th scope="col">How long</th></tr></thead>
     <tbody>
@@ -871,7 +871,7 @@ export function cookies() {
   </table>
   <p>We don't use advertising or tracking cookies, and we don't sell data. Some pages show content from other services (like our Instagram posts or Google Fonts); those services may receive basic technical information such as your IP address when your browser loads them.</p>
 
-  <h2>Managing cookies</h2>
+  <h2>Managing Cookies</h2>
   <p>Use the buttons above to change your choice at any time. You can also block or delete cookies in your browser settings. For more about how we handle information, see our <a href="${href('privacy/')}">Privacy Policy</a>.</p>
 </div>`;
 }
@@ -879,7 +879,7 @@ export function cookies() {
 export function notFound() {
   return `<section class="wrap nf">
   <img src="${asset('img/bentley-head.png')}" alt="" width="160" height="185">
-  <h1 class="page-h">This page wandered off</h1>
+  <h1 class="page-h">This Page Wandered Off</h1>
   <p class="page-lede">We couldn't find that page. These might help:</p>
   <div class="btn-row">${button('Get Help', 'get-help/', { ic: 'search' })}${button('Resource library', 'resources/', { variant: 'ghost' })}${button('Home', '', { variant: 'ghost', ic: 'home' })}</div>
 </section>`;

@@ -12,7 +12,7 @@ var T = window.BP_T || function (s) { return s; };
       function show(i) {
         if (!thumbs.length) return;
         cur = (i + thumbs.length) % thumbs.length;
-        if (main) main.src = thumbs[cur].getAttribute('data-src');
+        if (main) { main.src = thumbs[cur].getAttribute('data-src'); main.style.objectPosition = thumbs[cur].getAttribute('data-focus') || ''; }
         thumbs.forEach(function (o, k) { o.setAttribute('aria-pressed', String(k === cur)); });
         if (nEl) nEl.textContent = cur + 1;
       }

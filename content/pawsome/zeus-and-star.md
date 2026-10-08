@@ -17,7 +17,7 @@ sharePhoto: /assets/img/pawsome/zs-bed.jpg
 photoAlt: Zeus and Star, two fluffy white Samoyeds, sitting side by side by a door
 tagline: Two fluffy Samoyeds whose family needs to rehome them. They can be adopted together or separately.
 breed: Samoyed
-age: Zeus 4 yrs, Star 7 yrs
+age: Zeus 4 years, Star 7 years
 sex: Zeus male, Star female
 fixed: some
 fixedNote: Star is spayed. Zeus is not neutered yet. No dog is adopted out until they are spayed or neutered, so Zeus will be neutered before going to his new home.
@@ -43,7 +43,7 @@ Meet **Zeus and Star**, two Samoyeds who share a home. Their family reached out 
 - **Zeus** is a 4-year-old male.
 - **Star** is a 7-year-old female.
 
-**They can be adopted together or separately.** If you'd love both, wonderful! If you have room for one, that's okay too. Just tell us which pup you're interested in.
+**They can be adopted together or separately.** If you'd love both, wonderful! If you have room for one, that's OK too. Just tell us which pup you're interested in.
 
 **No dog is adopted out unless they are spayed or neutered.** Star is already spayed, and Zeus will be neutered before he goes to his new home. This protects them from ever being used for backyard breeding. [Here's why it matters](/resources/rehoming-a-dog-safely/).
 

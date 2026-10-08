@@ -52,7 +52,7 @@ export function giftBlock({ inDialog = false } = {}) {
   return `<div class="gift" data-gift>
   ${inDialog ? `<button type="button" class="gift__x" data-donate-close aria-label="Close">${icon('x', { size: 20 })}</button>` : ''}
   <div class="gift__badge"><img src="${asset('img/logo-badge.png')}" alt="" width="120" height="119"></div>
-  <h2 class="gift__h" id="${pid}">Help a pup today</h2>
+  <h2 class="gift__h" id="${pid}">Help a Pup Today</h2>
   <p class="gift__sub">Pick an amount to see where your gift goes.</p>
   <div class="gift__tiers" role="radiogroup" aria-labelledby="${pid}">${tierHtml}</div>
   ${primary

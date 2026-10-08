@@ -8,7 +8,10 @@
   var DOW = ES ? ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'] : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   var MONTHS = ES ? ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'] : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var cap = function (w) { return w.charAt(0).toUpperCase() + w.slice(1); };
-  var md = function (d) { return ES ? d.getDate() + ' de ' + MONTHS[d.getMonth()] : MONTHS[d.getMonth()] + ' ' + d.getDate(); };
+  var AP = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
+  var md = function (d) { return ES ? d.getDate() + ' de ' + MONTHS[d.getMonth()] : AP[d.getMonth()] + ' ' + d.getDate(); };
+  // event times arrive in AP style (10 a.m. to 5 p.m.); Spanish: 10 a. m. a 5 p. m.
+  var tm = function (t) { return ES ? String(t || '').replace(/ ([ap])\.m\./g, ' $1. m.').replace(/ to /g, ' a ').replace(/\bnoon\b/gi, 'mediodía').replace(/\bmidnight\b/gi, 'medianoche').replace(/\b(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/g, function (d) { return { Monday: 'lunes', Tuesday: 'martes', Wednesday: 'miércoles', Thursday: 'jueves', Friday: 'viernes', Saturday: 'sábado', Sunday: 'domingo' }[d]; }) : t; };
   var $ = function (s) { return root.querySelector(s); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var pad = function (n) { return (n < 10 ? '0' : '') + n; };
@@ -41,7 +44,7 @@
         if (c2) cls += ' has-more';
       }
       if (state.day === k) cls += ' is-sel';
-      var label = (ES ? d + ' de ' + MONTHS[m] : MONTHS[m] + ' ' + d) + (es.length ? ', ' + es.length + (es.length > 1 ? T(' events') : T(' event')) : '');
+      var label = (ES ? d + ' de ' + MONTHS[m] : AP[m] + ' ' + d) + (es.length ? ', ' + es.length + (es.length > 1 ? T(' events') : T(' event')) : '');
       html += es.length
         ? '<button type="button" class="' + cls + '"' + st + ' data-day="' + k + '" aria-label="' + esc(label) + '" aria-pressed="' + (state.day === k) + '">' + d + '</button>'
         : '<span class="' + cls + '" aria-label="' + esc(label) + '">' + d + '</span>';
@@ -55,7 +58,7 @@
   function gcal(e) {
     var s = e.date.replace(/-/g, ''), endD = new Date((e.endDate || e.date) + 'T12:00:00'); endD.setDate(endD.getDate() + 1);
     var en = iso(endD.getFullYear(), endD.getMonth(), endD.getDate()).replace(/-/g, '');
-    var details = [e.time && T('Time: ') + e.time, e.price && T('Cost: ') + e.price, e.link].filter(Boolean).join('\n');
+    var details = [e.time && T('Time: ') + tm(e.time), e.price && T('Cost: ') + e.price, e.link].filter(Boolean).join('\n');
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.title) + '&dates=' + s + '/' + en + '&details=' + encodeURIComponent(details) + '&location=' + encodeURIComponent([e.venue, e.address, e.city].filter(Boolean).join(', '));
   }
   function row(e) {
@@ -65,12 +68,12 @@
       '<div class="ev-item__date"><span>' + DOW[d.getDay()].slice(0, 3) + '</span><b>' + d.getDate() + '</b><span>' + MONTHS[d.getMonth()].slice(0, 3) + '</span></div>' +
       '<div class="ev-item__bar"></div>' +
       '<div class="ev-item__body"><h3 class="ev-item__h">' + esc(e.title) + '</h3>' +
-      '<p class="ev-item__meta">' + [e.time, e.city || e.venue].filter(Boolean).map(esc).join(' · ') + (multi ? ' · ' + T('until') + esc(multi.slice(2)) : '') + (e.price ? ' · <b class="' + (/^(free|gratis)/i.test(e.price) ? 'is-free' : '') + '">' + esc(e.price) + '</b>' : '') + '</p>' +
+      '<p class="ev-item__meta">' + [tm(e.time), e.city || e.venue].filter(Boolean).map(esc).join(' · ') + (multi ? ' · ' + T('until') + esc(multi.slice(2)) : '') + (e.price ? ' · <b class="' + (/^(free|gratis)/i.test(e.price) ? 'is-free' : '') + '">' + esc(e.price) + '</b>' : '') + '</p>' +
       '<details class="ev-more"><summary>' + T('Details') + ' <span aria-hidden="true">→</span></summary><div class="ev-more__in">' +
         '<span class="ev-cat" style="background:' + c.tint + ';color:' + c.ink + '">' + esc(c.label) + '</span>' +
         (e.desc ? '<div class="ev-more__desc">' + e.desc + '</div>' : '') +
         '<dl class="ev-more__dl">' + (where ? '<div><dt>' + T('Where') + '</dt><dd>' + esc(where) + ' · <a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(where) + '" target="_blank" rel="noopener">' + T('Map') + '</a></dd></div>' : '') +
-        (e.time ? '<div><dt>' + T('When') + '</dt><dd>' + cap(DOW[d.getDay()]) + ', ' + md(d) + esc(multi) + ' · ' + esc(e.time) + '</dd></div>' : '') +
+        (e.time ? '<div><dt>' + T('When') + '</dt><dd>' + cap(DOW[d.getDay()]) + ', ' + md(d) + esc(multi) + ' · ' + esc(tm(e.time)) + '</dd></div>' : '') +
         (e.price ? '<div><dt>' + T('Cost') + '</dt><dd>' + esc(e.price) + '</dd></div>' : '') +
         (e.organizer ? '<div><dt>' + T('Hosted by') + '</dt><dd>' + esc(e.organizer) + '</dd></div>' : '') + '</dl>' +
         '<div class="ev-more__btns">' + (e.link ? '<a class="btn btn--primary btn--small" href="' + esc(e.link) + '" target="_blank" rel="noopener">' + T('Event page') + '<span class="visually-hidden"> ' + T('(opens in a new tab)') + '</span></a>' : '') +
@@ -88,7 +91,7 @@
     } else {
       var a = iso(y, m, 1), b = iso(y, m, new Date(y, m + 1, 0).getDate()), from = a < TODAY ? TODAY : a;
       list = ALL.filter(function (e) { return state.cats.indexOf(e.cat) > -1 && (e.endDate || e.date) >= from && e.date <= b; });
-      head = ES ? (y * 12 + m === minKey ? 'Próximos eventos en ' + MONTHS[m] : cap(MONTHS[m])) + (y !== now.getFullYear() ? ' de ' + y : '') : (y * 12 + m === minKey ? 'Coming up in ' : '') + MONTHS[m] + (y !== now.getFullYear() ? ' ' + y : '');
+      head = ES ? (y * 12 + m === minKey ? 'Próximos eventos en ' + MONTHS[m] : cap(MONTHS[m])) + (y !== now.getFullYear() ? ' de ' + y : '') : (y * 12 + m === minKey ? 'Coming Up in ' : '') + MONTHS[m] + (y !== now.getFullYear() ? ' ' + y : '');
       all.hidden = true;
     }
     $('[data-ev-heading]').textContent = head;

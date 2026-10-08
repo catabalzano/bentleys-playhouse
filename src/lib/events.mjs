@@ -1,5 +1,5 @@
 // Community Calendar: /events/ (mini month calendar + "Coming up" list, rendered by assets/js/events.js)
-import { ctx, esc, href, asset, md, tag, breadcrumb, icon } from './core.mjs';
+import { ctx, esc, href, asset, md, tag, breadcrumb, icon, apTime, apText } from './core.mjs';
 import { socialButtons } from './layout.mjs';
 
 export const EVENT_CATS = {
@@ -18,9 +18,9 @@ export function prepEvents(list) {
     .filter((e) => e.title && /^\d{4}-\d{2}-\d{2}$/.test(String(e.date || '')) && !e.hidden && String(e.endDate || e.date) >= cutoff)
     .map((e) => ({
       slug: e.slug, title: String(e.title), date: e.date, endDate: /^\d{4}-\d{2}-\d{2}$/.test(String(e.endDate || '')) ? e.endDate : '',
-      time: e.time || '', cat: EVENT_CATS[e.category] ? e.category : 'fund', venue: e.venue || '', city: e.city || '',
+      time: ((t) => t.charAt(0).toUpperCase() + t.slice(1))(apTime(e.time || '')), cat: EVENT_CATS[e.category] ? e.category : 'fund', venue: e.venue || '', city: e.city || '',
       address: e.address || '', price: e.price || '', link: e.link || '', organizer: e.organizer || '',
-      desc: e.body && e.body.trim() ? md(e.body) : '',
+      desc: e.body && e.body.trim() ? md(apText(e.body)) : '',
       weekdays: Array.isArray(e.weekdays) ? e.weekdays.map(Number).filter((n) => n >= 0 && n <= 6) : [],
     }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
@@ -58,7 +58,7 @@ export function eventsPage(events) {
       </fieldset>
     </aside>
     <div class="ev-list">
-      <div class="ev-list__head"><h2 class="ev-list__h" data-ev-heading>Coming up</h2><button type="button" class="ev-list__all" data-ev-all hidden>Show the whole month</button></div>
+      <div class="ev-list__head"><h2 class="ev-list__h" data-ev-heading>Coming Up</h2><button type="button" class="ev-list__all" data-ev-all hidden>Show the whole month</button></div>
       <ul class="ev-items" role="list" data-ev-list>${upcoming.map(rowHtml).join('') || `<li class="ev-empty">No events listed yet. Check back soon.</li>`}</ul>
       <div class="ev-submit"><div class="ev-submit__text"><p class="ev-submit__h">Know about a free or low-cost dog event in South Florida?</p><p>Email us at <a href="mailto:${esc(ctx.site.contact.email)}?subject=${encodeURIComponent('Event for the Community Calendar')}">${esc(ctx.site.contact.email)}</a> and we'll add it.</p></div><a class="btn btn--ghost" href="${href('contact/')}?topic=event">Contact form</a></div>
       <p class="ev-note">We list events run by shelters, clinics, rescues and community groups. Details can change, so please confirm with the organizer before you go.</p>

@@ -3,7 +3,7 @@ fenix: true
 cover: microchips-explained.jpg
 coverAlt: "A veterinarian checking a dog lying on an exam table"
 coverCredit: "Tima Miroshnichenko on Pexels"
-title: Microchips, explained
+title: Microchips, Explained
 category: lost-found
 area: general
 order: 2
@@ -19,24 +19,24 @@ sources:
 ---
 A microchip is a tiny ID number placed under a dog's skin. It only helps if someone scans it and the number is registered with current contact details.
 
-## What a chip is, and isn't
+## What a Chip Is, and Isn't
 
 - It's an ID number, read by a handheld scanner.
 - It isn't a GPS tracker. It can't show where a dog is.
 - It doesn't store the owner's name or phone. Those live in a registry database.
 
-## If you found a dog
+## If You Found a Dog
 
 1. Ask any vet clinic or shelter to scan the dog. It's usually free. In Miami-Dade, finders must have the dog scanned within 72 hours.
-2. Put the number into the [AAHA lookup](https://www.aaha.org/for-veterinary-professionals/microchip-registry-lookup-tool-aaha-find-your-pets-microchip-registry/). Chips are 9, 10 or 15 digits.
+2. Put the number into the [AAHA lookup](https://www.aaha.org/for-veterinary-professionals/microchip-registry-lookup-tool-aaha-find-your-pets-microchip-registry/). Chips are nine, 10 or 15 digits.
 3. The lookup shows which registry holds the chip. Call them; they'll help reach the owner. In Miami-Dade, finders must contact the registered owner within 24 hours of finding a chip.
 
-## If you own a dog
+## If You Own a Dog
 
 - Find the chip number in your vet or adoption records, and look it up to see where it's registered.
 - Make sure your phone number and address are current. Outdated details are one of the most common reasons chipped dogs don't get home.
 - If your dog goes missing, call the registry right away to flag them as lost.
 
-## Unregistered chips
+## Unregistered Chips
 
 If a chip was never registered, the lookup may show the manufacturer or the clinic or rescue that bought it. They can sometimes trace it, so it's still worth calling.

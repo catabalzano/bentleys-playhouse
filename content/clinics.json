@@ -46,7 +46,7 @@
       "area": "Doral",
       "phone": "(305) 598-1234",
       "hours": "24/7",
-      "hoursNote": "Open 24 hours a day, 7 days a week, 365 days a year.",
+      "hoursNote": "Open 24 hours a day, seven days a week, 365 days a year.",
       "website": "https://doralvet.com/",
       "source": "https://doralvet.com/emergency/"
     },
@@ -199,7 +199,7 @@
       "type": "Preventive care only (low cost)",
       "emergency": "no",
       "walkIns": "yes",
-      "walkInNote": "Walk-ins welcome. Online appointments need a non-refundable deposit.",
+      "walkInNote": "Walk-ins welcome. Online appointments need a nonrefundable deposit.",
       "address": "16101 W Dixie Hwy, North Miami Beach, FL 33160",
       "area": "North Miami Beach",
       "phone": "(305) 696-0800",
@@ -257,7 +257,7 @@
         ],
         "sun": []
       },
-      "hoursNote": "Closed for lunch 12–1. Vaccines, preventives, county license tags. Not equipped for sick or injured animals.",
+      "hoursNote": "Closed for lunch from noon to 1 p.m. Vaccines, preventives, county license tags. Not equipped for sick or injured animals.",
       "website": "https://www.humanesocietymiami.org/vaccine-and-preventative-care/",
       "source": "https://www.humanesocietymiami.org/vaccine-and-preventative-care/"
     },
@@ -308,7 +308,7 @@
         "sun": []
       },
       "hoursNote": "Exams, vaccines, spay/neuter, microchips. Emergencies are referred to an emergency hospital.",
-      "eligibility": "Miami-Dade residents 18+ with proof of an eligible public assistance program.",
+      "eligibility": "Miami-Dade residents 18 and older with proof of an eligible public assistance program.",
       "confirm": "Hours come from Miami-Dade County's 311 information page; the ASPCA's own page doesn't list them.",
       "website": "https://clinic.aspca.org/clinics/miami/liberty-city",
       "source": "https://secure.miamidade.gov/internal/calltaker-faq.page?Mduid_faq=faq162370190355563"
@@ -482,7 +482,7 @@
           ]
         ]
       },
-      "hoursNote": "Open 7 days, with evening hours on weekdays.",
+      "hoursNote": "Open seven days, with evening hours on weekdays.",
       "confirm": "Hours confirmed on VCA's page. Walk-in and urgent-care policy aren't stated, so call first.",
       "website": "https://vcahospitals.com/alton-road",
       "source": "https://vcahospitals.com/alton-road"

@@ -2,7 +2,7 @@
 cover: toolkit-for-independent-rescuers.jpg
 coverAlt: "Two volunteers smiling and petting a dog"
 coverCredit: "Mikhail Nilov on Pexels"
-title: A toolkit for independent rescuers
+title: A Toolkit for Independent Rescuers
 category: rescuers
 area: local
 order: 1
@@ -17,17 +17,17 @@ sources:
 ---
 Independent rescuers do a lot of the hardest work in this city. This page collects the basics we wish everyone had from day one.
 
-## Every dog, every time
+## Every Dog, Every Time
 
 - Scan for a microchip and report the dog to Animal Services within 72 hours. It's required in Miami-Dade, and it protects you.
 - Photograph the dog and note the exact place, date and time you found it.
 - Keep copies of vet records and receipts.
 
-## Keep a simple record
+## Keep a Simple Record
 
 A shared note or spreadsheet with each dog's name, where and when they were found, the chip number, vet visits, vaccines and where they went. It helps with adopters, vets and grant applications.
 
-## Your kit
+## Your Kit
 
 - Slip leads and a properly fitted harness.
 - Strong-smelling treats.
@@ -35,7 +35,7 @@ A shared note or spreadsheet with each dog's name, where and when they were foun
 - A crate or carrier for the car.
 - A list of [emergency numbers](/resources/poison-and-emergency-contacts/).
 
-## Rehoming responsibly
+## Rehoming Responsibly
 
 Never list a dog as "free to a good home." The full checklist, and why it matters, is in [rehoming a dog safely](/resources/rehoming-a-dog-safely/).
 
@@ -43,12 +43,12 @@ Never list a dog as "free to a good home." The full checklist, and why it matter
 - Spay/neuter, vaccinate and microchip before placement if you can, and transfer the chip registration.
 - Use a simple written adoption agreement, and ask adopters to return the dog to you if things don't work out.
 
-## Getting help
+## Getting Help
 
 - Lower-cost care: see [affordable vet care in Miami](/resources/affordable-vet-care-miami/).
 - [RedRover Relief](https://redrover.org/relief/) grants can sometimes help Good Samaritans and rescuers with urgent care.
 - Share your dog's story on social media with clear photos and honest details.
 
-## Look after yourself
+## Look After Yourself
 
 Rescue can be heavy. Set limits on how many dogs you take on, lean on other rescuers and take breaks. Saying "I can't right now" is part of doing this for the long haul.

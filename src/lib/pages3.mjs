@@ -88,6 +88,8 @@ const storyData = (d) => JSON.stringify({ slug: d.slug, name: d.name, age: d.age
   where: d.loc.type === 'rescue' && d.loc.name ? d.loc.name : d.loc.name || d.loc.meta.long || d.loc.meta.label, city: d.loc.city || '',
   fixed: yn(d.fixed), vaccinated: yn(d.vaccinated), microchipped: yn(d.microchipped), good: d.good,
   photo: img(d.sharePhoto || d.photos[0] || ''), focus: /^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || '')) ? d.photoFocus : '', logo: asset('img/logo-badge.png') });
+const focusOk = (d) => /^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || ''));
+const focusStyle = (d) => (focusOk(d) ? ` style="object-position:${d.photoFocus}"` : '');
 const HEALTH = [['fixed', 'Spayed or neutered'], ['vaccinated', 'Vaccines up to date'], ['microchipped', 'Microchipped'], ['heartworm', 'Heartworm negative']];
 
 export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
@@ -98,9 +100,9 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
   const statusPill = d.status === 'adopted' ? `<span class="pp-status pp-status--adopted">Adopted${d.adoptedDate ? ' ' + esc(fmtDate(d.adoptedDate)) : ''}</span>` : d.status === 'pending' ? '<span class="pp-status">Adoption pending</span>' : `<span class="pp-status pp-status--open">${d.needs === 'foster' ? 'Needs a foster' : d.needs === 'both' ? 'Ready to adopt or foster' : 'Ready for adoption'}</span>`;
   return `<div class="pp-detail">
   <div class="pp-detail__media" data-pp-gallery>
-    <div class="pp-detail__main">${d.photos[0] ? `<img src="${img(d.photos[0])}" alt="${esc(d.photoAlt || d.name)}" data-pp-main>` : `<span class="pp-card__nophoto">${paw()}</span>`}${d.photos.length > 1 ? `<button type="button" class="pp-gal-btn pp-gal-btn--prev" data-pp-step="-1" aria-label="Previous photo">${icon('arrow', { size: 22 })}</button><button type="button" class="pp-gal-btn pp-gal-btn--next" data-pp-step="1" aria-label="Next photo">${icon('arrow', { size: 22 })}</button><span class="pp-gal-count" aria-live="polite"><span data-pp-n>1</span> / ${d.photos.length}</span>` : ''}</div>
+    <div class="pp-detail__main">${d.photos[0] ? `<img src="${img(d.photos[0])}" alt="${esc(d.photoAlt || d.name)}" data-pp-main${focusStyle(d)}>` : `<span class="pp-card__nophoto">${paw()}</span>`}${d.photos.length > 1 ? `<button type="button" class="pp-gal-btn pp-gal-btn--prev" data-pp-step="-1" aria-label="Previous photo">${icon('arrow', { size: 22 })}</button><button type="button" class="pp-gal-btn pp-gal-btn--next" data-pp-step="1" aria-label="Next photo">${icon('arrow', { size: 22 })}</button><span class="pp-gal-count" aria-live="polite"><span data-pp-n>1</span> / ${d.photos.length}</span>` : ''}</div>
     ${d.photos.length > 1 ? `<p class="pp-gal-hint">${icon('image', { size: 16 })} ${d.photos.length} photos. Use the arrows or tap a photo below to see more.</p>` : ''}
-    ${d.photos.length > 1 ? `<div class="pp-thumbs" role="group" aria-label="More photos of ${esc(d.name)}">${d.photos.map((p, i) => `<button type="button" class="pp-thumb" data-src="${img(p)}" aria-pressed="${i === 0}"><img src="${img(p)}" alt="Photo ${i + 1} of ${esc(d.name)}" loading="lazy"></button>`).join('')}</div>` : ''}
+    ${d.photos.length > 1 ? `<div class="pp-thumbs" role="group" aria-label="More photos of ${esc(d.name)}">${d.photos.map((p, i) => `<button type="button" class="pp-thumb" data-src="${img(p)}"${i === 0 && focusOk(d) ? ` data-focus="${d.photoFocus}"` : ''} aria-pressed="${i === 0}"><img src="${img(p)}" alt="Photo ${i + 1} of ${esc(d.name)}" loading="lazy"></button>`).join('')}</div>` : ''}
   </div>
   <div class="pp-detail__info">
     <p class="pp-detail__top">${statusPill}${locBadge(d)}</p>
@@ -204,11 +206,11 @@ export function pawsomePage(pooches) {
   <div class="pp-grid" data-pp-grid>${live.map((d) => ppCard(d, { headingLevel: 'h2' })).join('')}</div>
   <p class="pp-empty" data-pp-empty hidden>No pups match those filters this week. Try fewer filters.</p>
 
-  ${adopted.length ? `<section class="pp-happy" aria-labelledby="happy-h"><h2 id="happy-h" class="section-h">Happy tails</h2><p>Featured here, and now home. Thank you for sharing!</p><div class="pp-grid pp-grid--happy">${adopted.map((d) => ppCard(d)).join('')}</div></section>` : ''}
+  ${adopted.length ? `<section class="pp-happy" aria-labelledby="happy-h"><h2 id="happy-h" class="section-h">Happy Tails</h2><p>Featured here, and now home. Thank you for sharing!</p><div class="pp-grid pp-grid--happy">${adopted.map((d) => ppCard(d)).join('')}</div></section>` : ''}
 
   <section class="pp-submit" id="submit" aria-labelledby="submit-h">
-    <div><h2 id="submit-h" class="section-h">Know a pup who needs a spotlight?</h2>
-    <p>Rescues, shelter volunteers and families can submit a dog to feature. Fill out a short form with 1 to 5 clear photos and the pup's details. We review every submission before it goes live.</p>
+    <div><h2 id="submit-h" class="section-h">Know a Pup Who Needs a Spotlight?</h2>
+    <p>Rescues, shelter volunteers and families can submit a dog to feature. Fill out a short form with one to five clear photos and the pup's details. We review every submission before it goes live.</p>
     <p>Want to meet more adoptable pets? Follow <a href="https://www.instagram.com/adoptmiamipets/" target="_blank" rel="noopener">@adoptmiamipets<span class="visually-hidden"> (opens in a new tab)</span></a> for Miami-Dade Animal Services and see <a href="${href('rescues-you-can-help/')}">rescues you can help</a>.</p></div>
     <div class="btn-row">${button('Submit a pup', 'pawsome-pooches/submit/', { ic: 'paw' })}${button('Thinking of rehoming? Read this first', 'resources/rehoming-a-dog-safely/', { variant: 'ghost' })}</div>
   </section>
@@ -240,7 +242,7 @@ export function rescueCard(r) {
     <div class="rescue-card__links">
       ${ig ? `<a href="https://www.instagram.com/${esc(ig)}/" target="_blank" rel="noopener">${icon('instagram', { size: 18 })} @${esc(ig)}<span class="visually-hidden"> (opens in a new tab)</span></a>` : ''}
       ${r.website ? `<a href="${esc(r.website)}" target="_blank" rel="noopener">${icon('globe', { size: 18 })} Website<span class="visually-hidden"> (opens in a new tab)</span></a>` : ''}
-      ${r.wishlist ? `<a href="${esc(r.wishlist)}" target="_blank" rel="noopener">${icon('gift', { size: 18 })} Wishlist<span class="visually-hidden"> (opens in a new tab)</span></a>` : ''}
+      ${r.wishlist ? `<a href="${esc(r.wishlist)}" target="_blank" rel="noopener">${icon('gift', { size: 18 })} Wish list<span class="visually-hidden"> (opens in a new tab)</span></a>` : ''}
       ${r.donate ? `<a href="${esc(r.donate)}" target="_blank" rel="noopener">${icon('heart', { size: 18 })} Donate<span class="visually-hidden"> (opens in a new tab)</span></a>` : ''}
     </div>
   </article>`;
@@ -250,7 +252,7 @@ export function rescuesPage(rescues) {
 <section class="page-head"><div class="wrap wrap--text">
   ${breadcrumb([['Home', ''], ['Get Involved', 'get-involved/'], ['Rescues you can help', '']])}
   <p class="eyebrow">${tag('Miami-Dade', 'violet')}</p>
-  <h1 class="page-h">Rescues you can help</h1>
+  <h1 class="page-h">Rescues You Can Help</h1>
   <p class="page-lede">These rescues and shelters are in the trenches every day. Following, sharing, fostering, volunteering or sending supplies all make a real difference.</p>
 </div></section>
 <div class="wrap">

@@ -2,7 +2,7 @@
 cover: first-vet-visit-and-license.jpg
 coverAlt: "A vet examining a happy dog with a volunteer"
 coverCredit: "Mikhail Nilov on Pexels"
-title: First vet visit, rabies and your county license
+title: First Vet Visit, Rabies and Your County License
 category: care
 area: local
 order: 1
@@ -17,14 +17,14 @@ sources:
 ---
 Every new dog, whether adopted, rescued or found, should see a vet soon. Here's how to make that first visit count.
 
-## What to bring
+## What to Bring
 
 - Any records you have: shelter or rescue paperwork, vaccine history, microchip number.
 - A list of what you've noticed: eating, drinking, bathroom habits, energy, coughing or scratching.
 - What food the dog is eating, and how much.
 - Your questions, written down.
 
-## Questions worth asking
+## Questions Worth Asking
 
 - Which vaccines does my dog need, and when?
 - What parasite prevention do you recommend for South Florida?
@@ -34,7 +34,7 @@ Every new dog, whether adopted, rescued or found, should see a vet soon. Here's 
 
 Your vet is the right person for questions about food, medication and health. Please don't give a dog any human medication unless a vet tells you to.
 
-## Rabies and licensing in Miami-Dade
+## Rabies and Licensing in Miami-Dade
 
-- **Rabies:** Florida law requires dogs four months and older to be vaccinated by a licensed veterinarian.
-- **License:** Miami-Dade requires a license tag for all dogs over four months, worn at all times. You'll need proof of rabies vaccination. Tags are sold at the shelter, many vets and 311 service centers (not online), and renew each year on the anniversary of the rabies shot.
+- **Rabies:** Florida law requires dogs 4 months and older to be vaccinated by a licensed veterinarian.
+- **License:** Miami-Dade requires a license tag for all dogs over 4 months, worn at all times. You'll need proof of rabies vaccination. Tags are sold at the shelter, many vets and 311 service centers (not online), and renew each year on the anniversary of the rabies shot.

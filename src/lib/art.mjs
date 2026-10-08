@@ -3,7 +3,7 @@ import { asset } from './core.mjs';
 
 export function heroDoorway() {
   return `<svg class="hero-art" viewBox="0 0 1200 520" role="img" aria-labelledby="hero-art-t" preserveAspectRatio="xMidYMid slice">
-  <title id="hero-art-t">Illustration: Bentley, our French Bulldog, peeking through the glowing doorway of a playhouse.</title>
+  <title id="hero-art-t">Illustration: Bentley, our French bulldog, peeking through the glowing doorway of a playhouse.</title>
   <defs>
     <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--gold)"/><stop offset="1" stop-color="var(--orange)"/></linearGradient>
     <pattern id="stripes" width="34" height="34" patternUnits="userSpaceOnUse"><rect width="34" height="34" fill="var(--hero-wall)"/><rect width="10" height="34" fill="var(--hero-stripe)"/></pattern>

@@ -3,7 +3,7 @@ import { ctx, esc, href, asset, md, tag, previewNote, show, ext, button, breadcr
 
 const usd = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 const DAYS = [['mon', 'Monday'], ['tue', 'Tuesday'], ['wed', 'Wednesday'], ['thu', 'Thursday'], ['fri', 'Friday'], ['sat', 'Saturday'], ['sun', 'Sunday']];
-function t12(hm) { let [h, m] = hm.split(':').map(Number); const ap = h >= 12 && h < 24 ? 'PM' : 'AM'; h = h % 12 || 12; return m ? `${h}:${String(m).padStart(2, '0')} ${ap}` : `${h} ${ap}`; }
+function t12(hm) { let [h, m] = hm.split(':').map(Number); if (h === 12 && !m) return 'noon'; if ((h === 0 || h === 24) && !m) return 'midnight'; const ap = h >= 12 && h < 24 ? 'p.m.' : 'a.m.'; h = h % 12 || 12; return m ? `${h}:${String(m).padStart(2, '0')} ${ap}` : `${h} ${ap}`; }
 const span = (ranges) => ranges.length ? ranges.map(([a, b]) => `${t12(a)}–${t12(b)}`).join(', ') : 'Closed';
 
 // ================= TRANSPARENCY =================
@@ -24,7 +24,7 @@ export function transparency(fin) {
 <section class="page-head page-head--donate">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Transparency', '']])}
-    <h1 class="page-h">Where the money goes</h1>
+    <h1 class="page-h">Where the Money Goes</h1>
     <p class="page-lede">Every dollar we spend is listed here with its receipt: food, spay and neuter surgeries, medical bills, toys, help for other rescues. You shouldn't have to wonder what your support did.</p>
   </div>
 </section>`;
@@ -38,7 +38,7 @@ export function transparency(fin) {
 
   if (!rows.length) {
     return head + `<div class="wrap">${promises}
-      <div class="empty empty--wide"><img src="${asset('img/bentley-head.png')}" alt="" width="110" height="127" class="empty__bentley"><div><h2>Our first report is on its way</h2><p>We're gathering receipts and statements. Entries will appear here as soon as they're posted.</p>${button('Other ways to help', 'get-involved/', { variant: 'ghost', ic: 'hands' })}</div></div>
+      <div class="empty empty--wide"><img src="${asset('img/bentley-head.png')}" alt="" width="110" height="127" class="empty__bentley"><div><h2>Our First Report Is on Its Way</h2><p>We're gathering receipts and statements. Entries will appear here as soon as they're posted.</p>${button('Other ways to help', 'get-involved/', { variant: 'ghost', ic: 'hands' })}</div></div>
     </div>`;
   }
 
@@ -62,7 +62,7 @@ export function transparency(fin) {
   </section>
 
   <section class="fin-chart" aria-labelledby="chart-h">
-    <h2 id="chart-h" class="section-h section-h--sm">Spending by category</h2>
+    <h2 id="chart-h" class="section-h section-h--sm">Spending by Category</h2>
     <ul class="bars" role="list" data-bars>
       ${catRows.map(([id, v]) => `<li class="bar" data-cat="${id}" title="${esc(cats[id] || id)}: ${usd(v)}"><span class="bar__label">${esc(cats[id] || id)}</span><span class="bar__track"><span class="bar__fill" style="width:${(v / max * 100).toFixed(1)}%"></span></span><span class="bar__value">${usd(v)}</span></li>`).join('')}
     </ul>
@@ -70,14 +70,14 @@ export function transparency(fin) {
   </section>
 
   <section class="fin-ledger" aria-labelledby="ledger-h">
-    <div class="section-head"><h2 id="ledger-h" class="section-h section-h--sm">Every entry</h2>
+    <div class="section-head"><h2 id="ledger-h" class="section-h section-h--sm">Every Entry</h2>
       ${isExample ? '' : `<a class="arrow-link" href="${asset('finances/transactions.csv')}">${icon('download', { size: 18 })} Full ledger (CSV)</a>`}</div>
     <div class="table-scroll">
       <table class="ledger">
         <thead><tr><th scope="col">Date</th><th scope="col">What it was for</th><th scope="col">Category</th><th scope="col" class="num-col">Amount</th><th scope="col">Receipt</th></tr></thead>
         <tbody>
           ${rows.map((r) => `<tr data-year="${r.date.slice(0, 4)}" data-type="${r.type}" data-cat="${r.category}" data-amount="${r.amount}" data-receipt="${r.receipt ? 1 : 0}" data-search="${esc([r.description, r.party, r.dog, r.notes, cats[r.category]].join(' ').toLowerCase())}">
-            <td data-label="Date">${r.hideDate ? '<span class="muted" title="Date kept private">—</span>' : `<time datetime="${r.date}">${new Date(r.date + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time>`}</td>
+            <td data-label="Date">${r.hideDate ? '<span class="muted" title="Date kept private">—</span>' : `<time datetime="${r.date}">${fmtDate(r.date)}</time>`}</td>
             <td data-label="What it was for"><strong>${esc(r.description)}</strong>${r.party || r.dog ? `<span class="ledger__sub">${[r.party && esc(r.party), r.dog && `for ${esc(r.dog)}`].filter(Boolean).join(' · ')}</span>` : ''}${r.notes ? `<span class="ledger__sub">${esc(r.notes)}</span>` : ''}${isExample ? ' <span class="confirm-chip">Example</span>' : ''}</td>
             <td data-label="Category"><span class="cat-pill cat-pill--${r.type}">${esc(cats[r.category] || r.category)}</span></td>
             <td data-label="Amount" class="num-col amt amt--${r.type}">${r.type === 'income' ? '+' : '−'}${usd(r.amount)}</td>
@@ -87,16 +87,16 @@ export function transparency(fin) {
       </table>
     </div>
     <p class="lib-count" role="status" aria-live="polite" data-fin-status></p>
-    <p class="muted small">${latest ? `Last entry: <time datetime="${latest}">${fmtDate(latest)}</time>. ` : ''}Amounts in US dollars.</p>
+    <p class="muted small">${latest ? `Last entry: <time datetime="${latest}">${fmtDate(latest)}</time>. ` : ''}Amounts in U.S. dollars.</p>
   </section>
 
   <section class="fin-docs" aria-labelledby="docs-h">
-    <h2 id="docs-h" class="section-h section-h--sm">Statements & reports</h2>
+    <h2 id="docs-h" class="section-h section-h--sm">Statements & Reports</h2>
     ${docs.length ? `<ul class="link-list">${docs.map((d) => `<li><a href="${/^https?:/.test(d.file) ? esc(d.file) : asset('finances/statements/' + d.file)}" target="_blank" rel="noopener">${icon('book', { size: 20 })} <span>${esc(d.title)} <span class="muted small">· ${esc(d.kind || '')} · ${fmtDate(d.date)}</span></span></a></li>`).join('')}</ul>` : `<p class="muted">Monthly statements and yearly reports will be posted here.</p>`}
   </section>
 
   <section class="faq" aria-labelledby="fin-faq-h">
-    <h2 id="fin-faq-h" class="section-h section-h--sm">About this page</h2>
+    <h2 id="fin-faq-h" class="section-h section-h--sm">About This Page</h2>
     <details class="acc"><summary><span>Why don't you list who donated?</span>${icon('arrow', { size: 20, cls: 'acc__chev' })}</summary><div class="acc__body prose"><p>Giving is personal. We record donations as totals (for example, “Individual donations (6 gifts)”) so supporters stay private, while the total still shows up in what we received.</p></div></details>
     <details class="acc"><summary><span>Why are parts of some receipts blacked out?</span>${icon('arrow', { size: 20, cls: 'acc__chev' })}</summary><div class="acc__body prose"><p>We hide card and account numbers, home addresses and other people's personal details. Amounts, dates, sellers and items stay visible.</p></div></details>
     <details class="acc"><summary><span>What does “Pending” mean in the receipt column?</span>${icon('arrow', { size: 20, cls: 'acc__chev' })}</summary><div class="acc__body prose"><p>The expense is recorded, and we're still scanning or redacting the receipt. It will be added.</p></div></details>
@@ -135,7 +135,7 @@ function clinicCard(c, checked) {
       </dl>
       <div class="clinic__hours">
         <h4 class="clinic__h">Hours</h4>
-        ${is247 ? `<p class="hours247">${icon('clock', { size: 18 })} Open 24 hours, 7 days</p>` : `<table class="hours"><tbody>${DAYS.map(([k, n]) => `<tr data-day="${k}"><th scope="row">${n.slice(0, 3)}</th><td>${span(c.hours[k])}</td></tr>`).join('')}</tbody></table>`}
+        ${is247 ? `<p class="hours247">${icon('clock', { size: 18 })} Open 24 hours, seven days</p>` : `<table class="hours"><tbody>${DAYS.map(([k, n]) => `<tr data-day="${k}"><th scope="row">${n.slice(0, 3)}</th><td>${span(c.hours[k])}</td></tr>`).join('')}</tbody></table>`}
         ${c.hoursNote ? `<p class="small muted">${esc(c.hoursNote)}</p>` : ''}
       </div>
     </div>
@@ -153,7 +153,7 @@ export function clinics(data) {
 <section class="page-head page-head--help">
   <div class="wrap">
     ${breadcrumb([['Home', ''], ['Resources', 'resources/'], ['Vet clinic directory', '']])}
-    <h1 class="page-h">Vet clinic directory</h1>
+    <h1 class="page-h">Vet Clinic Directory</h1>
     <p class="page-lede">Where to take a dog in Miami-Dade, for everyday care and for emergencies. Hours change, so call before you go.</p>
   </div>
 </section>
@@ -173,19 +173,19 @@ export function clinics(data) {
   <p class="lib-count" role="status" aria-live="polite" data-clinic-status></p>
 
   <section class="clinic-group" id="emergency" aria-labelledby="em-h">
-    <h2 id="em-h" class="section-h">Emergency care</h2>
+    <h2 id="em-h" class="section-h">Emergency Care</h2>
     <p class="muted">For injuries, poisoning, trouble breathing, collapse or anything that can't wait. Five of these are open 24/7; one takes emergency walk-ins until 9 PM. Expect to be seen in order of how urgent it is, and ask for a cost estimate if that's a concern.</p>
     <div class="clinic-grid">${em.map((c) => clinicCard(c, checked)).join('')}</div>
   </section>
   <section class="clinic-group" id="everyday" aria-labelledby="cl-h">
-    <h2 id="cl-h" class="section-h">Everyday &amp; low-cost clinics</h2>
-    <p class="muted">For checkups, vaccines, microchips, spay/neuter and non-urgent problems. Not for emergencies.</p>
+    <h2 id="cl-h" class="section-h">Everyday &amp; Low-Cost Clinics</h2>
+    <p class="muted">For checkups, vaccines, microchips, spay/neuter and nonurgent problems. Not for emergencies.</p>
     <div class="clinic-grid">${cl.map((c) => clinicCard(c, checked)).join('')}</div>
   </section>
   <p class="empty clinic-empty" hidden>No clinics match. Try another filter.</p>
 
   <section class="clinic-group" aria-labelledby="glance-h">
-    <h2 id="glance-h" class="section-h section-h--sm">All clinics at a glance</h2>
+    <h2 id="glance-h" class="section-h section-h--sm">All Clinics at a Glance</h2>
     <div class="table-scroll"><table class="glance">
       <thead><tr><th scope="col">Clinic</th><th scope="col">Kind</th><th scope="col">Emergencies</th><th scope="col">Walk-ins</th><th scope="col">Days open</th><th scope="col">Phone</th></tr></thead>
       <tbody>${list.map((c) => `<tr><th scope="row"><a href="#${c.id}">${esc(c.name)}</a><span class="ledger__sub">${esc(c.area)}</span></th><td>${c.kind === 'emergency' ? (c.hours === '24/7' ? '24/7 emergency hospital' : 'Emergency care, set hours') : 'Clinic'}</td><td>${yn(c.emergency, { yes: c.hours === '24/7' ? 'Yes, 24/7' : 'Yes', limited: 'Urgent only, business hours', no: 'No' })}</td><td>${yn(c.walkIns, { yes: 'Yes', appointment: 'Appointment only', no: 'No', ask: 'Call to ask' })}</td><td>${c.hours === '24/7' ? 'Every day, 24 hours' : DAYS.filter(([k]) => c.hours[k].length).map(([, n]) => n.slice(0, 3)).join(', ')}</td><td class="nowrap">${esc(c.phone)}</td></tr>`).join('')}</tbody>
@@ -201,16 +201,16 @@ export function mdasBlock(m, spotlight, dogCard) {
     <div class="mdas__head">
       <div>
         <p class="eyebrow">${tag('Public shelter', 'gold')}</p>
-        <h3 id="mdas-h" class="section-h section-h--sm">Dogs waiting at Miami-Dade Animal Services</h3>
+        <h3 id="mdas-h" class="section-h section-h--sm">Dogs Waiting at Miami-Dade Animal Services</h3>
         <p>Hundreds of dogs are waiting at the county shelter right now. Browse them on the shelter's adoption site, then visit in person to meet them.</p>
       </div>
       <div class="btn-row">${button('Browse dogs at MDAS', m.searchUrl, { externalLink: true, ic: 'search' })}${button('How MDAS adoption works', m.adoptionPage, { variant: 'ghost', externalLink: true })}</div>
     </div>
     ${spotlight.length ? `<h4 class="h-sm">Spotlight</h4><div class="dog-grid">${spotlight.map(dogCard).join('')}</div>` : ''}
     <div class="mdas__facts">
-      <div><h4 class="h-sm">Adoption fees</h4><ul>${m.fees.map((f) => `<li>${esc(f)}</li>`).join('')}</ul><p class="small">Includes: ${esc(m.included)}</p></div>
-      <div><h4 class="h-sm">Where and when</h4><ul>${m.locations.map((l) => `<li><strong>${esc(l.name)}</strong><br>${esc(l.address)}<br><span class="muted">${esc(l.hours)}</span></li>`).join('')}</ul></div>
-      <div><h4 class="h-sm">How it works</h4><ol>${m.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol></div>
+      <div><h4 class="h-sm">Adoption Fees</h4><ul>${m.fees.map((f) => `<li>${esc(f)}</li>`).join('')}</ul><p class="small">Includes: ${esc(m.included)}</p></div>
+      <div><h4 class="h-sm">Where and When</h4><ul>${m.locations.map((l) => `<li><strong>${esc(l.name)}</strong><br>${esc(l.address)}<br><span class="muted">${esc(l.hours)}</span></li>`).join('')}</ul></div>
+      <div><h4 class="h-sm">How It Works</h4><ol>${m.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol></div>
     </div>
     <p class="muted small">Miami-Dade Animal Services is a county agency, not part of ${esc(ctx.site.name)}. Fees and hours checked ${fmtDate(m.checked)}; confirm on the MDAS site before you go.</p>
   </section>`;

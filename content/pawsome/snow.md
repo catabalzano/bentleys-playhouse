@@ -9,8 +9,9 @@ photos:
   - /assets/img/pawsome/snow.jpg
   - /assets/img/pawsome/snow-3.jpg
   - /assets/img/pawsome/snow-4.jpg
-photoAlt: Snow, American Bulldog Mix
-breed: American Bulldog Mix
+photoAlt: Snow, American bulldog mix
+photoFocus: 50% 25%
+breed: American bulldog mix
 age: "5"
 sex: Male
 fixed: "yes"
@@ -31,4 +32,4 @@ contact:
 submissionId: 20261007-c48a25e1
 size: Large
 ---
-Snow is a goofball full of energy and loves to play. He is an active and a happy Dog looking for his forever family. Preferably an active household.
+Snow is a goofball full of energy and loves to play. He is an active, happy dog looking for his forever family. Preferably an active household.

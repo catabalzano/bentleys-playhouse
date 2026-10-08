@@ -2,7 +2,7 @@
 cover: international-pet-travel.jpg
 coverAlt: "Two dogs in vests on an airport runway beside a plane"
 coverCredit: "Jeswin Thomas on Pexels"
-title: Traveling internationally with your dog
+title: Traveling Internationally With Your Dog
 icon: globe
 category: laws-travel
 area: national
@@ -41,22 +41,22 @@ sources:
 ---
 Taking your dog abroad, or bringing a dog home to Miami from another country, is very doable. It just takes paperwork, the right veterinarian and, for some places, months of lead time. This guide walks through both directions: leaving the U.S. with your dog, and entering the U.S. under the CDC dog import rules, including U.S. dogs coming home from a trip. Rules differ by country, by airline and even by the date you fly, so treat every timeline here as a starting point and confirm the details for your exact trip.
 
-> **Please note:** this is general information, not legal or veterinary advice. Pet travel rules change often. Always confirm with USDA APHIS, the CDC and your airline before you book. If you are headed to Britain or the EU, also read our [UK and Europe pet travel guide](/resources/uk-europe-pet-travel/), and print the [international pet travel checklist](/resources/checklists/international-pet-travel/).
+> **Please note:** this is general information, not legal or veterinary advice. Pet travel rules change often. Always confirm with USDA APHIS, the CDC and your airline before you book. If you are headed to Britain or the EU, also read our [U.K. and Europe pet travel guide](/resources/uk-europe-pet-travel/), and print the [international pet travel checklist](/resources/checklists/international-pet-travel/).
 
-## The big picture
+## The Big Picture
 
 Two U.S. agencies handle most of this:
 
 - **USDA APHIS** handles dogs **leaving** the U.S. It publishes each destination's requirements and endorses (officially signs off on) the health certificate your veterinarian issues.
-- **The CDC** sets the rules for dogs **entering or returning to** the U.S. Every dog needs a CDC Dog Import Form receipt, and dogs that have been in a high-risk rabies country in the past 6 months need more.
+- **The CDC** sets the rules for dogs **entering or returning to** the U.S. Every dog needs a CDC Dog Import Form receipt, and dogs that have been in a high-risk rabies country in the past six months need more.
 
 Your airline adds its own layer: whether dogs can fly in the cabin, in the hold or not at all, plus fees, carrier sizes and breed limits.
 
-## Part A: Leaving the U.S. with your dog
+## Part A: Leaving the U.S. With Your Dog
 
 APHIS says to contact a USDA-accredited veterinarian as soon as you decide to travel. Requirements can change at any time, so check them again for every trip.
 
-### Step-by-step timeline
+### Step-by-Step Timeline
 
 **3 to 6 months or more before you fly**
 
@@ -78,7 +78,7 @@ APHIS says to contact a USDA-accredited veterinarian as soon as you decide to tr
 10. **Vet exam and health certificate.** Your accredited vet examines your dog and completes the destination's health certificate.
 11. **APHIS endorsement.** The vet submits the certificate to APHIS for endorsement, usually electronically through VEHCS. For the EU, APHIS must endorse it within 10 days of your dog's arrival, and the EU certificate requires an original ink endorsement, so allow time for the paper to come back to you.
 12. **Destination-specific treatments.** If you are flying to Great Britain, Ireland, Finland, Malta, Northern Ireland or Norway, your dog needs a tapeworm treatment by a vet 24 to 120 hours before arrival.
-13. **Mexico:** United notes that dogs entering Mexico need a New World screwworm inspection certificate signed by a USDA-accredited vet and issued no more than 5 days before travel. This applies to in-cabin pets and service dogs too.
+13. **Mexico:** United notes that dogs entering Mexico need a New World screwworm inspection certificate signed by a USDA-accredited vet and issued no more than five days before travel. This applies to in-cabin pets and service dogs too.
 
 **Travel day**
 
@@ -86,7 +86,7 @@ APHIS says to contact a USDA-accredited veterinarian as soon as you decide to tr
 15. Arrive early. Airlines check pet documents at check-in, and you'll take your dog out of the carrier at the security checkpoint.
 16. **If your trip includes a high-risk rabies country,** make sure the CDC paperwork for your return was done **before** you left (Part B).
 
-## The health certificate, explained
+## The Health Certificate, Explained
 
 A **pet health certificate** is an official document confirming your dog was examined, appeared healthy and meets the destination's requirements (microchip, rabies vaccine, tests, treatments). A few key points:
 
@@ -96,20 +96,20 @@ A **pet health certificate** is an official document confirming your dog was exa
 - **Why the 10-day window matters:** for the EU, APHIS must endorse the certificate within 10 days of your dog's arrival. Great Britain has the same 10-day endorsement rule. Airlines can be stricter or looser: American asks for a certificate issued within 10 days of travel. If your flight is delayed past the window, the paperwork may no longer be valid, so build in a small buffer and know your vet's and APHIS's turnaround.
 - **Fees:** APHIS charges an endorsement fee (see costs below). Service dogs of people with disabilities are exempt.
 
-## Vaccines and timing
+## Vaccines and Timing
 
 ### Rabies
 
 - **Microchip first.** For both the EU and the CDC's high-risk rules, the chip must be in place before (or the same day as) the rabies shot.
 - **Age:** the CDC requires the first rabies vaccine to be given on or after 12 weeks (84 days) of age.
 - **Waiting periods:** the EU and Great Britain require at least 21 days after a primary rabies vaccination. The CDC's form for U.S.-vaccinated dogs returning from high-risk countries can't be completed until at least 28 days after a first vaccine.
-- **Boosters:** CDC notes a rabies vaccine usually lasts 1 or 3 years. Keep boosters on time and check the expiry date against your travel dates.
+- **Boosters:** CDC notes a rabies vaccine usually lasts one or three years. Keep boosters on time and check the expiration date against your travel dates.
 
-### Tapeworm treatment
+### Tapeworm Treatment
 
-Dogs entering **Finland, Ireland, Malta, Northern Ireland or Norway** must be treated against the *Echinococcus multilocularis* tapeworm by a vet between 24 and 120 hours before scheduled entry. **Great Britain** has the same 24 to 120 hour rule. Plan a vet visit near your destination if you are connecting through other countries first.
+Dogs entering **Finland, Ireland, Malta, Northern Ireland or Norway** must be treated against the *Echinococcus multilocularis* tapeworm by a vet between 24 and 120 hours before scheduled entry. **Great Britain** has the same 24- to 120-hour rule. Plan a vet visit near your destination if you are connecting through other countries first.
 
-### Titer tests for rabies-free places
+### Titer Tests for Rabies-Free Places
 
 A titer test shows your dog's rabies antibody level. Rabies-free destinations use it, along with long waits:
 
@@ -117,30 +117,30 @@ A titer test shows your dog's rabies antibody level. Rabies-free destinations us
 - **Hawaii:** two rabies vaccines and a passing FAVN titer, with at least 30 days after the titer and after the most recent vaccine. Documents must reach the state at least 10 days before arrival to qualify for the 5-Day-or-Less or direct airport release program; otherwise dogs can be quarantined for up to 120 days.
 - **Other rabies-free destinations** have their own processes. Check current rules on the APHIS country page as early as you can.
 
-## Crates and how your dog flies
+## Crates and How Your Dog Flies
 
 - **Cabin:** small dogs in a carrier that fits under the seat in front of you. Your dog stays in the carrier for the whole flight.
 - **Checked baggage or cargo:** for larger dogs, where the airline allows it. IATA's Live Animals Regulations say the crate must let your dog stand and sit upright, turn around normally while standing, and lie down naturally. IATA gives a measuring formula and says **snub-nosed breeds need a container 10% larger**.
 
-## Part B: Bringing a dog into the U.S. (including your own dog coming home)
+## Part B: Bringing a Dog Into the U.S. (Including Your Own Dog Coming Home)
 
 The CDC's current rules apply to **every** dog entering the U.S., including U.S.-born dogs returning from a vacation. What you need depends on where your dog has been in the **6 months before arrival**.
 
-### Rules for every dog
+### Rules for Every Dog
 
 1. **At least 6 months old** when entering or returning.
 2. **A microchip** that can be read by a universal scanner. For dogs from high-risk countries, the chip number must appear on every document.
 3. **Healthy on arrival.**
 4. **A CDC Dog Import Form receipt**, one per dog. The form is free and online. You show the receipt (printed or on your phone) to the airline and to CBP on arrival.
 
-### If your dog has only been in rabies-free or low-risk countries
+### If Your Dog Has Only Been in Rabies-Free or Low-Risk Countries
 
-1. Check that every country your dog has been in during the past 6 months is **not** on the [CDC high-risk list](https://www.cdc.gov/importation/dogs/high-risk-countries.html).
-2. Fill out the CDC Dog Import Form. You can do it up to 6 months ahead or on travel day.
-3. The receipt is good for 6 months of entries unless your dog visits a high-risk country.
+1. Check that every country your dog has been in during the past six months is **not** on the [CDC high-risk list](https://www.cdc.gov/importation/dogs/high-risk-countries.html).
+2. Fill out the CDC Dog Import Form. You can do it up to six months ahead or on travel day.
+3. The receipt is good for six months of entries unless your dog visits a high-risk country.
 4. Your dog can enter at any U.S. airport, seaport or land border crossing.
 
-### If your U.S.-vaccinated dog has been in a high-risk country
+### If Your U.S.-Vaccinated Dog Has Been in a High-Risk Country
 
 This is the path for most Miami dogs visiting a high-risk country and coming home.
 
@@ -150,7 +150,7 @@ This is the path for most Miami dogs visiting a high-risk country and coming hom
 4. Complete a CDC Dog Import Form for each entry (for high-risk travel the receipt covers one entry, and you'll upload a photo of your dog).
 5. Your dog can arrive at any airport, seaport or land crossing, as long as it matches the arrival location on the receipt.
 
-### If a foreign-vaccinated dog has been in a high-risk country
+### If a Foreign-Vaccinated Dog Has Been in a High-Risk Country
 
 This applies to many adopted or rescued dogs coming from abroad.
 
@@ -160,15 +160,15 @@ This applies to many adopted or rescued dogs coming from abroad.
 4. Your dog must arrive at the airport where that facility is located. The CDC keeps the [list of registered facilities](https://www.cdc.gov/importation/dogs/approved-care-facilities.html).
 5. Documents must be in English or come with a certified translation.
 
-### Screwworm and other USDA rules
+### Screwworm and Other USDA Rules
 
-Separately from the CDC, USDA requires dogs coming from regions with screwworm to be inspected within 5 days before shipment and certified free of screwworm by a full-time salaried government vet in the origin country. Dogs imported for resale or adoption fall under extra USDA rules.
+Separately from the CDC, USDA requires dogs coming from regions with screwworm to be inspected within five days before shipment and certified free of screwworm by a full-time salaried government vet in the origin country. Dogs imported for resale or adoption fall under extra USDA rules.
 
-### At the border
+### At the Border
 
 CBP enforces these rules on arrival. Dogs refused entry are returned to the country they left from at the owner's expense, and may be held until then at the owner's cost.
 
-## Links to all the government forms
+## Links to All the Government Forms
 
 - [APHIS pet travel: taking a pet from the U.S. (choose your country)](https://www.aphis.usda.gov/pet-travel/us-to-another-country-export)
 - [VEHCS login (for veterinarians)](https://vehcs.aphis.usda.gov/vehcs/faces/login_initial.jsf)
@@ -183,7 +183,7 @@ CBP enforces these rules on arrival. Dogs refused entry are returned to the coun
 - [USDA rules for bringing a dog into the U.S.](https://www.aphis.usda.gov/pet-travel/another-country-to-us-import/dogs)
 - Airline pet pages: [Alaska](https://www.alaskaair.com/content/travel-info/pets), [American](https://www.aa.com/i18n/travel-info/special-assistance/pets.jsp), [Delta](https://www.delta.com/us/en/pet-travel/overview), [United](https://www.united.com/en/us/fly/travel/traveling-with-pets.html), [JetBlue](https://www.jetblue.com/traveling-together/traveling-with-pets)
 
-## What it costs (approximately)
+## What It Costs (Approximately)
 
 These are published fees as of our review date. They change, so treat them as estimates.
 
@@ -199,7 +199,7 @@ These are published fees as of our review date. They change, so treat them as es
 
 APHIS notes that vaccines don't count as "tests" for its fees. Vet exam, microchip, vaccine and titer costs vary by clinic and lab; ask for a written quote. We could not find a reliable published range to share.
 
-## Pet-friendly airlines: what their policies say
+## Pet-Friendly Airlines: What Their Policies Say
 
 We are not ranking airlines. This table lists what each airline's own pet page said when we reviewed it. Policies, fees and route lists change often, so check before booking.
 
@@ -207,17 +207,17 @@ We are not ranking airlines. This table lists what each airline's own pet page s
 | --- | --- | --- | --- | --- | --- |
 | Alaska / Hawaiian | Yes, small dogs; dogs and cats only to select international locations | Yes, baggage compartment, $200 each way per kennel | $100 | Not accepted in the baggage compartment (exception for some Hawaii flights) | Dogs must be at least 8 weeks old; health certificate required for the baggage compartment |
 | American | Yes, within the U.S. and to Canada, Mexico, Central America and the Caribbean, subject to country rules | Checked only for active-duty military and State Department staff on orders; cargo via American PetEmbark | $150 per kennel | Not accepted as checked pets | Health certificate issued within 10 days of travel |
-| Delta | Yes, with destination exceptions (including the UK, Australia, Hawaii, Jamaica and others) | Cargo only for active military or State Department staff with relocation orders | $150 U.S. and Canada; $200 international | Its pet-shipping page says snub-nosed dogs and mixes are not permitted | Dogs flying into the U.S. must be 6 months old |
+| Delta | Yes, with destination exceptions (including the U.K., Australia, Hawaii, Jamaica and others) | Cargo only for active military or State Department staff with relocation orders | $150 U.S. and Canada; $200 international | Its pet-shipping page says snub-nosed dogs and mixes are not permitted | Dogs flying into the U.S. must be 6 months old |
 | United | Yes, cabin only, dogs and cats | No PetSafe checked pets; cargo only for certain military and State Department travelers | $150 | No breed limits for cabin pets | Health and vaccination certificate required on all international flights |
 | JetBlue | Small dogs only, max 6 pets per flight | No checked pets or cargo | $150 | Not stated | Carrier max 17 x 12.5 x 8.5 in.; no pets on partner or codeshare bookings; not all destinations allow pets |
 | Lufthansa | Yes, up to 8 kg including carrier | Larger dogs as excess baggage in the hold | Varies by route | Special rules for snub-nosed breeds | For flights to or from the U.S., register at least 72 hours ahead with Lufthansa's form |
 | Air France | Yes, up to 8 kg including carrier | Dogs from 8 to 75 kg with carrier in the hold | Varies by route | Check before booking | Add your pet at least 24 hours before departure |
 
-### Snub-nosed (brachycephalic) dogs
+### Snub-Nosed (Brachycephalic) Dogs
 
 Bulldogs, pugs, boxers and other short-nosed breeds have restricted airways that can make breathing difficult, as Lufthansa explains. Several airlines refuse them as checked or cargo pets: Alaska, American and Delta all publish restrictions, and Lufthansa has special rules. If your dog is snub-nosed, flying in the cabin may be the only option, and only if your dog is small enough. If your dog must go in a crate, IATA calls for a container 10% larger.
 
-## Quick tips from our team
+## Quick Tips From Our Team
 
 - Start early. The paperwork, not the flight, is what derails trips.
 - Keep the original endorsed certificate dry and in your carry-on, never in checked luggage.
@@ -225,4 +225,4 @@ Bulldogs, pugs, boxers and other short-nosed breeds have restricted airways that
 - Save every receipt and form as photos on your phone.
 - Call the airline after booking to confirm your dog is actually on the reservation.
 
-Questions about a specific trip? Your accredited veterinarian and the APHIS country page are the best first stops. For Britain and Europe in more detail, see our [UK and Europe pet travel guide](/resources/uk-europe-pet-travel/), and print the [checklist](/resources/checklists/international-pet-travel/) to keep on the fridge.
+Questions about a specific trip? Your accredited veterinarian and the APHIS country page are the best first stops. For Britain and Europe in more detail, see our [U.K. and Europe pet travel guide](/resources/uk-europe-pet-travel/), and print the [checklist](/resources/checklists/international-pet-travel/) to keep on the fridge.

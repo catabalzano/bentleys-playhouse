@@ -10,8 +10,8 @@ photos:
   - /assets/img/pawsome/jennifer-vasquez-2.jpg
   - /assets/img/pawsome/jennifer-vasquez-4.jpg
   - /assets/img/pawsome/jennifer-vasquez-5.jpg
-photoAlt: Jennifer Vasquez, American Bulldog Mix
-breed: American Bulldog Mix
+photoAlt: Belle, American bulldog mix
+breed: American bulldog mix
 age: "5"
 sex: Female
 fixed: "yes"
@@ -32,4 +32,4 @@ contact:
 submissionId: 20261007-79e27e3c
 size: Large
 ---
-Belle is a Service Dog. She is a loving girl who sadly lost her owner and ended up in the high kill shelter. She was rescued back in 2024 but since then has been living in a boarding facility. She needs a home without other Pets.
+Belle is a service dog. She is a loving girl who sadly lost her owner and ended up in the high-kill shelter. She was rescued back in 2024 but since then has been living in a boarding facility. She needs a home without other pets.

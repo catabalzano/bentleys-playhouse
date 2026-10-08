@@ -10,8 +10,8 @@ photos:
   - /assets/img/pawsome/france-3.jpg
   - /assets/img/pawsome/france-4.jpg
   - /assets/img/pawsome/france-5.jpg
-photoAlt: France, American Bulldog
-breed: American Bulldog
+photoAlt: France, American bulldog
+breed: American bulldog
 age: "4"
 sex: Female
 fixed: "yes"
@@ -32,4 +32,4 @@ contact:
 submissionId: 20261007-4d2a7942
 size: Large
 ---
-France is a high-energy, beautiful, loving pup who is looking for her forever home. She is dog-friendly but with proper low introduction. She was rescued back in 2024 and since then has been living in a boarding facility. Help us make her seen!
+France is a high-energy, beautiful, loving pup who is looking for her forever home. She is dog-friendly but with proper slow introduction. She was rescued back in 2024 and since then has been living in a boarding facility. Help us make her seen!

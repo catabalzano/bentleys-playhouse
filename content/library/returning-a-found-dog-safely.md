@@ -3,7 +3,7 @@ fenix: true
 cover: returning-a-found-dog-safely.jpg
 coverAlt: "A woman hugging a happy golden dog"
 coverCredit: "RDNE Stock project on Pexels"
-title: Returning a found dog safely
+title: Returning a Found Dog Safely
 category: lost-found
 area: general
 order: 3
@@ -19,13 +19,13 @@ sources:
 ---
 Most people who answer a found-dog post are the real family, and the reunion is a joy. A little checking protects the dog, and you.
 
-## Before you post
+## Before You Post
 
 - Share the general area and date, not your address.
 - Use a separate email or a text-only number if you can.
 - **Hold back one identifying detail** such as a marking, scar, collar color or tag shape. The real family will know it.
 
-## When someone gets in touch
+## When Someone Gets in Touch
 
 Ask for one or more of these:
 
@@ -35,13 +35,13 @@ Ask for one or more of these:
 
 People in a panic may not have papers handy. Photos and the held-back detail are usually enough.
 
-## Meeting up
+## Meeting Up
 
 - Meet somewhere busy and public, in daylight, and bring a friend.
 - Watch the dog. A happy reunion is usually obvious.
 - If the dog is microchipped, the shelter or a vet can confirm whose name it's registered in.
 
-## Red flags
+## Red Flags
 
 - Asking you to pay a fee, or offering a "reward" in exchange for personal details.
 - Refusing to share any photo or describe the dog.

@@ -9,13 +9,13 @@ sources:
   - { title: "Fostering FAQs", org: "Best Friends Animal Society", url: "https://bestfriends.org/pet-care-resources/cat-dog-and-other-pet-fostering-faqs" }
   - { title: "Fostering shelter dogs", org: "Maddie's Fund", url: "https://www.maddiesfund.org/fostering-shelter-dogs.htm" }
 ---
-## Why adoption matters
+## Why Adoption Matters
 
 **Adopt, don't shop** is one of our core values. Every adopted dog frees up a kennel or foster home for the next one who needs it. Puppies from pet stores and online sellers often come from puppy mills, which put profit ahead of the dogs' welfare.
 
 Adoption is also a great way to find the right dog. Rescues and shelters know their dogs' personalities, and many adult dogs are already house-trained and calm indoors. Adoption fees usually include vaccines, spay/neuter and a microchip. [Read why we say "adopt, don't shop"](/resources/adopt-dont-shop/).
 
-## Is it the right time?
+## Is It the Right Time?
 
 A dog can be part of your life for 10 to 15 years. Before you fall for a face, think through:
 
@@ -27,15 +27,15 @@ A dog can be part of your life for 10 to 15 years. Before you fall for a face, t
 
 If the honest answer is "not right now," that's a responsible choice. There are [other ways to help](#other-ways-to-help).
 
-## Questions to ask a rescue
+## Questions to Ask a Rescue
 
 Ask about the dog's history, how they do with other animals and children, energy level, house-training, health needs and what support the rescue offers after adoption. Ask what happens if it doesn't work out. A good rescue will want you to bring the dog back to them. [See our full list of questions](/resources/questions-to-ask-a-rescue/).
 
-## Preparing your home
+## Preparing Your Home
 
 Set up a quiet space with a bed or crate, get the food the dog has been eating and add an ID tag with your phone number to a well-fitted collar or harness. Walk through your home at dog height: cords, trash, medications, cleaning products and gaps in fences or gates. Choose a vet before the dog arrives.
 
-## The first three months
+## The First Three Months
 
 The ASPCA describes a **3-3-3 guideline**: about three days to decompress, three weeks to learn the routine, three months to feel at home. Many rescue dogs need longer. Keep a simple routine, give your dog a place to retreat and use reward-based training. [What to expect, month by month](/resources/the-first-three-months/).
 
@@ -45,6 +45,6 @@ Fostering means caring for a dog in your home until they're adopted. Placements 
 
 Fostering is a wonderful way to help if you can't commit to a dog for life, or want to learn whether a dog fits your household. [What fostering involves](/resources/what-fostering-involves/).
 
-## Other ways to help
+## Other Ways to Help
 
 Not able to adopt or foster? You can still make a real difference: share a dog's profile, help with transport, donate supplies or lend a professional skill. Everything counts.

@@ -2,7 +2,7 @@
 cover: reporting-animal-cruelty.jpg
 coverAlt: "A dog looking out from behind a chain-link fence"
 coverCredit: "Vivian Nguyen on Pexels"
-title: Reporting animal cruelty in Miami-Dade
+title: Reporting Animal Cruelty in Miami-Dade
 category: rescuers
 area: local
 order: 2
@@ -16,20 +16,20 @@ sources:
 ---
 If you think a dog is being hurt or neglected, reporting it is the right thing to do. You don't need to be certain.
 
-## Who to call
+## Who to Call
 
 - **Cruelty happening right now:** 911.
 - **Neglect or past cruelty:** Miami-Dade Animal Services at 311 or 305-468-5900, or its online animal welfare concern form.
 - **Tethering concerns:** MDAS lists 305-743-7433.
 - **The State Attorney's Animal Cruelty Unit** handles prosecutions: 305-547-0520.
 
-## What to write down
+## What to Write Down
 
 - The address or exact location.
 - Dates and times you saw what happened.
 - What you saw and heard, in plain words.
 - Photos or video, if you can take them safely and legally, from a public place.
 
-## Stay safe
+## Stay Safe
 
 Don't confront anyone, trespass or try to remove an animal yourself. Let the agencies do their job, and follow up if nothing changes.

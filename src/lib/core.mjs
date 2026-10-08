@@ -24,10 +24,38 @@ export const esc = (s = '') => String(s)
 export const slugify = (s) => String(s).toLowerCase().replace(/&/g, 'and').replace(/['’]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const strip = (html) => html.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ').replace(/\s+/g, ' ').trim();
+// AP style: abbreviate Jan., Feb., Aug., Sept., Oct., Nov., Dec. with a day; spell out March–July.
+export const AP_MONTHS = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 export function fmtDate(iso) {
   if (!iso) return '';
-  const d = new Date(iso + 'T12:00:00');
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const d = new Date(String(iso).slice(0, 10) + 'T12:00:00');
+  if (isNaN(d)) return String(iso);
+  return `${AP_MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+// AP times: 5 p.m., 10:30 a.m., noon, midnight; "10am–5pm" → "10 a.m. to 5 p.m."
+const AP_LONG = { January: 'Jan.', February: 'Feb.', August: 'Aug.', September: 'Sept.', October: 'Oct.', November: 'Nov.', December: 'Dec.' };
+const TIME = /\b(\d{1,2})(?::(\d{2}))?\s?([ap])\.?m\b\.?/gi;
+export function apTime(str) {
+  if (!str) return str;
+  let out = String(str).replace(TIME, (m, h, mm, ap) => {
+    const H = Number(h); if (H > 12) return m;
+    const min = mm && mm !== '00' ? ':' + mm : '';
+    if (H === 12 && !min) return ap.toLowerCase() === 'p' ? 'noon' : 'midnight';
+    return `${H}${min} ${ap.toLowerCase()}.m.`;
+  });
+  // "12–2 p.m." → "noon to 2 p.m."
+  out = out.replace(/\b12\s?[–-]\s?(\d{1,2}(?::\d{2})? p\.m\.)/g, 'noon to $1');
+  // ranges between two times: en dash or hyphen → "to"
+  out = out.replace(/((?:\d{1,2}(?::\d{2})? [ap]\.m\.)|noon|midnight)\s?[–-]\s?((?:\d{1,2}(?::\d{2})? [ap]\.m\.)|noon|midnight)/g, '$1 to $2');
+  return out;
+}
+export function apText(str) {
+  if (!str) return str;
+  return apTime(String(str).replace(/\b(January|February|August|September|October|November|December) (\d{1,2})\b(?!:)/g, (m, mo, d) => `${AP_LONG[mo]} ${d}`));
+}
+// Apply apText to the visible text of a whole page (skips tags, scripts and styles).
+export function apHtml(html) {
+  return html.replace(/(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]+>)|([^<]+)/g, (m, tag, text) => (tag ? tag : apText(text)));
 }
 
 // ---------- content loading ----------

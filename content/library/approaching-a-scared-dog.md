@@ -3,7 +3,7 @@ fenix: true
 cover: approaching-a-scared-dog.jpg
 coverAlt: "A nervous dog crouching as a hand reaches out gently"
 coverCredit: "Ivan S on Pexels"
-title: Approaching a scared or unfamiliar dog
+title: Approaching a Scared or Unfamiliar Dog
 category: rescue-basics
 area: general
 order: 2
@@ -18,7 +18,7 @@ sources:
 ---
 A dog that's lost or frightened isn't thinking clearly. Your goal is to look as unthreatening as possible and let the dog decide.
 
-## Make yourself less scary
+## Make Yourself Less Scary
 
 - Approach from the side, not head-on.
 - Crouch or sit, and turn partly away.
@@ -26,11 +26,11 @@ A dog that's lost or frightened isn't thinking clearly. Your goal is to look as 
 - Keep your hands low and still. Don't reach over the dog's head.
 - Talk softly, or not at all.
 
-## Let the dog come to you
+## Let the Dog Come to You
 
 Toss strong-smelling food a little way from you, then a little closer. Let the dog sniff your hand before you touch it, and stroke the chest or side rather than the top of the head.
 
-## Signs to back off
+## Signs to Back Off
 
 - Stiff body, freezing or a hard stare.
 - Growling, a lifted lip or snapping.
@@ -39,6 +39,6 @@ Toss strong-smelling food a little way from you, then a little closer. Let the d
 
 These are warnings, and they're useful. Respect them and give the dog more space.
 
-## Don't chase
+## Don't Chase
 
 Chasing usually makes a scared dog run, often into traffic. If you can't get close, call Animal Services (311 or 305-468-5900 in Miami-Dade), stay at a distance and keep the dog in view if you safely can.
