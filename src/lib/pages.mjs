@@ -584,6 +584,15 @@ export function story(data) {
       ${breadcrumb([['Home', ''], ['Our Story', '']])}
       <h1 class="page-h">${esc(p.title)}</h1>
       <div class="page-lede prose">${md(intro)}</div>
+      <div class="follow">
+        <p class="follow__h">Follow along and say hi:</p>
+        <ul class="follow__list" role="list">
+          <li><a href="https://www.instagram.com/bentleysplayhouse/" target="_blank" rel="noopener">${icon('instagram', { size: 20 })}<span>Instagram</span><span class="visually-hidden"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.facebook.com/itsbentleysplayhouse/" target="_blank" rel="noopener">${icon('facebook', { size: 20 })}<span>Facebook</span><span class="visually-hidden"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.threads.com/@bentleysplayhouse" target="_blank" rel="noopener">${icon('threads', { size: 20 })}<span>Threads</span><span class="visually-hidden"> (opens in a new tab)</span></a></li>
+          <li><a href="mailto:hello@bentleysplayhouse.org">${icon('mail', { size: 20 })}<span>hello@bentleysplayhouse.org</span></a></li>
+        </ul>
+      </div>
     </div>
     <div class="story-hero__art">
       <div class="arch arch--blue arch--photo"><img src="${asset('img/cata-romeo-bentley.jpg')}" alt="Cata laughing between Romeo, a merle French Bulldog, and Bentley, a black brindle French Bulldog" width="1000" height="1250"></div>

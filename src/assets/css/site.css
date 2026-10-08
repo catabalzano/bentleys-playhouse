@@ -1485,3 +1485,11 @@ fieldset.field { align-content: start; }
 @media (min-width: 901px) {
   .site-header .nav { margin-right: calc(-.5 * (max(0px, (100vw - 1180px) / 2) + var(--gutter))); }
 }
+
+/* Our Story: follow us (social handles + email) */
+.follow { margin-top: 1.4rem; }
+.follow__h { margin: 0 0 .6rem; font-weight: 700; color: var(--ink); }
+.follow__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .55rem; }
+.follow__list a { display: inline-flex; align-items: center; gap: .45rem; padding: .5rem .95rem; border-radius: 999px; background: #fff; color: var(--ink); font-weight: 700; font-size: .95rem; text-decoration: none; box-shadow: 0 2px 0 rgba(31, 29, 43, .08); transition: transform .15s, box-shadow .15s; }
+.follow__list a:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 var(--gold); }
+.follow__list a svg { color: var(--link); }
