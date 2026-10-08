@@ -81,7 +81,7 @@ export function home(data) {
       <span class="logo rrr__wordmark"><img class="logo__l" src="${asset('img/logo-wordmark.png')}" alt="" width="900" height="322" loading="lazy"><img class="logo__d" src="${asset('img/logo-wordmark-dark.png')}" alt="" width="900" height="322" loading="lazy"></span>
       <p class="eyebrow">${tag('Who we are')}</p>
       <h2 id="rrr-h" class="section-h">A playhouse with a purpose</h2>
-      <p>Since August 2022, Cata Balzano has been taking dogs out of abuse, neglect and backyard breeding into her Miami home, and helping them heal. The rescue is named for Bentley, her French Bulldog, who welcomed every one of them.</p>
+      <p>Since August 2022, journalist Cata Balzano has been taking dogs out of abuse, neglect and backyard breeding into her Miami home and helping them heal, by raising funds through her social media accounts while covering any additional costs out-of-pocket. The rescue is named after Bentley, her French Bulldog, who has welcomed every one of those pups into his playhouse.</p>
       <p><a class="arrow-link" href="${href('our-story/')}">Read our story ${icon('arrow', { size: 18 })}</a></p>
     </div>
     <ol class="rrr__steps" data-steps>
