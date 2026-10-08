@@ -1383,32 +1383,7 @@ fieldset.field { align-content: start; }
 @media (max-width: 760px) {
   .rrr__wordmark { margin-inline: auto; width: min(300px, 80%); }
 }
-/* Fénix panel color options (pick one, then make it the default) */
-.fenix-panel--cream .fenix-panel__in { background: #FFF6EC; color: var(--ink); box-shadow: inset 0 0 0 2px #FFD9B8; }
-.fenix-panel--cream .fenix-panel__by { color: var(--alert-ink); }
-.fenix-panel--cream .fenix-panel__h { color: var(--ink); }
-.fenix-panel--cream .fenix-panel__p { color: var(--muted); }
-.fenix-panel--cream .fenix-panel__ghost { color: var(--ink); border-color: var(--ink); }
-.fenix-panel--cream .fenix-panel__ghost:hover { background: var(--ink); color: #fff; }
-.fenix-panel--cream .fenix-panel__list a { background: #fff; color: var(--ink); box-shadow: 0 0 0 1.5px #FFE3CC; }
-.fenix-panel--cream .fenix-panel__list a:hover { background: #FFFDFB; }
-.fenix-panel--cream .fenix-panel__list .doodle { color: var(--orange); }
-
-.fenix-panel--violet .fenix-panel__in { background: linear-gradient(135deg, #2F45C8, #7B4BF0); }
-.fenix-panel--violet .fenix-panel__p { color: #E7E9FF; }
-.fenix-panel--violet .fenix-panel__list a { background: rgba(255, 255, 255, .14); }
-.fenix-panel--violet .fenix-panel__list a:hover { background: rgba(255, 255, 255, .22); }
-
-.fenix-panel--blue .fenix-panel__in { background: var(--tint-blue); color: var(--ink); }
-.fenix-panel--blue .fenix-panel__by { color: var(--link); }
-.fenix-panel--blue .fenix-panel__h { color: var(--ink); }
-.fenix-panel--blue .fenix-panel__p { color: var(--muted); }
-.fenix-panel--blue .fenix-panel__ghost { color: var(--link); border-color: var(--link); }
-.fenix-panel--blue .fenix-panel__ghost:hover { background: var(--link); color: #fff; }
-.fenix-panel--blue .fenix-panel__list a { background: #fff; color: var(--ink); }
-.fenix-panel--blue .fenix-panel__list a:hover { background: #FBFCFF; }
-.fenix-panel--blue .fenix-panel__list .doodle { color: var(--orange); }
-
+/* Fénix panel: white card with the Fénix ember stripe (chosen Oct 8) */
 .fenix-panel--ember .fenix-panel__in { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 2px var(--line); position: relative; overflow: hidden; }
 .fenix-panel--ember .fenix-panel__in::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 8px; background: linear-gradient(90deg, #F2A541, #E8662C, #B8322A); }
 .fenix-panel--ember .fenix-panel__by { color: #C2410C; }
@@ -1419,3 +1394,19 @@ fieldset.field { align-content: start; }
 .fenix-panel--ember .fenix-panel__list a { background: #FFF5EE; color: var(--ink); }
 .fenix-panel--ember .fenix-panel__list a:hover { background: #FFEDE1; }
 .fenix-panel--ember .fenix-panel__list .doodle { color: #E8662C; }
+
+/* "Looking for a dog to adopt?" on phones (option B): Westie peeks over the card's corner, one main button, shelters as a tap-list */
+.adopt-list { display: none; }
+@media (max-width: 640px) {
+  .dogs-home .empty { display: block; position: relative; margin-top: 72px; padding: 1.4rem 1.3rem 1.5rem; }
+  .dogs-home .empty img.empty__dog { position: absolute; right: 12px; top: -80px; width: 106px; }
+  .dogs-home .empty h2 { padding-right: 98px; font-size: 1.85rem; line-height: 1.12; }
+  .dogs-home .empty .btn-row { display: block; }
+  .dogs-home .empty .btn-row .btn--ghost { display: none; }
+  .dogs-home .empty .btn-row .btn--primary { display: flex; width: 100%; justify-content: center; }
+  .adopt-list { display: block; list-style: none; margin: 1rem 0 0; padding: 0; background: var(--paper); border-radius: var(--r-md); overflow: hidden; }
+  .adopt-list li + li { border-top: 1.5px solid var(--line); }
+  .adopt-list a { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .95rem 1.1rem; color: var(--ink); font-weight: 700; text-decoration: none; }
+  .adopt-list small { display: block; font-weight: 500; color: var(--muted); font-size: .85rem; }
+  .adopt-list__go { color: var(--link); flex: none; }
+}

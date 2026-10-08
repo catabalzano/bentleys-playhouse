@@ -13,7 +13,6 @@ import * as P3 from './lib/pages3.mjs';
 import * as PS from './lib/pawsome-submit.mjs';
 import { renderShare } from './lib/covers.mjs';
 import { prepEvents, eventsPage } from './lib/events.mjs';
-import { adoptMobileMockups } from './lib/mockups.mjs';
 import { parse as parseCSV } from 'csv-parse/sync';
 
 const args = process.argv.slice(2);
@@ -140,7 +139,6 @@ emit('contact/', { title: 'Contact & FAQ', description: 'How to reach Bentley\'s
 emit('privacy/', { title: 'Privacy Policy', description: 'How Bentley\'s Playhouse handles the information you share: forms, pup submissions, donations, analytics and your choices.', body: () => P.privacy() });
 emit('terms/', { title: 'Terms of Use', description: 'The ground rules for using the Bentley\'s Playhouse website: guidance, listings, submissions and donations.', body: () => P.terms() });
 emit('cookies/', { title: 'Cookie Policy', description: 'Which cookies and browser storage the Bentley\'s Playhouse website uses, and how to change your choice.', body: () => P.cookies() });
-emit('mockups/adopt-mobile/', { title: 'Design options', description: 'Design options.', noindex: true, body: () => adoptMobileMockups() });
 emit('404.html', { title: 'Page not found', description: 'Page not found.', noindex: true, body: () => P.notFound() });
 
 // assets

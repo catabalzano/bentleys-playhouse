@@ -121,6 +121,10 @@ ${dogs.length ? `
       <h2 id="dogs-h" class="section-h">Looking for a dog to adopt?</h2>
       <p>Profiles of our current dogs will live here. For now, our adoptable dogs are listed on RescueMe, and our day-to-day rescue work is on Instagram.</p>
       <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}${button('Dogs at Miami-Dade Animal Services', 'adopt-foster/#mdas', { variant: 'ghost' })}${button('Dogs at Broward County Animal Care', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { variant: 'ghost', externalLink: true })}</div>
+      <ul class="adopt-list" role="list">
+        <li><a href="${href('adopt-foster/')}#mdas"><span>Miami-Dade Animal Services<small>Doral and Medley shelters</small></span><span class="adopt-list__go" aria-hidden="true">${icon('arrow', { size: 20 })}</span></a></li>
+        <li><a href="https://24petconnect.com/BrowardAllAnimals?at=DOG" target="_blank" rel="noopener"><span>Broward County Animal Care<small>Fort Lauderdale shelter</small><span class="visually-hidden"> (opens in a new tab)</span></span><span class="adopt-list__go" aria-hidden="true">${icon('external', { size: 18 })}</span></a></li>
+      </ul>
     </div>
   </div>
   ${previewNote('Add real dogs in <code>content/dogs/</code> and rescue stories in <code>content/stories/</code>. They appear here automatically.')}
@@ -129,7 +133,7 @@ ${dogs.length ? `
 ${pawsomeHome(data.pooches)}
 </div>
 
-${fenixPanel()}
+${fenixPanel('ember')}
 
 <section class="help-ways" aria-labelledby="ways-h">
   <div class="wrap">
