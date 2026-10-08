@@ -23,7 +23,8 @@ goodWithCats: "yes"
 goodWithKids: "yes"
 location:
   type: rescue
-  name: Joy and Love rescue
+  name: Joy and Love Rescue
+  url: "@joyandloverescue"
   city: Miami
 contact:
   instagram: "@joyandloverescue"
