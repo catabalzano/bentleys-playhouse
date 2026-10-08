@@ -197,3 +197,13 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .side__site{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 14px;padding:10px 12px;border-radius:999px;background:var(--gold,#FFBD59);color:#1F1D2B;font-weight:800;font-size:14.5px;text-decoration:none}
 .side__site:hover{background:#fff}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.focusbox{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;margin-top:6px}
+.focus__full{position:relative;width:min(260px,100%);border-radius:12px;overflow:hidden;cursor:crosshair;touch-action:none;background:#eee}
+.focus__full img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.focus__dot{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px var(--orange,#FF914D),0 2px 8px rgba(0,0,0,.4);pointer-events:none}
+.focus__side{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.focus__cap{font-size:13px;font-weight:800;color:var(--muted)}
+.focus__card{position:relative;width:260px;aspect-ratio:4/3.4;border-radius:18px;overflow:hidden;background:#eee}
+.focus__card img{width:100%;height:100%;object-fit:cover;display:block}
+.focus__ribbon{position:absolute;left:12px;top:12px;padding:5px 10px;border-radius:999px;background:#FFBD59;color:#1F1D2B;font-size:11px;font-weight:800;letter-spacing:.04em}

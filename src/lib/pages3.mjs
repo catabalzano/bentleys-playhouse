@@ -45,7 +45,7 @@ export function ppCard(d, { headingLevel = 'h3' } = {}) {
   const ribbon = d.status === 'adopted' ? `<span class="pp-stamp">Adopted!</span>` : d.status === 'pending' ? `<span class="pp-ribbon pp-ribbon--pending">Adoption pending</span>` : d.urgent ? `<span class="pp-ribbon pp-ribbon--urgent">Urgent</span>` : d.isNew ? `<span class="pp-ribbon">New this week</span>` : '';
   return `<article class="pp-card${d.status === 'adopted' ? ' pp-card--adopted' : ''}" data-pp-card data-loc="${d.loc.group}" data-needs="${esc(d.needs || 'adoption')}" data-size="${esc((d.size || '').toLowerCase())}" data-good="${Object.entries(d.good).filter(([, v]) => v === 'yes').map(([k]) => k).join(' ')}">
     <a class="pp-card__link" href="${href(route(d))}" data-pp-open="${esc(d.slug)}">
-      <span class="pp-card__photo">${photo ? `<img src="${img(photo)}" alt="${esc(d.photoAlt || d.name)}" loading="lazy">` : `<span class="pp-card__nophoto">${paw()}</span>`}${ribbon}${d.photos.length > 1 ? `<span class="pp-card__count">${icon('image', { size: 15 })}${d.photos.length} photos</span>` : ''}</span>
+      <span class="pp-card__photo">${photo ? `<img src="${img(photo)}" alt="${esc(d.photoAlt || d.name)}" loading="lazy"${/^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || '')) ? ` style="object-position:${d.photoFocus}"` : ''}>` : `<span class="pp-card__nophoto">${paw()}</span>`}${ribbon}${d.photos.length > 1 ? `<span class="pp-card__count">${icon('image', { size: 15 })}${d.photos.length} photos</span>` : ''}</span>
       <span class="pp-card__body">
         <${H} class="pp-card__name">${esc(d.name)}</${H}>
         <span class="pp-card__facts">${facts(d)}</span>

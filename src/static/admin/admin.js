@@ -107,6 +107,7 @@
         ]],
         ['Photos', [
           { k: 'photos', label: 'Photos', type: 'images', wide: true, hint: 'The first photo is the main one. Use the arrows to reorder.' },
+          { k: 'photoFocus', label: 'Frame the main photo', type: 'focus', src: 'photos', wide: true, hint: 'Tap the dog\'s face on the left photo. The preview on the right is exactly how the card looks on the website.' },
           { k: 'sharePhoto', label: 'Photo for social shares (optional)', type: 'image', hint: 'A wide photo works best. Leave empty to use the first photo.' },
           { k: 'photoAlt', label: 'Photo description', hint: 'For screen readers, e.g. "Luna, a tan pit mix, sitting in the grass"' },
         ]],
@@ -406,7 +407,7 @@
         '<div class="actions"><button class="btn btn--go" type="submit">💾 Save' + (it ? ' changes' : '') + '</button>' + (it ? '<button class="btn btn--danger" type="button" data-del>Delete</button>' : '') + '<span class="msg" data-msg role="status"></span></div></form>';
 
       function fieldHtml(f) {
-        var id = 'f-' + f.k.replace(/\./g, '-'), v = f.k === 'body' ? data.body : get(data, f.k), cls = 'f' + (f.wide || ['images', 'markdown'].indexOf(f.type) > -1 ? ' wide' : '');
+        var id = 'f-' + f.k.replace(/\./g, '-'), v = f.k === 'body' ? data.body : get(data, f.k), cls = 'f' + (f.wide || ['images', 'markdown', 'focus'].indexOf(f.type) > -1 ? ' wide' : '');
         var lab = '<label for="' + id + '">' + esc(f.label) + (f.req ? ' <span class="req">*</span>' : '') + '</label>';
         var hint = f.hint ? '<p class="hint">' + esc(f.hint) + '</p>' : '';
         var hide = f.show && !f.show(data) ? ' hidden' : '';
@@ -424,6 +425,7 @@
         else if (t === 'tags') inner = lab + '<div class="tagsbox" data-tags="' + f.k + '"></div>';
         else if (t === 'images' || t === 'image') inner = '<span class="lbl">' + esc(f.label) + (f.req ? ' <span class="req">*</span>' : '') + '</span><div class="photos" data-imgs="' + f.k + '" data-multi="' + (t === 'images') + '"></div>';
         else if (t === 'file') inner = lab + '<div class="fileline" data-file="' + f.k + '"></div>';
+        else if (t === 'focus') inner = '<span class="lbl">' + esc(f.label) + '</span><div class="focusbox" data-focus="' + f.k + '" data-src="' + f.src + '"></div>';
         return '<div class="' + cls + '" data-field="' + f.k + '"' + hide + '>' + inner + hint + '</div>';
       }
 
@@ -458,11 +460,41 @@
         }
         draw();
       });
+      // photo framing (where the card crop is centered)
+      var focusRedraw = function () {};
+      $$('[data-focus]').forEach(function (box) {
+        var k = box.getAttribute('data-focus'), srcK = box.getAttribute('data-src');
+        function main() { var a = get(data, srcK) || []; var p = a[0]; return typeof p === 'string' ? p : p && p.image; }
+        function pos() { var v = String(get(data, k) || ''); var m = v.match(/^(\d{1,3})% (\d{1,3})%$/); return m ? [+m[1], +m[2]] : [50, 50]; }
+        function draw() {
+          var p = main();
+          if (!p) { box.innerHTML = '<p class="hint">Add a photo first.</p>'; return; }
+          var xy = pos(), src = esc(imgSrc(p));
+          box.innerHTML = '<div class="focus__full" data-pick title="Tap the dog\'s face"><img alt="" src="' + src + '" draggable="false"><span class="focus__dot" style="left:' + xy[0] + '%;top:' + xy[1] + '%"></span></div>' +
+            '<div class="focus__side"><span class="focus__cap">How the card looks</span><div class="focus__card"><img alt="" src="' + src + '" style="object-position:' + xy[0] + '% ' + xy[1] + '%"><span class="focus__ribbon">NEW THIS WEEK</span></div>' +
+            '<button type="button" class="btn btn--ghost btn--sm" data-reset>Center it again</button></div>';
+          var pick = $('[data-pick]', box), dragging = false;
+          function setFrom(e) {
+            var r = $('img', pick).getBoundingClientRect();
+            var x = Math.round(Math.min(100, Math.max(0, (e.clientX - r.left) / r.width * 100)));
+            var y = Math.round(Math.min(100, Math.max(0, (e.clientY - r.top) / r.height * 100)));
+            set(data, k, x + '% ' + y + '%'); dirty = true;
+            $('.focus__dot', box).style.left = x + '%'; $('.focus__dot', box).style.top = y + '%';
+            $('.focus__card img', box).style.objectPosition = x + '% ' + y + '%';
+          }
+          pick.onpointerdown = function (e) { dragging = true; try { pick.setPointerCapture(e.pointerId); } catch (er) {} setFrom(e); };
+          pick.onpointermove = function (e) { if (dragging) setFrom(e); };
+          pick.onpointerup = pick.onpointercancel = function () { dragging = false; };
+          $('[data-reset]', box).onclick = function () { set(data, k, ''); dirty = true; draw(); };
+        }
+        focusRedraw = draw;
+        draw();
+      });
       // images
       $$('[data-imgs]').forEach(function (box) {
         var k = box.getAttribute('data-imgs'), multi = box.getAttribute('data-multi') === 'true';
         function val() { var v = get(data, k); return multi ? (v || []).map(function (x) { return typeof x === 'string' ? x : x && x.image; }).filter(Boolean) : (v ? [v] : []); }
-        function put(arr) { set(data, k, multi ? arr : (arr[0] || '')); dirty = true; draw(); }
+        function put(arr) { set(data, k, multi ? arr : (arr[0] || '')); dirty = true; draw(); focusRedraw(); }
         function draw() {
           var arr = val();
           box.innerHTML = arr.map(function (p, i) {
