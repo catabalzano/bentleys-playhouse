@@ -99,7 +99,7 @@ export function home(data) {
     <div class="quick-help__grid">
       <p class="quick-help__h">Need help right now?</p>
       <a class="qh qh--alert" href="${href('get-help/emergency/')}"><span class="qh__icon" aria-hidden="true">${icon('alert', { size: 20 })}</span><b class="qh__t">Dog hurt or in danger?</b><span class="qh__go">Get help ${icon('arrow', { size: 16 })}</span></a>
-      <a class="qh qh--fenix" href="${FENIX_LF}" target="_blank" rel="noopener"><span class="qh__icon" aria-hidden="true">${icon('found', { size: 20 })}</span><b class="qh__t">Lost or found a dog?</b><span class="qh__go">Post on Fénix ${icon('external', { size: 14 })}<span class="visually-hidden"> (opens in a new tab)</span></span></a>
+      <a class="qh qh--fenix" href="${FENIX_LF}" target="_blank" rel="noopener"><span class="qh__icon" aria-hidden="true">${icon('found', { size: 20 })}</span><b class="qh__t">Lost or found a dog?</b><span class="qh__go">Post on Fénix Animal Project ${icon('external', { size: 14 })}<span class="visually-hidden"> (opens in a new tab)</span></span></a>
     </div>
   </div>
 </section>
