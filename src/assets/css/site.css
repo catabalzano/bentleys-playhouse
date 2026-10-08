@@ -1366,3 +1366,23 @@ fieldset.field { align-content: start; }
 .utility .lang-switch { display: inline-flex; align-items: center; gap: .3rem; }
 .nav__extra .lang-switch .icon { display: none; }
 .lang-switch .icon { flex: none; }
+
+/* "What brings you here?" — two balanced help notes under the cards */
+.brings__notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.note-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .9rem; padding: 1rem 1.15rem; border-radius: var(--r-md); border: 2px solid var(--note-line); background: var(--note-bg); color: var(--ink); text-decoration: none; transition: transform .2s, box-shadow .2s; }
+.note-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--note-line); text-decoration: none; }
+.note-card__icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--paper); color: var(--note-ink); }
+.note-card__txt { display: flex; flex-direction: column; gap: .15rem; min-width: 0; line-height: 1.35; }
+.note-card__txt b { font-size: 1rem; }
+.note-card__txt > span { color: var(--note-ink); font-weight: 700; font-size: .95rem; }
+.note-card__go { color: var(--note-ink); transition: transform .2s; }
+.note-card:hover .note-card__go { transform: translateX(3px); }
+.note-card--alert { --note-bg: var(--alert-bg); --note-line: #F6CDB0; --note-ink: var(--alert-ink); }
+.note-card--fenix { --note-bg: var(--tint-blue); --note-line: #C9D1F5; --note-ink: var(--link); }
+@media (max-width: 760px) { .brings__notes { grid-template-columns: 1fr; gap: .75rem; } }
+/* "Who we are" on phones: logo centered, everything under it centered */
+@media (max-width: 760px) {
+  .rrr__intro { text-align: center; }
+  .rrr__wordmark { margin-inline: auto; width: min(300px, 80%); }
+  .rrr__intro .eyebrow { justify-content: center; }
+}

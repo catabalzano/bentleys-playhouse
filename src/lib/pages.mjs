@@ -72,8 +72,10 @@ export function home(data) {
   <div class="wrap">
     <h2 id="brings-h" class="section-h section-h--center">What brings you here?</h2>
     ${choiceCards('h3')}
-    <p class="brings__urgent">${icon('alert', { size: 20 })} <span>Is a dog hurt or in danger right now? <a href="${href('get-help/emergency/')}">Go to emergency steps</a>.</span></p>
-    <p class="brings__fenix">${icon('found', { size: 20 })} <span>Lost or found a dog? Post it on the <a href="${FENIX_LF}" target="_blank" rel="noopener">Fénix Animal Project Lost &amp; Found</a>.</span></p>
+    <div class="brings__notes">
+      <a class="note-card note-card--alert" href="${href('get-help/emergency/')}"><span class="note-card__icon" aria-hidden="true">${icon('alert', { size: 22 })}</span><span class="note-card__txt"><b>Is a dog hurt or in danger right now?</b><span>Go to emergency steps</span></span><span class="note-card__go" aria-hidden="true">${icon('arrow', { size: 20 })}</span></a>
+      <a class="note-card note-card--fenix" href="${FENIX_LF}" target="_blank" rel="noopener"><span class="note-card__icon" aria-hidden="true">${icon('found', { size: 22 })}</span><span class="note-card__txt"><b>Lost or found a dog?</b><span>Post it on the Fénix Animal Project Lost &amp; Found<span class="visually-hidden"> (opens in a new tab)</span></span></span><span class="note-card__go" aria-hidden="true">${icon('external', { size: 18 })}</span></a>
+    </div>
   </div>
 </section>
 
