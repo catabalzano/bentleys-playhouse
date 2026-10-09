@@ -291,6 +291,7 @@
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       '<a class="nav" href="#messages" data-nav="messages">📬 Messages <span class="count" data-msgcount></span></a>' +
+      '<a class="nav" href="#rescues" data-nav="rescues">🤝 Rescue contacts</a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
@@ -331,6 +332,7 @@
     if (h === 'donations') return donations();
     if (h === 'homephoto') return homePhoto();
     if (h === 'messages') return messages();
+    if (h === 'rescues') return rescues();
     if (h === 'settings' || h === 'profile') return profile();
     if (h === 'users') return manageUsers();
     if (p[0] === 'spanish') return spanish(decodeURIComponent(p.slice(1).join('/') || ''));
@@ -418,6 +420,7 @@
       '<div class="home-cards">' +
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#messages"><span class="big">' + (S.msgs ? unread() : '…') + '</span><b>Messages</b><span>From the Contact and Get Involved forms</span></a>' +
+      '<a class="home-card" href="#rescues"><span class="big">🤝</span><b>Rescue contacts</b><span>Every rescue and foster that listed a pup</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
       ORDER.map(function (k) { return '<a class="home-card" href="#c/' + k + '"><span class="big">' + COLS[k].icon + '</span><b>' + esc(COLS[k].label) + '</b><span>' + esc(COLS[k].intro) + '</span></a>'; }).join('') +
       '<a class="home-card" href="#homephoto"><span class="big">🖼️</span><b>Homepage photo</b><span>The big photo at the top of the home page</span></a>' +
@@ -788,6 +791,117 @@
       });
     }
     loadMsgs().then(draw).catch(function (e) { $('[data-msgs]').innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
+  }
+
+  // ---------- rescue contacts ----------
+  // Every rescue/foster that sends a pup through the Pawsome Pooches form is added here automatically (worker/src/rescues.js).
+  var RTYPE = { rescue: 'Rescue', foster: 'Foster', other: 'Other' };
+  function socialLink(v) {
+    v = String(v || '').trim();
+    if (/^https?:\/\//i.test(v)) return '<a href="' + esc(v) + '" target="_blank" rel="noopener">' + esc(v.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')) + ' ↗</a>';
+    var hnd = v.replace(/^@/, '');
+    if (/^[\w.]{1,30}$/.test(hnd)) return '<a href="https://www.instagram.com/' + esc(hnd) + '/" target="_blank" rel="noopener">@' + esc(hnd) + ' ↗</a>';
+    return esc(v);
+  }
+  function telLinks(p) { var d = String(p).replace(/[^\d+]/g, ''); return esc(p) + ' <a class="hint" href="tel:' + esc(d) + '">Call</a> · <a class="hint" href="sms:' + esc(d) + '">Text</a>'; }
+  function day(iso) { return iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''; }
+  function rescues() {
+    main().innerHTML = '<div class="head"><div><h1>🤝 Rescue contacts</h1><p>Every rescue and foster that lists a pup on Pawsome Pooches is saved here automatically, with the person who sent it in. Only admins can see this. You can also add one yourself, fix details and write notes.</p></div><div class="row__act"><button class="btn btn--ghost" data-csv>⬇️ Download spreadsheet</button><button class="btn btn--go" data-add>＋ Add a rescue</button></div></div>' +
+      '<div class="card"><label for="rq"><b>Find a rescue</b></label><input id="rq" type="search" placeholder="Name, email, phone, Instagram, city or pup…" style="width:100%;margin-top:6px"></div>' +
+      '<div data-new></div><div data-rs><p class="empty">Loading…</p></div>' +
+      '<p class="hint" style="margin-top:8px">Missing someone? <button class="btn btn--ghost btn--sm" data-imp>🔄 Collect again from all pups</button></p>';
+    var list = [], live = {}, box = $('[data-rs]'), q = $('#rq');
+    function form(r) {
+      r = r || { type: 'rescue', emails: [], phones: [], socials: [], cities: [] };
+      var ta = function (id, label, v, hint) { return '<div class="f"><label for="' + id + '">' + label + '</label><textarea id="' + id + '" rows="2" style="min-height:0">' + esc((v || []).join('\n')) + '</textarea>' + (hint ? '<p class="hint">' + hint + '</p>' : '') + '</div>'; };
+      return '<form class="r-form" novalidate><div class="grid">' +
+        '<div class="f"><label for="rn">Name <span class="req">*</span></label><input type="text" id="rn" value="' + esc(r.name || '') + '" maxlength="120"></div>' +
+        '<div class="f"><label for="rt">Type</label><select id="rt">' + Object.keys(RTYPE).map(function (k) { return '<option value="' + k + '"' + (r.type === k ? ' selected' : '') + '>' + RTYPE[k] + '</option>'; }).join('') + '</select></div>' +
+        ta('re', 'Emails', r.emails, 'One per line') + ta('rp', 'Phone numbers', r.phones, 'One per line') +
+        ta('rs', 'Social media', r.socials, '@handle or a link, one per line') + ta('rc', 'City or area', r.cities) +
+        '<div class="f wide"><label for="rw">Website</label><input type="url" id="rw" value="' + esc(r.website || '') + '" placeholder="https://"></div>' +
+        '<div class="f wide"><label for="rno">Notes (only admins see these)</label><textarea id="rno" rows="3">' + esc(r.notes || '') + '</textarea></div>' +
+        '</div><div class="row__act" style="justify-content:flex-start;margin-top:12px"><button class="btn btn--go btn--sm" type="submit">💾 Save</button><button class="btn btn--ghost btn--sm" type="button" data-cancel>Cancel</button><span class="msg" data-msg role="status"></span></div></form>';
+    }
+    function readForm(f) { var v = function (id) { return $('#' + id, f).value; }; return { name: v('rn'), type: v('rt'), emails: v('re'), phones: v('rp'), socials: v('rs'), cities: v('rc'), website: v('rw'), notes: v('rno') }; }
+    function hay(r) { return [r.name, r.notes, r.website].concat(r.emails, r.phones, r.socials, r.cities || [], (r.pups || []).map(function (p) { return p.name; }), (r.people || []).map(function (p) { return p.name + ' ' + p.email + ' ' + p.phone; })).join(' ').toLowerCase(); }
+    function card(r) {
+      var pups = (r.pups || []).map(function (p) {
+        var L = p.slug && live[p.slug], st = L ? L.status : (p.status === 'pending' ? 'waiting for review' : p.status === 'rejected' ? 'not published' : '');
+        var url = (L && L.url) || p.url;
+        return (url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(p.name) + ' ↗</a>' : esc(p.name)) + (st ? ' <span class="pill' + (st === 'adopted' ? ' ok' : '') + '">' + esc(st === 'available' ? 'Available' : st === 'adopted' ? 'Adopted' : st) + '</span>' : '');
+      });
+      var people = (r.people || []).map(function (p) { return '<b>' + esc(p.name || '') + '</b>' + (p.email ? ' · <a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a>' : '') + (p.phone ? ' · ' + telLinks(p.phone) : '') + (p.social ? ' · ' + socialLink(p.social) : ''); });
+      var rows = [
+        ['Email', r.emails.map(function (e) { return '<a href="mailto:' + esc(e) + '">' + esc(e) + '</a>'; }).join('<br>') || '<span class="hint">Not on file yet</span>'],
+        ['Phone', r.phones.map(telLinks).join('<br>') || '<span class="hint">Not on file yet</span>'],
+        ['Social', r.socials.map(socialLink).join('<br>')],
+        ['Website', r.website && socialLink(r.website)],
+        ['City', esc((r.cities || []).join(', '))],
+        ['Pups', pups.join('<br>')],
+        ['Listed by', people.join('<br>')],
+      ].filter(function (x) { return x[1]; });
+      return '<section class="card msg-card" data-id="' + esc(r.id) + '">' +
+        '<div class="msg-top"><div><b>' + esc(r.name) + '</b> <span class="pill">' + esc(RTYPE[r.type] || 'Rescue') + '</span><div class="hint">In the list since ' + esc(day(r.firstSeen)) + (r.addedBy === 'admin' ? ' · added by hand' : '') + '</div></div>' +
+        (r.emails.length ? '<a class="btn btn--blue btn--sm" href="mailto:' + esc(r.emails.join(',')) + '?subject=' + encodeURIComponent('Bentley\'s Playhouse') + '">✉️ Email</a>' : '') + '</div>' +
+        '<dl class="msg-dl">' + rows.map(function (x) { return '<dt>' + x[0] + '</dt><dd>' + x[1] + '</dd>'; }).join('') + '</dl>' +
+        (r.notes ? '<p class="msg-body">' + esc(r.notes) + '</p>' : '') +
+        '<div data-edit></div><div class="row__act" style="justify-content:flex-start;margin-top:10px"><button class="btn btn--ghost btn--sm" data-ed>✏️ Edit</button><button class="btn btn--ghost btn--sm" data-cp>📋 Copy contact info</button><button class="btn btn--danger btn--sm" data-dl>Remove</button></div></section>';
+    }
+    function wire(f, r, done) {
+      $('[data-cancel]', f).onclick = done;
+      f.onsubmit = function (e) {
+        e.preventDefault();
+        var b = $('button[type=submit]', f), m = $('[data-msg]', f); b.disabled = true; m.className = 'msg'; m.textContent = 'Saving…';
+        api(r ? '/api/rescues/' + r.id : '/api/rescues', { method: r ? 'PUT' : 'POST', json: readForm(f) }).then(function (j) {
+          if (r) list = list.map(function (x) { return x.id === r.id ? j.rescue : x; }); else list.push(j.rescue);
+          list.sort(function (a, b2) { return a.name.localeCompare(b2.name, 'en', { sensitivity: 'base' }); });
+          toast('Saved.'); done(); draw();
+        }, function (er) { b.disabled = false; m.className = 'msg err'; m.textContent = er.message; });
+      };
+    }
+    function draw() {
+      var t = q.value.trim().toLowerCase(), rows = list.filter(function (r) { return !t || hay(r).indexOf(t) > -1; });
+      if (!list.length) { box.innerHTML = '<p class="empty">No rescues yet. When someone lists a pup that\'s with a rescue or a foster, they show up here.</p>'; return; }
+      if (!rows.length) { box.innerHTML = '<p class="empty">No rescue matches “' + esc(q.value) + '”.</p>'; return; }
+      box.innerHTML = '<p class="hint" style="margin:0 0 10px">' + rows.length + ' of ' + list.length + (list.length === 1 ? ' rescue' : ' rescues') + '</p>' + rows.map(card).join('');
+      $$('.msg-card', box).forEach(function (el) {
+        var r = list.filter(function (x) { return x.id === el.getAttribute('data-id'); })[0];
+        $('[data-ed]', el).onclick = function () {
+          var slot = $('[data-edit]', el), view = $$('.msg-dl, .msg-body, .row__act', el);
+          slot.innerHTML = form(r); view.forEach(function (v) { v.hidden = true; });
+          wire($('form', slot), r, function () { slot.innerHTML = ''; view.forEach(function (v) { v.hidden = false; }); }); $('#rn', slot).focus();
+        };
+        $('[data-cp]', el).onclick = function () {
+          var txt = [r.name].concat(r.emails, r.phones, r.socials, r.website ? [r.website] : []).join('\n');
+          (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast('Copied ' + r.name + '\'s contact info.'); }, function () { prompt('Copy this:', txt); });
+        };
+        $('[data-dl]', el).onclick = function () {
+          if (!confirm('Remove ' + r.name + ' from Rescue contacts? Their pups stay on the website.')) return;
+          api('/api/rescues/' + r.id, { method: 'DELETE' }).then(function () { list = list.filter(function (x) { return x.id !== r.id; }); draw(); }).catch(function (e) { alert(e.message); });
+        };
+      });
+    }
+    q.addEventListener('input', draw);
+    $('[data-add]').onclick = function () { var slot = $('[data-new]'); slot.innerHTML = '<section class="card"><h2>Add a rescue</h2>' + form() + '</section>'; wire($('form', slot), null, function () { slot.innerHTML = ''; }); $('#rn', slot).focus(); };
+    $('[data-csv]').onclick = function () {
+      var cell = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+      var out = [['Name', 'Type', 'Emails', 'Phones', 'Social media', 'Website', 'City', 'Pups', 'Listed by', 'Notes', 'In the list since']].concat(list.map(function (r) {
+        return [r.name, RTYPE[r.type] || '', r.emails.join('; '), r.phones.join('; '), r.socials.join('; '), r.website, (r.cities || []).join('; '), (r.pups || []).map(function (p) { return p.name; }).join('; '), (r.people || []).map(function (p) { return [p.name, p.email, p.phone].filter(Boolean).join(' '); }).join('; '), r.notes, day(r.firstSeen)];
+      })).map(function (row) { return row.map(cell).join(','); }).join('\r\n');
+      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + out], { type: 'text/csv' })); a.download = 'rescue-contacts-' + today() + '.csv'; document.body.appendChild(a); a.click(); a.remove();
+    };
+    function collect(btn) {
+      if (btn) { btn.disabled = true; btn.textContent = 'Collecting…'; }
+      return api('/api/rescues/import', { method: 'POST' }).then(function (j) { if (btn) toast(j.added ? 'Added ' + j.added + ' new ' + (j.added === 1 ? 'rescue' : 'rescues') + '.' : 'Everything was already here. Details are up to date.'); return load(); })
+        .catch(function (e) { toast(e.message); }).then(function () { if (btn) { btn.disabled = false; btn.textContent = '🔄 Collect again from all pups'; } });
+    }
+    $('[data-imp]').onclick = function () { collect(this); };
+    function load() {
+      return Promise.all([api('/api/rescues'), fetch('../pawsome-pooches/pups.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })])
+        .then(function (res) { list = res[0].rescues || []; live = res[1] || {}; draw(); return list; });
+    }
+    load().then(function (l) { if (!l.length) return collect(null); }).catch(function (e) { box.innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
   }
 
   // ---------- homepage photo ----------

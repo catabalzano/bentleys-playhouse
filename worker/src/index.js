@@ -3,6 +3,7 @@ import { receiveMessage, handleMessages } from './messages.js';
 import { translateMissing } from './translate.js';
 import { receiveInterest, markAdopted, queueApprovalEmail, sendQueuedEmails } from './pups.js';
 import { sendMail, submissionReceived } from './mail.js';
+import { handleRescues, logRescueFromSubmission } from './rescues.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -45,6 +46,7 @@ export default {
       else if (url.pathname === '/interest' && req.method === 'POST') res = await receiveInterest(req, env, ctx);
       else if (url.pathname === '/adopted' && req.method === 'POST') res = await markAdopted(req, env);
       else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);
+      else if (url.pathname.startsWith('/api/rescues')) res = await handleRescues(req, env, url);
       else if (url.pathname.startsWith('/api/')) res = await handleContent(req, env, url);
       else res = json({ error: 'Not found' }, 404);
       for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);
@@ -152,6 +154,7 @@ async function submit(req, env, ctx) {
   await env.SUBMISSIONS.put(rlKey, String(used + 1), { expirationTtl: 3700 });
   const thanks = submissionReceived(env, record);
   const mail = Promise.all([
+    logRescueFromSubmission(env, record),
     env.ALERTS === 'off' ? null : notify(env, record, files[0]).catch((e) => console.error('notify failed', e && e.message)),
     sendMail(env, { to: S.email, cc: S.email2, subject: thanks.subject, html: thanks.html, text: thanks.text, tag: 'submission-received' }).catch((e) => console.error('thanks mail', e && e.message)),
   ]);
@@ -256,6 +259,7 @@ async function admin(req, env, url) {
     const result = await publish(env, token, r, edits);
     r.status = 'approved'; r.reviewedAt = new Date().toISOString(); r.published = result;
     await saveRecord(env, r);
+    await logRescueFromSubmission(env, r); // adds the pup's page link to the rescue's contact card
     await queueApprovalEmail(env, r, result, result.stories || []);
     return json({ ok: true, ...result });
   }
