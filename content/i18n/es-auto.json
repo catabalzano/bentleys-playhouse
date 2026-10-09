@@ -315,5 +315,8 @@
  "Wirehaired pointing griffon": "grifón de pelo alambre de puntería",
  "Other (type it in)": "Otro (escríbelo)",
  "Your best guess is fine. Not sure? Pick \"Mixed breed\".": "Está bien tu mejor suposición. No estás seguro! Elige \"Raza mezclada\"",
- "Type the breed <t1>*</t1>": "Escribe la raza <t1>*</t1>"
+ "Type the breed <t1>*</t1>": "Escribe la raza <t1>*</t1>",
+ "e.g., Boxer and Lab mix": "por ejemplo, mezcla de Boxer y Lab",
+ "Age <t1>*</t1>": "Edad <t1>*</t1>",
+ "Male or female <t1>*</t1>": "Macho o hembra <t1>*</t1>"
 }
