@@ -318,5 +318,8 @@
  "Type the breed <t1>*</t1>": "Escribe la raza <t1>*</t1>",
  "e.g., Boxer and Lab mix": "por ejemplo, mezcla de Boxer y Lab",
  "Age <t1>*</t1>": "Edad <t1>*</t1>",
- "Male or female <t1>*</t1>": "Macho o hembra <t1>*</t1>"
+ "Male or female <t1>*</t1>": "Macho o hembra <t1>*</t1>",
+ "Spayed or neutered? <t1>*</t1>": "Esterilizado o castrado! <t1>*</t1>",
+ "Vaccines up to date? <t1>*</t1>": "¿Tus vacunas al día? <t1>*</t1>",
+ "Microchipped? <t1>*</t1>": "¿Microchipiado? <t1>*</t1>"
 }
