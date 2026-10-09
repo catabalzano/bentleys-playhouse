@@ -878,10 +878,8 @@ export function cookies() {
 }
 
 export function notFound() {
-  // Preview: ?nf=1-4 shows one of the 4 "confused Bentley" options (Cata is picking one)
   return `<section class="wrap nf" data-nf>
-  <img class="nf-head" src="${asset('img/bentley-head.png')}" alt="" width="160" height="185">
-  ${[1, 2, 3, 4].map((v) => `<div class="nf-opt" data-nf-opt="${v}" hidden>${confusedBentley(v)}</div>`).join('')}
+  <div class="nf-opt">${confusedBentley()}</div>
   <h1 class="page-h">This Page Wandered Off</h1>
   <p class="page-lede" data-nf-lede>We couldn't find that page. These might help:</p>
   <div class="nf-pup" data-nf-pup hidden>
@@ -892,8 +890,6 @@ export function notFound() {
   <div class="btn-row">${button('Get Help', 'get-help/', { ic: 'search' })}${button('Resource library', 'resources/', { variant: 'ghost' })}${button('Home', '', { variant: 'ghost', ic: 'home' })}</div>
 </section>
 <script>(function () {
-  var v = (location.search.match(/[?&]nf=([1-4])/) || [])[1];
-  if (v) { document.querySelector('.nf-head').hidden = true; document.querySelector('[data-nf-opt="' + v + '"]').hidden = false; }
   // a brand-new pup page that isn't built yet: explain, then reload once it exists
   var m = location.pathname.match(new RegExp('^/(es/)?pawsome-pooches/([a-z0-9-]+)/?$'));
   if (!m || /^(submit|adopted)$/.test(m[2])) return;
