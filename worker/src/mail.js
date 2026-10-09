@@ -60,19 +60,19 @@ export function layout(env, { pre, title, body, photo, photoAlt }) {
   <tr><td style="background:#ffffff;border-radius:${photo ? '0 0' : '0 0'} 24px 24px;padding:30px 30px 26px">
     <h1 style="margin:0 0 14px;font-family:${HEAD};font-size:27px;line-height:1.25;color:${INK}">${title}</h1>
     ${body}
+    ${note(`<strong>Have any questions?</strong> Just reply to this email and we'll get back to you.`)}
     <p style="margin:24px 0 0;font-family:${BODY};font-size:16px;line-height:1.6;color:${INK}">With love and wagging tails,<br><strong>Bentley's Playhouse</strong></p>
   </td></tr>
   <tr><td align="center" style="padding:20px 16px 8px;font-family:${BODY};font-size:13px;line-height:1.6;color:${MUTED}">
     <a href="${site}/" style="color:${DEEP};font-weight:700;text-decoration:none">bentleysplayhouse.org</a> &nbsp;·&nbsp;
     <a href="https://www.instagram.com/bentleysplayhouse/" style="color:${DEEP};font-weight:700;text-decoration:none">Instagram</a> &nbsp;·&nbsp;
     <a href="https://www.facebook.com/itsbentleysplayhouse/" style="color:${DEEP};font-weight:700;text-decoration:none">Facebook</a><br>
-    Bentley's Playhouse · Dog rescue and advocacy · Miami, Florida<br>
-    Questions? Just reply to this email.
+    Bentley's Playhouse · Dog rescue and advocacy · Miami, Florida
   </td></tr>
 </table></td></tr></table></body></html>`;
 }
 /** Plain-text twin of every email (spam filters and some people prefer it). */
-export const plain = (lines) => lines.filter((l) => l !== null && l !== undefined).join('\n') + "\n\nWith love and wagging tails,\nBentley's Playhouse\nhttps://bentleysplayhouse.org\nQuestions? Just reply to this email.\n";
+export const plain = (lines) => lines.filter((l) => l !== null && l !== undefined).join('\n') + "\n\nHave any questions? Just reply to this email and we'll get back to you.\n\nWith love and wagging tails,\nBentley's Playhouse\nhttps://bentleysplayhouse.org\n";
 
 // ---------- shared data ----------
 /** What the site publishes about each pup (slug → name, status, rescue contacts…), built by src/build.mjs. */
@@ -122,10 +122,9 @@ export function submissionReceived(env, rec) {
     note(`<strong>1.</strong> We review every pup by hand, usually within a few days.<br><strong>2.</strong> If we have questions, we'll email or text you.<br><strong>3.</strong> Once ${h(D.name)} is approved, you'll get another email with the link to the listing, ready-made Instagram Story images and a button to tell us when ${h(D.name)} finds a home.`),
     h2('What You Sent Us'),
     facts([['Pup', h(D.name)], ['Breed', h(D.breed)], ['Age', h(D.age)], ['Where', h([D.orgName, D.city].filter(Boolean).join(', '))], ['Photos', String(rec.photoCount)]]),
-    p(`Need to change something? Just reply to this email.`, `color:${MUTED};font-size:15px`),
     btn('See Pawsome Pooches', `${site}/pawsome-pooches/`),
   ].join('');
-  const text = plain([`Hi ${S.firstName},`, '', `Thank you for sending us ${D.name}. We review every pup by hand, usually within a few days. If we have questions, we'll email or text you.`, '', `Once ${D.name} is approved, you'll get another email with the link to the listing, Instagram Story images and a button to tell us when ${D.name} finds a home.`, '', `Pup: ${D.name}`, `Breed: ${D.breed}`, `Age: ${D.age}`, '', 'Need to change something? Just reply to this email.', '', `Pawsome Pooches: ${site}/pawsome-pooches/`]);
+  const text = plain([`Hi ${S.firstName},`, '', `Thank you for sending us ${D.name}. We review every pup by hand, usually within a few days. If we have questions, we'll email or text you.`, '', `Once ${D.name} is approved, you'll get another email with the link to the listing, Instagram Story images and a button to tell us when ${D.name} finds a home.`, '', `Pup: ${D.name}`, `Breed: ${D.breed}`, `Age: ${D.age}`, '', `Pawsome Pooches: ${site}/pawsome-pooches/`]);
   return { subject: `We got ${D.name}! Your Pawsome Pooches submission`, html: layout(env, { pre: `Thanks for sending us ${D.name}. Here's what happens next.`, title, body }), text };
 }
 
@@ -185,10 +184,10 @@ export function interestToRescue(env, { m, pup }) {
     p(`Good news: a person who found <strong>${h(pup.name)}</strong> on Bentley's Playhouse wants to ${verb} and asked us to share their details with you.`),
     facts(rows),
     m.message ? note(`<strong>Their note:</strong><br>${h(m.message).replace(/\n/g, '<br>')}`) : '',
-    p(`Reply to this email to write to them directly, or give them a call. They're expecting to hear from you.`),
+    p(`Tap the button to email them, or give them a call. They're expecting to hear from you.`),
     btn(`Email ${h(m.firstName)}`, `mailto:${m.email}?subject=${encodeURIComponent(pup.name + ' from Bentley\'s Playhouse')}`),
     p(`${h(pup.name)}'s listing: <a href="${h(pup.url)}" style="color:${DEEP};font-weight:700">${h(pup.url)}</a>`, `font-size:15px`),
   ].join('');
-  const text = plain([`Good news: someone who found ${pup.name} on Bentley's Playhouse wants to ${verb}.`, '', `Name: ${m.firstName} ${m.lastName}`, `City: ${m.city}`, `Phone: ${m.phone}`, `Email: ${m.email}`, m.message ? `\nTheir note:\n${m.message}` : null, '', 'Reply to this email to write to them directly.', '', `Listing: ${pup.url}`]);
+  const text = plain([`Good news: someone who found ${pup.name} on Bentley's Playhouse wants to ${verb}.`, '', `Name: ${m.firstName} ${m.lastName}`, `City: ${m.city}`, `Phone: ${m.phone}`, `Email: ${m.email}`, m.message ? `\nTheir note:\n${m.message}` : null, '', `Email them (${m.email}) or give them a call. They're expecting to hear from you.`, '', `Listing: ${pup.url}`]);
   return { subject: `${m.firstName} wants to ${verb} ${pup.name}`, html: layout(env, { pre: `${m.firstName} ${m.lastName} from ${m.city} wants to ${verb} ${pup.name}.`, title, body, photo: pup.photo, photoAlt: pup.name }), text };
 }

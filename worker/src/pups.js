@@ -74,7 +74,7 @@ export async function receiveInterest(req, env, ctx) {
     if (direct && m.shareWithRescue) {
       const r = interestToRescue(env, { m, pup });
       const to = [pup.rescue.email, ...lister.emails].filter(Boolean);
-      if (to.length) await sendMail(env, { to: to[0], cc: to.slice(1), subject: r.subject, html: r.html, text: r.text, replyTo: m.email, tag: 'adopt-interest-rescue' });
+      if (to.length) await sendMail(env, { to: to[0], cc: to.slice(1), subject: r.subject, html: r.html, text: r.text, tag: 'adopt-interest-rescue' });
       m.sentTo = to;
       await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m));
     }
