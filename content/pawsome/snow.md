@@ -10,7 +10,7 @@ photos:
   - /assets/img/pawsome/snow-3.jpg
   - /assets/img/pawsome/snow-4.jpg
 photoAlt: Snow, American bulldog mix
-photoFocus: 50% 25%
+photoFocus: 47% 44%
 breed: American bulldog mix
 age: "5"
 sex: Male
