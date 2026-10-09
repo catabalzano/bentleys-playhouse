@@ -5,8 +5,8 @@
 //  POST /adopted             public, with the private code from the "listing is live" email:
 //                             marks the pup adopted on the site and tells us in the admin inbox
 //  cron (every 5 minutes)    sends "your listing is live" emails once the new listing page is online
-import { githubToken, commitFiles, parseMd, stringifyMd } from './admin.js';
-import { sendMail, pupsIndex, adoptToken, adoptLink, interestToAdopter, interestToRescue, listingApproved } from './mail.js';
+import { githubToken, commitFiles, parseMd, stringifyMd, sessionUser } from './admin.js';
+import { sendMail, pupsIndex, adoptToken, adoptLink, interestToAdopter, interestToRescue, listingApproved, submissionReceived } from './mail.js';
 
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
 const fail = (msg, status = 400) => Object.assign(new Error(msg), { publicMessage: msg, status });
@@ -131,4 +131,34 @@ export async function sendQueuedEmails(env) {
     const rec = await env.SUBMISSIONS.get(`sub:${q.sid}`, 'json');
     if (rec) { rec.liveEmailSentAt = new Date().toISOString(); await env.SUBMISSIONS.put(`sub:${rec.id}`, JSON.stringify(rec), { metadata: { status: rec.status, name: rec.dog.name, createdAt: rec.createdAt } }); }
   }
+}
+
+// ---------- "Send me a test email" (admin) ----------
+// Sends the 4 Pawsome Pooches emails, filled in with a real pup from the website, to the address given.
+export async function sendTestEmails(req, env) {
+  const me = await sessionUser(env, req);
+  if (!me) throw fail('Please sign in again.', 401);
+  const b = await req.json().catch(() => ({}));
+  const to = clean(b.to, 120) || me.email || 'hello@bentleysplayhouse.org';
+  if (!isEmail(to)) throw fail('Please enter a valid email address.');
+  if (!env.RESEND_API_KEY) throw fail('Email isn\'t switched on yet (no Resend key).', 409);
+  const pups = await pupsIndex(env);
+  const slug = Object.keys(pups).find((k) => pups[k].status !== 'adopted' && pups[k].rescue) || Object.keys(pups)[0];
+  const pup = { slug, ...(pups[slug] || { name: 'Belle', url: `${site(env)}/pawsome-pooches/belle/` }) };
+  const rescue = pup.rescue || { name: 'Joy and Love Rescue' };
+  const fake = { id: 'test', createdAt: new Date().toISOString(), dog: { name: pup.name, breed: 'Mixed breed', needs: pup.needs || 'adoption', locationType: 'rescue', orgName: rescue.name }, submitter: { firstName: 'Cata', email: to } };
+  const m = { firstName: 'Cata', lastName: 'Test', city: 'Miami', phone: '305-555-0100', email: to, message: 'This is a test message.', verb: pup.needs === 'foster' ? 'foster' : 'adopt' };
+  const mails = [
+    submissionReceived(env, fake),
+    listingApproved(env, { name: pup.name, url: pup.url, firstName: 'Cata', adoptUrl: await adoptLink(env, slug, pup.name), stories: ['Scrapbook', 'Ticket', 'Poster'].map((l) => ({ label: l, url: `${site(env)}/assets/img/pawsome/stories/${slug}-story-${l.toLowerCase()}.jpg` })), photo: pup.photo, needs: pup.needs }),
+    interestToAdopter(env, { m, pup, rescue, sharedWithRescue: true }),
+    interestToRescue(env, { m, pup }),
+  ];
+  const sent = [];
+  for (const e of mails) {
+    const r = await sendMail(env, { to, subject: '[Test] ' + e.subject, html: e.html, text: e.text, tag: 'test' });
+    if (r && r.error) throw fail(`Resend said no (${r.error}). Check that the key has Sending access for bentleysplayhouse.org.`, 502);
+    sent.push(e.subject);
+  }
+  return json({ ok: true, to, sent });
 }

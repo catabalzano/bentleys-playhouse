@@ -1,7 +1,7 @@
 import { handleAuth, handleContent, sessionOk, githubToken } from './admin.js';
 import { receiveMessage, handleMessages } from './messages.js';
 import { translateMissing } from './translate.js';
-import { receiveInterest, markAdopted, queueApprovalEmail, sendQueuedEmails } from './pups.js';
+import { receiveInterest, markAdopted, queueApprovalEmail, sendQueuedEmails, sendTestEmails } from './pups.js';
 import { sendMail, submissionReceived } from './mail.js';
 import { handleRescues, logRescueFromSubmission } from './rescues.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
@@ -47,6 +47,7 @@ export default {
       else if (url.pathname === '/adopted' && req.method === 'POST') res = await markAdopted(req, env);
       else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);
       else if (url.pathname.startsWith('/api/rescues')) res = await handleRescues(req, env, url);
+      else if (url.pathname === '/api/mail/test' && req.method === 'POST') res = await sendTestEmails(req, env);
       else if (url.pathname.startsWith('/api/')) res = await handleContent(req, env, url);
       else res = json({ error: 'Not found' }, 404);
       for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);

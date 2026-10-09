@@ -752,7 +752,7 @@
   function msgCount() { var c = $('[data-msgcount]'); if (c) c.textContent = unread() || ''; }
   function loadMsgs() { return api('/api/messages').then(function (j) { S.msgs = j.messages || []; msgCount(); return S.msgs; }); }
   function messages() {
-    main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form, the "Raise your hand" form, and "I want to adopt" on Pawsome Pooches, plus a note whenever a pup is marked adopted. Only admins can see these.</p></div></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
+    main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form, the "Raise your hand" form, and "I want to adopt" on Pawsome Pooches, plus a note whenever a pup is marked adopted. Only admins can see these.</p></div><button class="btn btn--ghost" data-testmail>✉️ Send me test emails</button></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
     var tab = 'all';
     function draw() {
       var all = S.msgs || [], list = all.filter(function (m) { return tab === 'all' || (tab === 'unread' ? !m.read : m.form === tab); });
@@ -790,6 +790,13 @@
         $('[data-dl]', card).onclick = function () { if (!confirm('Delete the message from ' + m.name + ' for good?')) return; api('/api/messages/' + id, { method: 'DELETE' }).then(function () { S.msgs = S.msgs.filter(function (x) { return x.id !== id; }); msgCount(); draw(); }).catch(function (e) { alert(e.message); }); };
       });
     }
+    $('[data-testmail]').onclick = function () {
+      var b = this, to = prompt('Send the 4 Pawsome Pooches emails (as tests) to which email address?', (S.me && S.me.email) || '');
+      if (!to) return;
+      b.disabled = true; b.textContent = 'Sending…';
+      api('/api/mail/test', { method: 'POST', json: { to: to.trim() } }).then(function (j) { toast('Sent ' + j.sent.length + ' test emails to ' + j.to + '. Check your inbox (and spam, just in case).'); }, function (e) { alert(e.message); })
+        .then(function () { b.disabled = false; b.textContent = '✉️ Send me test emails'; });
+    };
     loadMsgs().then(draw).catch(function (e) { $('[data-msgs]').innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
   }
 
