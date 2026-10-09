@@ -118,7 +118,7 @@ export function page({ title, seoTitle, description, body, home = false, bodyCla
   const s = ctx.site;
   // Search results show about 60 characters: drop the site-name suffix when it would push the title past that.
   const baseTitle = seoTitle || title;
-  const full = home ? `${s.name} | Dog Rescue in Miami` : (`${baseTitle} | ${s.name}`.length <= 60 ? `${baseTitle} | ${s.name}` : baseTitle);
+  const full = home ? `Miami Dog Rescue | ${s.name}` : (`${baseTitle} | ${s.name}`.length <= 60 ? `${baseTitle} | ${s.name}` : baseTitle);
   description = clip(description, 160);
   const canonical = s.siteUrl + '/' + ctx.route;
   const robots = noindex || ctx.mode === 'preview' ? '<meta name="robots" content="noindex">' : '';
@@ -203,12 +203,15 @@ function structuredData({ home, title, description, canonical, ogType, modified,
     const sameAs = Object.values(s.social || {}).filter((x) => x && x.url && x.verified !== false).map((x) => x.url);
     graph.push({
       '@type': 'Organization', '@id': orgId, name: s.name, url: s.siteUrl + '/',
+      alternateName: ["Bentley's Playhouse Animal Rescue", "Bentley's Playhouse Dog Rescue"],
+      foundingDate: '2022-08',
+      knowsAbout: ['Dog rescue', 'Dog adoption', 'Dog fostering', 'Lost and found dogs', 'Animal welfare in Miami-Dade'],
       logo: { '@type': 'ImageObject', url: s.siteUrl + '/assets/img/logo-main.png' },
       description,
       slogan: s.tagline || undefined,
       founder: s.founder ? { '@type': 'Person', name: s.founder } : undefined,
       email: s.contact && s.contact.emailVerified ? s.contact.email : undefined,
-      areaServed: { '@type': 'AdministrativeArea', name: 'Miami-Dade County, Florida' },
+      areaServed: [{ '@type': 'City', name: 'Miami, Florida' }, { '@type': 'AdministrativeArea', name: 'Miami-Dade County, Florida' }, { '@type': 'State', name: 'Florida' }],
       address: { '@type': 'PostalAddress', addressLocality: 'Miami', addressRegion: 'FL', addressCountry: 'US' },
       sameAs,
     });

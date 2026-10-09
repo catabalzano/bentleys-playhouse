@@ -229,6 +229,6 @@ export function pawTrail(cls = '') {
 /** The main circular logo; swaps to the light-lettering version in dark mode. */
 export function logo(cls = '', { alt = "Bentley's Playhouse Animal Rescue", eager = false } = {}) {
   const l = eager ? '' : ' loading="lazy"';
-  return `<span class="logo ${cls}"><img class="logo__l" src="${asset('img/logo-main.png')}" alt="${alt}" width="720" height="714"${l}><img class="logo__d" src="${asset('img/logo-main-dark.png')}" alt="${alt}" width="720" height="714"${l}></span>`;
+  return `<span class="logo ${cls}"><img class="logo__l" src="${asset('img/logo-main.png')}" alt="${alt}" width="720" height="714"${l}><img class="logo__d" src="${asset('img/logo-main-dark.png')}" alt="${alt}" width="720" height="714" loading="lazy"></span>`;
 }
 export { icon };

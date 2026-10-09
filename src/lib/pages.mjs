@@ -59,7 +59,7 @@ export function home(data) {
     <div class="hero__card">
       <p class="eyebrow eyebrow--hero">${tag('Miami-based Dog Rescue &amp;<br class="br-m"> Advocacy Organization', 'gold')}</p>
       <h1 id="hero-h" class="hero__h">We Support the Pups, and <span class="hl">the Heroes Who Help Them.</span></h1>
-      <p class="hero__lede">${esc(s.name)} rescues, rehabilitates and rehomes dogs in South Florida. We also work to support other animal rescues in the country through volunteer work and donations, as well as sharing clear, practical help for anyone who has just found, lost or rescued a dog and isn't sure what to do next.</p>
+      <p class="hero__lede">${esc(s.name)} is a Miami dog rescue: we rescue, rehabilitate and rehome dogs across South Florida. We also work to support other animal rescues in the country through volunteer work and donations, as well as sharing clear, practical help for anyone who has just found, lost or rescued a dog and isn't sure what to do next.</p>
       <div class="hero__ctas">
         ${button('Find help', 'get-help/', { ic: 'search' })}
         ${button('Get involved', 'get-involved/', { variant: 'ghost', ic: 'hands' })}
