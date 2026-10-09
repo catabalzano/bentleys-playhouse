@@ -185,7 +185,7 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
     </div>
     <div class="pp-share">
       <button type="button" class="btn btn--ghost btn--small" data-pp-share="${esc(d.slug)}" data-title="${esc(d.name)}">${icon('share', { size: 18 })}<span>Share ${esc(d.name)}</span></button>
-      ${d.status !== 'adopted' ? `<button type="button" class="btn btn--primary btn--small pp-story-btn" data-pp-story="${esc(d.slug)}" data-story="${esc(storyData(d))}">${icon('instagram', { size: 18 })}<span>Share to Stories</span></button>` : ''}
+      ${d.status !== 'adopted' ? `<button type="button" class="btn btn--primary btn--small pp-story-btn" data-pp-story="${esc(d.slug)}" data-story="${esc(storyData(d))}">${icon('instagram', { size: 18 })}<span>Share to Stories</span></button><button type="button" class="btn btn--primary btn--small pp-feed-btn" data-pp-story="${esc(d.slug)}" data-pp-feed data-story="${esc(storyData(d))}">${icon('image', { size: 18 })}<span>Share a Post</span></button>` : ''}
       <span class="pp-share__status" role="status"></span>
     </div>
     <p class="pp-disclaimer">${ctx.site.name} shares community dogs to help them get seen. ${d.loc.type === 'family' ? 'We help screen and connect adopters with the family.' : `Adoptions are handled by ${esc(d.loc.name || d.loc.meta.label)}.`} Always meet the dog first and ask for vet records. Listed ${esc(fmtDate(d.featuredWeek || d.date || '2026-10-06'))}.</p>

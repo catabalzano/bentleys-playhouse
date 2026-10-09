@@ -194,7 +194,7 @@ var T = window.BP_T || function (s) { return s; };
   };
 
 
-  /* ---------- feed posts (1080x1350, Instagram's tallest feed size): 6 proposals ---------- */
+  /* ---------- feed posts (1080x1350, Instagram's tallest feed size): Split, Tear-Off Flyer, Name Tag (Cata picked Oct 9) ---------- */
   var FW = 1080, FH = 1350, SERIF = 'Georgia, "Times New Roman", serif';
   function fwords(d, w) {
     var where = d.where || '';
@@ -212,48 +212,6 @@ var T = window.BP_T || function (s) { return s; };
   }
   function check(c, x, y, color) { c.strokeStyle = color; c.lineWidth = 5; c.lineCap = 'round'; c.beginPath(); c.moveTo(x, y - 12); c.lineTo(x + 11, y); c.lineTo(x + 30, y - 24); c.stroke(); }
   var FEEDS = {
-    // 1 cork board: polaroid + index card, pushpins
-    1: function (c, d, w, img, logo) {
-      var f = fwords(d, w);
-      cork(c, FW, FH);
-      rot(c, 380, 455, -3, function () {
-        shadow(c, 26, 14, 0.4); c.fillStyle = '#fff'; c.fillRect(-300, -390, 600, 760); noShadow(c);
-        cover(c, img, -270, -360, 540, 560, d.focus);
-        c.fillStyle = BLUE; c.textAlign = 'center'; fit(c, w.name, 520, 700, 96, HAND, 50); c.fillText(w.name, 0, 300);
-      });
-      pin(c, 380, 90, '#E0483B');
-      rot(c, 650, 1085, 3, function () {
-        shadow(c, 20, 10, 0.35); c.fillStyle = '#FFFEF8'; c.fillRect(-370, -215, 740, 430); noShadow(c);
-        c.strokeStyle = 'rgba(82,113,255,.28)'; c.lineWidth = 2; for (var ly = -122; ly < 210; ly += 50) { c.beginPath(); c.moveTo(-370, ly); c.lineTo(370, ly); c.stroke(); }
-        c.strokeStyle = 'rgba(224,72,59,.5)'; c.beginPath(); c.moveTo(-310, -215); c.lineTo(-310, 215); c.stroke();
-        c.textAlign = 'left'; c.fillStyle = ORANGE; fit(c, w.ask, 620, 700, 54, DISPLAY, 30); c.fillText(w.ask, -290, -142);
-        var y = -80; c.fillStyle = INK; [w.facts, f.via, w.good, w.health].filter(Boolean).forEach(function (l) { fit(c, l, 640, 600, 31, BODY, 20); c.fillText(l, -290, y); y += 50; });
-        c.fillStyle = BLUE; fit(c, f.short, 640, 700, 30, DISPLAY, 18); c.fillText(f.short, -290, 188);
-      });
-      tape(c, 990, 880, 170, 46, 40, GOLD);
-      if (logo) { shadow(c, 12, 6, 0.35); c.drawImage(logo, 820, 90, 170, 170); noShadow(c); }
-      c.fillStyle = '#FFF6E6'; font(c, 700, 52, HAND); c.textAlign = 'center'; c.fillText('Pawsome Pooches', 905, 320);
-    },
-    // 2 classified ad in "The Pawsome Post"
-    2: function (c, d, w, img, logo) {
-      var f = fwords(d, w);
-      c.fillStyle = '#F3EEE2'; c.fillRect(0, 0, FW, FH); specks(c, 0, 0, FW, FH, 1600, ['rgba(80,60,30,.12)'], 1.4, 5);
-      c.fillStyle = INK; c.textAlign = 'center'; font(c, 700, 86, SERIF); c.fillText('The Pawsome Post', FW / 2, 128);
-      c.fillRect(60, 150, FW - 120, 5); c.fillRect(60, 162, FW - 120, 2);
-      font(c, 400, 26, SERIF); c.fillText("BENTLEY'S PLAYHOUSE  ·  " + (f.city || 'MIAMI').toUpperCase() + "  ·  ADOPTION EDITION", FW / 2, 200);
-      c.fillRect(60, 220, FW - 120, 2);
-      var head = (w.name + ' ' + (w.pair ? T('Seek a Forever Home') : T('Seeks Forever Home'))).toUpperCase(); c.fillStyle = INK; fit(c, head, FW - 120, 700, 74, SERIF, 34); c.fillText(head, FW / 2, 312);
-      c.fillStyle = INK; c.fillRect(60, 345, FW - 120, 570); cover(c, img, 66, 351, FW - 132, 558, d.focus);
-      var a = w.ask.replace('!', '').toUpperCase(); font(c, 700, 42, DISPLAY); var sw = Math.min(460, c.measureText(a).width + 60);
-      rot(c, FW - 70 - sw / 2, 420, 10, function () { c.strokeStyle = 'rgba(217,83,42,.92)'; c.lineWidth = 7; rr(c, -sw / 2, -48, sw, 96, 10); c.stroke(); c.fillStyle = 'rgba(217,83,42,.92)'; c.textAlign = 'center'; fit(c, a, sw - 50, 700, 42, DISPLAY, 18); c.fillText(a, 0, 15); });
-      c.fillStyle = INK; c.fillRect(538, 945, 3, 330);
-      c.textAlign = 'left'; font(c, 700, 30, SERIF); c.fillText(T('THE DETAILS'), 60, 975);
-      var y = 1020; [f.age, f.sex, f.breed, w.good, w.health].filter(Boolean).forEach(function (l) { fit(c, l, 450, 400, 30, SERIF, 18); c.fillText(l, 60, y); y += 46; });
-      font(c, 700, 30, SERIF); c.fillText(T('HOW TO APPLY'), 570, 975);
-      y = 1020; [f.via, f.dm ? 'DM ' + f.dm : ''].filter(Boolean).forEach(function (l) { font(c, 400, 30, SERIF); wrap(c, l, 450).slice(0, 2).forEach(function (t) { c.fillText(t, 570, y); y += 44; }); });
-      c.fillStyle = BLUE; fit(c, f.short, 450, 700, 28, DISPLAY, 16); c.fillText(f.short, 570, y + 10);
-      if (logo) c.drawImage(logo, 900, 1150, 120, 120);
-    },
     // 3 split: photo left, Playhouse Blue panel right
     3: function (c, d, w, img, logo) {
       var f = fwords(d, w);
@@ -296,30 +254,6 @@ var T = window.BP_T || function (s) { return s; };
       });
       pin(c, 175, 80, '#2F45C8'); pin(c, 905, 70, '#FF914D');
     },
-    // 5 trading card
-    5: function (c, d, w, img, logo) {
-      var f = fwords(d, w);
-      var g = c.createLinearGradient(0, 0, FW, FH); g.addColorStop(0, '#5271FF'); g.addColorStop(1, '#8C52FF'); c.fillStyle = g; c.fillRect(0, 0, FW, FH);
-      paw(c, 90, 120, 60, 'rgba(255,255,255,.15)'); paw(c, 1000, 1250, 70, 'rgba(255,255,255,.15)'); paw(c, 990, 140, 40, 'rgba(255,211,107,.35)');
-      var x = 110, y = 70, cw = 860, ch = 1210;
-      shadow(c, 40, 18, 0.35); c.fillStyle = GOLD; rr(c, x, y, cw, ch, 44); c.fill(); noShadow(c);
-      c.fillStyle = '#fff'; rr(c, x + 22, y + 22, cw - 44, ch - 44, 30); c.fill();
-      c.fillStyle = INK; c.textAlign = 'left'; fit(c, w.name, 520, 700, 84, DISPLAY, 40); c.fillText(w.name, x + 56, y + 116);
-      font(c, 700, 34, DISPLAY); var aw = c.measureText(w.ask).width + 40; c.fillStyle = ORANGE; rr(c, x + cw - 56 - aw, y + 62, aw, 64, 32); c.fill(); c.fillStyle = INK; c.textAlign = 'center'; c.fillText(w.ask, x + cw - 56 - aw / 2, y + 106);
-      c.save(); rr(c, x + 56, y + 150, cw - 112, 560, 22); c.clip(); cover(c, img, x + 56, y + 150, cw - 112, 560, d.focus); c.restore();
-      c.strokeStyle = GOLD; c.lineWidth = 6; rr(c, x + 56, y + 150, cw - 112, 560, 22); c.stroke();
-      var stats = [[T('AGE'), f.age], [T('SEX'), f.sex], [T('BREED'), f.breed], [T('GOOD WITH'), (function (g) { g = g.replace(/^\S+ \S+ /, ''); return g ? g.charAt(0).toUpperCase() + g.slice(1) : T('Ask us'); })(w.good || '')]];
-      stats.forEach(function (s, i) {
-        var bx = x + 56 + (i % 2) * 382, by = y + 740 + Math.floor(i / 2) * 150;
-        c.fillStyle = '#EEF1FF'; rr(c, bx, by, 366, 134, 18); c.fill();
-        c.fillStyle = 'rgba(31,29,43,.6)'; c.textAlign = 'left'; font(c, 800, 22, BODY); c.fillText(s[0], bx + 22, by + 40);
-        c.fillStyle = INK; fit(c, s[1] || '—', 320, 700, 38, DISPLAY, 20); c.fillText(s[1] || '—', bx + 22, by + 96);
-      });
-      c.fillStyle = BLUE; rr(c, x + 56, y + 1050, cw - 112, 104, 18); c.fill();
-      if (logo) c.drawImage(logo, x + 70, y + 1060, 84, 84);
-      c.fillStyle = '#fff'; c.textAlign = 'left'; fit(c, f.via || 'Pawsome Pooches', 560, 700, 30, DISPLAY, 18); c.fillText(f.via || 'Pawsome Pooches', x + 172, y + 1094);
-      c.fillStyle = GOLD; fit(c, f.short, 560, 700, 24, DISPLAY, 14); c.fillText(f.short, x + 172, y + 1132);
-    },
     // 6 "Hello, my name is" sticker on a big photo
     6: function (c, d, w, img, logo) {
       var f = fwords(d, w);
@@ -354,9 +288,7 @@ var T = window.BP_T || function (s) { return s; };
     cache[key].catch(function () { delete cache[key]; });
     return cache[key];
   }
-  var FEED_NAMES = { f1: 'Cork board', f2: 'Newspaper', f3: 'Split', f4: 'Tear-off flyer', f5: 'Trading card', f6: 'Name tag' };
-  var FP = (location.search.match(/[?&]fp=([1-6]|all)/) || [])[1];
-  var FEED_STYLES = !FP ? [] : FP === 'all' ? ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'].map(function (k, i) { return [k, (i + 1) + '. ' + FEED_NAMES[k]]; }) : [['f' + FP, FP + '. ' + FEED_NAMES['f' + FP]]];
+  var FEED_STYLES = [['f3', 'Split'], ['f4', 'Tear-Off Flyer'], ['f6', 'Name Tag']];
   function stylesOf(btn) { return btn._feed ? FEED_STYLES : STYLES; }
   function warmAll(btn) { stylesOf(btn).forEach(function (s) { render(btn, s[0]).catch(function () {}); }); }
 
@@ -386,14 +318,8 @@ var T = window.BP_T || function (s) { return s; };
     return panel;
   }
   function prep(root) {
-    // preview: a "Share a Post" button next to Share to Stories
-    if (FEED_STYLES.length) Array.prototype.forEach.call((root || document).querySelectorAll('.pp-story-btn:not([data-pp-feedmade])'), function (sb) {
-      sb.setAttribute('data-pp-feedmade', '1');
-      var fb = sb.cloneNode(true); fb.classList.remove('pp-story-btn'); fb.classList.add('pp-feed-btn'); fb.removeAttribute('data-pp-feedmade'); fb._feed = true;
-      fb.querySelector('span').textContent = T('Share a Post'); sb.parentNode.insertBefore(fb, sb.nextSibling);
-    });
     Array.prototype.forEach.call((root || document).querySelectorAll('[data-pp-story]'), function (btn) {
-      if (btn._story) return; btn._story = true;
+      if (btn._story) return; btn._story = true; btn._feed = btn.hasAttribute('data-pp-feed');
       btn.setAttribute('aria-expanded', 'false');
       btn.addEventListener('pointerdown', function () { warmAll(btn); });
       btn.addEventListener('click', function () {

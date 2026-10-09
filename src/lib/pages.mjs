@@ -885,8 +885,8 @@ export function notFound() {
   <h1 class="page-h">This Page Wandered Off</h1>
   <p class="page-lede" data-nf-lede>We couldn't find that page. These might help:</p>
   <div class="nf-pup" data-nf-pup hidden>
-    <p class="nf-pup__h">Just approved a pup?</p>
-    <p>New Pawsome Pooches pages take about 2 minutes to go live while the website rebuilds. We're working as quickly as pawsible! This page will refresh on its own as soon as it's ready.</p>
+    <p class="nf-pup__h">Looking for a pup?</p>
+    <p>New Pawsome Pooches pages take about 2 minutes to go live. We're working as quickly as pawsible! This page will refresh on its own as soon as it's ready.</p>
     <p class="nf-pup__wait" data-nf-wait role="status" aria-live="polite">Checking…</p>
   </div>
   <div class="btn-row">${button('Get Help', 'get-help/', { ic: 'search' })}${button('Resource library', 'resources/', { variant: 'ghost' })}${button('Home', '', { variant: 'ghost', ic: 'home' })}</div>
