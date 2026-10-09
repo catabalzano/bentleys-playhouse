@@ -679,16 +679,36 @@
       '<h2>' + esc(d.name) + '</h2><p class="hint">Submitted ' + esc(new Date(s.createdAt).toLocaleString()) + '</p>' +
       '<dl class="facts"><dt>Breed</dt><dd>' + esc(d.breed) + '</dd><dt>Age</dt><dd>' + esc(d.age) + '</dd><dt>Sex</dt><dd>' + esc(d.sex) + '</dd><dt>Spayed/neutered</dt><dd>' + SYN[d.fixed] + '</dd><dt>Vaccines</dt><dd>' + SYN[d.vaccinated] + '</dd><dt>Microchip</dt><dd>' + SYN[d.microchipped] + '</dd><dt>Heartworm neg.</dt><dd>' + SYN[d.heartworm] + '</dd>' +
       '<dt>Good with</dt><dd>Dogs: ' + SYN[d.goodWithDogs] + ' · Cats: ' + SYN[d.goodWithCats] + ' · Kids: ' + SYN[d.goodWithKids] + '</dd><dt>Where</dt><dd>' + esc([d.orgName, SLOC[d.locationType], d.city].filter(Boolean).join(', ')) + '</dd>' + (d.orgUrl ? '<dt>Rescue website</dt><dd><a href="' + esc(d.orgUrl) + '" target="_blank" rel="noopener">' + esc(d.orgUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')) + ' ↗</a></dd>' : '') + (d.animalId ? '<dt>Shelter ID</dt><dd>' + esc(d.animalId) + '</dd>' : '') + '</dl>' +
-      '<div class="private"><h3>Submitted by (private)</h3><dl class="facts"><dt>Name</dt><dd>' + esc(p.firstName + ' ' + p.lastName) + '</dd><dt>Social</dt><dd><a href="https://www.instagram.com/' + encodeURIComponent(social) + '/" target="_blank" rel="noopener">@' + esc(social) + '</a></dd><dt>Phone</dt><dd><a href="tel:' + esc(String(p.phone).replace(/[^\d+]/g, '')) + '">' + esc(p.phone) + '</a></dd><dt>Email</dt><dd><a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a></dd></dl></div>' +
+      '<div class="private"><h3>Submitted by (private)</h3><dl class="facts"><dt>Name</dt><dd>' + esc(p.firstName + ' ' + p.lastName) + '</dd><dt>Social</dt><dd><a href="https://www.instagram.com/' + encodeURIComponent(social) + '/" target="_blank" rel="noopener">@' + esc(social) + '</a></dd><dt>Phone</dt><dd><a href="tel:' + esc(String(p.phone).replace(/[^\d+]/g, '')) + '">' + esc(p.phone) + '</a></dd><dt>Email</dt><dd><a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a></dd>' + (p.email2 ? '<dt>Second email</dt><dd><a href="mailto:' + esc(p.email2) + '">' + esc(p.email2) + '</a></dd>' : '') + '</dl></div>' +
+      (d.orgEmail || d.orgPhone || d.orgSocial ? '<div class="private"><h3>Rescue contact (shown on the listing)</h3><dl class="facts">' + (d.orgEmail ? '<dt>Email</dt><dd>' + esc(d.orgEmail) + '</dd>' : '') + (d.orgPhone ? '<dt>Phone</dt><dd>' + esc(d.orgPhone) + '</dd>' : '') + (d.orgSocial ? '<dt>Social</dt><dd>' + esc(d.orgSocial) + '</dd>' : '') + '</dl></div>' : '') +
       (s.status === 'pending' ?
         '<div class="grid"><div class="f wide"><label for="n-' + s.id + '">Name on the site</label><input type="text" id="n-' + s.id + '" value="' + esc(d.name) + '"></div>' +
         '<div class="f wide"><label for="t-' + s.id + '">One-line intro</label><input type="text" id="t-' + s.id + '" maxlength="220" placeholder="e.g. A goofy, gentle pit mix who loves car rides"></div>' +
         '<div class="f wide"><label for="b-' + s.id + '">Story</label><textarea id="b-' + s.id + '">' + esc(d.about) + '</textarea></div>' +
         '<label class="switch wide"><input type="checkbox" id="u-' + s.id + '"> Mark as urgent</label></div>' +
         '<div class="actions" style="position:static"><button class="btn btn--go" data-approve>✓ Approve &amp; publish</button><button class="btn btn--danger" data-reject>Reject</button><span class="msg" data-msg role="status"></span></div>'
-        : s.status === 'approved' ? '<p class="msg ok">Published' + (s.published ? ': <a href="' + esc(s.published.url) + '" target="_blank" rel="noopener">view on site</a>' : '') + '</p><p class="hint">Edit it or mark it adopted under Pawsome Pooches.</p>'
+        : s.status === 'approved' ? (s.reviewedAt && Date.now() - Date.parse(s.reviewedAt) < 4 * 60000 ? '<p class="msg">⏳ Going live in about 2 minutes. The website is rebuilding' + (s.published ? ', then it will be <a href="' + esc(s.published.url) + '" target="_blank" rel="noopener">here</a>' : '') + '.</p>' : '<p class="msg ok">Published' + (s.published ? ': <a href="' + esc(s.published.url) + '" target="_blank" rel="noopener">view on site</a>' : '') + '</p>') + '<p class="hint">' + (s.liveEmailSentAt ? '✉️ "Your listing is live" email sent ' + esc(new Date(s.liveEmailSentAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) + '. ' : '✉️ The "your listing is live" email goes out once the page is online. ') + 'Edit it or mark it adopted under Pawsome Pooches.</p>'
         : '<div class="actions" style="position:static"><button class="btn btn--ghost" data-delete>Delete for good</button><span class="msg" data-msg role="status"></span></div>') +
       '</div></div></article>';
+  }
+  // The 3 "Share to Stories" designs (js/story.js), drawn here so the "your listing is live" email can include them
+  var SLONG = { 'mdas-doral': 'Miami-Dade Animal Services (Doral)', 'mdas-medley': 'Miami-Dade Animal Services (Medley)', broward: 'Broward County Animal Care', family: 'With their family', foster: 'In a foster home', rescue: 'A local rescue', other: '' };
+  function storyImages(s, name, photo) {
+    if (!window.BPStory || !photo) return Promise.resolve([]);
+    var d = s.dog, slug = String(name || d.name).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 50) || 'pup';
+    var cap = function (x) { return x ? x.charAt(0).toUpperCase() + x.slice(1) : ''; };
+    var btn = document.createElement('button');
+    btn.setAttribute('data-pp-story', 'admin-' + s.id + '-' + Date.now());
+    btn.setAttribute('data-story', JSON.stringify({ slug: slug, name: name || d.name, age: d.age, sex: cap(d.sex), breed: d.breed, needs: d.needs, where: d.orgName || SLONG[d.locationType] || '', city: d.city,
+      fixed: d.fixed, vaccinated: d.vaccinated, microchipped: d.microchipped, good: { dogs: d.goodWithDogs, cats: d.goodWithCats, kids: d.goodWithKids }, photo: photo, focus: '', logo: '../assets/img/logo-badge.png' }));
+    return Promise.all(window.BPStory.styles.map(function (st) {
+      return window.BPStory.render(btn, st[0]).then(function (blob) {
+        return new Promise(function (res) {
+          var im = new Image(); im.onload = function () { var c = document.createElement('canvas'); c.width = im.width; c.height = im.height; c.getContext('2d').drawImage(im, 0, 0); URL.revokeObjectURL(im.src); res({ label: st[1], data: c.toDataURL('image/jpeg', 0.86) }); };
+          im.onerror = function () { res(null); }; im.src = URL.createObjectURL(blob);
+        });
+      }).catch(function () { return null; });
+    })).then(function (a) { return a.filter(Boolean); }).catch(function () { return []; });
   }
   function wireSub(s, tab) {
     var el = document.getElementById('s-' + s.id); if (!el) return;
@@ -703,9 +723,13 @@
     });
     var msg = $('[data-msg]', el), ap = $('[data-approve]', el), rj = $('[data-reject]', el), dl = $('[data-delete]', el);
     if (ap) ap.onclick = function () {
-      ap.disabled = rj.disabled = true; msg.className = 'msg'; msg.textContent = 'Publishing…';
-      api('/admin/approve/' + s.id, { method: 'POST', json: { name: $('#n-' + s.id).value, tagline: $('#t-' + s.id).value, story: $('#b-' + s.id).value, urgent: $('#u-' + s.id).checked, photoOrder: order } })
-        .then(function () { delete S.cache.pawsome; toast('Published! It will be on Pawsome Pooches in about 2 minutes.'); submissions(tab); })
+      ap.disabled = rj.disabled = true; msg.className = 'msg'; msg.textContent = 'Making the Instagram Story images…';
+      var nm = $('#n-' + s.id).value;
+      storyImages(s, nm, photoUrls[s.id + '/' + order[0]]).then(function (stories) {
+        msg.textContent = 'Publishing…';
+        return api('/admin/approve/' + s.id, { method: 'POST', json: { name: nm, tagline: $('#t-' + s.id).value, story: $('#b-' + s.id).value, urgent: $('#u-' + s.id).checked, photoOrder: order, stories: stories } });
+      })
+        .then(function () { delete S.cache.pawsome; toast('Approved! It will be on Pawsome Pooches in about 2 minutes, while the website rebuilds.'); submissions(tab); })
         .catch(function (e) { msg.className = 'msg err'; msg.textContent = e.message; ap.disabled = rj.disabled = false; });
     };
     if (rj) rj.onclick = function () {
@@ -725,22 +749,22 @@
   function msgCount() { var c = $('[data-msgcount]'); if (c) c.textContent = unread() || ''; }
   function loadMsgs() { return api('/api/messages').then(function (j) { S.msgs = j.messages || []; msgCount(); return S.msgs; }); }
   function messages() {
-    main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form and the "Raise your hand" form on Get Involved. Only admins can see these.</p></div></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
+    main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form, the "Raise your hand" form, and "I want to adopt" on Pawsome Pooches, plus a note whenever a pup is marked adopted. Only admins can see these.</p></div></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
     var tab = 'all';
     function draw() {
       var all = S.msgs || [], list = all.filter(function (m) { return tab === 'all' || (tab === 'unread' ? !m.read : m.form === tab); });
-      var T = [['all', 'All', all.length], ['unread', 'Unread', unread()], ['contact', 'Contact', all.filter(function (m) { return m.form === 'contact'; }).length], ['involved', 'Get Involved', all.filter(function (m) { return m.form === 'involved'; }).length]];
+      var T = [['all', 'All', all.length], ['unread', 'Unread', unread()], ['contact', 'Contact', all.filter(function (m) { return m.form === 'contact'; }).length], ['involved', 'Get Involved', all.filter(function (m) { return m.form === 'involved'; }).length], ['adopt', 'Want to adopt', all.filter(function (m) { return m.form === 'adopt'; }).length], ['adopted', 'Adopted', all.filter(function (m) { return m.form === 'adopted'; }).length]];
       $('[data-mtabs]').innerHTML = T.map(function (t) { return '<button class="tab" aria-pressed="' + (t[0] === tab) + '" data-t="' + t[0] + '">' + t[1] + ' <span>' + t[2] + '</span></button>'; }).join('');
       $$('[data-t]').forEach(function (b) { b.onclick = function () { tab = b.getAttribute('data-t'); draw(); }; });
       if (!list.length) { $('[data-msgs]').innerHTML = '<p class="empty">' + (all.length ? 'Nothing here.' : 'No messages yet. When someone uses a form on the website, it shows up here.') + '</p>'; return; }
       $('[data-msgs]').innerHTML = list.map(function (m) {
-        var subj = m.form === 'contact' ? (m.topic || 'Contact form') : 'Raise your hand';
-        var rows = [['Phone', m.phone], ['Area', m.area], ['Interested in', (m.interests || []).join(', ')]].filter(function (r) { return r[1]; });
+        var subj = m.form === 'contact' ? (m.topic || 'Contact form') : m.form === 'adopt' ? '🏡 ' + (m.topic || 'Wants to adopt') : m.form === 'adopted' ? '🎉 ' + (m.topic || 'Adopted') : 'Raise your hand';
+        var rows = [['Pup', m.pupUrl ? '<a href="' + esc(m.pupUrl) + '" target="_blank" rel="noopener">' + esc(m.pupName || m.pup) + ' ↗</a>' : ''], ['Phone', m.phone && esc(m.phone)], [m.form === 'adopt' ? 'City' : 'Area', m.area && esc(m.area)], ['Interested in', esc((m.interests || []).join(', '))], ['Rescue', m.rescue && esc(m.rescue)], ['Details sent to', esc((m.sentTo || []).join(', '))]].filter(function (r) { return r[1]; });
         return '<section class="card msg-card' + (m.read ? '' : ' is-new') + '" data-id="' + esc(m.id) + '">' +
           '<div class="msg-top"><div><b>' + esc(m.name) + '</b> ' + (m.read ? '' : '<span class="pill">New</span>') + '<div class="hint">' + esc(subj) + ' · ' + esc(new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div></div>' +
-          '<a class="btn btn--blue btn--sm" href="mailto:' + esc(m.email) + '?subject=' + encodeURIComponent('Re: ' + subj + ' - Bentley\'s Playhouse') + '">✉️ Reply</a></div>' +
-          '<p class="msg-email"><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></p>' +
-          (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('') + '</dl>' : '') +
+          (m.email ? '<a class="btn btn--blue btn--sm" href="mailto:' + esc(m.email) + '?subject=' + encodeURIComponent('Re: ' + subj.replace(/^\S+ /, '') + ' - Bentley\'s Playhouse') + '">✉️ Reply</a>' : '') + '</div>' +
+          (m.email ? '<p class="msg-email"><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></p>' : '') +
+          (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' : '') +
           (m.message ? '<p class="msg-body">' + esc(m.message) + '</p>' : '') +
           ((m.files || []).length ? '<div class="msg-files"><b>📎 Attachments</b>' + m.files.map(function (f) { return '<button type="button" class="btn btn--ghost btn--sm" data-file="' + f.n + '">' + esc(f.name) + ' <span class="hint">' + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB') + '</span></button>'; }).join('') + '</div>' : '') +
           '<div class="row__act" style="justify-content:flex-start;margin-top:10px"><button class="btn btn--ghost btn--sm" data-rd>' + (m.read ? 'Mark as unread' : 'Mark as read') + '</button><button class="btn btn--danger btn--sm" data-dl>Delete</button></div></section>';

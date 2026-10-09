@@ -108,14 +108,15 @@ var T = window.BP_T || function (s) { return s; };
     if (d.vaccinated === 'yes') health.push(T('vaccinated'));
     if (d.microchipped === 'yes') health.push(T('microchipped'));
     var cap = function (s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; };
+    var pair = / & | and /.test(d.name || '');
     var url = (/^(localhost|127\.|\[)/.test(location.host) ? 'bentleysplayhouse.org' : location.host.replace(/^www\./, '')) + (window.BP_LANG === 'es' ? '/es' : '') + '/pawsome-pooches/' + d.slug;
     return {
       name: d.name, facts: facts, size: d.size ? T(d.size) : '',
       where: [d.where, d.city].filter(Boolean).join(', '),
       good: good.length ? T('Good with') + ' ' + list(good) : '',
       health: health.length ? cap(list(health)) : '',
-      ask: d.needs === 'foster' ? T('Foster me!') : d.needs === 'both' ? T('Adopt or foster me!') : T('Adopt me!'),
-      hi: T("Hi, I'm {name}!").replace('{name}', d.name),
+      ask: pair ? (d.needs === 'foster' ? T('Foster us!') : d.needs === 'both' ? T('Adopt or foster us!') : T('Adopt us!')) : d.needs === 'foster' ? T('Foster me!') : d.needs === 'both' ? T('Adopt or foster me!') : T('Adopt me!'),
+      hi: (pair ? T("Hi, we're {name}!") : T("Hi, I'm {name}!")).replace('{name}', d.name), pair: pair,
       url: url
     };
   }
@@ -192,6 +193,152 @@ var T = window.BP_T || function (s) { return s; };
     }
   };
 
+
+  /* ---------- feed posts (1080x1350, Instagram's tallest feed size): 6 proposals ---------- */
+  var FW = 1080, FH = 1350, SERIF = 'Georgia, "Times New Roman", serif';
+  function fwords(d, w) {
+    var where = d.where || '';
+    var via = d.loc === 'family' ? T('Rehoming with their family') : /^(rescue|foster|other)$/.test(d.loc || '') && where ? T('Adopt through') + ' ' + where : where ? T('At') + ' ' + where : '';
+    return { via: via, dm: d.ig || '', city: d.city || '', short: (w.url || '').replace(/^www\./, ''), age: w.facts.split(' · ')[0] || '', sex: d.sex ? T(d.sex) : '', breed: d.breed || '' };
+  }
+  function cork(c, w, h) {
+    c.fillStyle = '#C49A63'; c.fillRect(0, 0, w, h);
+    specks(c, 0, 0, w, h, 5200, ['rgba(120,78,36,.45)', 'rgba(232,200,150,.5)', 'rgba(90,58,26,.35)'], 2.6, 11);
+    var g = c.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(60,35,10,.35)'); c.fillStyle = g; c.fillRect(0, 0, w, h);
+  }
+  function pin(c, x, y, color) {
+    shadow(c, 8, 6, 0.4); c.fillStyle = color; c.beginPath(); c.arc(x, y, 22, 0, 7); c.fill(); noShadow(c);
+    var g = c.createRadialGradient(x - 7, y - 8, 2, x, y, 22); g.addColorStop(0, 'rgba(255,255,255,.75)'); g.addColorStop(0.4, 'rgba(255,255,255,0)'); c.fillStyle = g; c.beginPath(); c.arc(x, y, 22, 0, 7); c.fill();
+  }
+  function check(c, x, y, color) { c.strokeStyle = color; c.lineWidth = 5; c.lineCap = 'round'; c.beginPath(); c.moveTo(x, y - 12); c.lineTo(x + 11, y); c.lineTo(x + 30, y - 24); c.stroke(); }
+  var FEEDS = {
+    // 1 cork board: polaroid + index card, pushpins
+    1: function (c, d, w, img, logo) {
+      var f = fwords(d, w);
+      cork(c, FW, FH);
+      rot(c, 380, 455, -3, function () {
+        shadow(c, 26, 14, 0.4); c.fillStyle = '#fff'; c.fillRect(-300, -390, 600, 760); noShadow(c);
+        cover(c, img, -270, -360, 540, 560, d.focus);
+        c.fillStyle = BLUE; c.textAlign = 'center'; fit(c, w.name, 520, 700, 96, HAND, 50); c.fillText(w.name, 0, 300);
+      });
+      pin(c, 380, 90, '#E0483B');
+      rot(c, 650, 1085, 3, function () {
+        shadow(c, 20, 10, 0.35); c.fillStyle = '#FFFEF8'; c.fillRect(-370, -215, 740, 430); noShadow(c);
+        c.strokeStyle = 'rgba(82,113,255,.28)'; c.lineWidth = 2; for (var ly = -122; ly < 210; ly += 50) { c.beginPath(); c.moveTo(-370, ly); c.lineTo(370, ly); c.stroke(); }
+        c.strokeStyle = 'rgba(224,72,59,.5)'; c.beginPath(); c.moveTo(-310, -215); c.lineTo(-310, 215); c.stroke();
+        c.textAlign = 'left'; c.fillStyle = ORANGE; fit(c, w.ask, 620, 700, 54, DISPLAY, 30); c.fillText(w.ask, -290, -142);
+        var y = -80; c.fillStyle = INK; [w.facts, f.via, w.good, w.health].filter(Boolean).forEach(function (l) { fit(c, l, 640, 600, 31, BODY, 20); c.fillText(l, -290, y); y += 50; });
+        c.fillStyle = BLUE; fit(c, f.short, 640, 700, 30, DISPLAY, 18); c.fillText(f.short, -290, 188);
+      });
+      tape(c, 990, 880, 170, 46, 40, GOLD);
+      if (logo) { shadow(c, 12, 6, 0.35); c.drawImage(logo, 820, 90, 170, 170); noShadow(c); }
+      c.fillStyle = '#FFF6E6'; font(c, 700, 52, HAND); c.textAlign = 'center'; c.fillText('Pawsome Pooches', 905, 320);
+    },
+    // 2 classified ad in "The Pawsome Post"
+    2: function (c, d, w, img, logo) {
+      var f = fwords(d, w);
+      c.fillStyle = '#F3EEE2'; c.fillRect(0, 0, FW, FH); specks(c, 0, 0, FW, FH, 1600, ['rgba(80,60,30,.12)'], 1.4, 5);
+      c.fillStyle = INK; c.textAlign = 'center'; font(c, 700, 86, SERIF); c.fillText('The Pawsome Post', FW / 2, 128);
+      c.fillRect(60, 150, FW - 120, 5); c.fillRect(60, 162, FW - 120, 2);
+      font(c, 400, 26, SERIF); c.fillText("BENTLEY'S PLAYHOUSE  ·  " + (f.city || 'MIAMI').toUpperCase() + "  ·  ADOPTION EDITION", FW / 2, 200);
+      c.fillRect(60, 220, FW - 120, 2);
+      var head = (w.name + ' ' + (w.pair ? T('Seek a Forever Home') : T('Seeks Forever Home'))).toUpperCase(); c.fillStyle = INK; fit(c, head, FW - 120, 700, 74, SERIF, 34); c.fillText(head, FW / 2, 312);
+      c.fillStyle = INK; c.fillRect(60, 345, FW - 120, 570); cover(c, img, 66, 351, FW - 132, 558, d.focus);
+      var a = w.ask.replace('!', '').toUpperCase(); font(c, 700, 42, DISPLAY); var sw = Math.min(460, c.measureText(a).width + 60);
+      rot(c, FW - 70 - sw / 2, 420, 10, function () { c.strokeStyle = 'rgba(217,83,42,.92)'; c.lineWidth = 7; rr(c, -sw / 2, -48, sw, 96, 10); c.stroke(); c.fillStyle = 'rgba(217,83,42,.92)'; c.textAlign = 'center'; fit(c, a, sw - 50, 700, 42, DISPLAY, 18); c.fillText(a, 0, 15); });
+      c.fillStyle = INK; c.fillRect(538, 945, 3, 330);
+      c.textAlign = 'left'; font(c, 700, 30, SERIF); c.fillText(T('THE DETAILS'), 60, 975);
+      var y = 1020; [f.age, f.sex, f.breed, w.good, w.health].filter(Boolean).forEach(function (l) { fit(c, l, 450, 400, 30, SERIF, 18); c.fillText(l, 60, y); y += 46; });
+      font(c, 700, 30, SERIF); c.fillText(T('HOW TO APPLY'), 570, 975);
+      y = 1020; [f.via, f.dm ? 'DM ' + f.dm : ''].filter(Boolean).forEach(function (l) { font(c, 400, 30, SERIF); wrap(c, l, 450).slice(0, 2).forEach(function (t) { c.fillText(t, 570, y); y += 44; }); });
+      c.fillStyle = BLUE; fit(c, f.short, 450, 700, 28, DISPLAY, 16); c.fillText(f.short, 570, y + 10);
+      if (logo) c.drawImage(logo, 900, 1150, 120, 120);
+    },
+    // 3 split: photo left, Playhouse Blue panel right
+    3: function (c, d, w, img, logo) {
+      var f = fwords(d, w);
+      cover(c, img, 0, 0, 560, FH, d.focus);
+      c.fillStyle = '#5271FF'; c.fillRect(560, 0, FW - 560, FH);
+      c.fillStyle = 'rgba(255,255,255,.08)'; for (var yy = 30; yy < FH; yy += 44) for (var xx = 590; xx < FW; xx += 44) { c.beginPath(); c.arc(xx, yy, 2.5, 0, 7); c.fill(); }
+      tape(c, 560, 120, 200, 52, 82, GOLD);
+      if (logo) c.drawImage(logo, 610, 70, 130, 130);
+      c.fillStyle = '#fff'; font(c, 700, 40, DISPLAY); c.textAlign = 'left'; c.fillText('Pawsome', 760, 124); c.fillText('Pooches', 760, 168);
+      rot(c, 610, 330, -3, function () { font(c, 700, 44, DISPLAY); var pw = c.measureText(w.ask).width + 56; c.fillStyle = ORANGE; rr(c, 0, -42, pw, 76, 38); c.fill(); c.fillStyle = INK; c.fillText(w.ask, 28, 12); });
+      c.fillStyle = '#fff'; var ns = fit(c, w.name, 430, 700, 130, DISPLAY, 50); c.fillText(w.name, 606, 300 + 120 + ns * 0.35);
+      var y = 600; [w.facts, f.via, w.good, w.health].filter(Boolean).forEach(function (l) {
+        check(c, 612, y - 4, GOLD); c.fillStyle = '#fff'; font(c, 600, 31, BODY);
+        var ls = wrap(c, l, 380).slice(0, 3); ls.forEach(function (t, i) { c.fillText(t, 660, y + i * 40); }); y += ls.length * 40 + 30;
+      });
+      c.fillStyle = GOLD; rr(c, 600, 1190, 440, 92, 46); c.fill();
+      c.fillStyle = INK; c.textAlign = 'center'; var cut = f.short.indexOf('/'), u1 = cut > 0 ? f.short.slice(0, cut) : f.short, u2 = cut > 0 ? f.short.slice(cut) : '';
+      if (u2) { fit(c, u1, 390, 700, 28, DISPLAY, 14); c.fillText(u1, 820, 1228); fit(c, u2, 390, 600, 24, BODY, 14); c.fillText(u2, 820, 1262); } else { fit(c, u1, 390, 700, 28, DISPLAY, 14); c.fillText(u1, 820, 1246); }
+    },
+    // 4 bulletin-board flyer with tear-off tabs
+    4: function (c, d, w, img, logo) {
+      var f = fwords(d, w);
+      cork(c, FW, FH);
+      rot(c, FW / 2, FH / 2 + 10, -1.5, function () {
+        var x = -440, y = -620, pw = 880, ph = 1240, tabsY = ph - 230;
+        shadow(c, 28, 14, 0.38); c.fillStyle = '#FFFDF6'; c.beginPath(); c.moveTo(x, y); c.lineTo(x + pw, y); c.lineTo(x + pw, y + ph);
+        var n = 7, tw = pw / n; for (var i = n - 1; i >= 0; i--) { if (i === 2) { c.lineTo(x + tw * (i + 1), y + tabsY + 18); c.lineTo(x + tw * i, y + tabsY + 22); continue; } c.lineTo(x + tw * (i + 1) - 4, y + ph); c.lineTo(x + tw * i + 4, y + ph); c.lineTo(x + tw * i + 2, y + tabsY + 20); } c.lineTo(x, y + tabsY + 20); c.closePath(); c.fill(); noShadow(c);
+        c.fillStyle = BLUE; c.textAlign = 'center'; fit(c, w.ask.toUpperCase(), 600, 700, 110, DISPLAY, 50); c.fillText(w.ask.toUpperCase(), -60, y + 130);
+        c.fillStyle = ORANGE; fit(c, w.hi, 600, 700, 64, HAND, 36); c.fillText(w.hi, -60, y + 200);
+        c.save(); rr(c, x + 60, y + 235, pw - 120, 470, 24); c.clip(); cover(c, img, x + 60, y + 235, pw - 120, 470, d.focus); c.restore();
+        var ly = y + 765; c.fillStyle = INK; [w.facts, f.via, w.good, w.health].filter(Boolean).forEach(function (l) { fit(c, l, 760, 600, 32, BODY, 20); c.fillText(l, 0, ly); ly += 46; });
+        c.strokeStyle = 'rgba(31,29,43,.35)'; c.lineWidth = 3;
+        c.setLineDash([10, 8]); c.beginPath(); c.moveTo(x, y + ph - 210); c.lineTo(x + pw, y + ph - 210); c.stroke(); c.setLineDash([]);
+        for (var k = 0; k < n; k++) {
+          if (k === 2) continue;
+          if (k) { c.setLineDash([8, 8]); c.beginPath(); c.moveTo(x + tw * k, y + ph - 210); c.lineTo(x + tw * k, y + ph); c.stroke(); c.setLineDash([]); }
+          rot(c, x + tw * k + tw / 2, y + ph - 105, -90, function () { c.fillStyle = BLUE; font(c, 700, 22, DISPLAY); c.textAlign = 'center'; c.fillText(T('Meet') + ' ' + w.name, 0, -8); c.fillStyle = INK; font(c, 600, 15, BODY); c.fillText('bentleysplayhouse.org', 0, 18); });
+        }
+        if (logo) c.drawImage(logo, x + pw - 150, y + 40, 120, 120);
+      });
+      pin(c, 175, 80, '#2F45C8'); pin(c, 905, 70, '#FF914D');
+    },
+    // 5 trading card
+    5: function (c, d, w, img, logo) {
+      var f = fwords(d, w);
+      var g = c.createLinearGradient(0, 0, FW, FH); g.addColorStop(0, '#5271FF'); g.addColorStop(1, '#8C52FF'); c.fillStyle = g; c.fillRect(0, 0, FW, FH);
+      paw(c, 90, 120, 60, 'rgba(255,255,255,.15)'); paw(c, 1000, 1250, 70, 'rgba(255,255,255,.15)'); paw(c, 990, 140, 40, 'rgba(255,211,107,.35)');
+      var x = 110, y = 70, cw = 860, ch = 1210;
+      shadow(c, 40, 18, 0.35); c.fillStyle = GOLD; rr(c, x, y, cw, ch, 44); c.fill(); noShadow(c);
+      c.fillStyle = '#fff'; rr(c, x + 22, y + 22, cw - 44, ch - 44, 30); c.fill();
+      c.fillStyle = INK; c.textAlign = 'left'; fit(c, w.name, 520, 700, 84, DISPLAY, 40); c.fillText(w.name, x + 56, y + 116);
+      font(c, 700, 34, DISPLAY); var aw = c.measureText(w.ask).width + 40; c.fillStyle = ORANGE; rr(c, x + cw - 56 - aw, y + 62, aw, 64, 32); c.fill(); c.fillStyle = INK; c.textAlign = 'center'; c.fillText(w.ask, x + cw - 56 - aw / 2, y + 106);
+      c.save(); rr(c, x + 56, y + 150, cw - 112, 560, 22); c.clip(); cover(c, img, x + 56, y + 150, cw - 112, 560, d.focus); c.restore();
+      c.strokeStyle = GOLD; c.lineWidth = 6; rr(c, x + 56, y + 150, cw - 112, 560, 22); c.stroke();
+      var stats = [[T('AGE'), f.age], [T('SEX'), f.sex], [T('BREED'), f.breed], [T('GOOD WITH'), (function (g) { g = g.replace(/^\S+ \S+ /, ''); return g ? g.charAt(0).toUpperCase() + g.slice(1) : T('Ask us'); })(w.good || '')]];
+      stats.forEach(function (s, i) {
+        var bx = x + 56 + (i % 2) * 382, by = y + 740 + Math.floor(i / 2) * 150;
+        c.fillStyle = '#EEF1FF'; rr(c, bx, by, 366, 134, 18); c.fill();
+        c.fillStyle = 'rgba(31,29,43,.6)'; c.textAlign = 'left'; font(c, 800, 22, BODY); c.fillText(s[0], bx + 22, by + 40);
+        c.fillStyle = INK; fit(c, s[1] || '—', 320, 700, 38, DISPLAY, 20); c.fillText(s[1] || '—', bx + 22, by + 96);
+      });
+      c.fillStyle = BLUE; rr(c, x + 56, y + 1050, cw - 112, 104, 18); c.fill();
+      if (logo) c.drawImage(logo, x + 70, y + 1060, 84, 84);
+      c.fillStyle = '#fff'; c.textAlign = 'left'; fit(c, f.via || 'Pawsome Pooches', 560, 700, 30, DISPLAY, 18); c.fillText(f.via || 'Pawsome Pooches', x + 172, y + 1094);
+      c.fillStyle = GOLD; fit(c, f.short, 560, 700, 24, DISPLAY, 14); c.fillText(f.short, x + 172, y + 1132);
+    },
+    // 6 "Hello, my name is" sticker on a big photo
+    6: function (c, d, w, img, logo) {
+      var f = fwords(d, w);
+      cover(c, img, 0, 0, FW, 930, d.focus);
+      c.fillStyle = '#FBF6EA'; c.fillRect(0, 930, FW, FH - 930);
+      c.fillStyle = GOLD; c.fillRect(0, 922, FW, 12);
+      rot(c, 300, 840, -6, function () {
+        shadow(c, 22, 10, 0.35); c.fillStyle = '#fff'; rr(c, -250, -150, 500, 300, 26); c.fill(); noShadow(c);
+        c.save(); rr(c, -250, -150, 500, 300, 26); c.clip(); c.fillStyle = '#E0483B'; c.fillRect(-250, -150, 500, 108); c.fillRect(-250, 126, 500, 24); c.restore();
+        c.fillStyle = '#fff'; c.textAlign = 'center'; font(c, 800, 52, DISPLAY); c.fillText('HELLO', 0, -82); font(c, 600, 26, BODY); c.fillText(T('my name is'), 0, -52);
+        c.fillStyle = INK; fit(c, w.name, 440, 700, 108, HAND, 50); c.fillText(w.name, 0, 75);
+      });
+      rot(c, 830, 1000, 3, function () { font(c, 700, 46, DISPLAY); var pw = c.measureText(w.ask).width + 60; c.fillStyle = ORANGE; rr(c, -pw / 2, -44, pw, 80, 40); c.fill(); c.fillStyle = INK; c.textAlign = 'center'; c.fillText(w.ask, 0, 12); });
+      c.textAlign = 'left'; var y = 1100; [w.facts, f.via, w.good].filter(Boolean).forEach(function (l) { c.fillStyle = INK; fit(c, l, 760, 600, 34, BODY, 20); c.fillText(l, 70, y); y += 52; });
+      c.fillStyle = BLUE; fit(c, f.short, 760, 700, 32, DISPLAY, 18); c.fillText(f.short, 70, y + 20);
+      if (logo) c.drawImage(logo, 880, 1150, 140, 140);
+    }
+  };
+
   var STYLES = [[3, 'Scrapbook'], [4, 'Ticket'], [5, 'Poster']];
   function data(btn) { return JSON.parse(btn.getAttribute('data-story')); }
   function render(btn, st) {
@@ -199,15 +346,19 @@ var T = window.BP_T || function (s) { return s; };
     if (cache[key]) return cache[key];
     var d; try { d = data(btn); } catch (e) { return Promise.reject(e); }
     cache[key] = Promise.all([loadImg(d.photo), loadImg(d.logo), fontsReady()]).then(function (r) {
-      var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      var feed = /^f\d$/.test(String(st)), cv = document.createElement('canvas'); cv.width = feed ? FW : W; cv.height = feed ? FH : H;
       var c = cv.getContext('2d'); c.textBaseline = 'alphabetic';
-      DESIGNS[st](c, d, words(d), r[0], r[1]);
+      (feed ? FEEDS[String(st).slice(1)] : DESIGNS[st])(c, d, words(d), r[0], r[1]);
       return new Promise(function (res, rej) { cv.toBlob(function (b) { b ? res(b) : rej(new Error('no image')); }, 'image/png'); });
     });
     cache[key].catch(function () { delete cache[key]; });
     return cache[key];
   }
-  function warmAll(btn) { STYLES.forEach(function (s) { render(btn, s[0]).catch(function () {}); }); }
+  var FEED_NAMES = { f1: 'Cork board', f2: 'Newspaper', f3: 'Split', f4: 'Tear-off flyer', f5: 'Trading card', f6: 'Name tag' };
+  var FP = (location.search.match(/[?&]fp=([1-6]|all)/) || [])[1];
+  var FEED_STYLES = !FP ? [] : FP === 'all' ? ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'].map(function (k, i) { return [k, (i + 1) + '. ' + FEED_NAMES[k]]; }) : [['f' + FP, FP + '. ' + FEED_NAMES['f' + FP]]];
+  function stylesOf(btn) { return btn._feed ? FEED_STYLES : STYLES; }
+  function warmAll(btn) { stylesOf(btn).forEach(function (s) { render(btn, s[0]).catch(function () {}); }); }
 
   function say(btn, msg) {
     var s = btn.closest('.pp-share').querySelector('.pp-share__status'); if (!s) return;
@@ -215,17 +366,18 @@ var T = window.BP_T || function (s) { return s; };
   }
   // the style picker: three tappable previews; tapping one shares that design
   function picker(btn) {
-    var wrap = btn.closest('.pp-share'), panel = wrap.nextElementSibling;
-    if (panel && panel.classList.contains('pp-story-pick')) return panel;
-    var id = 'pp-story-pick-' + btn.getAttribute('data-pp-story');
+    var wrap = btn.closest('.pp-share'), panel = btn._panel;
+    if (panel) return panel;
+    var id = 'pp-' + (btn._feed ? 'feed' : 'story') + '-pick-' + btn.getAttribute('data-pp-story');
     panel = document.createElement('div'); panel.className = 'pp-story-pick'; panel.id = id; panel.hidden = true;
-    panel.innerHTML = '<p class="pp-story-pick__h">' + T('Pick a design, then tap it to share') + '</p><div class="pp-story-pick__row" role="group" aria-label="' + T('Story designs') + '"></div>';
+    panel.innerHTML = '<p class="pp-story-pick__h">' + (btn._feed ? T('Pick a post, then tap it to share') : T('Pick a design, then tap it to share')) + '</p><div class="pp-story-pick__row' + (btn._feed ? ' pp-story-pick__row--feed' : '') + '" role="group" aria-label="' + (btn._feed ? T('Post designs') : T('Story designs')) + '"></div>';
     var row = panel.querySelector('.pp-story-pick__row');
-    STYLES.forEach(function (s) {
+    btn._panel = panel;
+    stylesOf(btn).forEach(function (s) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'pp-story-opt is-loading';
       b.innerHTML = '<span class="pp-story-opt__img"><img alt=""></span><span class="pp-story-opt__label">' + T(s[1]) + '</span>';
-      b.setAttribute('aria-label', T('Share the') + ' ' + T(s[1]).toLowerCase() + ' ' + T('design to your story'));
-      b.addEventListener('click', function () { if (window.bpTrack) window.bpTrack('share_to_stories_' + s[1].toLowerCase(), { pup: btn.getAttribute('data-pp-story'), design: s[1].toLowerCase() }); share(btn, s[0]); });
+      b.setAttribute('aria-label', T('Share the') + ' ' + T(s[1]).toLowerCase() + ' ' + (btn._feed ? T('post') : T('design to your story')));
+      b.addEventListener('click', function () { if (window.bpTrack) window.bpTrack((btn._feed ? 'share_post_' : 'share_to_stories_') + String(s[0]), { pup: btn.getAttribute('data-pp-story'), design: s[1].toLowerCase() }); share(btn, s[0]); });
       row.appendChild(b);
       render(btn, s[0]).then(function (blob) { b.querySelector('img').src = URL.createObjectURL(blob); b.classList.remove('is-loading'); }, function () { b.classList.remove('is-loading'); });
     });
@@ -234,6 +386,12 @@ var T = window.BP_T || function (s) { return s; };
     return panel;
   }
   function prep(root) {
+    // preview: a "Share a Post" button next to Share to Stories
+    if (FEED_STYLES.length) Array.prototype.forEach.call((root || document).querySelectorAll('.pp-story-btn:not([data-pp-feedmade])'), function (sb) {
+      sb.setAttribute('data-pp-feedmade', '1');
+      var fb = sb.cloneNode(true); fb.classList.remove('pp-story-btn'); fb.classList.add('pp-feed-btn'); fb.removeAttribute('data-pp-feedmade'); fb._feed = true;
+      fb.querySelector('span').textContent = T('Share a Post'); sb.parentNode.insertBefore(fb, sb.nextSibling);
+    });
     Array.prototype.forEach.call((root || document).querySelectorAll('[data-pp-story]'), function (btn) {
       if (btn._story) return; btn._story = true;
       btn.setAttribute('aria-expanded', 'false');
@@ -250,10 +408,10 @@ var T = window.BP_T || function (s) { return s; };
     var link = location.origin + (window.BP_LANG === 'es' ? '/es' : '') + '/pawsome-pooches/' + d.slug + '/';
     var copied = navigator.clipboard ? navigator.clipboard.writeText(link).then(function () { return true; }, function () { return false; }) : Promise.resolve(false);
     render(btn, st).then(function (blob) {
-      var file = new File([blob], d.slug + '-story.png', { type: 'image/png' });
+      var file = new File([blob], d.slug + (btn._feed ? '-post.png' : '-story.png'), { type: 'image/png' });
       var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
       if (touch && navigator.canShare && navigator.canShare({ files: [file] })) {
-        say(btn, T('Pick Instagram, then Story. Link copied: add a Link sticker and paste it.'));
+        say(btn, btn._feed ? T('Pick Instagram, then Feed. Link copied: paste it in your caption.') : T('Pick Instagram, then Story. Link copied: add a Link sticker and paste it.'));
         navigator.share({ files: [file] }).catch(function (e) { if (e && e.name === 'AbortError') return; download(blob, d.slug); copied.then(function (ok) { say(btn, saved(ok)); }); });
         return;
       }

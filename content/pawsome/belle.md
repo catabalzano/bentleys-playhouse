@@ -1,15 +1,17 @@
 ---
 name: Belle
 status: available
+oldSlugs:
+  - jennifer-vasquez
 featuredWeek: 2026-10-07
 urgent: false
 needs: adoption
 photos:
-  - /assets/img/pawsome/jennifer-vasquez-3.jpg
-  - /assets/img/pawsome/jennifer-vasquez.jpg
-  - /assets/img/pawsome/jennifer-vasquez-2.jpg
-  - /assets/img/pawsome/jennifer-vasquez-4.jpg
-  - /assets/img/pawsome/jennifer-vasquez-5.jpg
+  - /assets/img/pawsome/belle-3.jpg
+  - /assets/img/pawsome/belle.jpg
+  - /assets/img/pawsome/belle-2.jpg
+  - /assets/img/pawsome/belle-4.jpg
+  - /assets/img/pawsome/belle-5.jpg
 photoAlt: Belle, American bulldog mix
 breed: American bulldog mix
 age: "5"

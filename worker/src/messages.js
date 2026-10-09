@@ -83,7 +83,7 @@ export async function receiveMessage(req, env, url) {
   for (const [i, x] of files.entries()) await env.SUBMISSIONS.put(`msgf:${m.id}:${i}`, x.buf, { metadata: { name: x.name, type: x.type } });
   await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m));
   await env.SUBMISSIONS.put(rlKey, String(used + 1), { expirationTtl: 3700 });
-  try { await alert(env, m); } catch (e) { console.error('message alert', e); }
+  if (env.ALERTS !== 'off') try { await alert(env, m); } catch (e) { console.error('message alert', e); }
   return json({ ok: true });
 }
 
@@ -93,7 +93,7 @@ async function alert(env, m) {
   const inbox = `${env.SITE_URL || ''}/admin/#messages`;
   const html = `<div style="font-family:Arial,sans-serif;color:#1F1D2B;max-width:560px"><h2 style="color:#2F45C8;margin:0 0 4px">New message from ${h(m.name)}</h2><p style="margin:0 0 14px;color:#5c5a72">${h(FORMS[m.form])} · reply to this email to answer them.</p><table style="border-collapse:collapse;font-size:14px">${rows.map(([k, v]) => `<tr><td style="padding:4px 14px 4px 0;color:#5c5a72;font-weight:bold">${h(k)}</td><td>${h(v)}</td></tr>`).join('')}</table>${m.message ? `<p style="white-space:pre-wrap;margin:16px 0">${h(m.message)}</p>` : ''}<p><a href="${h(inbox)}">Open the inbox in the admin</a></p></div>`;
   const text = `New message from ${m.name} (${FORMS[m.form]})\n\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n${m.message}\n\nInbox: ${inbox}\n`;
-  const res = await fetch(`${env.RESEND_API || 'https://api.resend.com'}/emails`, { method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: env.NOTIFY_FROM || "Bentley's Playhouse <onboarding@resend.dev>", to: [env.NOTIFY_EMAIL], reply_to: m.email, subject: `New message: ${m.name} (${FORMS[m.form]})`, html, text }) });
+  const res = await fetch(`${env.RESEND_API || 'https://api.resend.com'}/emails`, { method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: env.MAIL_FROM || env.NOTIFY_FROM || "Bentley's Playhouse <hello@bentleysplayhouse.org>", to: [env.NOTIFY_EMAIL], reply_to: m.email, subject: `New message: ${m.name} (${FORMS[m.form]})`, html, text }) });
   if (!res.ok) console.error('resend', res.status, await res.text());
 }
 

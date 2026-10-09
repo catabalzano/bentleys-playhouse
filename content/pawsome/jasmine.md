@@ -10,8 +10,8 @@ photos:
   - /assets/img/pawsome/jasmine-3.jpg
   - /assets/img/pawsome/jasmine-5.jpg
   - /assets/img/pawsome/jasmine-4.jpg
-photoAlt: Jasmine, German Sheperd
-breed: German Sheperd
+photoAlt: Jasmine, German shepherd
+breed: German shepherd
 age: "6"
 sex: Female
 fixed: "yes"

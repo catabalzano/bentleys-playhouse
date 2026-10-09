@@ -1536,3 +1536,35 @@ fieldset.field { align-content: start; }
 .footer__col .soc { display: flex; gap: .6rem; }
 .footer__col .soc a { width: 44px; height: 44px; }
 .footer__col .soc a svg { width: 20px; height: 20px; }
+
+/* ---------- required marks ---------- */
+.must { color: #C42B2B; font-weight: 800; margin-left: .1em; }
+
+/* ---------- Pawsome Pooches: "I want to adopt" ---------- */
+.pp-adopt { margin-top: .6rem; }
+.pp-adopt__open { width: 100%; justify-content: center; }
+.pp-adopt__form { margin-top: 1rem; padding: 1.1rem 1.1rem .4rem; background: #fff; border-radius: 18px; box-shadow: 0 0 0 2px var(--line); }
+.pp-adopt__form .form__grid { gap: .8rem; }
+.pp-adopt__form .field { margin-bottom: .2rem; }
+.pp-adopt__h { font-family: var(--font-display); font-weight: 700; font-size: 1.12rem; margin: 0 0 .25rem; }
+.pp-adopt__ts { margin: .8rem 0 .2rem; }
+.pp-adopt__done { margin-top: .4rem; padding: 1.1rem 1.15rem; background: #fff; border-radius: 18px; box-shadow: 0 0 0 2px var(--good, #2E8B57), 5px 5px 0 var(--gold); }
+.pp-adopt__done:focus { outline: none; }
+.pp-adopt__done p { margin: 0 0 .6rem; }
+.pp-adopt__yay { display: flex; align-items: center; gap: .45rem; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; }
+.pp-adopt__yay svg { flex: none; color: #fff; background: #2E8B57; border-radius: 50%; padding: 3px; }
+.pp-adopt__reach { margin-top: .4rem; }
+.pp-adopt__reach .btn { flex: 1 1 auto; justify-content: center; }
+
+/* ---------- "Mark as adopted" page ---------- */
+.ad-box { margin-bottom: 3rem; }
+.pps-org { margin: 1rem 0 1.2rem; padding: 1rem 1.1rem .3rem; background: var(--tint-blue); border-radius: 18px; }
+.pps-org__h { font-family: var(--font-display); font-weight: 700; font-size: 1.08rem; margin: 0 0 .2rem; }
+/* 404: confused Bentley + "your pup page is on its way" */
+.nf-opt .nf-art { width: min(300px, 70vw); height: auto; display: block; margin-inline: auto; }
+.nf-pup { max-width: 34rem; margin: .4rem auto 1.4rem; padding: 1.1rem 1.25rem; background: #fff; border-radius: 20px; box-shadow: 0 0 0 2px var(--line), 5px 5px 0 var(--gold); text-align: left; }
+.nf-pup p { margin: 0 0 .5rem; }
+.nf-pup__h { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; }
+.nf-pup__wait { color: var(--muted); font-size: .92rem; margin: 0 !important; }
+.pp-story-pick__row--feed { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 30rem; }
+.pp-story-pick__row--feed .pp-story-opt__img { aspect-ratio: 4 / 5; }

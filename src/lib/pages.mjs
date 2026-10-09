@@ -5,6 +5,7 @@ import {
 import { mdasBlock } from './pages2.mjs';
 import { socialButtons } from './layout.mjs';
 import { doodle } from './doodles.mjs';
+import { confusedBentley } from './confused.mjs';
 import { pawsomeHome, img } from './pages3.mjs';
 import { heroDoorway, photoSlot } from './art.mjs';
 import { giftBlock, donateVisible } from './donate.mjs';
@@ -877,12 +878,36 @@ export function cookies() {
 }
 
 export function notFound() {
-  return `<section class="wrap nf">
-  <img src="${asset('img/bentley-head.png')}" alt="" width="160" height="185">
+  // Preview: ?nf=1-4 shows one of the 4 "confused Bentley" options (Cata is picking one)
+  return `<section class="wrap nf" data-nf>
+  <img class="nf-head" src="${asset('img/bentley-head.png')}" alt="" width="160" height="185">
+  ${[1, 2, 3, 4].map((v) => `<div class="nf-opt" data-nf-opt="${v}" hidden>${confusedBentley(v)}</div>`).join('')}
   <h1 class="page-h">This Page Wandered Off</h1>
-  <p class="page-lede">We couldn't find that page. These might help:</p>
+  <p class="page-lede" data-nf-lede>We couldn't find that page. These might help:</p>
+  <div class="nf-pup" data-nf-pup hidden>
+    <p class="nf-pup__h">Just approved a pup?</p>
+    <p>New Pawsome Pooches pages take about 2 minutes to go live while the website rebuilds. We're working as quickly as pawsible! This page will refresh on its own as soon as it's ready.</p>
+    <p class="nf-pup__wait" data-nf-wait role="status" aria-live="polite">Checking…</p>
+  </div>
   <div class="btn-row">${button('Get Help', 'get-help/', { ic: 'search' })}${button('Resource library', 'resources/', { variant: 'ghost' })}${button('Home', '', { variant: 'ghost', ic: 'home' })}</div>
-</section>`;
+</section>
+<script>(function () {
+  var v = (location.search.match(/[?&]nf=([1-4])/) || [])[1];
+  if (v) { document.querySelector('.nf-head').hidden = true; document.querySelector('[data-nf-opt="' + v + '"]').hidden = false; }
+  // a brand-new pup page that isn't built yet: explain, then reload once it exists
+  var m = location.pathname.match(new RegExp('^/(es/)?pawsome-pooches/([a-z0-9-]+)/?$'));
+  if (!m || /^(submit|adopted)$/.test(m[2])) return;
+  document.querySelector('[data-nf-pup]').hidden = false;
+  document.querySelector('[data-nf-lede]').hidden = true;
+  var wait = document.querySelector('[data-nf-wait]'), tries = 0;
+  (function check() {
+    fetch(location.pathname + '?live=' + Date.now(), { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+      if (r.ok) { wait.textContent = "It's ready! Loading…"; location.reload(); return; }
+      tries++; wait.textContent = tries < 18 ? "Still building… we'll check again in a few seconds." : "Still not ready. Please try again in a few minutes.";
+      if (tries < 18) setTimeout(check, 10000);
+    }).catch(function () { setTimeout(check, 15000); });
+  })();
+})();</script>`;
 }
 
 export function fenixPanel(variant = '') {

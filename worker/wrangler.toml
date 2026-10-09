@@ -11,7 +11,12 @@ SITE_URL = "https://bentleysplayhouse.org"
 ALLOWED_ORIGINS = "https://bentleysplayhouse.org,https://www.bentleysplayhouse.org,http://localhost:8765"
 MAX_PER_HOUR = "6"
 NOTIFY_EMAIL = "hello@bentleysplayhouse.org"
-NOTIFY_FROM = "Bentley's Playhouse <onboarding@resend.dev>"
+NOTIFY_FROM = "Bentley's Playhouse <hello@bentleysplayhouse.org>"
+# Emails people get (submission received, listing live, adoption interest). Needs the domain verified in Resend.
+MAIL_FROM = "Bentley's Playhouse <hello@bentleysplayhouse.org>"
+MAIL_REPLY_TO = "hello@bentleysplayhouse.org"
+# Alert emails to us about new submissions/messages: off (Cata checks the admin instead). Set to "on" to get them.
+ALERTS = "off"
 # RESEND_API_KEY is a secret, set by the deploy workflow from the GitHub secret of the same name.
 # TURNSTILE_SECRET is set as a secret (wrangler secret put TURNSTILE_SECRET), never here.
 
@@ -24,4 +29,4 @@ id = "5608dc2b1e8d44a091479bf3d2ddde8a"
 binding = "AI"
 
 [triggers]
-crons = ["*/20 * * * *"]
+crons = ["*/20 * * * *", "*/5 * * * *"]

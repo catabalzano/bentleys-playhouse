@@ -73,6 +73,66 @@ function contactButtons(d) {
   return out.join('');
 }
 
+// ---------- "I want to adopt": tell us + get the rescue's details ----------
+const digits = (v) => String(v || '').replace(/[^\d+]/g, '');
+const igName = (v) => { v = String(v || '').trim(); const m = /instagram\.com\/([\w.]+)/i.exec(v); return m ? m[1] : v.replace(/^@/, ''); };
+/** One-tap ways to reach whoever handles the adoption (call, text, email, Instagram DM, website). */
+export function reachButtons(d) {
+  const c = d.contact || {}, verb = d.needs === 'foster' ? 'foster' : 'adopt';
+  const hello = `Hi! I saw ${d.name} on Bentley's Playhouse and I'd love to ${verb} ${d.sex && /^f/i.test(d.sex) ? 'her' : d.sex && /^m/i.test(d.sex) ? 'him' : 'them'}.`;
+  const site = c.website || (/^https?:/.test(d.loc.url || '') && !/instagram\.com/.test(d.loc.url) ? d.loc.url : '');
+  const ig = igName(c.instagram || (/instagram\.com|^@/.test(d.loc.url || '') ? d.loc.url : ''));
+  const out = [];
+  if (c.phone) out.push(`<a class="btn btn--ghost" href="tel:${esc(digits(c.phone))}">${icon('phone', { size: 20 })}<span>Call ${esc(c.phone)}</span></a>`, `<a class="btn btn--ghost" href="sms:${esc(digits(c.phone))}?&amp;body=${encodeURIComponent(hello)}">${icon('chat', { size: 20 })}<span>Text</span></a>`);
+  if (c.email) out.push(`<a class="btn btn--ghost" href="mailto:${esc(c.email)}?subject=${encodeURIComponent(`${verb === 'foster' ? 'Fostering' : 'Adopting'} ${d.name}`)}&amp;body=${encodeURIComponent(hello + '\n\n' + `${ctx.site.siteUrl}/pawsome-pooches/${d.slug}/`)}">${icon('mail', { size: 20 })}<span>Email ${esc(c.email)}</span></a>`);
+  if (ig && ig !== 'bentleysplayhouse') out.push(`<a class="btn btn--ghost" href="https://ig.me/m/${esc(ig)}" target="_blank" rel="noopener">${icon('instagram', { size: 20 })}<span>Message @${esc(ig)}</span><span class="visually-hidden"> (opens in a new tab)</span></a>`);
+  if (site) out.push(button('Website', site, { variant: 'ghost', ic: 'globe', externalLink: true }));
+  const t = d.loc.type;
+  if (!out.length && t.startsWith('mdas')) out.push(button('MDAS adoptions', ctx.mdas?.adoptionPage || 'https://www.miamidade.gov/global/animals/home.page', { variant: 'ghost', externalLink: true }));
+  if (!out.length && t === 'broward') out.push(button('Broward adoptable dogs', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { variant: 'ghost', externalLink: true }));
+  return out.join('');
+}
+function adoptPanel(d, HC) {
+  const verb = d.needs === 'foster' ? 'foster' : 'adopt', Verb = verb === 'foster' ? 'Foster' : 'Adopt';
+  const name = d.pair ? 'them' : esc(d.name);
+  const endpoint = (ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '';
+  const tsKey = (ctx.site.forms && ctx.site.forms.turnstileSiteKey) || (ctx.site.pawsome && ctx.site.pawsome.turnstileSiteKey) || '';
+  const who = d.loc.type === 'family' ? '' : esc(d.loc.name || d.loc.meta.long || d.loc.meta.label);
+  const reach = reachButtons(d);
+  const id = 'ppi-' + esc(d.slug);
+  const lede = d.loc.type === 'family'
+    ? `Tap the button and tell us a bit about you. We'll connect you with ${esc(d.name)}'s family and help make sure it's a safe match.`
+    : `Tap the button and tell us a bit about you. Bentley's Playhouse gets your details right away${who ? `, and we'll show you how to reach ${who} directly` : ''}.`;
+  const f = (k, label, type = 'text', ac = '', extra = '') => `<div class="field"><label for="${id}-${k}">${label} <span class="must" aria-hidden="true">*</span></label><input id="${id}-${k}" name="${k}" type="${type}" required${ac ? ` autocomplete="${ac}"` : ''} ${extra}></div>`;
+  return `<div class="pp-howto"><${HC}>How to ${verb} ${name}</${HC}><p>${lede}</p></div>
+      <div class="pp-adopt" data-pp-adopt="${esc(d.slug)}">
+        <button type="button" class="btn btn--primary pp-adopt__open" aria-expanded="false" aria-controls="${id}">${icon('heart', { size: 20 })}<span>I Want to ${Verb} ${esc(d.name)}</span></button>
+        <form class="pp-adopt__form form" id="${id}" hidden novalidate${endpoint ? ` action="${esc(endpoint)}/interest"` : ''}>
+          <p class="pp-adopt__h">Tell Us About You</p>
+          <p class="hint">Every field with <span class="must">*</span> is required. We only share your details with ${who || 'the family'} if you say so below.</p>
+          <input type="hidden" name="pup" value="${esc(d.slug)}">
+          <div class="form__grid">
+            ${f('firstName', 'First name', 'text', 'given-name', 'maxlength="60"')}
+            ${f('lastName', 'Last name', 'text', 'family-name', 'maxlength="60"')}
+            ${f('city', 'City', 'text', 'address-level2', 'maxlength="80" placeholder="e.g., Kendall"')}
+            ${f('phone', 'Phone number', 'tel', 'tel', 'maxlength="30"')}
+            ${f('email', 'Email', 'email', 'email', 'maxlength="120"')}
+          </div>
+          <div class="field"><label for="${id}-message">Anything you'd like us to know? <span class="opt">(optional)</span></label><textarea id="${id}-message" name="message" rows="3" maxlength="1500" placeholder="Your home, other pets, your schedule…"></textarea></div>
+          ${who ? `<label class="pick pick--block"><input type="checkbox" name="share" value="yes" checked><span>Send my name and contact details to ${who} too, so they can reach me.</span></label>` : ''}
+          <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          ${tsKey ? `<div class="pp-adopt__ts" data-sitekey="${esc(tsKey)}"></div>` : ''}
+          <p class="form__status" role="status" aria-live="polite"></p>
+          <div class="btn-row"><button class="btn btn--primary" type="submit"${endpoint ? '' : ' disabled'}>${icon('paw', { size: 20 })}<span>Send</span></button></div>
+        </form>
+        <div class="pp-adopt__done" hidden tabindex="-1">
+          <p class="pp-adopt__yay">${icon('check', { size: 22 })} Bentley's Playhouse has been alerted!</p>
+          <p>Thank you for wanting to ${verb} ${esc(d.name)}. We emailed you the next steps<span data-pp-shared hidden>, and we sent your details to ${who}</span>.</p>
+          ${reach && who ? `<p class="pp-adopt__h">Reach ${who} Now</p><p>They handle ${esc(d.name)}'s adoption. Mention you found ${esc(d.name)} on Bentley's Playhouse.</p><div class="btn-row pp-adopt__reach">${reach}</div>` : `<p>We'll be in touch soon by email or phone.</p>`}
+        </div>
+      </div>`;
+}
+
 function howTo(d) {
   if (d.contact.instructions) return md(d.contact.instructions);
   const t = d.loc.type; const id = d.loc.animalId ? ` Bring ${esc(d.name)}'s animal ID (<strong>${esc(d.loc.animalId)}</strong>).` : '';
@@ -87,7 +147,7 @@ function howTo(d) {
 const storyData = (d) => JSON.stringify({ slug: d.slug, name: d.name, age: d.age || '', sex: d.sex || '', breed: d.breed || '', size: d.size || '', needs: d.needs || 'adoption',
   where: d.loc.type === 'rescue' && d.loc.name ? d.loc.name : d.loc.name || d.loc.meta.long || d.loc.meta.label, city: d.loc.city || '',
   fixed: yn(d.fixed), vaccinated: yn(d.vaccinated), microchipped: yn(d.microchipped), good: d.good,
-  photo: img(d.sharePhoto || d.photos[0] || ''), focus: /^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || '')) ? d.photoFocus : '', logo: asset('img/logo-badge.png') });
+  photo: img(d.sharePhoto || d.photos[0] || ''), loc: d.loc.type, ig: (() => { const v = (d.contact && d.contact.instagram) || ''; const m = /instagram\.com\/([\w.]+)/i.exec(v); const h = m ? m[1] : v.replace(/^@/, ''); return h && h !== 'bentleysplayhouse' ? '@' + h : ''; })(), focus: /^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || '')) ? d.photoFocus : '', logo: asset('img/logo-badge.png') });
 const focusOk = (d) => /^\d{1,3}% \d{1,3}%$/.test(String(d.photoFocus || ''));
 const focusStyle = (d) => (focusOk(d) ? ` style="object-position:${d.photoFocus}"` : '');
 const HEALTH = [['fixed', 'Spayed or neutered'], ['vaccinated', 'Vaccines up to date'], ['microchipped', 'Microchipped'], ['heartworm', 'Heartworm negative']];
@@ -121,7 +181,7 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
       ${d.loc.name && d.loc.meta.long && d.loc.type !== 'rescue' ? `<p class="pp-where__sub">${esc(d.loc.meta.long)}</p>` : ''}
       ${/^https?:\/\//.test(d.loc.url || '') ? `<p class="pp-where__sub"><a href="${esc(d.loc.url)}" target="_blank" rel="noopener">${esc(/instagram\.com/.test(d.loc.url) ? '@' + d.loc.url.replace(/\/+$/, '').split('/').pop() + ' on Instagram' : d.loc.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))} ↗</a></p>` : ''}
       ${[d.loc.city, d.loc.animalId && 'Animal ID ' + d.loc.animalId].filter(Boolean).length ? `<p class="pp-where__sub">${[d.loc.city, d.loc.animalId && 'Animal ID ' + d.loc.animalId].filter(Boolean).map(esc).join(' · ')}</p>` : ''}
-      ${d.status !== 'adopted' ? `<div class="pp-howto"><${HC}>How to ${d.needs === 'foster' ? 'foster' : 'adopt'} ${d.pair ? 'them' : esc(d.name)}</${HC}>${howTo(d)}</div><div class="btn-row">${contactButtons(d)}</div>` : `<p class="pp-where__sub">${esc(d.name)} found a home. Thank you to everyone who shared!</p>`}
+      ${d.status !== 'adopted' ? adoptPanel(d, HC) : `<p class="pp-where__sub">${esc(d.name)} found a home. Thank you to everyone who shared!</p>`}
     </div>
     <div class="pp-share">
       <button type="button" class="btn btn--ghost btn--small" data-pp-share="${esc(d.slug)}" data-title="${esc(d.name)}">${icon('share', { size: 18 })}<span>Share ${esc(d.name)}</span></button>
@@ -259,5 +319,31 @@ export function rescuesPage(rescues) {
   <div class="rescue-grid">${rescues.map(rescueCard).join('')}</div>
   ${!rescues.length ? previewNote('Add rescues in the admin (/admin) under Rescues you can help.') : ''}
   <p class="pp-back"><a class="arrow-link" href="${href('pawsome-pooches/')}">See their dogs in Pawsome Pooches ${icon('arrow', { size: 18 })}</a></p>
+</div>`;
+}
+
+// ---------- "Mark as adopted" (from the link in the listing email) ----------
+export function adoptedPage() {
+  const endpoint = (ctx.site.pawsome && ctx.site.pawsome.submitEndpoint) || '';
+  return `
+<section class="page-head page-head--pawsome"><div class="wrap wrap--text">
+  <h1 class="page-h" data-ad-title>Did Your Pup Find a Home?</h1>
+  <p class="page-lede" data-ad-lede>Tap the button to mark them as adopted on Pawsome Pooches. We'll update the listing right away.</p>
+</div></section>
+<div class="wrap wrap--text">
+  <div class="form-wrap ad-box" data-ad${endpoint ? ` data-endpoint="${esc(endpoint)}"` : ''}>
+    <div data-ad-ask>
+      <p>Once you confirm, the listing shows <strong>Adopted</strong>, people stop asking about this pup and Bentley's Playhouse gets a note.</p>
+      <div class="btn-row"><button type="button" class="btn btn--primary" data-ad-go>${icon('heart', { size: 20 })}<span data-ad-btn>Yes, Mark as Adopted</span></button></div>
+      <p class="hint">Not adopted yet? Just close this page. Nothing changes.</p>
+    </div>
+    <p class="form__status" data-ad-status role="status" aria-live="polite"></p>
+    <div data-ad-done hidden tabindex="-1">
+      <h2 class="section-h" data-ad-done-h>Congratulations!</h2>
+      <p data-ad-done-p>Thank you for helping this pup find a home. The listing now says Adopted.</p>
+      <p>We'd love a photo of them in their new home for a happy-tail post. Send it to <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a> or tag <a href="${esc(ctx.site.social.instagram.url)}" target="_blank" rel="noopener">@bentleysplayhouse</a>.</p>
+      <div class="btn-row"><a class="btn btn--ghost" href="${href('pawsome-pooches/')}" data-ad-link>See Pawsome Pooches</a></div>
+    </div>
+  </div>
 </div>`;
 }

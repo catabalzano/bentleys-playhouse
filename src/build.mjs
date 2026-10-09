@@ -121,9 +121,11 @@ function emit(route, opts) {
 }
 
 emit('', { home: true, bodyClass: 'home', title: 'Home', shareTitle: 'We Support the Pups, and the Heroes Who Help Them', shareKicker: 'Miami dog rescue',
-  description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data), scripts: ['js/pawsome.js', 'js/story.js'] });
-emit('pawsome-pooches/', { shareTitle: 'Pawsome Pooches: dogs in our community who need a home', shareKicker: 'Updated weekly', shareCategory: 'adopt-foster', sharePhoto: (() => { const d = pooches.find((x) => x.status !== 'adopted' && x.photos[0]); return d && (d.sharePhoto || d.photos[0]); })(), title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js', 'js/story.js'] });
-for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, shareTitle: d.status === 'adopted' ? `${d.name} found a home!` : `Meet ${d.name}`, shareKicker: d.status === 'adopted' ? 'Pawsome Pooches · Happy tail' : 'Pawsome Pooches · Adopt me', shareCategory: 'adopt-foster', sharePhoto: d.sharePhoto || d.photos[0], description: d.tagline || `Meet ${d.name}, looking for a home.`, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js', 'js/story.js'] });
+  description: "Bentley's Playhouse is a Miami dog rescue. Rescue, rehab, rehome, plus practical help if you've found, lost or rescued a dog.", body: () => P.home(data), scripts: ['js/pawsome.js', 'js/story.js', 'js/interest.js'] });
+emit('pawsome-pooches/', { shareTitle: 'Pawsome Pooches: dogs in our community who need a home', shareKicker: 'Updated weekly', shareCategory: 'adopt-foster', sharePhoto: (() => { const d = pooches.find((x) => x.status !== 'adopted' && x.photos[0]); return d && (d.sharePhoto || d.photos[0]); })(), title: 'Pawsome Pooches', description: 'Adoptable dogs in our community, updated weekly: Miami-Dade Animal Services (Doral and Medley), the Broward shelter, local rescues and families rehoming safely.', bodyClass: 'is-pawsome', body: () => P3.pawsomePage(pooches), scripts: ['js/pawsome.js', 'js/story.js', 'js/interest.js'] });
+for (const d of pooches) emit(`pawsome-pooches/${d.slug}/`, { title: `${d.name} · Pawsome Pooches`, shareTitle: d.status === 'adopted' ? `${d.name} found a home!` : `Meet ${d.name}`, shareKicker: d.status === 'adopted' ? 'Pawsome Pooches · Happy tail' : 'Pawsome Pooches · Adopt me', shareCategory: 'adopt-foster', sharePhoto: d.sharePhoto || d.photos[0], description: d.tagline || `Meet ${d.name}, looking for a home.`, bodyClass: 'is-pawsome', body: () => P3.pawsomeDogPage(d), scripts: ['js/pawsome.js', 'js/story.js', 'js/interest.js'] });
+// "Mark as adopted" page (link in the "your listing is live" email; asks before changing anything)
+emit('pawsome-pooches/adopted/', { title: 'Mark a Pup as Adopted', description: 'Tell Bentley\'s Playhouse a pup found a home.', noindex: true, bodyClass: 'is-pawsome', body: () => P3.adoptedPage(), scripts: ['js/adopted.js'] });
 emit('pawsome-pooches/submit/', { title: 'Submit a pup · Pawsome Pooches', shareTitle: 'Submit a pup to Pawsome Pooches', shareKicker: 'Rescues, volunteers & families', shareCategory: 'adopt-foster', description: 'Rescues, shelter volunteers and families can submit a dog who needs a home to be featured on Pawsome Pooches.', bodyClass: 'is-pawsome', body: () => PS.pawsomeSubmitPage(), scripts: ['js/pawsome-submit.js'] });
 emit('rescues-you-can-help/', { title: 'Rescues You Can Help', description: 'Miami-Dade rescues and shelters you can support by fostering, volunteering, sharing or sending supplies.', body: () => P3.rescuesPage(rescues) });
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
@@ -196,6 +198,11 @@ for (const j of shareJobs) {
   const ok = (await renderShare({ ...j, photo }, j.file)) || (photo && (await renderShare({ ...j, photo: undefined }, j.file)));
   if (!ok) fs.copyFileSync(path.join(ROOT, 'src/assets/img/og-image.png'), j.file);
 }
+// a light JPEG copy of each pup's share card, used at the top of the emails we send about that pup
+try {
+  const sharp = (await import('sharp')).default;
+  for (const j of shareJobs) if (/og\/pawsome-pooches--[^/]+\.png$/.test(j.file) && fs.existsSync(j.file)) await sharp(j.file).jpeg({ quality: 80, mozjpeg: true }).toFile(j.file.replace(/\.png$/, '.jpg'));
+} catch (e) { console.log('Email cards skipped:', e.message); }
 // Spanish site (/es/): translate every indexable English page with content/i18n/es.json
 const base = ctx.site.siteUrl.replace(/\/$/, '');
 const CONTENT_DIR = path.join(ROOT, 'content');
@@ -245,6 +252,28 @@ if (esOn && fs.existsSync(path.join(CONTENT_DIR, 'i18n/es.json'))) {
   console.log(`Spanish: ${esRoutes.length} pages, ${all.size - missing.length}/${all.size} strings translated${missing.length ? ` (${missing.length} missing → tmp-missing-es.json)` : ''}`);
 }
 sitemap.push(...esRoutes);
+
+// Pawsome Pooches: what the submissions service needs to know about each pup (rescue contacts for "I want to adopt")
+{
+  const abs = (u) => (u ? (/^https?:/.test(u) ? u : base + (u.startsWith('/') ? u : '/assets/img/' + u)) : '');
+  const idx = {};
+  for (const d of pooches) {
+    const c = d.contact || {};
+    idx[d.slug] = { name: d.name, status: d.status || 'available', needs: d.needs || 'adoption', url: `${base}/pawsome-pooches/${d.slug}/`, photo: `${base}/assets/og/pawsome-pooches--${d.slug}.jpg`, locType: d.loc.type, submissionId: d.submissionId || '',
+      rescue: d.loc.type === 'family' ? null : { name: d.loc.name || d.loc.meta.long || d.loc.meta.label, city: d.loc.city || '', email: c.email || '', phone: c.phone || '', instagram: c.instagram || '', website: c.website || (/^https?:/.test(d.loc.url || '') ? d.loc.url : '') } };
+  }
+  fs.writeFileSync(path.join(OUT, 'pawsome-pooches/pups.json'), JSON.stringify(idx));
+  // old links keep working when a pup's page is renamed (front matter: oldSlugs)
+  const redirect = (to) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved</title><meta name="robots" content="noindex"><link rel="canonical" href="${to}"><meta http-equiv="refresh" content="0; url=${to}"><script>location.replace(${JSON.stringify(to)} + location.search + location.hash)</script></head><body><p><a href="${to}">This page moved here.</a></p></body></html>`;
+  for (const d of pooches) for (const old of [].concat(d.oldSlugs || [])) {
+    if (!/^[a-z0-9-]+$/.test(old) || old === d.slug) continue;
+    for (const pre of ['', ...(esRoutes.length ? ['es/'] : [])]) {
+      const f = path.join(OUT, pre, 'pawsome-pooches', old, 'index.html');
+      fs.mkdirSync(path.dirname(f), { recursive: true });
+      fs.writeFileSync(f, redirect(`${base}/${pre}pawsome-pooches/${d.slug}/`));
+    }
+  }
+}
 // sitemap + robots
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.map((r) => `  <url><loc>${base}/${r}</loc></url>`).join('\n')}\n</urlset>\n`);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), ctx.mode === 'live' ? `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n` : 'User-agent: *\nDisallow: /\n');

@@ -1,6 +1,8 @@
 import { handleAuth, handleContent, sessionOk, githubToken } from './admin.js';
 import { receiveMessage, handleMessages } from './messages.js';
 import { translateMissing } from './translate.js';
+import { receiveInterest, markAdopted, queueApprovalEmail, sendQueuedEmails } from './pups.js';
+import { sendMail, submissionReceived } from './mail.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -24,7 +26,11 @@ const YNS = ['yes', 'no', 'some', 'unknown'];
 
 export default {
   // every 20 minutes: translate new English text on the site into Spanish (see translate.js)
-  async scheduled(event, env, ctx) { ctx.waitUntil(translateMissing(env, { limit: 60 }).catch((e) => console.log('translate', e && e.message))); },
+  // every 5 minutes: send "your listing is live" emails once new listings are online (see pups.js)
+  async scheduled(event, env, ctx) {
+    if (event.cron === '*/5 * * * *') ctx.waitUntil(sendQueuedEmails(env).catch((e) => console.log('mail queue', e && e.message)));
+    else ctx.waitUntil(translateMissing(env, { limit: 60 }).catch((e) => console.log('translate', e && e.message)));
+  },
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const cors = corsHeaders(req, env);
@@ -36,6 +42,8 @@ export default {
       else if (url.pathname.startsWith('/admin/')) res = await admin(req, env, url);
       else if (url.pathname.startsWith('/auth/')) res = await handleAuth(req, env, url);
       else if (url.pathname === '/message' && req.method === 'POST') res = await receiveMessage(req, env, url);
+      else if (url.pathname === '/interest' && req.method === 'POST') res = await receiveInterest(req, env, ctx);
+      else if (url.pathname === '/adopted' && req.method === 'POST') res = await markAdopted(req, env);
       else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);
       else if (url.pathname.startsWith('/api/')) res = await handleContent(req, env, url);
       else res = json({ error: 'Not found' }, 404);
@@ -97,13 +105,13 @@ async function submit(req, env, ctx) {
   const g = (k, max) => clean(f.get(k), max);
   const d = {
     dog: {
-      name: g('name', 80), breed: g('breed', 80), age: g('age', 60), sex: g('sex', 10),
+      name: g('name', 80), breed: (g('breed', 80) === 'Other' ? g('breedOther', 80) : g('breed', 80)), age: g('age', 60), sex: g('sex', 10),
       fixed: g('fixed', 10), vaccinated: g('vaccinated', 10), microchipped: g('microchipped', 10), heartworm: g('heartworm', 10),
       goodWithDogs: g('goodWithDogs', 10), goodWithCats: g('goodWithCats', 10), goodWithKids: g('goodWithKids', 10),
-      locationType: g('locationType', 20), orgName: g('orgName', 120), orgUrl: D_url(g('orgUrl', 200)), city: g('city', 80), animalId: g('animalId', 60),
+      locationType: g('locationType', 20), orgName: g('orgName', 120), orgUrl: D_url(g('orgUrl', 200)), orgEmail: g('orgEmail', 120), orgSocial: g('orgSocial', 100), orgPhone: g('orgPhone', 30), city: g('city', 80), animalId: g('animalId', 60),
       needs: g('needs', 10), about: cleanLong(f.get('about'), 3000),
     },
-    submitter: { firstName: g('firstName', 60), lastName: g('lastName', 60), social: g('social', 100), phone: g('phone', 30), email: g('email', 120) },
+    submitter: { firstName: g('firstName', 60), lastName: g('lastName', 60), social: g('social', 100), phone: g('phone', 30), email: g('email', 120), email2: g('email2', 120) },
   };
   const D = d.dog, S = d.submitter;
   const missing = [];
@@ -113,10 +121,16 @@ async function submit(req, env, ctx) {
   for (const [k, l] of [['fixed', 'spayed/neutered'], ['vaccinated', 'vaccines'], ['microchipped', 'microchip'], ['heartworm', 'heartworm test']]) if (!YN.includes(D[k])) missing.push(l);
   for (const [k, l] of [['goodWithDogs', 'good with dogs'], ['goodWithCats', 'good with cats'], ['goodWithKids', 'good with kids']]) if (!YNS.includes(D[k])) missing.push(l);
   if (!LOCATION_TYPES.includes(D.locationType)) missing.push('where the pup is');
-  if (['rescue', 'foster', 'other'].includes(D.locationType)) need(D.orgName, 'rescue or organization name');
+  if (['rescue', 'foster', 'other'].includes(D.locationType)) {
+    need(D.orgName, 'name of the rescue organization'); need(D.orgEmail, "the rescue's email"); need(D.orgSocial, "the rescue's social media handle"); need(D.orgPhone, "the rescue's phone number");
+    if (D.orgEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(D.orgEmail)) missing.push("a valid email for the rescue");
+    if (D.orgPhone && D.orgPhone.replace(/\D/g, '').length < 7) missing.push("a valid phone number for the rescue");
+  }
   if (!['adoption', 'foster', 'both'].includes(D.needs)) missing.push('adopter or foster');
+  if (/^(mdas-|broward)/.test(D.locationType)) need(D.animalId, 'shelter animal ID number');
   need(S.firstName, 'your first name'); need(S.lastName, 'your last name'); need(S.social, 'your social media handle'); need(S.phone, 'your phone number'); need(S.email, 'your email');
   if (S.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(S.email)) missing.push('a valid email');
+  if (S.email2 && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(S.email2)) missing.push('a valid second email (or leave it empty)');
   if (S.phone && S.phone.replace(/\D/g, '').length < 7) missing.push('a valid phone number');
   if (f.get('consent') !== 'yes') missing.push('permission to share');
 
@@ -136,7 +150,11 @@ async function submit(req, env, ctx) {
   const record = { id: sid, status: 'pending', createdAt: new Date().toISOString(), photoCount: files.length, ...d };
   await env.SUBMISSIONS.put(`sub:${sid}`, JSON.stringify(record), { metadata: { status: 'pending', name: D.name, createdAt: record.createdAt } });
   await env.SUBMISSIONS.put(rlKey, String(used + 1), { expirationTtl: 3700 });
-  const mail = notify(env, record, files[0]).catch((e) => console.error('notify failed', e && e.message));
+  const thanks = submissionReceived(env, record);
+  const mail = Promise.all([
+    env.ALERTS === 'off' ? null : notify(env, record, files[0]).catch((e) => console.error('notify failed', e && e.message)),
+    sendMail(env, { to: S.email, cc: S.email2, subject: thanks.subject, html: thanks.html, text: thanks.text, tag: 'submission-received' }).catch((e) => console.error('thanks mail', e && e.message)),
+  ]);
   if (ctx && ctx.waitUntil) ctx.waitUntil(mail); else await mail;
   return json({ ok: true, id: sid });
 }
@@ -164,7 +182,7 @@ async function notify(env, r, photo) {
 <p style="font-weight:bold;margin:16px 0 4px">About ${h(D.name)}</p><p style="white-space:pre-wrap;margin:0">${h(D.about)}</p>
 ${photo ? '<p style="color:#5c5a72;font-size:13px">The main photo is attached. See all photos on the review page.</p>' : ''}</div>`;
   const text = `New Pawsome Pooches submission: ${D.name}\n\nReview it: ${review}\n\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nAbout ${D.name}:\n${D.about}\n`;
-  const body = { from: env.NOTIFY_FROM || "Bentley's Playhouse <onboarding@resend.dev>", to: [env.NOTIFY_EMAIL], subject: `New pup to review: ${D.name} (${LOC_LABEL[D.locationType] || 'Pawsome Pooches'})`, html, text, reply_to: S.email };
+  const body = { from: env.MAIL_FROM || env.NOTIFY_FROM || "Bentley's Playhouse <hello@bentleysplayhouse.org>", to: [env.NOTIFY_EMAIL], subject: `New pup to review: ${D.name} (${LOC_LABEL[D.locationType] || 'Pawsome Pooches'})`, html, text, reply_to: S.email };
   if (photo) body.attachments = [{ filename: `${slugify(D.name)}.jpg`, content: b64(await photo.arrayBuffer()) }];
   const res = await fetch(`${env.RESEND_API || 'https://api.resend.com'}/emails`, { method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   if (!res.ok) console.error('resend', res.status, await res.text());
@@ -238,12 +256,15 @@ async function admin(req, env, url) {
     const result = await publish(env, token, r, edits);
     r.status = 'approved'; r.reviewedAt = new Date().toISOString(); r.published = result;
     await saveRecord(env, r);
+    await queueApprovalEmail(env, r, result, result.stories || []);
     return json({ ok: true, ...result });
   }
   throw fail('Not found.', 404);
 }
 
 // ---------- publishing to the site repo (one commit) ----------
+// "@myrescue", "instagram.com/myrescue" → "myrescue"
+const igOf = (v) => { v = String(v || '').trim(); const m = /instagram\.com\/([\w.]+)/i.exec(v); return m ? m[1] : /^@?[\w.]{1,30}$/.test(v) ? v.replace(/^@/, '') : ''; };
 const yq = (v) => JSON.stringify(String(v == null ? '' : v)); // JSON strings are valid YAML
 
 function buildMarkdown(dog, slug, photoPaths, opt) {
@@ -276,10 +297,15 @@ function buildMarkdown(dog, slug, photoPaths, opt) {
     `  type: ${dog.locationType}`,
     `  name: ${yq(dog.orgName)}`,
     `  url: ${yq(dog.orgUrl || '')}`,
+    ...(dog.orgEmail ? [`  email: ${yq(dog.orgEmail)}`] : []),
+    ...(dog.orgPhone ? [`  phone: ${yq(dog.orgPhone)}`] : []),
     `  city: ${yq(dog.city)}`,
     `  animalId: ${yq(dog.animalId)}`,
     'contact:',
-    `  instagram: ${yq(opt.contactInstagram || 'bentleysplayhouse')}`,
+    `  instagram: ${yq(opt.contactInstagram || igOf(dog.orgSocial) || 'bentleysplayhouse')}`,
+    ...(dog.orgPhone ? [`  phone: ${yq(dog.orgPhone)}`] : []),
+    ...(dog.orgEmail ? [`  email: ${yq(dog.orgEmail)}`] : []),
+    ...(dog.orgUrl && !/instagram\.com/.test(dog.orgUrl) ? [`  website: ${yq(dog.orgUrl)}`] : []),
     `  instructions: ${yq(opt.contactInstructions || '')}`,
     `submissionId: ${yq(opt.submissionId)}`,
     '---',
@@ -320,6 +346,16 @@ async function publish(env, token, r, edits) {
     tree.push({ path: `src/assets/img/pawsome/${file}`, mode: '100644', type: 'blob', sha: blob.sha });
     photoPaths.push(`/assets/img/pawsome/${file}`);
   }
+  // Instagram Story images made in the admin when approving (Scrapbook, Ticket, Poster), for the "listing is live" email
+  const stories = [];
+  for (const s of (Array.isArray(edits.stories) ? edits.stories : []).slice(0, 3)) {
+    const label = clean(s.label, 20), data = String(s.data || '').replace(/^data:image\/jpeg;base64,/, '');
+    if (!/^[A-Za-z ]{2,20}$/.test(label) || !data || data.length > 4e6) continue;
+    const file = `${slug}-story-${label.toLowerCase()}.jpg`;
+    const blob = await call('POST', '/git/blobs', { content: data, encoding: 'base64' });
+    tree.push({ path: `src/assets/img/pawsome/stories/${file}`, mode: '100644', type: 'blob', sha: blob.sha });
+    stories.push({ label, url: `${env.SITE_URL || ''}/assets/img/pawsome/stories/${file}` });
+  }
   const md = buildMarkdown(r.dog, slug, photoPaths, {
     name, tagline: clean(edits.tagline, 220), story: cleanLong(edits.story, 5000), urgent: !!edits.urgent,
     photoAlt: clean(edits.photoAlt, 200), contactInstagram: clean(edits.contactInstagram, 60).replace(/^@/, ''), contactInstructions: cleanLong(edits.contactInstructions, 800), submissionId: r.id,
@@ -329,7 +365,7 @@ async function publish(env, token, r, edits) {
   const newTree = await call('POST', '/git/trees', { base_tree: baseCommit.tree.sha, tree });
   const commit = await call('POST', '/git/commits', { message: `Pawsome Pooches: add ${name} (approved submission)`, tree: newTree.sha, parents: [baseSha] });
   await call('PATCH', `/git/refs/heads/${branch}`, { sha: commit.sha });
-  return { slug, url: `${env.SITE_URL || ''}/pawsome-pooches/${slug}/`, commit: commit.sha };
+  return { slug, name, url: `${env.SITE_URL || ''}/pawsome-pooches/${slug}/`, photo: `${env.SITE_URL || ''}/assets/og/pawsome-pooches--${slug}.jpg`, stories, commit: commit.sha };
 }
 
 function b64(buf) {

@@ -17,12 +17,18 @@ var T = window.BP_T || function (s) { return s; };
   // Show "name of the rescue" only when it applies
   var url = form.querySelector('[data-pps-url]'), orgLabel = form.querySelector('[data-pps-orglabel]');
   function syncOrg() {
-    var need = ['rescue', 'foster', 'other'].indexOf(loc.value) > -1, isRescue = loc.value === 'rescue';
-    org.hidden = !need; org.querySelector('input').required = need;
-    if (orgLabel) orgLabel.textContent = isRescue ? T('Rescue name') : T('Name of the rescue or organization');
-    if (url) { url.hidden = !isRescue; if (!isRescue) url.querySelector('input').value = ''; }
+    var need = ['rescue', 'foster', 'other'].indexOf(loc.value) > -1;
+    org.hidden = !need;
+    ['orgName', 'orgEmail', 'orgSocial', 'orgPhone'].forEach(function (n) { var el = org.querySelector('[name="' + n + '"]'); if (el) el.required = need; });
+    var shelter = /^(mdas-|broward)/.test(loc.value), idBox = form.querySelector('[data-pps-id]');
+    idBox.hidden = !shelter; idBox.querySelector('input').required = shelter; if (!shelter) idBox.querySelector('input').value = '';
+    if (orgLabel) orgLabel.textContent = loc.value === 'foster' ? T('Name of the rescue the foster is with') : loc.value === 'other' ? T('Name of the organization') : T('Name of the rescue organization');
   }
   loc.addEventListener('change', syncOrg); syncOrg();
+  // Breed: "Other" opens a box to type it
+  var breed = document.getElementById('pps-breed'), breedOther = form.querySelector('[data-pps-breedother]');
+  function syncBreed() { var o = breed.value === 'Other'; breedOther.hidden = !o; breedOther.querySelector('input').required = o; }
+  breed.addEventListener('change', syncBreed); syncBreed();
 
   // Resize to max 1600px JPEG so uploads are quick on phones
   function shrink(file) {
@@ -72,7 +78,7 @@ var T = window.BP_T || function (s) { return s; };
     if (!photos.length) { say(T('Please add at least one clear photo of the pup.')); input.focus(); return; }
     if (bad.length) {
       bad.forEach(function (el) { el.setAttribute('aria-invalid', 'true'); });
-      say(T('Please fill in every field (only the shelter ID is optional).'));
+      say(T('Please fill in every field marked with *.'));
       bad[0].focus(); return;
     }
     var fd = new FormData(form);
