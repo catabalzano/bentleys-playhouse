@@ -27,7 +27,7 @@ location:
   url: https://www.instagram.com/lotusgolddoggang/
   city: Kendall
 contact:
-  instagram: bentleysplayhouse
+  instagram: lotusgolddoggang
 submissionId: 20261009-2cb7471e
 photoFocus: 74% 52%
 ---
