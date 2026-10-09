@@ -1568,3 +1568,4 @@ fieldset.field { align-content: start; }
 .nf-pup__wait { color: var(--muted); font-size: .92rem; margin: 0 !important; }
 .pp-story-pick__row--feed { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 30rem; }
 .pp-story-pick__row--feed .pp-story-opt__img { aspect-ratio: 4 / 5; }
+.nf-tag { margin: .4rem 0 .2rem; }

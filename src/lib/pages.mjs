@@ -57,8 +57,8 @@ export function home(data) {
   <div class="wrap">
     <div class="hero__frame">${heroImg}</div>
     <div class="hero__card">
-      <p class="eyebrow eyebrow--hero">${tag('Miami Dog Rescue &amp;<br class="br-m"> Advocacy Organization', 'gold')}</p>
-      <h1 id="hero-h" class="hero__h">We Support Miami's Pups, and <span class="hl">the Heroes Who Rescue Them.</span></h1>
+      <p class="eyebrow eyebrow--hero">${tag('Miami-based Dog Rescue &amp;<br class="br-m"> Advocacy Organization', 'gold')}</p>
+      <h1 id="hero-h" class="hero__h">We Support the Pups, and <span class="hl">the Heroes Who Help Them.</span></h1>
       <p class="hero__lede">${esc(s.name)} is a Miami dog rescue: we rescue, rehabilitate and rehome dogs across South Florida. We also work to support other animal rescues in the country through volunteer work and donations, as well as sharing clear, practical help for anyone who has just found, lost or rescued a dog and isn't sure what to do next.</p>
       <div class="hero__ctas">
         ${button('Find help', 'get-help/', { ic: 'search' })}
@@ -880,8 +880,9 @@ export function cookies() {
 export function notFound() {
   return `<section class="wrap nf" data-nf>
   <div class="nf-opt">${confusedBentley()}</div>
-  <h1 class="page-h">This Page Wandered Off</h1>
-  <p class="page-lede" data-nf-lede>We couldn't find that page. These might help:</p>
+  <p class="nf-tag">${tag('Error 404', 'blue')}</p>
+  <h1 class="page-h">Ruh-Roh! This Page Slipped Its Leash</h1>
+  <p class="page-lede" data-nf-lede>We sniffed everywhere, but it's not here. These might help:</p>
   <div class="nf-pup" data-nf-pup hidden>
     <p class="nf-pup__h">Looking for a pup?</p>
     <p>New Pawsome Pooches pages take about 2 minutes to go live. We're working as quickly as pawsible! This page will refresh on its own as soon as it's ready.</p>
