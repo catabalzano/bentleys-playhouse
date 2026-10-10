@@ -15,6 +15,12 @@ const cleanLong = (v, max = 2000) => String(v == null ? '' : v).replace(/\r\n/g,
 const isEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
 const newId = () => new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + crypto.randomUUID().slice(0, 8);
 async function sha256(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); }
+/** Only the Story images that are really online (an image that isn't there shows as broken in the email). */
+async function onlineStories(stories) {
+  const out = [];
+  for (const st of stories || []) if (await fetch(st.url, { method: 'HEAD', cf: { cacheTtl: 0 } }).then((r) => r.ok).catch(() => false)) out.push(st);
+  return out;
+}
 const site = (env) => (env.SITE_URL || 'https://bentleysplayhouse.org').replace(/\/$/, '');
 async function turnstileOk(env, token, ip) {
   if (!env.TURNSTILE_SECRET) return true;
@@ -124,7 +130,7 @@ export async function sendQueuedEmails(env) {
     const imgs = !q.stories.length || await fetch(q.stories[0].url, { method: 'HEAD', cf: { cacheTtl: 0 } }).then((r) => r.ok).catch(() => false);
     if (!(live && imgs) && age < 6 * 3600 * 1000) continue; // try again in 5 minutes (give up waiting after 6 hours)
     if (!env.RESEND_API_KEY) { if (age > 3 * 24 * 3600 * 1000) await env.SUBMISSIONS.delete(k.name); continue; } // waits for email to be switched on
-    const e = listingApproved(env, { name: q.name, url: q.url, firstName: q.firstName, adoptUrl: await adoptLink(env, q.slug, q.name), stories: q.stories, photo: q.photo, needs: q.needs });
+    const e = listingApproved(env, { name: q.name, url: q.url, firstName: q.firstName, adoptUrl: await adoptLink(env, q.slug, q.name), stories: await onlineStories(q.stories), photo: q.photo, needs: q.needs });
     const res = await sendMail(env, { to: q.to[0], cc: q.to.slice(1), subject: e.subject, html: e.html, text: e.text, tag: 'listing-live' });
     if (res && res.error) continue;
     await env.SUBMISSIONS.delete(k.name);
@@ -150,7 +156,7 @@ export async function sendTestEmails(req, env) {
   const m = { firstName: 'Cata', lastName: 'Test', city: 'Miami', phone: '305-555-0100', email: to, message: 'This is a test message.', verb: pup.needs === 'foster' ? 'foster' : 'adopt' };
   const mails = [
     submissionReceived(env, fake),
-    listingApproved(env, { name: pup.name, url: pup.url, firstName: 'Cata', adoptUrl: await adoptLink(env, slug, pup.name), stories: ['Scrapbook', 'Ticket', 'Poster'].map((l) => ({ label: l, url: `${site(env)}/assets/img/pawsome/stories/${slug}-story-${l.toLowerCase()}.jpg` })), photo: pup.photo, needs: pup.needs }),
+    listingApproved(env, { name: pup.name, url: pup.url, firstName: 'Cata', adoptUrl: await adoptLink(env, slug, pup.name), stories: await onlineStories(['Scrapbook', 'Ticket', 'Poster'].map((l) => ({ label: l, url: `${site(env)}/assets/img/pawsome/stories/${slug}-story-${l.toLowerCase()}.jpg` }))), photo: pup.photo, needs: pup.needs }),
     interestToAdopter(env, { m, pup, rescue, sharedWithRescue: true }),
     interestToRescue(env, { m, pup }),
   ];
