@@ -327,5 +327,8 @@
  "Cats <t1>*</t1>": "Gatos <t1>*</t1>",
  "Kids <t1>*</t1>": "Niños <t1>*</t1>",
  "The pup is… <t1>*</t1>": "El perrito es… <t1>*</t1>",
- "The Rescue's Contact Details": "Detalles de contacto del Rescate"
+ "The Rescue's Contact Details": "Detalles de contacto del Rescate",
+ "Shown on the listing so adopters can reach the rescue directly.": "Mostrado en la lista para que los adoptantes puedan comunicarse directamente con el refugio",
+ "<t1>Name of the rescue organization</t1> <t2>*</t2>": "<t1>Nombre de la organización de rescate</t1> <t2>*</t2>",
+ "Rescue's email <t1>*</t1>": "Correo electrónico del refugio <t1>*</t1>"
 }
