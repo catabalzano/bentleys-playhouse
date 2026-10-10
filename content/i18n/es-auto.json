@@ -341,5 +341,7 @@
  "City or area <t1>*</t1>": "Ciudad o área <t1>*</t1>",
  "Shelter animal ID number <t1>*</t1>": "Número de identificación del animal del refugio <t1>*</t1>",
  "Looking for <t1>*</t1>": "Buscando <t1>*</t1>",
- "Tell us about them <t1>*</t1>": "Háblanos sobre ellos <t1>*</t1>"
+ "Tell us about them <t1>*</t1>": "Háblanos sobre ellos <t1>*</t1>",
+ "Social media handle <t1>*</t1>": "Nombre de cuenta de redes sociales <t1>*</t1>",
+ "We'll email you when we get your pup and when the listing goes live.": "Te enviaremos un correo electrónico cuando recibamos a tu perrito y cuando la lista esté disponible."
 }
