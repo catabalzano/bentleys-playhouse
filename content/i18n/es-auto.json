@@ -337,5 +337,7 @@
  "Rescue's social media handle <t1>*</t1>": "Nombre de cuenta de redes sociales del refugio <t1>*</t1>",
  "Rescue's phone number <t1>*</t1>": "Número de teléfono del refugio <t1>*</t1>",
  "Rescue's website <t1>(if they have one)</t1>": "Sitio web del refugio <t1>(si lo tienen)</t1>",
- "e.g., myrescue.org": "p. ej., myrescue.org"
+ "e.g., myrescue.org": "p. ej., myrescue.org",
+ "City or area <t1>*</t1>": "Ciudad o área <t1>*</t1>",
+ "Shelter animal ID number <t1>*</t1>": "Número de identificación del animal del refugio <t1>*</t1>"
 }
