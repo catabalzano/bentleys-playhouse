@@ -1,4 +1,7 @@
 ---
+cover: where-to-adopt-a-dog-in-miami.jpg
+coverAlt: "Two happy dogs wearing \"Adopt Me\" bandanas in a park"
+coverCredit: "Nanda Mends on Pexels"
 title: "Where to Adopt a Dog in Miami: Shelters and Rescues"
 seoTitle: "Where to Adopt a Dog in Miami: Shelters & Rescues"
 category: adopt-foster
