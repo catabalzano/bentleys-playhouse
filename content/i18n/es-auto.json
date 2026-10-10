@@ -339,5 +339,7 @@
  "Rescue's website <t1>(if they have one)</t1>": "Sitio web del refugio <t1>(si lo tienen)</t1>",
  "e.g., myrescue.org": "p. ej., myrescue.org",
  "City or area <t1>*</t1>": "Ciudad o área <t1>*</t1>",
- "Shelter animal ID number <t1>*</t1>": "Número de identificación del animal del refugio <t1>*</t1>"
+ "Shelter animal ID number <t1>*</t1>": "Número de identificación del animal del refugio <t1>*</t1>",
+ "Looking for <t1>*</t1>": "Buscando <t1>*</t1>",
+ "Tell us about them <t1>*</t1>": "Háblanos sobre ellos <t1>*</t1>"
 }
