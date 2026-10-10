@@ -2,7 +2,7 @@
 title: "Where to Adopt a Dog in Miami: Shelters and Rescues"
 seoTitle: "Where to Adopt a Dog in Miami: Shelters & Rescues"
 category: adopt-foster
-area: miami-dade
+area: local
 order: 0
 featured: true
 summary: "Miami-Dade's main places to adopt a rescue dog, what each costs, what's included and how the process works, so you can pick the right path before you fall for a face."
