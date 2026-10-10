@@ -343,5 +343,7 @@
  "Looking for <t1>*</t1>": "Buscando <t1>*</t1>",
  "Tell us about them <t1>*</t1>": "Háblanos sobre ellos <t1>*</t1>",
  "Social media handle <t1>*</t1>": "Nombre de cuenta de redes sociales <t1>*</t1>",
- "We'll email you when we get your pup and when the listing goes live.": "Te enviaremos un correo electrónico cuando recibamos a tu perrito y cuando la lista esté disponible."
+ "We'll email you when we get your pup and when the listing goes live.": "Te enviaremos un correo electrónico cuando recibamos a tu perrito y cuando la lista esté disponible.",
+ "Second email <t1>(optional)</t1>": "Segundo correo electrónico <t1>(opcional)</t1>",
+ "Another address that should get the same emails, just in case.": "Otra dirección que debería recibir los mismos correos electrónicos, por si acaso."
 }
