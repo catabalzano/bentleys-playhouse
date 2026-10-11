@@ -4,6 +4,7 @@ import { translateMissing } from './translate.js';
 import { receiveInterest, markAdopted, queueApprovalEmail, sendQueuedEmails, sendTestEmails } from './pups.js';
 import { sendMail, submissionReceived } from './mail.js';
 import { handleRescues, logRescueFromSubmission } from './rescues.js';
+import { eventsPublic, eventsAdmin } from './events.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -47,6 +48,8 @@ export default {
       else if (url.pathname === '/adopted' && req.method === 'POST') res = await markAdopted(req, env);
       else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);
       else if (url.pathname.startsWith('/api/rescues')) res = await handleRescues(req, env, url);
+      else if (url.pathname.startsWith('/events/')) res = await eventsPublic(req, env, url);
+      else if (url.pathname.startsWith('/api/partners') || url.pathname.startsWith('/api/eventreqs')) res = await eventsAdmin(req, env, url);
       else if (url.pathname === '/api/mail/test' && req.method === 'POST') res = await sendTestEmails(req, env);
       else if (url.pathname.startsWith('/api/')) res = await handleContent(req, env, url);
       else res = json({ error: 'Not found' }, 404);

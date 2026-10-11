@@ -181,5 +181,20 @@
  "{name} is already marked as adopted. Thank you!": "{name} ya está marcado como adoptado. ¡Gracias!",
  "Split": "Foto y datos",
  "Tear-Off Flyer": "Volante con tiras",
- "Name Tag": "Etiqueta"
+ "Name Tag": "Etiqueta",
+ "Something went wrong. Please try again.": "Algo salió mal. Inténtalo de nuevo.",
+ "Hi": "Hola",
+ "Tell us about your event.": "Cuéntanos sobre tu evento.",
+ "Checking…": "Revisando…",
+ "Please enter your access code.": "Escribe tu código de acceso.",
+ "event name": "nombre del evento",
+ "kind of event": "tipo de evento",
+ "date": "fecha",
+ "time": "hora",
+ "place name": "nombre del lugar",
+ "city": "ciudad",
+ "description": "descripción",
+ "Please add:": "Por favor agrega:",
+ "The last day has to be after the first day.": "El último día tiene que ser después del primero.",
+ "Tell us about your next event.": "Cuéntanos sobre tu próximo evento."
 }

@@ -317,6 +317,7 @@
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       '<a class="nav" href="#messages" data-nav="messages">📬 Messages <span class="count" data-msgcount></span></a>' +
       '<a class="nav" href="#rescues" data-nav="rescues">🤝 Rescue contacts</a>' +
+      '<a class="nav" href="#eventreqs" data-nav="eventreqs">📨 Event requests <span class="count" data-evcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
       '<a class="nav" href="#donations" data-nav="donations">💛 Donations</a>' +
@@ -327,7 +328,7 @@
       '<div><div class="topbar"><button type="button" data-menu>☰ Menu</button><b>Admin</b></div><main class="main" id="main" tabindex="-1"></main></div></div>';
     $('[data-menu]').onclick = function () { $('.shell').classList.toggle('menu-open'); };
     $$('.nav').forEach(function (n) { n.addEventListener('click', function () { $('.shell').classList.remove('menu-open'); }); });
-    loadSubs(); loadMe();
+    loadSubs(); loadMe(); loadEvReqs().catch(function () {});
   }
   function main() { return $('#main'); }
   function loadMe() {
@@ -358,6 +359,7 @@
     if (h === 'homephoto') return homePhoto();
     if (h === 'messages') return messages();
     if (h === 'rescues') return rescues();
+    if (h === 'eventreqs') return eventReqs();
     if (h === 'settings' || h === 'profile') return profile();
     if (h === 'users') return manageUsers();
     if (p[0] === 'spanish') return spanish(decodeURIComponent(p.slice(1).join('/') || ''));
@@ -935,6 +937,84 @@
         .then(function (res) { list = res[0].rescues || []; live = res[1] || {}; draw(); return list; });
     }
     load().then(function (l) { if (!l.length) return collect(null); }).catch(function (e) { box.innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
+  }
+
+  // ---------- event requests + event partners (worker/src/events.js) ----------
+  function evCount(list) { var c = $('[data-evcount]'); if (c) c.textContent = (list || []).filter(function (r) { return r.status === 'pending'; }).length || ''; }
+  function loadEvReqs() { return api('/api/eventreqs').then(function (j) { S.evreqs = j.requests || []; evCount(S.evreqs); return S.evreqs; }); }
+  function eventReqs() {
+    main().innerHTML = '<div class="head"><div><h1>📨 Event requests</h1><p>Events sent by your event partners from the <a href="../events/add/" target="_blank" rel="noopener">Add an event</a> page. Nothing goes on the Community Calendar until you approve it.</p></div></div><div class="tabs" data-etabs></div><div data-ebox><p class="empty">Loading…</p></div>';
+    var tab = 'pending', partners = null;
+    function tabs() {
+      var R = S.evreqs || [], n = function (st) { return R.filter(function (r) { return r.status === st; }).length; };
+      var T = [['pending', 'To review', n('pending')], ['approved', 'Approved', n('approved')], ['rejected', 'Rejected', n('rejected')], ['partners', 'Event partners & codes', partners ? partners.length : '…']];
+      $('[data-etabs]').innerHTML = T.map(function (t) { return '<button class="tab" aria-pressed="' + (t[0] === tab) + '" data-t="' + t[0] + '">' + t[1] + ' <span>' + t[2] + '</span></button>'; }).join('');
+      $$('[data-t]').forEach(function (b) { b.onclick = function () { tab = b.getAttribute('data-t'); draw(); }; });
+    }
+    function draw() { tabs(); if (tab === 'partners') drawPartners(); else drawReqs(); }
+    function drawReqs() {
+      var box = $('[data-ebox]'), list = (S.evreqs || []).filter(function (r) { return r.status === tab; });
+      if (!list.length) { box.innerHTML = '<p class="empty">' + (tab === 'pending' ? 'Nothing to review. When an event partner sends an event, it shows up here.' : 'Nothing here yet.') + '</p>'; return; }
+      box.innerHTML = list.map(function (r) {
+        var e = r.event, rows = [['Kind', EVC[e.category]], ['Date', e.date + (e.endDate ? ' to ' + e.endDate : '')], ['Time', e.time], ['Cost', e.price], ['Place', [e.venue, e.address, e.city].filter(Boolean).join(', ')], ['Hosted by', e.organizer], ['Link', e.link ? '<a href="' + esc(e.link) + '" target="_blank" rel="noopener">' + esc(e.link.replace(/^https?:\/\/(www\.)?/, '')) + ' ↗</a>' : '']].filter(function (x) { return x[1]; });
+        return '<section class="card msg-card' + (r.status === 'pending' ? ' is-new' : '') + '" data-id="' + esc(r.id) + '"><div class="msg-top"><div><b>' + esc(e.title) + '</b><div class="hint">From ' + esc(r.partner.name + (r.partner.org ? ' (' + r.partner.org + ')' : '')) + ' · ' + esc(new Date(r.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div></div></div>' +
+          '<dl class="msg-dl">' + rows.map(function (x) { return '<dt>' + x[0] + '</dt><dd>' + (x[0] === 'Link' ? x[1] : esc(x[1])) + '</dd>'; }).join('') + '</dl>' +
+          '<p class="msg-body">' + esc(e.description) + '</p>' +
+          '<div class="row__act" style="justify-content:flex-start;margin-top:10px">' +
+          (r.status === 'pending' ? '<button class="btn btn--go btn--sm" data-ok>✓ Approve</button><button class="btn btn--ghost btn--sm" data-no>Reject</button>' : '') +
+          (r.status === 'approved' && r.slug ? '<a class="btn btn--ghost btn--sm" href="#c/events/' + esc(r.slug) + '">✏️ Edit on the calendar</a>' : '') +
+          '<button class="btn btn--danger btn--sm" data-dl>Delete</button></div></section>';
+      }).join('');
+      $$('.msg-card', box).forEach(function (card) {
+        var id = card.getAttribute('data-id'), r = S.evreqs.filter(function (x) { return x.id === id; })[0];
+        var ok = $('[data-ok]', card), no = $('[data-no]', card);
+        if (ok) ok.onclick = function () { ok.disabled = true; ok.textContent = 'Publishing…'; api('/api/eventreqs/' + id + '/approve', { method: 'POST', json: {} }).then(function (j) { r.status = 'approved'; r.slug = j.slug; watchLive(); toast('Approved. It shows on the calendar in about 2 minutes.'); evCount(S.evreqs); draw(); }, function (e) { ok.disabled = false; ok.textContent = '✓ Approve'; alert(e.message); }); };
+        if (no) no.onclick = function () { if (!confirm('Reject "' + r.event.title + '"? It won\'t go on the calendar.')) return; api('/api/eventreqs/' + id + '/reject', { method: 'POST', json: {} }).then(function () { r.status = 'rejected'; evCount(S.evreqs); draw(); }, function (e) { alert(e.message); }); };
+        $('[data-dl]', card).onclick = function () { if (!confirm('Delete this request? (Approved events stay on the calendar.)')) return; api('/api/eventreqs/' + id, { method: 'DELETE' }).then(function () { S.evreqs = S.evreqs.filter(function (x) { return x.id !== id; }); evCount(S.evreqs); draw(); }, function (e) { alert(e.message); }); };
+      });
+    }
+    function pform(p) {
+      p = p || {};
+      return '<form class="r-form" novalidate><div class="grid">' +
+        '<div class="f"><label for="pn">Name <span class="req">*</span></label><input type="text" id="pn" value="' + esc(p.name || '') + '" placeholder="e.g. FOMA"></div>' +
+        '<div class="f"><label for="pc">Access code</label><input type="text" id="pc" value="' + esc(p.code || '') + '" placeholder="Leave empty to make one up" style="text-transform:uppercase"><p class="hint">6 to 20 letters or numbers, e.g. FOMAPETS.</p></div>' +
+        '<div class="f"><label for="po">Organization</label><input type="text" id="po" value="' + esc(p.org || '') + '"></div>' +
+        '<div class="f"><label for="pe">Email</label><input type="email" id="pe" value="' + esc(p.email || '') + '"></div>' +
+        '<div class="f"><label for="pp">Phone</label><input type="text" id="pp" value="' + esc(p.phone || '') + '"></div>' +
+        '</div><div class="row__act" style="justify-content:flex-start;margin-top:12px"><button class="btn btn--go btn--sm" type="submit">💾 Save</button><button class="btn btn--ghost btn--sm" type="button" data-cancel>Cancel</button><span class="msg" data-msg role="status"></span></div></form>';
+    }
+    function pwire(f, p, done) {
+      $('[data-cancel]', f).onclick = done;
+      f.onsubmit = function (ev) {
+        ev.preventDefault();
+        var m = $('[data-msg]', f), body = { name: $('#pn', f).value, code: $('#pc', f).value, org: $('#po', f).value, email: $('#pe', f).value, phone: $('#pp', f).value };
+        m.className = 'msg'; m.textContent = 'Saving…';
+        api(p ? '/api/partners/' + p.id : '/api/partners', { method: p ? 'PUT' : 'POST', json: body }).then(function (j) {
+          if (p) partners = partners.map(function (x) { return x.id === p.id ? j.partner : x; }); else partners.push(j.partner);
+          toast(p ? 'Saved.' : 'Added. Their code is ' + j.partner.code + '.'); done(); draw();
+        }, function (e) { m.className = 'msg err'; m.textContent = e.message; });
+      };
+    }
+    function drawPartners() {
+      var box = $('[data-ebox]');
+      if (!partners) { box.innerHTML = '<p class="empty">Loading…</p>'; return; }
+      var link = location.origin + '/events/add/';
+      box.innerHTML = '<div class="card"><p style="margin:0 0 6px"><b>How it works:</b> send a partner the link <a href="../events/add/" target="_blank" rel="noopener">' + esc(link) + '</a> and their code. Their events come to “To review.” Turn a code off anytime.</p><div class="row__act" style="justify-content:flex-start"><button class="btn btn--go btn--sm" data-padd>＋ Add an event partner</button></div><div data-pnew></div></div>' +
+        (partners.length ? partners.map(function (p) {
+          return '<section class="card msg-card" data-pid="' + esc(p.id) + '"><div class="msg-top"><div><b>' + esc(p.name) + '</b> ' + (p.active === false ? '<span class="pill">Code turned off</span>' : '') + (p.org ? '<div class="hint">' + esc(p.org) + '</div>' : '') + '</div></div>' +
+            '<dl class="msg-dl"><dt>Access code</dt><dd><code style="font-size:16px;font-weight:800;letter-spacing:.05em">' + esc(p.code) + '</code></dd>' + (p.email ? '<dt>Email</dt><dd><a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a></dd>' : '') + (p.phone ? '<dt>Phone</dt><dd>' + esc(p.phone) + '</dd>' : '') + '<dt>Events sent</dt><dd>' + (S.evreqs || []).filter(function (r) { return r.partner.id === p.id; }).length + '</dd></dl>' +
+            '<div data-pedit></div><div class="row__act" style="justify-content:flex-start;margin-top:10px"><button class="btn btn--ghost btn--sm" data-pcopy>📋 Copy link + code</button><button class="btn btn--ghost btn--sm" data-ped>✏️ Edit</button><button class="btn btn--ghost btn--sm" data-ptog>' + (p.active === false ? 'Turn code on' : 'Turn code off') + '</button><button class="btn btn--danger btn--sm" data-pdel>Remove</button></div></section>';
+        }).join('') : '<p class="empty">No event partners yet.</p>');
+      $('[data-padd]', box).onclick = function () { var slot = $('[data-pnew]', box); slot.innerHTML = pform(); pwire($('form', slot), null, function () { slot.innerHTML = ''; }); $('#pn', slot).focus(); };
+      $$('[data-pid]', box).forEach(function (card) {
+        var p = partners.filter(function (x) { return x.id === card.getAttribute('data-pid'); })[0];
+        $('[data-pcopy]', card).onclick = function () { var txt = 'Add events to the Bentley\'s Playhouse Community Calendar here: ' + link + '\nYour access code: ' + p.code; (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast('Copied. Paste it in a message to ' + p.name + '.'); }, function () { prompt('Copy this:', txt); }); };
+        $('[data-ped]', card).onclick = function () { var slot = $('[data-pedit]', card); slot.innerHTML = pform(p); pwire($('form', slot), p, function () { slot.innerHTML = ''; }); };
+        $('[data-ptog]', card).onclick = function () { api('/api/partners/' + p.id, { method: 'PUT', json: { active: p.active === false } }).then(function (j) { partners = partners.map(function (x) { return x.id === p.id ? j.partner : x; }); draw(); }, function (e) { alert(e.message); }); };
+        $('[data-pdel]', card).onclick = function () { if (!confirm('Remove ' + p.name + '? Their code stops working. Events already on the calendar stay.')) return; api('/api/partners/' + p.id, { method: 'DELETE' }).then(function () { partners = partners.filter(function (x) { return x.id !== p.id; }); draw(); }, function (e) { alert(e.message); }); };
+      });
+    }
+    Promise.all([loadEvReqs(), api('/api/partners').then(function (j) { partners = j.partners || []; })]).then(draw).catch(function (e) { $('[data-ebox]').innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
   }
 
   // ---------- homepage photo ----------

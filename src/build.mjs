@@ -14,7 +14,7 @@ import * as P2 from './lib/pages2.mjs';
 import * as P3 from './lib/pages3.mjs';
 import * as PS from './lib/pawsome-submit.mjs';
 import { renderShare } from './lib/covers.mjs';
-import { prepEvents, eventsPage } from './lib/events.mjs';
+import { prepEvents, eventsPage, eventsAddPage } from './lib/events.mjs';
 import { parse as parseCSV } from 'csv-parse/sync';
 
 const args = process.argv.slice(2);
@@ -140,6 +140,7 @@ for (const c of checklists) emit(`resources/checklists/${c.slug}/`, { shareKicke
 emit('resources/flyer-builder/', { title: 'Lost & Found Flyer Builder', description: 'Make a printable lost or found dog flyer. Your photo stays on your device.', bodyClass: 'is-flyer', body: () => P.flyer(), scripts: ['js/flyer.js'] });
 emit('resources/vet-clinics/', { title: 'Vet Clinic Directory', description: 'Miami-Dade vet clinics and 24/7 emergency hospitals: hours, walk-in policies, phone numbers and addresses.', bodyClass: 'is-clinics', body: () => P2.clinics(clinicData), scripts: ['js/clinics.js'] });
 emit('events/', { title: 'Community Calendar', shareTitle: 'Dog events in South Florida', shareKicker: 'Community Calendar', description: 'Free and low-cost dog events in Miami-Dade and Broward: spay/neuter clinics, vaccine days, adoption events and dog walks.', bodyClass: 'is-events', body: () => eventsPage(events), scripts: ['js/events.js'] });
+emit('events/add/', { title: 'Add an event · Community Calendar', description: 'For Bentley\'s Playhouse event partners: add an event to the Community Calendar with your access code.', bodyClass: 'is-events', noindex: true, body: () => eventsAddPage(), scripts: ['js/events-add.js'] });
 emit('transparency/', { title: 'Where the Money Goes', description: "Every expense Bentley's Playhouse makes, with receipts: food, spay/neuter, medical care, toys and support for other rescues.", bodyClass: 'is-fin', body: () => P2.transparency(finances), scripts: ['js/transparency.js'] });
 emit('our-story/', { title: 'Our Story', seoTitle: 'Our Story: A Grassroots Miami Dog Rescue', description: pages.story.summary, body: () => P.story(data) });
 emit('get-involved/', { title: 'Get Involved', seoTitle: 'Ways to Help Dogs in Miami', description: 'Volunteer, foster, donate supplies, share rescue information or offer your skills to Bentley\'s Playhouse.', body: () => P.involved(data) });
