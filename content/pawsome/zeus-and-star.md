@@ -32,7 +32,8 @@ location:
   type: mdas-doral
   city: Miami
   url: https://www.miamidade.gov/global/animals/home.page
-  animalId: Star (A2826706), Zeus (A2826707)
+  animalId: Star (A2826706)
+  animalId2: Zeus (A2826707)
 contact:
   instagram: "@adoptmiamipets"
   instructions: Email us at hello@bentleysplayhouse.org or send us a DM on Instagram, and tell us a little about your home, and whether you're interested in Zeus, Star or both. We'll connect you with their family and help make sure it's a safe match. Please note that no dog is adopted out unless they are spayed or neutered, so Zeus will be neutered before he goes home with you.
