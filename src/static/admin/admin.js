@@ -108,6 +108,7 @@
         ['Photos', [
           { k: 'photos', label: 'Photos', type: 'images', wide: true, hint: 'The first photo is the main one. Use the arrows to reorder.' },
           { k: 'photoFocus', label: 'Frame the main photo', type: 'focus', src: 'photos', wide: true, hint: 'Tap the dog\'s face on the left photo. The preview on the right is exactly how the card looks on the website.' },
+          { k: 'video', label: 'Video (optional)', type: 'video', wide: true, hint: 'One short video of the pup, up to 25 MB (about 30 seconds). It shows under the photos on the pup\'s page.' },
           { k: 'sharePhoto', label: 'Photo for social shares (optional)', type: 'image', hint: 'A wide photo works best. Leave empty to use the first photo.' },
           { k: 'photoAlt', label: 'Photo description', hint: 'For screen readers, e.g. "Luna, a tan pit mix, sitting in the grass"' },
         ]],
@@ -249,6 +250,29 @@
         '<p class="msg err" role="alert">' + esc(msg || '') + '</p><button class="btn btn--go" type="submit">' + (setup ? 'Create login & sign in' : 'Sign in') + '</button></form>');
       var form = $('form', app), m = $('.msg', app);
       $('#un').focus();
+      // one video per pup (admins only)
+      $$('[data-video]').forEach(function (box) {
+        var k = box.getAttribute('data-video');
+        function draw() {
+          var v = get(data, k);
+          box.innerHTML = (v ? '<video src="' + esc(uploads[v] ? uploads[v].base64 : imgSrc(v)) + '" controls playsinline preload="metadata" style="display:block;width:100%;max-width:360px;border-radius:14px;background:#000;margin-bottom:8px"></video>' : '') +
+            '<div class="row__act" style="justify-content:flex-start"><label class="btn btn--ghost btn--sm"><input type="file" accept="video/mp4,video/quicktime,video/webm,video/*" hidden>🎬 ' + (v ? 'Replace video' : 'Add a video') + '</label>' + (v ? '<button type="button" class="btn btn--ghost btn--sm" data-rm>Remove video</button>' : '') + '</div>';
+          var rm = $('[data-rm]', box); if (rm) rm.onclick = function () { set(data, k, ''); dirty = true; draw(); };
+          var inp = $('input', box);
+          inp.onchange = function () {
+            var f = inp.files[0]; if (!f) return;
+            if (!/^video\//.test(f.type)) { toast('Please choose a video file.'); return; }
+            if (f.size > 25 * 1024 * 1024) { toast('That video is ' + Math.round(f.size / 1048576) + ' MB. Please use one under 25 MB (trim it to about 30 seconds).'); return; }
+            var ext = /quicktime/.test(f.type) || /\.mov$/i.test(f.name) ? 'mov' : /webm/.test(f.type) ? 'webm' : 'mp4';
+            var fr = new FileReader();
+            fr.onload = function () { set(data, k, addUpload(fr.result, 'video.' + ext)); dirty = true; draw(); };
+            fr.onerror = function () { toast('We couldn\'t read that video. Please try another one.'); };
+            fr.readAsDataURL(f);
+          };
+        }
+        draw();
+      });
+
       form.onsubmit = function (e) {
         e.preventDefault(); m.textContent = '';
         var un = $('#un').value.trim(), req;
@@ -505,6 +529,7 @@
         else if (t === 'tags') inner = lab + '<div class="tagsbox" data-tags="' + f.k + '"></div>';
         else if (t === 'images' || t === 'image') inner = '<span class="lbl">' + esc(f.label) + (f.req ? ' <span class="req">*</span>' : '') + '</span><div class="photos" data-imgs="' + f.k + '" data-multi="' + (t === 'images') + '"></div>';
         else if (t === 'file') inner = lab + '<div class="fileline" data-file="' + f.k + '"></div>';
+        else if (t === 'video') inner = '<span class="lbl">' + esc(f.label) + '</span><div class="videobox" data-video="' + f.k + '"></div>';
         else if (t === 'focus') inner = '<span class="lbl">' + esc(f.label) + '</span><div class="focusbox" data-focus="' + f.k + '" data-src="' + f.src + '"></div>';
         return '<div class="' + cls + '" data-field="' + f.k + '"' + hide + '>' + inner + hint + '</div>';
       }

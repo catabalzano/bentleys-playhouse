@@ -5,6 +5,8 @@ import crypto from 'node:crypto';
 //   --pretty           → links as /folder/ (use when hosting on Netlify, Cloudflare Pages, etc.)
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+globalThis.BP_FFMPEG = spawnSync('ffmpeg', ['-version'], { stdio: 'ignore' }).status === 0;
 import { ctx, ROOT, readJSON, readCollection, md, strip, href, apHtml, apTitle } from './lib/core.mjs';
 import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
@@ -150,6 +152,16 @@ emit('404.html', { title: 'Page not found', description: 'Page not found.', noin
 
 // assets
 fs.cpSync(path.join(ROOT, 'src/assets'), path.join(OUT, 'assets'), { recursive: true });
+// pup videos: convert to a light .mp4 (H.264, max 720p) that plays on every phone, when ffmpeg is available
+if (globalThis.BP_FFMPEG) {
+  const vdir = path.join(OUT, 'assets/img/pawsome');
+  if (fs.existsSync(vdir)) for (const f of fs.readdirSync(vdir)) {
+    if (!/\.(mp4|mov|webm)$/i.test(f)) continue;
+    const src = path.join(vdir, f), out = src.replace(/\.(mov|webm|mp4)$/i, '.mp4'), tmp = out + '.tmp.mp4';
+    const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', src, '-vf', "scale='min(1280,iw)':-2", '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '26', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', tmp]);
+    if (r.status === 0) { if (src !== out) fs.rmSync(src); fs.renameSync(tmp, out); } else { if (fs.existsSync(tmp)) fs.rmSync(tmp); if (src !== out) fs.renameSync(src, out); }
+  }
+}
 // lighter photos: big phone photos are resized (max 1600px) and recompressed in the published copy only
 await (async () => {
   let sharp; try { sharp = (await import('sharp')).default; } catch (e) { console.log('Photos: sharp not installed, skipping'); return; }

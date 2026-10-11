@@ -133,6 +133,8 @@ function adoptPanel(d, HC) {
       </div>`;
 }
 
+/** Phone videos (.mov) are converted to .mp4 when the site is built, if the build has ffmpeg. */
+const videoSrc = (v) => (globalThis.BP_FFMPEG ? String(v).replace(/\.(mov|webm)$/i, '.mp4') : v);
 function howTo(d) {
   if (d.contact.instructions) return md(d.contact.instructions);
   const t = d.loc.type; const ids = [d.loc.animalId, d.loc.animalId2].filter(Boolean);
@@ -164,6 +166,7 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
     <div class="pp-detail__main">${d.photos[0] ? `<img src="${img(d.photos[0])}" alt="${esc(d.photoAlt || d.name)}" data-pp-main${focusStyle(d)}>` : `<span class="pp-card__nophoto">${paw()}</span>`}${d.photos.length > 1 ? `<button type="button" class="pp-gal-btn pp-gal-btn--prev" data-pp-step="-1" aria-label="Previous photo">${icon('arrow', { size: 22 })}</button><button type="button" class="pp-gal-btn pp-gal-btn--next" data-pp-step="1" aria-label="Next photo">${icon('arrow', { size: 22 })}</button><span class="pp-gal-count" aria-live="polite"><span data-pp-n>1</span> / ${d.photos.length}</span>` : ''}</div>
     ${d.photos.length > 1 ? `<p class="pp-gal-hint">${icon('image', { size: 16 })} ${d.photos.length} photos. Use the arrows or tap a photo below to see more.</p>` : ''}
     ${d.photos.length > 1 ? `<div class="pp-thumbs" role="group" aria-label="More photos of ${esc(d.name)}">${d.photos.map((p, i) => `<button type="button" class="pp-thumb" data-src="${img(p)}"${i === 0 && focusOk(d) ? ` data-focus="${d.photoFocus}"` : ''} aria-pressed="${i === 0}"><img src="${img(p)}" alt="Photo ${i + 1} of ${esc(d.name)}" loading="lazy"></button>`).join('')}</div>` : ''}
+    ${d.video ? `<div class="pp-video"><p class="pp-video__h">Watch ${esc(d.name)}</p><video src="${img(videoSrc(d.video))}" controls playsinline preload="metadata"${d.photos[0] ? ` poster="${img(d.photos[0])}"` : ''} aria-label="Video of ${esc(d.name)}"></video></div>` : ''}
   </div>
   <div class="pp-detail__info">
     <p class="pp-detail__top">${statusPill}${locBadge(d)}</p>

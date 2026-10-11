@@ -483,7 +483,7 @@ export async function handleContent(req, env, url) {
     const stamp = Date.now().toString(36);
     const map = {};
     for (const [i, u] of (b.uploads || []).entries()) {
-      const ext2 = /\.(png|webp|pdf|jpe?g)$/i.test(u.name) ? u.name.split('.').pop().toLowerCase().replace('jpeg', 'jpg') : 'jpg';
+      const ext2 = /\.(png|webp|pdf|jpe?g|mp4|mov|webm)$/i.test(u.name) ? u.name.split('.').pop().toLowerCase().replace('jpeg', 'jpg') : 'jpg';
       const file = `${slug}-${stamp}${i ? '-' + i : ''}.${ext2}`;
       const repoPath = `${col.images}/${file}`;
       changes.push({ path: repoPath, base64: String(u.base64).replace(/^data:[^,]+,/, '') });
