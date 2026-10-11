@@ -433,5 +433,6 @@
  "Which Path Is Right for You?": "¿Qué camino es el adecuado para ti?",
  "<t1>You want to help the most urgent dogs:</t1> the county shelter.": "<t1>Quieres ayudar a los perros más urgentes:</t1> el refugio del condado.",
  "<t1>You want a structured shelter visit and a set fee:</t1> the Humane Society.": "<t1>Quieres una visita al refugio estructurada y una tarifa fija:</t1> la Humane Society.",
- "<t1>You want to know how a dog behaves in a home:</t1> a foster-based rescue.": "<t1>Quieres saber cómo se comporta un perro en un hogar:</t1> una organización de rescate basada en familias de acogida."
+ "<t1>You want to know how a dog behaves in a home:</t1> a foster-based rescue.": "<t1>Quieres saber cómo se comporta un perro en un hogar:</t1> una organización de rescate basada en familias de acogida.",
+ "<t1>You&#39;re not sure you&#39;re ready:</t1> <t2>foster first</t2>. It&#39;s the best way to learn, and it saves a life too.": "<t1>No estás seguro de que estés listo:</t1> <t2>fomenta primero</t2>. Es la mejor manera de aprender, y también salva una vida."
 }
