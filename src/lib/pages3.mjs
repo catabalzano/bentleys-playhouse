@@ -135,7 +135,8 @@ function adoptPanel(d, HC) {
 
 function howTo(d) {
   if (d.contact.instructions) return md(d.contact.instructions);
-  const t = d.loc.type; const id = d.loc.animalId ? ` Bring ${esc(d.name)}'s animal ID (<strong>${esc(d.loc.animalId)}</strong>).` : '';
+  const t = d.loc.type; const ids = [d.loc.animalId, d.loc.animalId2].filter(Boolean);
+  const id = ids.length > 1 ? ` Bring their animal IDs (${ids.map((x) => `<strong>${esc(x)}</strong>`).join(' and ')}).` : ids.length ? ` Bring ${esc(d.name)}'s animal ID (<strong>${esc(ids[0])}</strong>).` : '';
   if (t.startsWith('mdas')) return `<p>Visit Miami-Dade Animal Services or start on their adoption page.${id} Check MDAS for current hours before you go. Questions? Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a>.</p>`;
   if (t === 'broward') return `<p>Visit Broward County Animal Care or browse their adoptable dogs online.${id} Questions? Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a>.</p>`;
   if (t === 'family') return `<p>Email us at <a href="mailto:${esc(pawsomeEmail())}">${esc(pawsomeEmail())}</a> or send us a DM on Instagram. We'll connect you with the family and help make sure it's a safe match.</p>`;
@@ -180,7 +181,7 @@ export function ppDetail(d, { headingLevel = 'h2', standalone = false } = {}) {
       <p class="pp-where__name">${esc(d.loc.name || d.loc.meta.long || d.loc.meta.label)}</p>
       ${d.loc.name && d.loc.meta.long && d.loc.type !== 'rescue' ? `<p class="pp-where__sub">${esc(d.loc.meta.long)}</p>` : ''}
       ${/^https?:\/\//.test(d.loc.url || '') ? `<p class="pp-where__sub"><a href="${esc(d.loc.url)}" target="_blank" rel="noopener">${esc(/instagram\.com/.test(d.loc.url) ? '@' + d.loc.url.replace(/\/+$/, '').split('/').pop() + ' on Instagram' : d.loc.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))} ↗</a></p>` : ''}
-      ${[d.loc.city, d.loc.animalId && 'Animal ID ' + d.loc.animalId].filter(Boolean).length ? `<p class="pp-where__sub">${[d.loc.city, d.loc.animalId && 'Animal ID ' + d.loc.animalId].filter(Boolean).map(esc).join(' · ')}</p>` : ''}
+      ${(() => { const ids = [d.loc.animalId, d.loc.animalId2].filter(Boolean); const bits = [d.loc.city, ids.length > 1 ? 'Animal IDs ' + ids.join(' and ') : ids.length ? 'Animal ID ' + ids[0] : ''].filter(Boolean); return bits.length ? `<p class="pp-where__sub">${bits.map(esc).join(' · ')}</p>` : ''; })()}
       ${d.status !== 'adopted' ? adoptPanel(d, HC) : `<p class="pp-where__sub">${esc(d.name)} found a home. Thank you to everyone who shared!</p>`}
     </div>
     <div class="pp-share">

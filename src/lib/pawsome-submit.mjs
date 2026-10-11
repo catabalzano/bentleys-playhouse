@@ -21,7 +21,7 @@ export function adoptMailto(d) {
     d.age ? `Age: ${d.age}` : null,
     d.sex ? `Sex: ${d.sex}` : null,
     where ? `Where: ${where}` : null,
-    d.loc.animalId ? `Shelter / animal ID: ${d.loc.animalId}` : null,
+    d.loc.animalId ? `Shelter / animal ID: ${[d.loc.animalId, d.loc.animalId2].filter(Boolean).join(" and ")}` : null,
     `Listing: ${url}`,
     '',
     'About me:',

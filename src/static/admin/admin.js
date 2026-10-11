@@ -133,7 +133,8 @@
           { k: 'location.type', label: 'The pup is with', type: 'select', options: LOC, req: true },
           { k: 'location.name', label: 'Name of the rescue or place', hint: 'Leave empty for shelters.' },
           { k: 'location.url', label: 'Rescue website or Instagram link', hint: 'Optional. Shown as a link on the pup\'s page.' },
-          { k: 'location.city', label: 'City or area' }, { k: 'location.animalId', label: 'Shelter animal ID', hint: 'e.g. A1234567' },
+          { k: 'location.city', label: 'City or area' }, { k: 'location.animalId', label: 'Shelter animal ID', hint: 'e.g. A1234567. For 2 pups, add the name: Star (A2826706)' },
+          { k: 'location.animalId2', label: 'Second pup\'s shelter ID', hint: 'Only when 2 pups are listed together, e.g. Zeus (A2826707)' },
         ]],
         ['How to adopt', [
           { k: 'contact.instagram', label: 'Instagram handle', hint: 'Without the @' }, { k: 'contact.website', label: 'Website' },
