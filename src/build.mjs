@@ -228,7 +228,6 @@ await (async () => {
         for (let c = -8; c <= 8; c++) {
           const cx = sx + dx / 2 + (r % 2 ? dx / 2 : 0) + c * dx;
           if (cx - mm.width / 2 < 0 || cx + mm.width / 2 > W) continue;
-          if (Math.abs(cx - mx) < mm.width * 0.75 && Math.abs(cy - my) < mm.height * 1.1) continue; // none right in the middle (Cata)
           marks.push({ input: mark, left: Math.round(cx - mm.width / 2), top: Math.round(cy - mm.height / 2) });
         }
       }
