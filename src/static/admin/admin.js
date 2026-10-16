@@ -779,12 +779,12 @@
   function unread() { return (S.msgs || []).filter(function (m) { return !m.read; }).length; }
   function msgCount() { var c = $('[data-msgcount]'); if (c) c.textContent = unread() || ''; }
   function loadMsgs() { return api('/api/messages').then(function (j) { S.msgs = j.messages || []; msgCount(); return S.msgs; }); }
-  // Reply opens Gmail (the Bentley's Playhouse Gmail, which sends as hello@bentleysplayhouse.org) with everything filled in
-  var REPLY_GMAIL = 'bentleysplayhouseorg@gmail.com';
+  // Reply opens the Mail app on the computer. In Mail → Settings → Composing, "Send new messages from" is set to
+  // hello@bentleysplayhouse.org, so replies go out as Bentley's Playhouse.
   function gmailReply(m, subj) {
     var first = String(m.firstName || m.name || '').split(' ')[0];
     var subject = 'Re: ' + String(subj).replace(/^\S+ /, '') + ' - Bentley\'s Playhouse';
-    return 'https://mail.google.com/mail/?authuser=' + encodeURIComponent(REPLY_GMAIL) + '&view=cm&fs=1&to=' + encodeURIComponent(m.email) + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Hi ' + first + ',\n\n');
+    return 'mailto:' + encodeURIComponent(m.email).replace(/%40/g, '@') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Hi ' + first + ',\n\n');
   }
   function confirmLine(m) {
     var c = m.confirm;
@@ -809,7 +809,7 @@
         var rows = [['Pup', m.pupUrl ? '<a href="' + esc(m.pupUrl) + '" target="_blank" rel="noopener">' + esc(m.pupName || m.pup) + ' ↗</a>' : ''], ['Phone', m.phone && esc(m.phone)], [m.form === 'adopt' ? 'City' : 'Area', m.area && esc(m.area)], ['Interested in', esc((m.interests || []).join(', '))], ['Rescue', m.rescue && esc(m.rescue)], ['Details sent to', esc((m.sentTo || []).join(', '))]].filter(function (r) { return r[1]; });
         return '<section class="card msg-card' + (m.read ? '' : ' is-new') + '" data-id="' + esc(m.id) + '">' +
           '<div class="msg-top"><div><b>' + esc(m.name) + '</b> ' + (m.read ? '' : '<span class="pill">New</span>') + '<div class="hint">' + esc(subj) + ' · ' + esc(new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div></div>' +
-          (m.email ? '<a class="btn btn--blue btn--sm" target="_blank" rel="noopener" href="' + esc(gmailReply(m, subj)) + '">✉️ Reply</a>' : '') + '</div>' +
+          (m.email ? '<a class="btn btn--blue btn--sm" href="' + esc(gmailReply(m, subj)) + '">✉️ Reply</a>' : '') + '</div>' +
           (m.email ? '<p class="msg-email"><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></p>' : '') +
           confirmLine(m) +
           (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' : '') +
