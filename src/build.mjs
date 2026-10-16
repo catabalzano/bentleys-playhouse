@@ -204,21 +204,34 @@ await (async () => {
       // The site shows photos cropped to a square (pup page) and to 4:3.4 (cards), so everything goes inside the
       // part of the photo that's always visible: sw × sh in the middle.
       const sw = Math.min(W, H), sh = Math.min(H, Math.round(W / (4 / 3.4))), sx = Math.round((W - sw) / 2), sy = Math.round((H - sh) / 2);
-      // 1) the Bentley's Playhouse wordmark across the visible part (Cata, Oct 16), light (20%) so faces stay clear
+      // 1) small Bentley's Playhouse wordmarks scattered over the photo (Cata, Oct 16: about 10 in view, tilted,
+      //    light so faces stay clear). Adopted pups also get the "Adopted!" sticker in the bottom-left corner
+      //    (src/assets/img/adopted-sticker.png), never over their faces.
       const isAdopted = adoptedFiles.has(f);
       const wmMeta = await sharp(wordmark).metadata();
-      const wmW = Math.min(Math.round(sw * 0.92), Math.round(sh * 0.9 * wmMeta.width / wmMeta.height));
-      const gw = isAdopted ? Math.round(sw * 0.86) : wmW, gh = isAdopted ? Math.round(short * 0.5) : Math.round(wmW * wmMeta.height / wmMeta.width), fs2 = Math.round(gw * 0.17);
-      const ghost = isAdopted
-        ? await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${gw}" height="${gh}"><text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" transform="rotate(-12 ${gw / 2} ${gh / 2})" font-family="Fredoka, 'Arial Black', 'DejaVu Sans', sans-serif" font-weight="800" font-size="${fs2}" fill="#ffffff" fill-opacity="0.45" stroke="#1B6E45" stroke-opacity="0.3" stroke-width="${Math.max(1, Math.round(fs2 * 0.03))}">ADOPTED</text></svg>`)).png().toBuffer()
-        : await sharp(wordmark).resize(gw, gh, { fit: 'fill' }).ensureAlpha()
-          .composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.2)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer();
+      const mw = Math.round(sw * 0.17), mh = Math.round(mw * wmMeta.height / wmMeta.width);
+      const mark = await sharp(await sharp(wordmark).resize(mw, mh, { fit: 'fill' }).ensureAlpha()
+        .composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.22)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer())
+        .rotate(-14, { background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+      const mm = await sharp(mark).metadata();
+      const marks = [], dx = sw / 3.6, dy = sh / 3.4;
+      for (let r = -6; r <= 6; r++) {
+        const cy = sy + dy / 2 + r * dy;
+        if (cy - mm.height / 2 < 0 || cy + mm.height / 2 > H) continue;
+        for (let c = -8; c <= 8; c++) {
+          const cx = sx + dx / 2 + (r % 2 ? dx / 2 : 0) + c * dx;
+          if (cx - mm.width / 2 < 0 || cx + mm.width / 2 > W) continue;
+          marks.push({ input: mark, left: Math.round(cx - mm.width / 2), top: Math.round(cy - mm.height / 2) });
+        }
+      }
+      const st = Math.round(Math.min(sw, sh) * 0.34);
+      const sticker = isAdopted ? await sharp(path.join(ROOT, 'src/assets/img/adopted-sticker.png')).resize(st, st, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer() : null;
       // 2) corner logo: the logo PNG as is (no white circle behind it, Cata Oct 16), 18% of the visible part,
-      //    in the bottom-right corner of what the site actually shows
+      //    in the top-right corner of what the site actually shows (bottom-right sits under the "4 photos" label)
       const d = Math.max(64, Math.round(Math.min(sw, sh) * 0.18)), pad = Math.round(d * 0.12);
       const badge = await sharp(logo).resize(d, d, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
       const out = await sharp(fs.readFileSync(file), { failOn: 'none' }).rotate()
-        .composite([{ input: ghost, left: Math.round((W - gw) / 2), top: Math.round((H - gh) / 2) }, { input: badge, left: sx + sw - d - pad, top: sy + sh - d - pad }])
+        .composite([...marks, ...(sticker ? [{ input: sticker, left: sx + Math.round(st * 0.08), top: sy + sh - st - Math.round(st * 0.08) }] : []), { input: badge, left: sx + sw - d - pad, top: sy + Math.round(d * 0.4) }])
         .toFormat(/\.png$/i.test(f) ? 'png' : /\.webp$/i.test(f) ? 'webp' : 'jpeg', { quality: 82 }).toBuffer();
       fs.writeFileSync(file, out); n++;
     } catch (e) { /* leave it */ }
