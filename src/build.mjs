@@ -201,20 +201,24 @@ await (async () => {
       const img = sharp(fs.readFileSync(file), { failOn: 'none' }).rotate();
       const { width: W, height: H } = await img.metadata().then(async (m) => { const b = await sharp(fs.readFileSync(file)).rotate().toBuffer({ resolveWithObject: true }); return b.info; });
       const short = Math.min(W, H);
-      // 1) the Bentley's Playhouse wordmark across the whole photo (Cata, Oct 16), 30% visible
+      // The site shows photos cropped to a square (pup page) and to 4:3.4 (cards), so everything goes inside the
+      // part of the photo that's always visible: sw × sh in the middle.
+      const sw = Math.min(W, H), sh = Math.min(H, Math.round(W / (4 / 3.4))), sx = Math.round((W - sw) / 2), sy = Math.round((H - sh) / 2);
+      // 1) the Bentley's Playhouse wordmark across the visible part (Cata, Oct 16), light (20%) so faces stay clear
       const isAdopted = adoptedFiles.has(f);
       const wmMeta = await sharp(wordmark).metadata();
-      const wmW = Math.min(Math.round(W * 0.94), Math.round(H * 0.9 * wmMeta.width / wmMeta.height));
-      const gw = isAdopted ? Math.round(W * 0.86) : wmW, gh = isAdopted ? Math.round(short * 0.5) : Math.round(wmW * wmMeta.height / wmMeta.width), fs2 = Math.round(gw * 0.17);
+      const wmW = Math.min(Math.round(sw * 0.92), Math.round(sh * 0.9 * wmMeta.width / wmMeta.height));
+      const gw = isAdopted ? Math.round(sw * 0.86) : wmW, gh = isAdopted ? Math.round(short * 0.5) : Math.round(wmW * wmMeta.height / wmMeta.width), fs2 = Math.round(gw * 0.17);
       const ghost = isAdopted
         ? await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${gw}" height="${gh}"><text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" transform="rotate(-12 ${gw / 2} ${gh / 2})" font-family="Fredoka, 'Arial Black', 'DejaVu Sans', sans-serif" font-weight="800" font-size="${fs2}" fill="#ffffff" fill-opacity="0.45" stroke="#1B6E45" stroke-opacity="0.3" stroke-width="${Math.max(1, Math.round(fs2 * 0.03))}">ADOPTED</text></svg>`)).png().toBuffer()
         : await sharp(wordmark).resize(gw, gh, { fit: 'fill' }).ensureAlpha()
-          .composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.3)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer();
-      // 2) corner logo: the logo PNG as is (no white circle behind it, Cata Oct 16), 16% of the short side
-      const d = Math.max(56, Math.round(short * 0.16)), pad = Math.round(d * 0.16);
+          .composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.2)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer();
+      // 2) corner logo: the logo PNG as is (no white circle behind it, Cata Oct 16), 18% of the visible part,
+      //    in the bottom-right corner of what the site actually shows
+      const d = Math.max(64, Math.round(Math.min(sw, sh) * 0.18)), pad = Math.round(d * 0.12);
       const badge = await sharp(logo).resize(d, d, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
       const out = await sharp(fs.readFileSync(file), { failOn: 'none' }).rotate()
-        .composite([{ input: ghost, left: Math.round((W - gw) / 2), top: Math.round((H - gh) / 2) }, { input: badge, left: W - d - pad, top: H - d - pad }])
+        .composite([{ input: ghost, left: Math.round((W - gw) / 2), top: Math.round((H - gh) / 2) }, { input: badge, left: sx + sw - d - pad, top: sy + sh - d - pad }])
         .toFormat(/\.png$/i.test(f) ? 'png' : /\.webp$/i.test(f) ? 'webp' : 'jpeg', { quality: 82 }).toBuffer();
       fs.writeFileSync(file, out); n++;
     } catch (e) { /* leave it */ }
