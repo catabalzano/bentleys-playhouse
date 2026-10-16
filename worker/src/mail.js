@@ -167,7 +167,6 @@ export function interestToAdopter(env, { m, pup, rescue, rescueNotified }) {
   const ids = (P.animalIds || []).filter(Boolean);
   const title = `You Want to ${verb === 'foster' ? 'Foster' : 'Adopt'} ${h(P.name)}!`;
   const intro = p(`Thank you for your interest in <strong>${h(P.name)}</strong>! We got your message, and Bentley's Playhouse will get back to you <strong>within 24 to 48 hours</strong> to help you connect.`);
-  const card = pupCard(P);
   let where = '', whereText = [], tips = [];
   if (kind === 'shelter') {
     const rows = [['Shelter', `<strong>${h(S.name)}</strong><br>${h(S.place)}`], ['Address', S.address ? `<a href="${h(mapHref(S.address))}" style="color:${DEEP};font-weight:700">${h(S.address)}</a>` : ''], ['Phone', S.phone ? `<a href="${h(telHref(S.phone))}" style="color:${DEEP};font-weight:700">${h(S.phone)}</a>` : ''], [ids.length > 1 ? 'Animal IDs' : 'Animal ID', ids.map(h).join('<br>')], ['Website', `<a href="${h(S.site)}" style="color:${DEEP};font-weight:700">Adoption page</a>`]];
@@ -186,13 +185,13 @@ export function interestToAdopter(env, { m, pup, rescue, rescueNotified }) {
     tips = [`Think about questions for the family: ${them === P.name ? P.name + "'s" : 'their'} routine, habits and vet records.`, 'Plan a meet-and-greet, with your other dogs if you have any.', 'Have your home ready: a quiet spot, a crate or bed, and a leash and ID tag.'];
   }
   const body = [
-    p(`Hi ${h(m.firstName)},`), intro, card, where,
+    p(`Hi ${h(m.firstName)},`), intro, where,
     h2('Tips for a Smooth Adoption'), note(tips.map((t) => '• ' + h(t)).join('<br>')),
     m.message ? h2('Your Message') + note(`<span style="white-space:pre-wrap">${h(m.message)}</span>`) : '',
     btn(`See ${h(P.name)} Again`, P.url),
   ].join('');
   const text = plain([`Hi ${m.firstName},`, '', `Thank you for your interest in ${P.name}! We got your message, and Bentley's Playhouse will get back to you within 24 to 48 hours to help you connect.`, '', ...whereText, '', 'TIPS FOR A SMOOTH ADOPTION', ...tips.map((t) => '- ' + t), ...(m.message ? ['', 'Your message:', m.message] : []), '', `${P.name}: ${P.url}`]);
-  return { subject: `Next steps for ${P.name}`, html: layout(env, { pre: `We'll get back to you within 24 to 48 hours. Here's where ${P.name} ${is} and how to reach them.`, title, body }), text };
+  return { subject: `Next steps for ${P.name}`, html: layout(env, { pre: `We'll get back to you within 24 to 48 hours. Here's where ${P.name} ${is} and how to reach them.`, title, body, photo: P.photo, photoAlt: P.name }), text };
 }
 /** Small photo + name + status card for a pup (used in emails). */
 function pupCard(P) {
@@ -250,11 +249,6 @@ export function messageReceived(env, { firstName, pup, message, kind }) {
       whereText = ['WHERE ' + P.name.toUpperCase() + (many ? ' ARE' : ' IS'), ...rb.text];
     }
   }
-  const pupCardOld = P ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 18px;border:2px solid #E4E7F7;border-radius:18px"><tr>
-    ${P.photo ? `<td width="132" style="padding:12px 0 12px 12px;vertical-align:middle"><a href="${h(P.url)}"><img src="${h(P.photo)}" width="120" height="120" alt="${h(P.name)}" style="display:block;width:120px;height:120px;object-fit:cover;border-radius:14px;border:0"></a></td>` : ''}
-    <td style="padding:12px 16px;vertical-align:middle;font-family:${BODY};color:${INK}"><div style="font-family:${HEAD};font-size:22px;font-weight:700;line-height:1.2">${h(P.name)}</div>
-    <div style="margin:6px 0 10px"><span style="display:inline-block;background:#E3F4EA;color:#1B6E45;font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px">${P.status === 'adopted' ? 'Adopted' : P.needs === 'foster' ? 'Needs a foster' : 'Ready for adoption'}</span></div>
-    <a href="${h(P.url)}" style="color:${DEEP};font-weight:700;font-size:15px">See ${h(P.name)}'s page →</a></td></tr></table>` : '';
   const body = [
     p(`Hi ${h(firstName || 'there')},`),
     p(P ? `Thank you for reaching out about <strong>${h(P.name)}</strong>! We got your message, and someone from Bentley's Playhouse will get back to you <strong>within 24 to 48 hours</strong>.` : `Thank you for reaching out! We got your message, and someone from Bentley's Playhouse will get back to you <strong>within 24 to 48 hours</strong>.`),

@@ -183,13 +183,13 @@ await (async () => {
   }
   if (files.length) console.log(`Photos: ${files.length} resized, ${(before / 1048576).toFixed(1)} MB → ${(after / 1048576).toFixed(1)} MB`);
 })();
-// Watermark (Cata picked option 5, Oct 16): a big see-through logo in the middle + the round logo badge in the
+// Watermark (Cata picked option 5, Oct 16; updated Oct 16): the see-through wordmark across the photo + the round logo in the
 // bottom-right corner, on every Pawsome Pooches photo in the published copy only. The originals stay clean.
 await (async () => {
   let sharp; try { sharp = (await import('sharp')).default; } catch (e) { return; }
   const dir = path.join(OUT, 'assets/img/pawsome');
   if (!fs.existsSync(dir)) return;
-  const logo = path.join(ROOT, 'src/assets/img/logo-badge.png');
+  const logo = path.join(ROOT, 'src/assets/img/logo-badge.png'), wordmark = path.join(ROOT, 'src/assets/img/logo-watermark.png');
   // photos of adopted pups get a big see-through "ADOPTED" instead of the big logo (Cata, Oct 16)
   const adoptedFiles = new Set();
   for (const d of pooches) if (d.status === 'adopted') for (const ph of [...d.photos, d.sharePhoto].filter(Boolean)) adoptedFiles.add(path.basename(String(ph)));
@@ -201,19 +201,18 @@ await (async () => {
       const img = sharp(fs.readFileSync(file), { failOn: 'none' }).rotate();
       const { width: W, height: H } = await img.metadata().then(async (m) => { const b = await sharp(fs.readFileSync(file)).rotate().toBuffer({ resolveWithObject: true }); return b.info; });
       const short = Math.min(W, H);
-      // 1) big faint logo: the badge turned white, 18% visible, 45% of the short side
-      const big = Math.round(short * 0.45);
+      // 1) the Bentley's Playhouse wordmark across the whole photo (Cata, Oct 16), 30% visible
       const isAdopted = adoptedFiles.has(f);
-      const gw = isAdopted ? Math.round(W * 0.86) : big, gh = isAdopted ? Math.round(short * 0.5) : big, fs2 = Math.round(gw * 0.17);
+      const wmMeta = await sharp(wordmark).metadata();
+      const wmW = Math.min(Math.round(W * 0.94), Math.round(H * 0.9 * wmMeta.width / wmMeta.height));
+      const gw = isAdopted ? Math.round(W * 0.86) : wmW, gh = isAdopted ? Math.round(short * 0.5) : Math.round(wmW * wmMeta.height / wmMeta.width), fs2 = Math.round(gw * 0.17);
       const ghost = isAdopted
         ? await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${gw}" height="${gh}"><text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" transform="rotate(-12 ${gw / 2} ${gh / 2})" font-family="Fredoka, 'Arial Black', 'DejaVu Sans', sans-serif" font-weight="800" font-size="${fs2}" fill="#ffffff" fill-opacity="0.45" stroke="#1B6E45" stroke-opacity="0.3" stroke-width="${Math.max(1, Math.round(fs2 * 0.03))}">ADOPTED</text></svg>`)).png().toBuffer()
-        : await sharp(logo).resize(big, big, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).ensureAlpha()
-          .linear([0, 0, 0], [255, 255, 255]).composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.18)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer();
-      // 2) corner badge: white circle with the logo, 16% of the short side
+        : await sharp(wordmark).resize(gw, gh, { fit: 'fill' }).ensureAlpha()
+          .composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.3)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer();
+      // 2) corner logo: the logo PNG as is (no white circle behind it, Cata Oct 16), 16% of the short side
       const d = Math.max(56, Math.round(short * 0.16)), pad = Math.round(d * 0.16);
-      const circle = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${d}" height="${d}"><circle cx="${d / 2}" cy="${d / 2}" r="${d / 2 - 1}" fill="#fff" fill-opacity="0.94"/></svg>`);
-      const inner = await sharp(logo).resize(Math.round(d * 0.86), Math.round(d * 0.86), { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
-      const badge = await sharp(circle).composite([{ input: inner, gravity: 'center' }]).png().toBuffer();
+      const badge = await sharp(logo).resize(d, d, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
       const out = await sharp(fs.readFileSync(file), { failOn: 'none' }).rotate()
         .composite([{ input: ghost, left: Math.round((W - gw) / 2), top: Math.round((H - gh) / 2) }, { input: badge, left: W - d - pad, top: H - d - pad }])
         .toFormat(/\.png$/i.test(f) ? 'png' : /\.webp$/i.test(f) ? 'webp' : 'jpeg', { quality: 82 }).toBuffer();

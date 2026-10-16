@@ -316,6 +316,7 @@
       '<a class="nav" href="#home" data-nav="home">🏡 Home</a>' +
       '<a class="nav" href="#submissions" data-nav="submissions">📥 Submitted pups <span class="count" data-subcount></span></a>' +
       '<a class="nav" href="#messages" data-nav="messages">📬 Messages <span class="count" data-msgcount></span></a>' +
+      '<a class="nav" href="#cases" data-nav="cases">🐾 Adoption cases <span class="count" data-casecount></span></a>' +
       '<a class="nav" href="#rescues" data-nav="rescues">🤝 Rescue contacts</a>' +
       '<a class="nav" href="#eventreqs" data-nav="eventreqs">📨 Event requests <span class="count" data-evcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
@@ -328,7 +329,7 @@
       '<div><div class="topbar"><button type="button" data-menu>☰ Menu</button><b>Admin</b></div><main class="main" id="main" tabindex="-1"></main></div></div>';
     $('[data-menu]').onclick = function () { $('.shell').classList.toggle('menu-open'); };
     $$('.nav').forEach(function (n) { n.addEventListener('click', function () { $('.shell').classList.remove('menu-open'); }); });
-    loadSubs(); loadMe(); loadEvReqs().catch(function () {});
+    loadSubs(); loadMe(); loadEvReqs().catch(function () {}); api('/api/cases').then(function (j) { caseCount(j.cases); }).catch(function () {});
   }
   function main() { return $('#main'); }
   function loadMe() {
@@ -359,6 +360,7 @@
     if (h === 'homephoto') return homePhoto();
     if (h === 'messages') return messages();
     if (h === 'rescues') return rescues();
+    if (p[0] === 'cases') return cases(p[1] || null);
     if (h === 'eventreqs') return eventReqs();
     if (h === 'settings' || h === 'profile') return profile();
     if (h === 'users') return manageUsers();
@@ -447,6 +449,7 @@
       '<div class="home-cards">' +
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#messages"><span class="big">' + (S.msgs ? unread() : '…') + '</span><b>Messages</b><span>From the Contact and Get Involved forms</span></a>' +
+      '<a class="home-card" href="#cases"><span class="big">🐾</span><b>Adoption cases</b><span>Steps to follow for every “I want to adopt”</span></a>' +
       '<a class="home-card" href="#rescues"><span class="big">🤝</span><b>Rescue contacts</b><span>Every rescue and foster that listed a pup</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
       ORDER.map(function (k) { return '<a class="home-card" href="#c/' + k + '"><span class="big">' + COLS[k].icon + '</span><b>' + esc(COLS[k].label) + '</b><span>' + esc(COLS[k].intro) + '</span></a>'; }).join('') +
@@ -786,15 +789,16 @@
     var subject = 'Re: ' + String(subj).replace(/^\S+ /, '') + ' - Bentley\'s Playhouse';
     return 'mailto:' + encodeURIComponent(m.email).replace(/%40/g, '@') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Hi ' + first + ',\n\n');
   }
-  function confirmLine(m) {
+  function confirmLine(m) { return confirmLine0(m) + caseLink(m); }
+  function confirmLine0(m) {
     var c = m.confirm;
     if (m.form !== 'adopt') return '';
     if (!c) return '<p class="msg-confirm is-unknown">✉️ Confirmation email: not recorded</p>';
     var when = new Date(c.at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
     if (c.status === 'sent') return '<p class="msg-confirm is-ok">✅ ' + esc(m.firstName || 'They') + ' got the confirmation email “' + esc(c.subject) + '” · ' + esc(when) + '</p>';
     if (c.status === 'off') return '<p class="msg-confirm is-warn">⚠️ No confirmation email: email sending was off</p>';
-    return '<p class="msg-confirm is-bad">⚠️ The confirmation email didn\'t go through · ' + esc(when) + '. Reply to them yourself.</p>';
-  }
+    return '<p class="msg-confirm is-bad">⚠️ The confirmation email didn\'t go through · ' + esc(when) + '. Reply to them yourself.</p>';  }
+  function caseLink(m) { return m.form === 'adopt' ? ' <a class="btn btn--ghost btn--sm" href="#cases/' + esc(m.id) + '">🐾 Open case</a>' : ''; }
   function messages() {
     main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form, the "Raise your hand" form, and "I want to adopt" on Pawsome Pooches, plus a note whenever a pup is marked adopted. Only admins can see these.</p></div><button class="btn btn--ghost" data-testmail>✉️ Send me test emails</button></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
     var tab = 'all';
@@ -954,6 +958,94 @@
         .then(function (res) { list = res[0].rescues || []; live = res[1] || {}; draw(); return list; });
     }
     load().then(function (l) { if (!l.length) return collect(null); }).catch(function (e) { box.innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
+  }
+
+  // ---------- 🐾 Adoption cases (worker/src/cases.js) ----------
+  // Every "I want to adopt" message is a case with steps to follow, depending on where the pup is.
+  // Red when nobody replied within 48 hours; flagged when the pup was adopted by someone else.
+  var KIND = { shelter: 'Shelter pup', rescue: 'Rescue pup', family: 'Family rehoming' };
+  function caseFlags(c, all) {
+    var f = [];
+    if (c.outcome) return f;
+    var replied = c.steps.some(function (s) { return (s.key === 'reply' || s.key === 'screen') && s.done; });
+    if (!replied && Date.now() - new Date(c.createdAt).getTime() > 48 * 3600 * 1000) f.push(['bad', '⏰ No reply yet after 48 hours']);
+    else if (!replied) f.push(['warn', 'Reply within 48 hours (by ' + new Date(new Date(c.createdAt).getTime() + 48 * 3600 * 1000).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }) + ')']);
+    if (c.pup.status === 'adopted') f.push(['bad', '🏠 ' + c.pup.name + ' is marked adopted on the website. Let ' + (c.person.firstName || 'them') + ' know.']);
+    else if (all.some(function (o) { return o !== c && o.pup.slug === c.pup.slug && (o.outcome === 'adopted' || o.outcome === 'fostered'); })) f.push(['bad', '🏠 ' + c.pup.name + ' went home with another adopter. Let ' + (c.person.firstName || 'them') + ' know.']);
+    if (c.pup.status === 'pending') f.push(['warn', 'Adoption pending on the website']);
+    return f;
+  }
+  function caseCount(list) { var cc = $('[data-casecount]'); if (cc) cc.textContent = (list || []).filter(function (c) { return caseFlags(c, list).some(function (f) { return f[0] === 'bad'; }); }).length || ''; }
+  function cases(openId) {
+    main().innerHTML = '<div class="head"><div><h1>🐾 Adoption cases</h1><p>Every “I want to adopt” message is a case. Tick each step as it happens so nothing falls through the cracks. Steps the website does itself tick on their own.</p></div></div>' +
+      '<div class="tabs" data-ctabs></div><div class="card"><input id="cq" type="search" placeholder="Find by person, pup, email or phone…" style="width:100%"></div><div data-cases><p class="empty">Loading…</p></div>';
+    var list = [], OUT = {}, tab = 'open', box = $('[data-cases]'), q = $('#cq');
+    function when(iso) { return iso ? new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : ''; }
+    function stepRow(c, s, i) {
+      var isResult = s.key === 'result';
+      return '<li class="cs-step' + (s.done ? ' is-done' : '') + '">' +
+        (isResult ? '<span class="cs-dot">' + (s.done ? '✓' : (i + 1)) + '</span><div class="cs-body"><b>Result</b> <select data-out><option value="">Still open</option>' + Object.keys(OUT).map(function (k) { return '<option value="' + k + '"' + (c.outcome === k ? ' selected' : '') + '>' + esc(OUT[k]) + '</option>'; }).join('') + '</select>' + (s.done ? ' <span class="hint">' + esc(when(s.at)) + '</span>' : '') + '</div>'
+          : '<label class="cs-dot"><input type="checkbox" data-step="' + s.key + '"' + (s.done ? ' checked' : '') + ' aria-label="' + esc(s.label) + '"><span>' + (s.done ? '✓' : (i + 1)) + '</span></label><div class="cs-body"><b>' + esc(s.label) + '</b>' +
+            (s.done ? '<div class="hint">' + esc(when(s.at)) + (s.by === 'system' ? ' · done by the website' : s.by ? ' · ' + esc(s.by) : '') + (s.note ? ' · ' + esc(s.note) : '') + '</div>' : '') + '</div>') +
+        '</li>';
+    }
+    function card(c) {
+      var flags = caseFlags(c, list), P = c.pup, R = P.rescue;
+      var where = c.kind === 'shelter' ? (P.animalIds.length ? 'Animal ID' + (P.animalIds.length > 1 ? 's' : '') + ': <b>' + P.animalIds.map(esc).join(', ') + '</b>' : 'No animal ID on file') :
+        c.kind === 'rescue' && R ? esc(R.name) + (R.email ? ' · <a href="mailto:' + esc(R.email) + '">' + esc(R.email) + '</a>' : '') + (R.phone ? ' · ' + telLinks(R.phone) : '') : '';
+      var subj = 'Re: ' + P.name + ' - Bentley\'s Playhouse';
+      return '<section class="card msg-card cs-card' + (flags.some(function (f) { return f[0] === 'bad'; }) ? ' is-late' : '') + (c.outcome ? ' is-closed' : '') + '" id="case-' + esc(c.id) + '" data-id="' + esc(c.id) + '">' +
+        '<div class="msg-top"><div class="cs-who">' + (P.thumb ? '<img src="' + esc(P.thumb) + '" alt="">' : '') + '<div><b>' + esc(c.person.name) + '</b> wants to ' + esc(c.verb) + ' ' + (P.url ? '<a href="' + esc(P.url) + '" target="_blank" rel="noopener">' + esc(P.name) + ' ↗</a>' : esc(P.name)) +
+        '<div class="hint">' + esc(when(c.createdAt)) + ' · <span class="pill">' + esc(KIND[c.kind]) + '</span>' + (P.status === 'adopted' ? '<span class="pill ok">Adopted on site</span>' : P.status === 'gone' ? '<span class="pill">Not on site</span>' : '') + (c.outcome ? '<span class="pill ok">' + esc(OUT[c.outcome]) + '</span>' : '') + '</div></div></div>' +
+        '<a class="btn btn--blue btn--sm" href="' + esc('mailto:' + encodeURIComponent(c.person.email).replace(/%40/g, '@') + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent('Hi ' + (c.person.firstName || '') + ',\n\n')) + '">✉️ Reply</a></div>' +
+        flags.map(function (f) { return '<p class="msg-confirm is-' + (f[0] === 'bad' ? 'bad' : 'warn') + '">' + esc(f[1]) + '</p>'; }).join(' ') +
+        '<dl class="msg-dl"><dt>Email</dt><dd><a href="mailto:' + esc(c.person.email) + '">' + esc(c.person.email) + '</a></dd><dt>Phone</dt><dd>' + telLinks(c.person.phone || '') + '</dd><dt>City</dt><dd>' + esc(c.person.city || '') + '</dd>' + (where ? '<dt>' + (c.kind === 'shelter' ? 'Shelter' : 'Rescue') + '</dt><dd>' + where + '</dd>' : '') + '</dl>' +
+        (c.message ? '<details class="cs-msg"><summary>Their message</summary><p class="msg-body">' + esc(c.message) + '</p></details>' : '') +
+        '<ol class="cs-steps">' + c.steps.map(function (s, i) { return stepRow(c, s, i); }).join('') + '</ol>' +
+        '<div class="f"><label for="cn-' + esc(c.id) + '">Notes (only admins see these)</label><textarea id="cn-' + esc(c.id) + '" rows="2" data-notes placeholder="Calls, what the shelter said, next steps…">' + esc(c.notes) + '</textarea></div>' +
+        '<div class="row__act" style="justify-content:flex-start"><button class="btn btn--ghost btn--sm" data-savenotes hidden>💾 Save notes</button><span class="msg" data-msg role="status"></span></div></section>';
+    }
+    function hay(c) { return [c.person.name, c.person.email, c.person.phone, c.person.city, c.pup.name, c.notes].join(' ').toLowerCase(); }
+    function inTab(c) { var bad = caseFlags(c, list).some(function (f) { return f[0] === 'bad'; }); return tab === 'all' || (tab === 'open' && !c.outcome) || (tab === 'attention' && bad) || (tab === 'closed' && !!c.outcome); }
+    function tabs() {
+      var n = function (t) { var keep = tab; tab = t; var k = list.filter(inTab).length; tab = keep; return k; };
+      $('[data-ctabs]').innerHTML = [['attention', '⚠️ Needs attention'], ['open', 'Open'], ['closed', 'Closed'], ['all', 'All']].map(function (t) { return '<button class="tab" aria-pressed="' + (tab === t[0]) + '" data-t="' + t[0] + '">' + t[1] + ' <span class="count">' + n(t[0]) + '</span></button>'; }).join('');
+      $$('[data-t]').forEach(function (b) { b.onclick = function () { tab = b.getAttribute('data-t'); draw(); }; });
+    }
+    function save(c, body, el) {
+      var m = $('[data-msg]', el); m.className = 'msg'; m.textContent = 'Saving…';
+      return api('/api/cases/' + c.id, { method: 'PUT', json: body }).then(function (j) {
+        list = list.map(function (x) { return x.id === c.id ? j.case : x; }); caseCount(list); draw(); toast('Saved.');
+      }, function (e) { m.className = 'msg err'; m.textContent = e.message; });
+    }
+    function draw() {
+      tabs(); caseCount(list);
+      var t = q.value.trim().toLowerCase(), rows = list.filter(function (c) { return inTab(c) && (!t || hay(c).indexOf(t) > -1); });
+      if (!list.length) { box.innerHTML = '<p class="empty">No adoption cases yet. When someone taps “I want to adopt” on a pup, it shows up here.</p>'; return; }
+      box.innerHTML = rows.length ? rows.map(card).join('') : '<p class="empty">Nothing here right now. 🎉</p>';
+      $$('.cs-card', box).forEach(function (el) {
+        var c = list.filter(function (x) { return x.id === el.getAttribute('data-id'); })[0];
+        $$('[data-step]', el).forEach(function (cb) {
+          cb.onchange = function () {
+            var body = { step: cb.getAttribute('data-step'), done: cb.checked, by: (S.me && (S.me.name || '').split(' ')[0]) || '' };
+            if (cb.checked && /contact|confirm|rcontact|screen|intro/.test(body.step)) { var n = prompt('Add a short note? (optional)', ''); if (n === null) { cb.checked = false; return; } body.note = n; }
+            save(c, body, el);
+          };
+        });
+        var out = $('[data-out]', el); if (out) out.onchange = function () { save(c, { outcome: out.value }, el); };
+        var ta = $('[data-notes]', el), sb = $('[data-savenotes]', el);
+        ta.oninput = function () { sb.hidden = false; };
+        sb.onclick = function () { save(c, { notes: ta.value }, el); };
+      });
+      if (openId) { var target = document.getElementById('case-' + openId); if (target) { target.scrollIntoView({ block: 'start' }); target.classList.add('is-focus'); } openId = null; }
+    }
+    q.addEventListener('input', draw);
+    api('/api/cases').then(function (j) {
+      list = j.cases || []; OUT = j.outcomes || {};
+      if (openId) { var c = list.filter(function (x) { return x.id === openId; })[0]; if (c) tab = c.outcome ? 'closed' : 'open'; }
+      else if (list.some(function (c) { return caseFlags(c, list).some(function (f) { return f[0] === 'bad'; }); })) tab = 'attention';
+      draw();
+    }).catch(function (e) { box.innerHTML = '<p class="empty msg err">' + esc(e.message) + '</p>'; });
   }
 
   // ---------- event requests + event partners (worker/src/events.js) ----------

@@ -219,3 +219,15 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 #sp-q{font:inherit;border:2px solid var(--line);border-radius:12px;padding:10px 12px}
 .r-form{margin-top:14px}
 .msg-confirm{margin:8px 0 0;font-size:14px;font-weight:700;padding:6px 12px;border-radius:10px;display:inline-block}.msg-confirm.is-ok{background:#E3F4EA;color:#1B6E45}.msg-confirm.is-warn,.msg-confirm.is-unknown{background:#FFF1E6;color:#9A4A12}.msg-confirm.is-bad{background:#FDE7E5;color:#B42318}
+/* 🐾 Adoption cases */
+.cs-card.is-late{border-left:5px solid var(--red)}.cs-card.is-closed{opacity:.85}.cs-card.is-focus{box-shadow:0 0 0 3px var(--gold)}
+.cs-who{display:flex;gap:12px;align-items:center}.cs-who img{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none}
+.cs-steps{list-style:none;margin:14px 0;padding:0;display:grid;gap:2px}
+.cs-step{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line)}.cs-step:last-child{border-bottom:0}
+.cs-dot{position:relative;flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:#fff;border:2px solid var(--line);color:var(--muted);cursor:pointer}
+.cs-dot input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.cs-dot:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.cs-step.is-done .cs-dot{background:var(--green);border-color:var(--green);color:#fff}
+.cs-body{padding-top:4px;min-width:0}.cs-body select{margin-left:6px;padding:4px 8px}
+.cs-step.is-done .cs-body b{color:var(--green)}
+.cs-msg summary{cursor:pointer;font-weight:800;margin:8px 0}
