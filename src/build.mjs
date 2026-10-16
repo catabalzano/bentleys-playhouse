@@ -231,10 +231,6 @@ await (async () => {
           marks.push({ input: mark, left: Math.round(cx - mm.width / 2), top: Math.round(cy - mm.height / 2) });
         }
       }
-      // always one right in the middle of what the site shows (Cata): drop the nearest one and center a mark there
-      { let best = -1, bd = Infinity; marks.forEach((k, i) => { const dd = Math.hypot(k.left + mm.width / 2 - mx, k.top + mm.height / 2 - my); if (dd < bd) { bd = dd; best = i; } });
-        if (best > -1 && bd < dx * 0.75) marks.splice(best, 1);
-        marks.push({ input: mark, left: Math.round(mx - mm.width / 2), top: Math.round(my - mm.height / 2) }); }
       const st = Math.round(Math.min(sw, sh) * 0.34);
       const sticker = isAdopted ? await sharp(path.join(ROOT, 'src/assets/img/adopted-sticker.png')).resize(st, st, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer() : null;
       // 2) corner logo: the logo PNG as is (no white circle behind it, Cata Oct 16), 18% of the visible part,
