@@ -74,16 +74,23 @@ export async function receiveInterest(req, env, ctx) {
   // Who else hears about it: the rescue (from the listing) and whoever submitted the pup, unless it's a family rehoming (we screen those).
   const direct = pup.rescue && pup.locType !== 'family';
   const work = (async () => {
-    const lister = await listerEmails(env, pup.submissionId);
-    const a = interestToAdopter(env, { m, pup, rescue: direct ? pup.rescue : null, sharedWithRescue: direct && m.shareWithRescue });
-    await sendMail(env, { to: m.email, subject: a.subject, html: a.html, text: a.text, tag: 'adopt-interest' });
+    let notified = false;
     if (direct && m.shareWithRescue) {
+      const lister = await listerEmails(env, pup.submissionId);
       const r = interestToRescue(env, { m, pup });
       const to = [pup.rescue.email, ...lister.emails].filter(Boolean);
-      if (to.length) await sendMail(env, { to: to[0], cc: to.slice(1), subject: r.subject, html: r.html, text: r.text, tag: 'adopt-interest-rescue' });
-      m.sentTo = to;
-      await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m));
+      if (to.length) {
+        const res = await sendMail(env, { to: to[0], cc: to.slice(1), subject: r.subject, html: r.html, text: r.text, tag: 'adopt-interest-rescue' });
+        notified = !!(res && res.id);
+        m.sentTo = to;
+        await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m));
+      }
     }
+    const a = interestToAdopter(env, { m, pup, rescue: direct ? pup.rescue : null, rescueNotified: notified });
+    const res = await sendMail(env, { to: m.email, subject: a.subject, html: a.html, text: a.text, tag: 'adopt-interest' });
+    // so the admin can show "Confirmation email sent" on the message
+    m.confirm = { subject: a.subject, at: new Date().toISOString(), status: res && res.id ? 'sent' : res && res.skipped ? 'off' : 'failed', id: (res && res.id) || '' };
+    await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m));
   })().catch((e) => console.error('interest mail', e && e.message));
   if (ctx && ctx.waitUntil) ctx.waitUntil(work); else await work;
   return json({ ok: true, rescue: direct ? pup.rescue : null, shared: !!(direct && m.shareWithRescue) });
@@ -157,7 +164,7 @@ export async function sendTestEmails(req, env) {
   const mails = [
     submissionReceived(env, fake),
     listingApproved(env, { name: pup.name, url: pup.url, firstName: 'Cata', adoptUrl: await adoptLink(env, slug, pup.name), stories: await onlineStories(['Scrapbook', 'Ticket', 'Poster'].map((l) => ({ label: l, url: `${site(env)}/assets/img/pawsome/stories/${slug}-story-${l.toLowerCase()}.jpg` }))), photo: pup.photo, needs: pup.needs }),
-    interestToAdopter(env, { m, pup, rescue, sharedWithRescue: true }),
+    interestToAdopter(env, { m, pup, rescue: pup.rescue, rescueNotified: false }),
     interestToRescue(env, { m, pup }),
   ];
   const sent = [];

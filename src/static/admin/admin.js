@@ -779,6 +779,22 @@
   function unread() { return (S.msgs || []).filter(function (m) { return !m.read; }).length; }
   function msgCount() { var c = $('[data-msgcount]'); if (c) c.textContent = unread() || ''; }
   function loadMsgs() { return api('/api/messages').then(function (j) { S.msgs = j.messages || []; msgCount(); return S.msgs; }); }
+  // Reply opens Gmail (the Bentley's Playhouse Gmail, which sends as hello@bentleysplayhouse.org) with everything filled in
+  var REPLY_GMAIL = 'bentleysplayhouseorg@gmail.com';
+  function gmailReply(m, subj) {
+    var first = String(m.firstName || m.name || '').split(' ')[0];
+    var subject = 'Re: ' + String(subj).replace(/^\S+ /, '') + ' - Bentley\'s Playhouse';
+    return 'https://mail.google.com/mail/?authuser=' + encodeURIComponent(REPLY_GMAIL) + '&view=cm&fs=1&to=' + encodeURIComponent(m.email) + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('Hi ' + first + ',\n\n');
+  }
+  function confirmLine(m) {
+    var c = m.confirm;
+    if (m.form !== 'adopt') return '';
+    if (!c) return '<p class="msg-confirm is-unknown">✉️ Confirmation email: not recorded</p>';
+    var when = new Date(c.at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    if (c.status === 'sent') return '<p class="msg-confirm is-ok">✅ ' + esc(m.firstName || 'They') + ' got the confirmation email “' + esc(c.subject) + '” · ' + esc(when) + '</p>';
+    if (c.status === 'off') return '<p class="msg-confirm is-warn">⚠️ No confirmation email: email sending was off</p>';
+    return '<p class="msg-confirm is-bad">⚠️ The confirmation email didn\'t go through · ' + esc(when) + '. Reply to them yourself.</p>';
+  }
   function messages() {
     main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form, the "Raise your hand" form, and "I want to adopt" on Pawsome Pooches, plus a note whenever a pup is marked adopted. Only admins can see these.</p></div><button class="btn btn--ghost" data-testmail>✉️ Send me test emails</button></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
     var tab = 'all';
@@ -793,8 +809,9 @@
         var rows = [['Pup', m.pupUrl ? '<a href="' + esc(m.pupUrl) + '" target="_blank" rel="noopener">' + esc(m.pupName || m.pup) + ' ↗</a>' : ''], ['Phone', m.phone && esc(m.phone)], [m.form === 'adopt' ? 'City' : 'Area', m.area && esc(m.area)], ['Interested in', esc((m.interests || []).join(', '))], ['Rescue', m.rescue && esc(m.rescue)], ['Details sent to', esc((m.sentTo || []).join(', '))]].filter(function (r) { return r[1]; });
         return '<section class="card msg-card' + (m.read ? '' : ' is-new') + '" data-id="' + esc(m.id) + '">' +
           '<div class="msg-top"><div><b>' + esc(m.name) + '</b> ' + (m.read ? '' : '<span class="pill">New</span>') + '<div class="hint">' + esc(subj) + ' · ' + esc(new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div></div>' +
-          (m.email ? '<a class="btn btn--blue btn--sm" href="mailto:' + esc(m.email) + '?subject=' + encodeURIComponent('Re: ' + subj.replace(/^\S+ /, '') + ' - Bentley\'s Playhouse') + '">✉️ Reply</a>' : '') + '</div>' +
+          (m.email ? '<a class="btn btn--blue btn--sm" target="_blank" rel="noopener" href="' + esc(gmailReply(m, subj)) + '">✉️ Reply</a>' : '') + '</div>' +
           (m.email ? '<p class="msg-email"><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></p>' : '') +
+          confirmLine(m) +
           (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' : '') +
           (m.message ? '<p class="msg-body">' + esc(m.message) + '</p>' : '') +
           ((m.files || []).length ? '<div class="msg-files"><b>📎 Attachments</b>' + m.files.map(function (f) { return '<button type="button" class="btn btn--ghost btn--sm" data-file="' + f.n + '">' + esc(f.name) + ' <span class="hint">' + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB') + '</span></button>'; }).join('') + '</div>' : '') +

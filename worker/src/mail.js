@@ -156,24 +156,52 @@ export function listingApproved(env, { name, url, firstName, adoptUrl, stories, 
   return { subject: `${name} is live on Pawsome Pooches! Help ${name} get seen`, html: layout(env, { pre: `${name}'s listing is up. Here are Story images and the "adopted" button for later.`, title, body, photo, photoAlt: name }), text };
 }
 
-// ---------- 3a. "We got your interest" (to the person who wants to adopt) ----------
-export function interestToAdopter(env, { m, pup, rescue, sharedWithRescue }) {
-  const verb = m.verb || 'adopt';
-  const rb = rescueBlock(rescue);
-  const title = `You Want to ${verb === 'foster' ? 'Foster' : 'Adopt'} ${h(pup.name)}!`;
-  const direct = rescue && rb.html;
+// ---------- 3a. "You want to adopt <pup>!" (to the person who wants to adopt) ----------
+// Different for shelter pups (MDAS, Broward), rescue/foster pups and family rehomings.
+// rescueNotified: true only when we really emailed the rescue (or the person who listed the pup) their details.
+export function interestToAdopter(env, { m, pup, rescue, rescueNotified }) {
+  const verb = m.verb === 'foster' ? 'foster' : 'adopt';
+  const P = pup, many = /&| and /i.test(P.name), is = many ? 'are' : 'is', them = many ? 'them' : P.name;
+  const S = SHELTERS[P.locType];
+  const kind = S ? 'shelter' : P.locType === 'family' ? 'family' : rescue && rescue.name ? 'rescue' : 'other';
+  const ids = (P.animalIds || []).filter(Boolean);
+  const title = `You Want to ${verb === 'foster' ? 'Foster' : 'Adopt'} ${h(P.name)}!`;
+  const intro = p(`Thank you for your interest in <strong>${h(P.name)}</strong>! We got your message, and Bentley's Playhouse will get back to you <strong>within 24 to 48 hours</strong> to help you connect.`);
+  const card = pupCard(P);
+  let where = '', whereText = [], tips = [];
+  if (kind === 'shelter') {
+    const rows = [['Shelter', `<strong>${h(S.name)}</strong><br>${h(S.place)}`], ['Address', S.address ? `<a href="${h(mapHref(S.address))}" style="color:${DEEP};font-weight:700">${h(S.address)}</a>` : ''], ['Phone', S.phone ? `<a href="${h(telHref(S.phone))}" style="color:${DEEP};font-weight:700">${h(S.phone)}</a>` : ''], [ids.length > 1 ? 'Animal IDs' : 'Animal ID', ids.map(h).join('<br>')], ['Website', `<a href="${h(S.site)}" style="color:${DEEP};font-weight:700">Adoption page</a>`]];
+    where = h2(`Where ${h(P.name)} ${many ? 'Are' : 'Is'}`) + note(facts(rows).replace('margin:0 0 16px', 'margin:0') + `<p style="margin:12px 0 0">${h(P.name)} ${is} at a county shelter, where pups go home on a first-come, first-served basis. If you're ready, the fastest way is to visit soon with ${ids.length > 1 ? 'their animal IDs' : 'the animal ID'}. We'll also let the shelter know you're interested.</p>`) + `<p style="margin:0 0 16px">${ghostBtn('Shelter adoption page', S.site)}${S.address ? ghostBtn('Directions', mapHref(S.address)) : ''}</p>`;
+    whereText = [`WHERE ${P.name.toUpperCase()} ${is.toUpperCase()}`, `${S.name}, ${S.place}`, S.address, S.phone ? `Phone: ${S.phone}` : null, ids.length ? `Animal ID${ids.length > 1 ? 's' : ''}: ${ids.join(', ')}` : null, `Adoption page: ${S.site}`, `Shelter pups go home first-come, first-served. Visit soon with the animal ID. We'll also let the shelter know you're interested.`];
+    tips = ['Go early in the day and bring a photo ID.', `Show the staff ${ids.length > 1 ? 'the animal IDs' : 'the animal ID'} so they can find ${them} quickly.`, 'Ask for a meet-and-greet, and bring your other dogs if the shelter allows it.', 'Ask about vet records, vaccines and what the adoption fee includes.'];
+  } else if (kind === 'rescue') {
+    const R = rescue;
+    const rows = [['Rescue', `<strong>${h(R.name)}</strong>${R.city ? `<br>${h(R.city)}` : ''}`], ['Email', R.email ? `<a href="mailto:${h(R.email)}" style="color:${DEEP};font-weight:700">${h(R.email)}</a>` : ''], ['Phone', R.phone ? `<a href="${h(telHref(R.phone))}" style="color:${DEEP};font-weight:700">${h(R.phone)}</a> &nbsp;<a href="${h(smsHref(R.phone))}" style="color:${DEEP}">(text)</a>` : ''], ['Instagram', R.instagram ? `<a href="${h(igUrl(R.instagram))}" style="color:${DEEP};font-weight:700">${h(igHandle(R.instagram))}</a>` : ''], ['Facebook', R.facebook ? `<a href="${h(R.facebook)}" style="color:${DEEP};font-weight:700">${h(String(R.facebook).replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>` : ''], ['Website', R.website && !/instagram\.com/i.test(R.website) ? `<a href="${h(R.website)}" style="color:${DEEP};font-weight:700">${h(String(R.website).replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>` : '']];
+    where = h2(`Where ${h(P.name)} ${many ? 'Are' : 'Is'}`) + note(facts(rows).replace('margin:0 0 16px', 'margin:0') + `<p style="margin:12px 0 0">${h(P.name)} ${is} with ${h(R.name)}, and they handle the adoption. Feel free to reach out to them directly too, and mention you saw ${h(P.name)} on Bentley's Playhouse. ${rescueNotified ? `We also sent them your name and contact details, so they may reach out to you first.` : `We'll also let them know you're interested.`}</p>`);
+    whereText = [`WHERE ${P.name.toUpperCase()} ${is.toUpperCase()}`, R.name + (R.city ? ` (${R.city})` : ''), R.email ? `Email: ${R.email}` : null, R.phone ? `Phone: ${R.phone}` : null, R.instagram ? `Instagram: ${igHandle(R.instagram)}` : null, R.facebook ? `Facebook: ${R.facebook}` : null, R.website ? `Website: ${R.website}` : null, `They handle the adoption. Feel free to reach out directly and mention you saw ${P.name} on Bentley's Playhouse.`, rescueNotified ? 'We also sent them your name and contact details.' : `We'll also let them know you're interested.`];
+    tips = [`Ask about ${them === P.name ? P.name + "'s" : 'their'} routine, energy and vet records.`, 'Most rescues ask you to fill out an application and may do a home visit.', 'Plan a meet-and-greet, with your other dogs if you have any.', 'Have your home ready: a quiet spot, a crate or bed, and a leash and ID tag.'];
+  } else {
+    where = h2(`Where ${h(P.name)} ${many ? 'Are' : 'Is'}`) + note(kind === 'family' ? `${h(P.name)} ${is} with ${many ? 'their' : 'their'} family, who are looking for a safe new home. We talk with every interested adopter first, then introduce you to the family.` : `We'll connect you with the people caring for ${h(them)}.`);
+    whereText = [kind === 'family' ? `${P.name} ${is} with their family. We talk with every interested adopter first, then introduce you.` : `We'll connect you with the people caring for ${them}.`];
+    tips = [`Think about questions for the family: ${them === P.name ? P.name + "'s" : 'their'} routine, habits and vet records.`, 'Plan a meet-and-greet, with your other dogs if you have any.', 'Have your home ready: a quiet spot, a crate or bed, and a leash and ID tag.'];
+  }
   const body = [
-    p(`Hi ${h(m.firstName)},`),
-    p(`Thank you for your interest in <strong>${h(pup.name)}</strong>. Bentley's Playhouse has been told, and we'll help you connect.`),
-    direct ? h2(`Reach ${h(rescue.name || 'the Rescue')} Directly`) : '',
-    direct ? p(`${h(pup.name)} is with ${h(rescue.name || 'a rescue')}. They handle the adoption, so the fastest way is to contact them now and mention you saw ${h(pup.name)} on Bentley's Playhouse.${sharedWithRescue ? ` We also sent them your name and contact details, so they may reach out to you first.` : ''}`) : '',
-    direct ? rb.html : note(`We'll be in touch soon by email or phone with the next steps for ${h(pup.name)}.`),
-    h2('Tips for a Smooth Adoption'),
-    note(`• Ask about ${h(pup.name)}'s routine, energy and vet records.<br>• Plan a meet-and-greet, with your other dogs if you have any.<br>• Have your home ready: a quiet spot, a crate or bed, and a leash and ID tag.`),
-    btn(`See ${h(pup.name)} Again`, pup.url),
+    p(`Hi ${h(m.firstName)},`), intro, card, where,
+    h2('Tips for a Smooth Adoption'), note(tips.map((t) => '• ' + h(t)).join('<br>')),
+    m.message ? h2('Your Message') + note(`<span style="white-space:pre-wrap">${h(m.message)}</span>`) : '',
+    btn(`See ${h(P.name)} Again`, P.url),
   ].join('');
-  const text = plain([`Hi ${m.firstName},`, '', `Thank you for your interest in ${pup.name}. Bentley's Playhouse has been told, and we'll help you connect.`, '', ...(direct ? [`Reach the rescue directly (they handle the adoption):`, ...rb.text, sharedWithRescue ? 'We also sent them your contact details.' : null] : [`We'll be in touch soon with the next steps.`]), '', `${pup.name}: ${pup.url}`]);
-  return { subject: `Next steps for ${pup.name}`, html: layout(env, { pre: direct ? `How to reach ${rescue.name || 'the rescue'} about ${pup.name}.` : `We got your interest in ${pup.name}.`, title, body, photo: pup.photo, photoAlt: pup.name }), text };
+  const text = plain([`Hi ${m.firstName},`, '', `Thank you for your interest in ${P.name}! We got your message, and Bentley's Playhouse will get back to you within 24 to 48 hours to help you connect.`, '', ...whereText, '', 'TIPS FOR A SMOOTH ADOPTION', ...tips.map((t) => '- ' + t), ...(m.message ? ['', 'Your message:', m.message] : []), '', `${P.name}: ${P.url}`]);
+  return { subject: `Next steps for ${P.name}`, html: layout(env, { pre: `We'll get back to you within 24 to 48 hours. Here's where ${P.name} ${is} and how to reach them.`, title, body }), text };
+}
+/** Small photo + name + status card for a pup (used in emails). */
+function pupCard(P) {
+  const img = P.thumb || P.photo;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 18px;border:2px solid #E4E7F7;border-radius:18px"><tr>
+    ${img ? `<td width="132" style="padding:12px 0 12px 12px;vertical-align:middle"><a href="${h(P.url)}"><img src="${h(img)}" width="120" height="120" alt="${h(P.name)}" style="display:block;width:120px;height:120px;object-fit:cover;border-radius:14px;border:0"></a></td>` : ''}
+    <td style="padding:12px 16px;vertical-align:middle;font-family:${BODY};color:${INK}"><div style="font-family:${HEAD};font-size:22px;font-weight:700;line-height:1.2">${h(P.name)}</div>
+    <div style="margin:6px 0 10px"><span style="display:inline-block;background:#E3F4EA;color:#1B6E45;font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px">${P.status === 'adopted' ? 'Adopted' : P.needs === 'foster' ? 'Needs a foster' : 'Ready for adoption'}</span></div>
+    <a href="${h(P.url)}" style="color:${DEEP};font-weight:700;font-size:15px">See ${h(P.name)}'s page →</a></td></tr></table>`;
 }
 
 // ---------- 3b. "Someone wants to adopt your pup" (to the rescue and the person who listed the pup) ----------
@@ -191,4 +219,50 @@ export function interestToRescue(env, { m, pup }) {
   ].join('');
   const text = plain([`Good news: someone who found ${pup.name} on Bentley's Playhouse wants to ${verb}.`, '', `Name: ${m.firstName} ${m.lastName}`, `City: ${m.city}`, `Phone: ${m.phone}`, `Email: ${m.email}`, m.message ? `\nTheir note:\n${m.message}` : null, '', `Email them (${m.email}) or give them a call. They're expecting to hear from you.`, '', `Listing: ${pup.url}`]);
   return { subject: `${m.firstName} wants to ${verb} ${pup.name}`, html: layout(env, { pre: `${m.firstName} ${m.lastName} from ${m.city} wants to ${verb} ${pup.name}.`, title, body, photo: pup.photo, photoAlt: pup.name }), text };
+}
+
+// ---------- 5. "We got your message" (automatic reply to every form: Contact, Get Involved, I Want to Adopt) ----------
+// Shelters we know: address + phone so people can go see the pup.
+export const SHELTERS = {
+  'mdas-doral': { name: 'Miami-Dade Animal Services', place: 'Pet Adoption and Protection Center (Doral)', address: '3599 NW 79th Ave, Doral, FL 33122', phone: '305-468-5900', site: 'https://www.miamidade.gov/global/animals/adopt-a-pet.page' },
+  'mdas-medley': { name: 'Miami-Dade Animal Services', place: 'Medley facility (medium and large dogs)', address: '', phone: '305-468-5900', site: 'https://www.miamidade.gov/global/animals/adopt-a-pet.page' },
+  broward: { name: 'Broward County Animal Care', place: 'Adoption Center', address: '', phone: '', site: 'https://www.broward.org/animal/Adoptions' },
+};
+const mapHref = (a) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(a);
+/** pup: {name, url, photo, status, needs, locType, animalIds[], rescue{...}} (from pups.json) — optional */
+export function messageReceived(env, { firstName, pup, message, kind }) {
+  const P = pup || null, many = P && /&| and /i.test(P.name);
+  const title = P ? `We Got Your Message About ${h(P.name)}!` : 'We Got Your Message!';
+  let where = '', whereText = [];
+  if (P) {
+    const S = SHELTERS[P.locType];
+    const ids = (P.animalIds || []).filter(Boolean);
+    if (S) {
+      const rows = [['Shelter', `<strong>${h(S.name)}</strong><br>${h(S.place)}`], ['Address', S.address ? `<a href="${h(mapHref(S.address))}" style="color:${DEEP};font-weight:700">${h(S.address)}</a>` : ''], ['Phone', S.phone ? `<a href="${h(telHref(S.phone))}" style="color:${DEEP};font-weight:700">${h(S.phone)}</a>` : ''], [ids.length > 1 ? 'Animal IDs' : 'Animal ID', ids.map(h).join('<br>')]];
+      where = h2(`Where ${h(P.name)} ${many ? 'Are' : 'Is'}`) + note(facts(rows).replace('margin:0 0 16px', 'margin:0') + `<p style="margin:12px 0 0">Shelter pups can be adopted by anyone who visits. Bring ${many ? 'their animal IDs' : 'the animal ID'} so the staff can find ${many ? 'them' : P.name} quickly, and check the shelter's hours before you go.</p>`) + `<p style="margin:0 0 16px">${ghostBtn('Shelter adoption page', S.site)}${S.address ? ghostBtn('Directions', mapHref(S.address)) : ''}</p>`;
+      whereText = [`WHERE ${P.name.toUpperCase()} ${many ? 'ARE' : 'IS'}`, `${S.name}, ${S.place}`, S.address, S.phone ? `Phone: ${S.phone}` : null, ids.length ? `Animal ID${ids.length > 1 ? 's' : ''}: ${ids.join(', ')}` : null, `Adoption page: ${S.site}`];
+    } else if (P.locType === 'family') {
+      where = h2(`Where ${h(P.name)} ${many ? 'Are' : 'Is'}`) + note(`${h(P.name)} ${many ? 'are' : 'is'} with ${many ? 'their' : 'their'} family, who are looking for a safe new home. We screen every adopter for family rehomings, so we'll be your contact and introduce you once we've talked.`);
+      whereText = [`${P.name} ${many ? 'are' : 'is'} with their family. We'll be your contact and introduce you.`];
+    } else if (P.rescue && P.rescue.name) {
+      const rb = rescueBlock(P.rescue);
+      where = h2(`Where ${h(P.name)} ${many ? 'Are' : 'Is'}`) + (rb.html || note(`<strong>${h(P.rescue.name)}</strong>`)) + p(`${h(P.rescue.name)} handles the adoption. You can also reach them directly and mention you saw ${h(P.name)} on Bentley's Playhouse.`, `font-size:15px`);
+      whereText = ['WHERE ' + P.name.toUpperCase() + (many ? ' ARE' : ' IS'), ...rb.text];
+    }
+  }
+  const pupCardOld = P ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 18px;border:2px solid #E4E7F7;border-radius:18px"><tr>
+    ${P.photo ? `<td width="132" style="padding:12px 0 12px 12px;vertical-align:middle"><a href="${h(P.url)}"><img src="${h(P.photo)}" width="120" height="120" alt="${h(P.name)}" style="display:block;width:120px;height:120px;object-fit:cover;border-radius:14px;border:0"></a></td>` : ''}
+    <td style="padding:12px 16px;vertical-align:middle;font-family:${BODY};color:${INK}"><div style="font-family:${HEAD};font-size:22px;font-weight:700;line-height:1.2">${h(P.name)}</div>
+    <div style="margin:6px 0 10px"><span style="display:inline-block;background:#E3F4EA;color:#1B6E45;font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px">${P.status === 'adopted' ? 'Adopted' : P.needs === 'foster' ? 'Needs a foster' : 'Ready for adoption'}</span></div>
+    <a href="${h(P.url)}" style="color:${DEEP};font-weight:700;font-size:15px">See ${h(P.name)}'s page →</a></td></tr></table>` : '';
+  const body = [
+    p(`Hi ${h(firstName || 'there')},`),
+    p(P ? `Thank you for reaching out about <strong>${h(P.name)}</strong>! We got your message, and someone from Bentley's Playhouse will get back to you <strong>within 24 to 48 hours</strong>.` : `Thank you for reaching out! We got your message, and someone from Bentley's Playhouse will get back to you <strong>within 24 to 48 hours</strong>.`),
+    P ? pupCard(P) : '',
+    where,
+    message ? h2('Your Message') + note(`<span style="white-space:pre-wrap">${h(message)}</span>`) : '',
+    kind === 'involved' ? p(`While you wait, see who needs help right now on <a href="${SITE(env)}/pawsome-pooches/" style="color:${DEEP};font-weight:700">Pawsome Pooches</a>.`) : '',
+  ].join('');
+  const text = plain([`Hi ${firstName || 'there'},`, '', `Thank you for reaching out${P ? ' about ' + P.name : ''}! We got your message, and someone from Bentley's Playhouse will get back to you within 24 to 48 hours.`, ...(P ? ['', `${P.name}: ${P.url}`] : []), ...(whereText.length ? ['', ...whereText] : []), ...(message ? ['', 'Your message:', message] : [])]);
+  return { subject: P ? `We got your message about ${P.name}` : `We got your message`, html: layout(env, { pre: `Thanks for reaching out${P ? ' about ' + P.name : ''}. We'll get back to you within 24 to 48 hours.`, title, body }), text };
 }

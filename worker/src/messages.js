@@ -122,6 +122,13 @@ export async function handleMessages(req, env, url) {
     await env.SUBMISSIONS.put(key, JSON.stringify(m));
     return json({ ok: true, message: m });
   }
+  if (parts[3] === 'confirm' && req.method === 'POST') {
+    // admin: record a confirmation email that was sent before the site tracked them (checked in Resend)
+    const b = await req.json().catch(() => ({}));
+    m.confirm = { subject: String(b.subject || '').slice(0, 200), at: String(b.at || new Date().toISOString()).slice(0, 40), status: 'sent', id: String(b.id || '').slice(0, 80), note: 'checked in Resend' };
+    await env.SUBMISSIONS.put(key, JSON.stringify(m));
+    return json({ ok: true, message: m });
+  }
   if (parts[3] === 'file' && req.method === 'GET') {
     const n = Number(parts[4]);
     const meta = (m.files || []).find((x) => x.n === n);

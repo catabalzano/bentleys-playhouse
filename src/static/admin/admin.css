@@ -218,3 +218,4 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .sg-list{margin:0;padding-left:1.1em;display:grid;gap:8px}
 #sp-q{font:inherit;border:2px solid var(--line);border-radius:12px;padding:10px 12px}
 .r-form{margin-top:14px}
+.msg-confirm{margin:8px 0 0;font-size:14px;font-weight:700;padding:6px 12px;border-radius:10px;display:inline-block}.msg-confirm.is-ok{background:#E3F4EA;color:#1B6E45}.msg-confirm.is-warn,.msg-confirm.is-unknown{background:#FFF1E6;color:#9A4A12}.msg-confirm.is-bad{background:#FDE7E5;color:#B42318}
