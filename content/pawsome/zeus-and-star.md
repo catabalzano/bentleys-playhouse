@@ -45,7 +45,7 @@ personality:
   - Cuddly
   - Friendly
   - Friendly
-adoptedDate: 2026-10-16
+adoptedDate: 2026-10-14
 ---
 Meet **Zeus and Star**, two Samoyeds who share a home. Their family reached out to us because they're struggling financially and need to find them new homes. This is a surrender case, so we're helping make sure they go somewhere safe and loving.
 
