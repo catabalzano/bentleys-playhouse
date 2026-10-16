@@ -191,6 +191,8 @@ await (async () => {
   if (!fs.existsSync(dir)) return;
   const logo = path.join(ROOT, 'src/assets/img/logo-badge.png'), wordmark = path.join(ROOT, 'src/assets/img/logo-watermark.png');
   // photos of adopted pups get a big see-through "ADOPTED" instead of the big logo (Cata, Oct 16)
+  const focusOf = new Map();
+  for (const d of pooches) { const m = /^(\d{1,3})% (\d{1,3})%$/.exec(String(d.photoFocus || '')); if (m && d.photos[0]) focusOf.set(path.basename(String(d.photos[0])), [Math.min(100, +m[1]) / 100, Math.min(100, +m[2]) / 100]); }
   const adoptedFiles = new Set();
   for (const d of pooches) if (d.status === 'adopted') for (const ph of [...d.photos, d.sharePhoto].filter(Boolean)) adoptedFiles.add(path.basename(String(ph)));
   let n = 0;
@@ -203,7 +205,12 @@ await (async () => {
       const short = Math.min(W, H);
       // The site shows photos cropped to a square (pup page) and to 4:3.4 (cards), so everything goes inside the
       // part of the photo that's always visible: sw × sh in the middle.
-      const sw = Math.min(W, H), sh = Math.min(H, Math.round(W / (4 / 3.4))), sx = Math.round((W - sw) / 2), sy = Math.round((H - sh) / 2);
+      // A pup's first photo can have its own focus point (photoFocus, e.g. "46% 72%"), which moves both crops.
+      const [fx, fy] = focusOf.get(f) || [0.5, 0.5];
+      const cropRect = (A) => { const cw = W / H > A ? H * A : W, ch = W / H > A ? H : W / A; const x = (W - cw) * fx, y = (H - ch) * fy; return [x, y, x + cw, y + ch]; };
+      const r1 = cropRect(1), r2 = cropRect(4 / 3.4);
+      const sx = Math.round(Math.max(r1[0], r2[0])), sy = Math.round(Math.max(r1[1], r2[1]));
+      const sw = Math.round(Math.min(r1[2], r2[2])) - sx, sh = Math.round(Math.min(r1[3], r2[3])) - sy;
       // 1) small Bentley's Playhouse wordmarks scattered over the photo (Cata, Oct 16: about 10 in view, tilted,
       //    light so faces stay clear). Adopted pups also get the "Adopted!" sticker in the bottom-left corner
       //    (src/assets/img/adopted-sticker.png), never over their faces.
@@ -214,13 +221,14 @@ await (async () => {
         .composite([{ input: Buffer.from([255, 255, 255, Math.round(255 * 0.22)]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }]).png().toBuffer())
         .rotate(-14, { background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
       const mm = await sharp(mark).metadata();
-      const marks = [], dx = sw / 3.6, dy = sh / 3.4;
+      const marks = [], dx = sw / 3.2, dy = sh / 3.1, mx = sx + sw / 2, my = sy + sh / 2;
       for (let r = -6; r <= 6; r++) {
         const cy = sy + dy / 2 + r * dy;
         if (cy - mm.height / 2 < 0 || cy + mm.height / 2 > H) continue;
         for (let c = -8; c <= 8; c++) {
           const cx = sx + dx / 2 + (r % 2 ? dx / 2 : 0) + c * dx;
           if (cx - mm.width / 2 < 0 || cx + mm.width / 2 > W) continue;
+          if (Math.abs(cx - mx) < mm.width * 0.75 && Math.abs(cy - my) < mm.height * 1.1) continue; // none right in the middle (Cata)
           marks.push({ input: mark, left: Math.round(cx - mm.width / 2), top: Math.round(cy - mm.height / 2) });
         }
       }
@@ -228,10 +236,12 @@ await (async () => {
       const sticker = isAdopted ? await sharp(path.join(ROOT, 'src/assets/img/adopted-sticker.png')).resize(st, st, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer() : null;
       // 2) corner logo: the logo PNG as is (no white circle behind it, Cata Oct 16), 18% of the visible part,
       //    in the top-right corner of what the site actually shows (bottom-right sits under the "4 photos" label)
-      const d = Math.max(64, Math.round(Math.min(sw, sh) * 0.18)), pad = Math.round(d * 0.12);
+      const d = Math.max(56, Math.round(Math.min(sw, sh) * 0.14));
+      // inset so it survives the cards' rounded corners and the 5% zoom when you hover a card
+      const insetX = Math.round(sw * 0.06), insetY = Math.round(sh * 0.07);
       const badge = await sharp(logo).resize(d, d, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
       const out = await sharp(fs.readFileSync(file), { failOn: 'none' }).rotate()
-        .composite([...marks, ...(sticker ? [{ input: sticker, left: sx + Math.round(st * 0.08), top: sy + sh - st - Math.round(st * 0.08) }] : []), { input: badge, left: sx + sw - d - pad, top: sy + Math.round(d * 0.4) }])
+        .composite([...marks, ...(sticker ? [{ input: sticker, left: sx + Math.round(sw * 0.05), top: sy + sh - st - Math.round(sh * 0.06) }] : []), { input: badge, left: sx + sw - d - insetX, top: sy + insetY }])
         .toFormat(/\.png$/i.test(f) ? 'png' : /\.webp$/i.test(f) ? 'webp' : 'jpeg', { quality: 82 }).toBuffer();
       fs.writeFileSync(file, out); n++;
     } catch (e) { /* leave it */ }
