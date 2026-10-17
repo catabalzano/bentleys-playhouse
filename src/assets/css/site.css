@@ -1599,8 +1599,8 @@ fieldset.field { align-content: start; }
 .ctabs.is-tabs .ctabs__tabs { position: absolute; inset: 0 0 auto 0; height: 48px; }
 .ctab { all: unset; box-sizing: border-box; cursor: pointer; position: absolute; bottom: -2px; width: 31%; height: 42px; display: flex; align-items: center; justify-content: center; z-index: 0; font: 600 1.05rem/1 var(--font-display); color: var(--ink); white-space: nowrap; transition: transform .2s; }
 .ctab::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--d); border-radius: 12px 12px 0 0; transform: perspective(60px) rotateX(10deg); transform-origin: bottom; }
-.ctab--p0 { left: 0; } .ctab--p1 { left: 34.5%; } .ctab--p2 { left: 69%; }
-.ctab[data-rank="1"] { transform: translateY(-11px); } .ctab[data-rank="2"] { transform: translateY(-22px); }
+.ctab { width: 190px; } .ctab--p0 { left: 0; } .ctab--p1 { left: 194px; } .ctab--p2 { left: 388px; }
+.ctab[data-rank="1"] { transform: translateY(-11px); z-index: 2; } .ctab[data-rank="2"] { transform: translateY(-22px); z-index: 1; }
 .ctab[aria-selected="true"] { z-index: 6; }
 .ctab[aria-selected="true"]::before { background: var(--t); }
 .ctab:not([aria-selected="true"]):hover { transform: translateY(var(--lift, 0)); }
@@ -1613,7 +1613,7 @@ fieldset.field { align-content: start; }
 .ctabs.is-tabs .cpanel--p0 { border-top-left-radius: 4px; }
 .ctabs.is-tabs .cpanel__name { display: none; }
 @media (max-width: 700px) {
-  .ctab { font-size: .9rem; }
+  .ctab { font-size: .9rem; width: 32.5%; } .ctab--p1 { left: 33.75%; } .ctab--p2 { left: 67.5%; }
   .cpanel { padding: .75rem; }
   .cpanel__list { grid-template-columns: 1fr; }
 }
