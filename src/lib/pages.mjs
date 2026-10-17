@@ -542,7 +542,7 @@ export function dogPage(d) {
   <dl class="dog-facts">${[['Good with', d.goodWith], ['Energy', d.energy], ['Medical notes', d.medical], ['Listed', d.date && fmtDate(d.date)]].filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
   <div class="prose">${md(d.body)}</div>
   <div class="btn-row">
-    ${d.inquiryUrl ? button(`Ask about ${esc(d.name)}`, d.inquiryUrl, { externalLink: true }) : (show(s.adoption.applicationVerified) ? button('Start an adoption application', s.adoption.applicationUrl, { externalLink: true }) : button('Ask about this dog', 'contact/'))}
+    ${d.inquiryUrl ? button(`Ask about ${esc(d.name)}`, d.inquiryUrl, { externalLink: true }) : (show(s.adoption.applicationVerified) ? `<a class="btn btn--primary" href="${href(s.adoption.applicationUrl)}?pet=${encodeURIComponent(d.name)}"><span>Start an adoption application</span></a>` : button('Ask about this dog', 'contact/'))}
   </div>
 </div>`;
 }
@@ -581,8 +581,8 @@ export function adopt(data) {
     </div>`}
     <div class="adopt-process">
       <h3 class="section-h section-h--sm">How Adopting From Us Works</h3>
-      <ol class="process">${s.adoption.process.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>
-      ${show(s.adoption.applicationVerified) ? `<div class="btn-row">${button('Start an adoption application', s.adoption.applicationUrl, { externalLink: true, ic: 'adopt' })}</div>` : ''}
+      <ol class="process">${s.adoption.process.map((x) => `<li>${mdInline(x)}</li>`).join('')}</ol>
+      ${show(s.adoption.applicationVerified) ? `<div class="btn-row">${button('Start an adoption application', s.adoption.applicationUrl, { ic: 'adopt' })}</div>` : ''}
     </div>
     ${partner.length ? `<h3 class="section-h section-h--sm">Partner Listings</h3><p class="muted">Dogs listed by other rescues we know. Their adoption process is their own.</p><div class="dog-grid">${partner.map(dogCard).join('')}</div>` : ''}
     ${mdasBlock(data.mdas, data.dogs.filter((d) => d.source === 'mdas' && d.status !== 'adopted'), dogCard)}
@@ -594,7 +594,7 @@ export function adopt(data) {
     ${block('questions-to-ask-a-rescue')}
     ${block('preparing-your-home', `<p>${button('New-adopter checklist', 'resources/checklists/new-adopter/', { variant: 'ghost', ic: 'list' })}</p>`)}
     ${block('the-first-three-months')}
-    ${block('fostering', `<div class="btn-row">${button('Foster-home checklist', 'resources/checklists/foster-home/', { variant: 'ghost', ic: 'list' })}${button('Tell us you\'re interested', 'get-involved/#foster', { ic: 'home' })}</div>`)}
+    ${block('fostering', `<div class="btn-row">${button('Foster-home checklist', 'resources/checklists/foster-home/', { variant: 'ghost', ic: 'list' })}${button('Fill out the foster application', s.foster.applicationUrl, { ic: 'home' })}</div>`)}
     ${block('other-ways-to-help', `<p>${button('See ways to get involved', 'get-involved/', { ic: 'hands' })}</p>`)}
     ${sourcesList(data.pages.adopt.sources, data.pages.adopt.lastReviewed)}
   </div>
@@ -654,7 +654,6 @@ export function involved(data) {
       <h2 class="way__h">${esc(w.title)}</h2>
       <div class="prose">${md(w.body)}</div>
       ${w.action ? `<p>${w.action.external ? button(w.action.label, w.action.url, { externalLink: true, variant: 'ghost' }) : `<a class="arrow-link" href="${w.action.url.startsWith('#') ? w.action.url : href(w.action.url)}">${esc(w.action.label)} ${icon('arrow', { size: 18 })}</a>`}</p>` : ''}
-      ${w.id === 'foster' && show(s.foster.verified) ? `<p>${ext(s.foster.applicationUrl, 'Open the foster application form')} ${s.foster.verified ? '' : needsConfirm()}</p>` : ''}
       ${w.preview ? previewNote(w.preview) : ''}
     </li>`).join('')}
   </ul>

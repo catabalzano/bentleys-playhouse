@@ -6,6 +6,7 @@ import { sendMail, submissionReceived } from './mail.js';
 import { handleRescues, logRescueFromSubmission } from './rescues.js';
 import { handleCases } from './cases.js';
 import { eventsPublic, eventsAdmin } from './events.js';
+import { receiveApplication } from './applications.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -45,6 +46,7 @@ export default {
       else if (url.pathname.startsWith('/admin/')) res = await admin(req, env, url);
       else if (url.pathname.startsWith('/auth/')) res = await handleAuth(req, env, url);
       else if (url.pathname === '/message' && req.method === 'POST') res = await receiveMessage(req, env, url);
+      else if (url.pathname === '/apply' && req.method === 'POST') res = await receiveApplication(req, env, url);
       else if (url.pathname === '/interest' && req.method === 'POST') res = await receiveInterest(req, env, ctx);
       else if (url.pathname === '/adopted' && req.method === 'POST') res = await markAdopted(req, env);
       else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);

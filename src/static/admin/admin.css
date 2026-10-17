@@ -231,3 +231,11 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .cs-body{padding-top:4px;min-width:0}.cs-body select{margin-left:6px;padding:4px 8px}
 .cs-step.is-done .cs-body b{color:var(--green)}
 .cs-msg summary{cursor:pointer;font-weight:800;margin:8px 0}
+/* applications (adoption / foster) in Messages */
+.app-ans{margin:12px 0 0;border:1px solid var(--line,#e3e3ee);border-radius:12px;padding:10px 14px}
+.app-ans summary{cursor:pointer;font-weight:800}
+.app-ans__h{margin:14px 0 4px;font-size:15px;color:#2F45C8}
+.app-ans__dl{grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin-top:4px}
+.app-ans__dl dt{font-weight:600}
+.app-ans__dl dd{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:700px){.app-ans__dl{grid-template-columns:1fr}.app-ans__dl dd{margin-bottom:6px}}

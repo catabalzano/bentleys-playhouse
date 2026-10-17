@@ -13,10 +13,9 @@
       "preview": "List specific volunteer roles here once they're confirmed, and switch status to \"open\"."
     },
     {
-      "id": "foster", "icon": "home", "status": "interest", "title": "Foster a Dog",
-      "body": "Foster homes give dogs a quiet place to heal and learn to trust. Join our interest list and we'll talk through what a placement would look like for your home. Joining doesn't commit you to anything.\n\nNew to fostering? Read [what fostering involves](/resources/what-fostering-involves/) and use the [foster-home checklist](/resources/checklists/foster-home/).",
-      "action": { "label": "Join the interest list", "url": "#interest-form" },
-      "preview": "Confirm your foster process (application, what you provide, vet arrangements) to describe it here."
+      "id": "foster", "icon": "home", "status": "open", "title": "Foster a Dog",
+      "body": "Foster homes give dogs a quiet place to heal and learn to trust. Fill out our foster application and we'll talk through what a placement would look like for your home. Applying doesn't commit you to anything.\n\nNew to fostering? Read [what fostering involves](/resources/what-fostering-involves/) and use the [foster-home checklist](/resources/checklists/foster-home/).",
+      "action": { "label": "Fill out the foster application", "url": "/applications/foster/" }
     },
     {
       "id": "supplies", "icon": "gift", "status": "soon", "title": "Donate Supplies",

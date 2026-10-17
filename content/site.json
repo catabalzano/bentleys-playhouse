@@ -82,11 +82,11 @@
     "canHelpWithVerified": false
   },
   "adoption": {
-    "applicationUrl": "https://form.jotform.com/231626654705155",
+    "applicationUrl": "applications/adoption/",
     "applicationVerified": true,
-    "_note": "Linked from our Facebook, YouTube and RescueMe pages.",
+    "_note": "On the site since Oct 17, 2026 (was form.jotform.com/231626654705155, still linked from our Facebook, YouTube and RescueMe pages).",
     "process": [
-      "Fill out our adoption application form.",
+      "Fill out our [adoption application](/applications/adoption/).",
       "If your application is approved, we'll contact you for a phone screening.",
       "A 10- to 15-minute initial screening.",
       "A home safety inspection.",
@@ -174,9 +174,9 @@
   },
   "tagline": "Rescue. Rehab. Rehome. Repeat.",
   "foster": {
-    "applicationUrl": "https://docs.google.com/forms/d/1WfFiNT0acpZ4y0JCJoW3EWcqrOf8fzfM3LwHHVxHI04/viewform",
+    "applicationUrl": "applications/foster/",
     "verified": true,
-    "_note": "Checked Oct 7, 2026: the /viewform link opens for signed-out visitors. The form itself still lists the old gmail address as its contact."
+    "_note": "On the site since Oct 17, 2026 (was a Google Form)."
   },
   "founded": "August 2022",
   "pawsome": {

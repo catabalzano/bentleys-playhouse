@@ -84,7 +84,7 @@ Some rescues care for dogs at their own property and meet adopters by appointmen
 
 We're a small, home-based Miami dog rescue, so we usually have only a few dogs at a time, and we get to know each one well. Our process:
 
-1. Fill out our [adoption application](https://form.jotform.com/231626654705155).
+1. Fill out our [adoption application](/applications/adoption/).
 2. If your application is approved, we contact you for a 10- to 15-minute phone screening.
 3. A home safety inspection.
 4. A background check and vetting process.

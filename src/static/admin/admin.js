@@ -799,17 +799,27 @@
     if (c.status === 'off') return '<p class="msg-confirm is-warn">⚠️ No confirmation email: email sending was off</p>';
     return '<p class="msg-confirm is-bad">⚠️ The confirmation email didn\'t go through · ' + esc(when) + '. Reply to them yourself.</p>';  }
   function caseLink(m) { return m.form === 'adopt' ? ' <a class="btn btn--ghost btn--sm" href="#cases/' + esc(m.id) + '">🐾 Open case</a>' : ''; }
+  // adoption / foster applications from /applications/… (worker/src/applications.js): every answer, grouped by section
+  function appAnswers(m) {
+    var last = '', out = '';
+    m.answers.forEach(function (x) {
+      if (x.s !== last) { out += (last ? '</dl>' : '') + '<h4 class="app-ans__h">' + esc(x.s) + '</h4><dl class="msg-dl app-ans__dl">'; last = x.s; }
+      var a = Array.isArray(x.a) ? x.a.join(', ') : x.a;
+      out += '<dt>' + esc(x.q) + '</dt><dd>' + (a ? esc(a).replace(/\n/g, '<br>') : '<span class="hint">—</span>') + '</dd>';
+    });
+    return '<details class="app-ans"' + (m.read ? '' : ' open') + '><summary>See all ' + m.answers.length + ' answers</summary>' + out + '</dl></details>';
+  }
   function messages() {
     main().innerHTML = '<div class="head"><div><h1>📬 Messages</h1><p>What people send through the Contact form, the "Raise your hand" form, and "I want to adopt" on Pawsome Pooches, plus a note whenever a pup is marked adopted. Only admins can see these.</p></div><button class="btn btn--ghost" data-testmail>✉️ Send me test emails</button></div><div class="tabs" data-mtabs></div><div data-msgs><p class="empty">Loading…</p></div>';
     var tab = 'all';
     function draw() {
       var all = S.msgs || [], list = all.filter(function (m) { return tab === 'all' || (tab === 'unread' ? !m.read : m.form === tab); });
-      var T = [['all', 'All', all.length], ['unread', 'Unread', unread()], ['contact', 'Contact', all.filter(function (m) { return m.form === 'contact'; }).length], ['involved', 'Get Involved', all.filter(function (m) { return m.form === 'involved'; }).length], ['adopt', 'Want to adopt', all.filter(function (m) { return m.form === 'adopt'; }).length], ['adopted', 'Adopted', all.filter(function (m) { return m.form === 'adopted'; }).length]];
+      var T = [['all', 'All', all.length], ['unread', 'Unread', unread()], ['contact', 'Contact', all.filter(function (m) { return m.form === 'contact'; }).length], ['involved', 'Get Involved', all.filter(function (m) { return m.form === 'involved'; }).length], ['adopt', 'Want to adopt', all.filter(function (m) { return m.form === 'adopt'; }).length], ['adoptapp', 'Adoption applications', all.filter(function (m) { return m.form === 'adoptapp'; }).length], ['fosterapp', 'Foster applications', all.filter(function (m) { return m.form === 'fosterapp'; }).length], ['adopted', 'Adopted', all.filter(function (m) { return m.form === 'adopted'; }).length]];
       $('[data-mtabs]').innerHTML = T.map(function (t) { return '<button class="tab" aria-pressed="' + (t[0] === tab) + '" data-t="' + t[0] + '">' + t[1] + ' <span>' + t[2] + '</span></button>'; }).join('');
       $$('[data-t]').forEach(function (b) { b.onclick = function () { tab = b.getAttribute('data-t'); draw(); }; });
       if (!list.length) { $('[data-msgs]').innerHTML = '<p class="empty">' + (all.length ? 'Nothing here.' : 'No messages yet. When someone uses a form on the website, it shows up here.') + '</p>'; return; }
       $('[data-msgs]').innerHTML = list.map(function (m) {
-        var subj = m.form === 'contact' ? (m.topic || 'Contact form') : m.form === 'adopt' ? '🏡 ' + (m.topic || 'Wants to adopt') : m.form === 'adopted' ? '🎉 ' + (m.topic || 'Adopted') : 'Raise your hand';
+        var subj = m.form === 'adoptapp' ? '📝 ' + (m.topic || 'Adoption application') : m.form === 'fosterapp' ? '🏡 Foster application' : m.form === 'contact' ? (m.topic || 'Contact form') : m.form === 'adopt' ? '🏡 ' + (m.topic || 'Wants to adopt') : m.form === 'adopted' ? '🎉 ' + (m.topic || 'Adopted') : 'Raise your hand';
         var rows = [['Pup', m.pupUrl ? '<a href="' + esc(m.pupUrl) + '" target="_blank" rel="noopener">' + esc(m.pupName || m.pup) + ' ↗</a>' : ''], ['Phone', m.phone && esc(m.phone)], [m.form === 'adopt' ? 'City' : 'Area', m.area && esc(m.area)], ['Interested in', esc((m.interests || []).join(', '))], ['Rescue', m.rescue && esc(m.rescue)], ['Details sent to', esc((m.sentTo || []).join(', '))]].filter(function (r) { return r[1]; });
         return '<section class="card msg-card' + (m.read ? '' : ' is-new') + '" data-id="' + esc(m.id) + '">' +
           '<div class="msg-top"><div><b>' + esc(m.name) + '</b> ' + (m.read ? '' : '<span class="pill">New</span>') + '<div class="hint">' + esc(subj) + ' · ' + esc(new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</div></div>' +
@@ -818,6 +828,7 @@
           confirmLine(m) +
           (rows.length ? '<dl class="msg-dl">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' : '') +
           (m.message ? '<p class="msg-body">' + esc(m.message) + '</p>' : '') +
+          (m.answers ? appAnswers(m) : '') +
           ((m.files || []).length ? '<div class="msg-files"><b>📎 Attachments</b>' + m.files.map(function (f) { return '<button type="button" class="btn btn--ghost btn--sm" data-file="' + f.n + '">' + esc(f.name) + ' <span class="hint">' + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB') + '</span></button>'; }).join('') + '</div>' : '') +
           '<div class="row__act" style="justify-content:flex-start;margin-top:10px"><button class="btn btn--ghost btn--sm" data-rd>' + (m.read ? 'Mark as unread' : 'Mark as read') + '</button><button class="btn btn--danger btn--sm" data-dl>Delete</button></div></section>';
       }).join('');

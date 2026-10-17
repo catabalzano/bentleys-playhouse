@@ -1,0 +1,172 @@
+// The adoption and foster applications (Cata, Oct 17, 2026). One definition is used twice:
+// src/build.mjs draws the pages /applications/adoption/ and /applications/foster/ from it,
+// and worker/src/applications.js checks and stores what people send against it.
+// Wording comes from the old JotForm (adoption) and Google Form (foster), lightly cleaned up.
+//
+// Field: { id, label, type, req, opts, hint, rows, half, other }
+//   type: text | email | tel | date | number | textarea | radio | checks | initials
+//   half: sits next to the next half field on wide screens
+
+const YN = ['Yes', 'No'];
+
+export const APP_FORMS = {
+  adoption: {
+    id: 'adoption',
+    route: 'applications/adoption/',
+    title: 'Adoption Application',
+    short: 'Adoption application',
+    lede: "Thank you for wanting to give a rescue dog a home. Bentley's Playhouse is a volunteer-run rescue. Our dogs live with foster families and get the vet care they need before they're adopted. These questions help us make sure the dog you love is a good fit for your home, and everyone adopting needs to fill them out.",
+    note: "We may decline an adoption based on the answers here or on our conversations with you. It takes about 15 minutes. Your answers are saved on this device as you go, so you can come back to finish.",
+    sections: [
+      { h: 'About You', fields: [
+        { id: 'pet', label: 'Name of the dog you are interested in', type: 'text', req: true, hint: "Not sure yet? Write \"Not sure\" and tell us what you're looking for below." },
+        { id: 'name', label: 'Your full name', type: 'text', req: true, half: true, auto: 'name' },
+        { id: 'age', label: 'Your age', type: 'number', req: true, half: true },
+        { id: 'street', label: 'Street address', type: 'text', req: true, auto: 'street-address' },
+        { id: 'city', label: 'City, state and ZIP', type: 'text', req: true, auto: 'address-level2' },
+        { id: 'email', label: 'Email', type: 'email', req: true, half: true, auto: 'email' },
+        { id: 'cell', label: 'Cell phone', type: 'tel', req: true, half: true, auto: 'tel' },
+        { id: 'homePhone', label: 'Home phone', type: 'tel', half: true },
+        { id: 'workPhone', label: 'Work phone', type: 'tel', half: true },
+        { id: 'employer', label: 'Employer', type: 'text' },
+        { id: 'reference', label: 'Character reference and their phone number', type: 'text' },
+      ] },
+      { h: 'Your Household', fields: [
+        { id: 'agree', label: 'Are all members of your household in agreement with this adoption?', type: 'radio', req: true, opts: ['Yes', 'No', "Don't know"] },
+        { id: 'caregiver', label: "Who will be the pet's primary caregiver?", type: 'text', req: true },
+        { id: 'home', label: 'What type of home do you live in?', type: 'radio', req: true, opts: ['House', 'Apartment', 'Condo', 'Mobile home', 'Other'] },
+        { id: 'own', label: 'Do you own or rent?', type: 'radio', req: true, opts: ['Own', 'Rent'] },
+        { id: 'landlord', label: 'If you rent, your landlord\'s name and phone number', type: 'text' },
+        { id: 'landlordDogs', label: 'Does your landlord allow dogs?', type: 'radio', opts: ['Yes', 'No', "I don't rent"] },
+        { id: 'restrictions', label: 'Are there any restrictions from your landlord or subdivision?', type: 'checks', req: true, opts: ['Number of pets', 'Size or weight restrictions', 'Breed restrictions', 'None'] },
+        { id: 'fence', label: 'Do you have a fully fenced yard?', type: 'radio', req: true, opts: YN },
+        { id: 'fenceType', label: 'Height and type of fence', type: 'text' },
+        { id: 'containment', label: 'Do you have any of the following?', type: 'checks', opts: ['Underground fence', 'Kennel', 'Dog run'] },
+        { id: 'adults', label: 'How many adults live in your home?', type: 'number', req: true, half: true },
+        { id: 'kids', label: 'How many children live in your home?', type: 'number', req: true, half: true },
+        { id: 'kidsAges', label: 'If you have children, how old are they?', type: 'text' },
+        { id: 'kidsPets', label: 'Have your children been around animals before?', type: 'radio', opts: ['Yes', 'No', 'No children'] },
+        { id: 'allergies', label: 'Does anyone in your home have allergies to dogs or asthma?', type: 'radio', req: true, opts: YN },
+      ] },
+      { h: 'Your Pets, Now and Before', fields: [
+        { id: 'pets', label: 'List any pets you own or have owned in the past five years, and their ages', type: 'textarea' },
+        { id: 'fixed', label: 'How many of these pets are spayed or neutered?', type: 'text' },
+        { id: 'petsNow', label: 'Where are these animals now?', type: 'textarea', rows: 2 },
+        { id: 'adoptedBefore', label: 'Have you adopted from an animal welfare group before?', type: 'radio', opts: YN },
+        { id: 'adoptedGroup', label: 'If yes, which group?', type: 'text' },
+        { id: 'gaveUp', label: 'Have you ever given up a pet?', type: 'radio', opts: YN },
+        { id: 'gaveUpWhy', label: 'If yes, what were the circumstances?', type: 'textarea', rows: 2 },
+        { id: 'vet', label: 'Name and phone number of your current or previous vet or clinic', type: 'text' },
+      ] },
+      { h: 'Your New Dog', fields: [
+        { id: 'personality', label: 'What kind of personality do you want your dog to have?', type: 'text', req: true, hint: 'For example calm, energetic, protective or a couch potato.' },
+        { id: 'crate', label: 'Are you familiar with crate training?', type: 'radio', req: true, opts: YN },
+        { id: 'housebroken', label: 'Have you ever house-trained a dog or puppy before?', type: 'radio', req: true, opts: YN },
+        { id: 'accident', label: 'If the dog has an accident in your home, how will you correct it?', type: 'textarea', req: true, rows: 2 },
+        { id: 'alone', label: 'How many hours a day will your dog be home alone?', type: 'text', req: true, half: true },
+        { id: 'sleep', label: 'Where will your dog sleep at night?', type: 'text', req: true, half: true },
+        { id: 'outdoor', label: "How will you supervise the dog's time outside?", type: 'textarea', req: true, rows: 2 },
+        { id: 'nobodyHome', label: 'Where will your dog stay when nobody is home?', type: 'text', req: true },
+        { id: 'adjust', label: 'How much time will you give your dog to adjust to its new home?', type: 'text', req: true },
+        { id: 'issues', label: "Are you willing to work through your dog's issues, if any?", type: 'radio', req: true, opts: YN },
+        { id: 'stress', label: 'Do you know that a new home is stressful for a dog, and it may act out of character at first?', type: 'radio', req: true, opts: YN },
+        { id: 'commitment', label: 'Do you understand that a dog can be an 18-year commitment and can cost $300 to $500 a year to care for?', type: 'radio', req: true, opts: YN },
+        { id: 'obedience', label: 'Do you plan to take an obedience class with your dog?', type: 'radio', req: true, opts: ['Yes', 'No', 'Not sure'] },
+        { id: 'obedienceWhere', label: 'If yes, where?', type: 'text' },
+        { id: 'largeBreed', label: 'A large-breed dog takes about two years to mature. Are you prepared for that?', type: 'radio', req: true, opts: YN },
+        { id: 'giveUpWhen', label: 'What would lead you to give up your dog?', type: 'textarea', req: true, rows: 2 },
+        { id: 'giveUpHow', label: 'If you had to give up your dog, what would you do?', type: 'textarea', req: true, rows: 2 },
+        { id: 'heard', label: "How did you hear about Bentley's Playhouse?", type: 'checks', req: true, opts: ['Our website', 'Instagram', 'Facebook', 'Petfinder', 'A friend or family member', 'Another website', 'PetSmart', 'Other'] },
+      ] },
+      { h: 'Agreement', fields: [
+        { id: 'responsible', label: 'I understand that I take full responsibility for the welfare of this pet from the date of adoption.', type: 'agree', req: true },
+        { id: 'truthful', label: 'Everything in this application is true and complete.', type: 'agree', req: true },
+      ] },
+    ],
+  },
+
+  foster: {
+    id: 'foster',
+    route: 'applications/foster/',
+    title: 'Foster Application',
+    short: 'Foster application',
+    lede: "Thank you for wanting to foster a dog with Bentley's Playhouse Animal Rescue and Sanctuary. Fosters give our dogs a safe place to heal and learn while they wait for their family. Please answer as completely as you can, so we can match the right dog with the right home.",
+    note: "Fosters must be 18 or older. It takes about 20 minutes. Your answers are saved on this device as you go, so you can come back to finish.",
+    sections: [
+      { h: 'About You', fields: [
+        { id: 'name', label: 'Your full name', type: 'text', req: true, auto: 'name' },
+        { id: 'email', label: 'Email', type: 'email', req: true, half: true, auto: 'email' },
+        { id: 'phone', label: 'Phone number', type: 'tel', req: true, half: true, auto: 'tel' },
+        { id: 'altPhone', label: 'Other phone number', type: 'tel', half: true },
+        { id: 'bestTime', label: 'Best time to reach you', type: 'text', req: true, half: true },
+        { id: 'address', label: 'Full address', type: 'textarea', req: true, rows: 2, auto: 'street-address' },
+        { id: 'birthdate', label: 'Birthdate', type: 'date', req: true, half: true, hint: "If you're under 25, we'll need written consent from a parent or legal guardian." },
+        { id: 'license', label: "Driver's license number", type: 'text', req: true, half: true, private: true, hint: "Please also email a photo of your license to hello@bentleysplayhouse.org." },
+      ] },
+      { h: 'References', note: 'Please fill these out completely.', fields: [
+        { id: 'vetName', label: 'Veterinarian reference name', type: 'text', req: true, half: true },
+        { id: 'vetPhone', label: "Veterinarian's phone number", type: 'tel', req: true, half: true },
+        { id: 'refName', label: 'Personal reference name and phone number', type: 'text', req: true },
+        { id: 'ref2Name', label: 'Additional reference name', type: 'text', half: true },
+        { id: 'ref2Rel', label: 'How do they know you?', type: 'text', half: true },
+      ] },
+      { h: 'Your Household', fields: [
+        { id: 'adults', label: 'Names, ages and relation of all adults in your home, including you', type: 'textarea', req: true, rows: 3 },
+        { id: 'kids', label: 'Names, ages and relation of all children in your home', type: 'textarea', req: true, rows: 2, hint: 'Write "None" if no children live with you.' },
+        { id: 'allergies', label: 'Does anyone in your home have allergies to animals or anything else? If so, please explain.', type: 'textarea', req: true, rows: 2 },
+      ] },
+      { h: 'Your Home', note: "Please email photos of your home to hello@bentleysplayhouse.org: shared living areas, bedrooms, the kitchen, anywhere the dog will spend time, and the front, side and back yard if you have one. If you rent, we'll need written confirmation from your landlord that pets are allowed and what the weight limits are.", fields: [
+        { id: 'homeDesc', label: 'Please describe your home', type: 'textarea', req: true, rows: 3, hint: 'Size, location, yard size, stairs, which floor you live on, whether there is an elevator and so on.' },
+        { id: 'own', label: 'Do you own or rent?', type: 'radio', req: true, opts: ['Own', 'Rent'] },
+        { id: 'homeType', label: 'What type of home do you live in?', type: 'radio', req: true, opts: ['Single-family house', 'Apartment', 'Townhouse', 'Condo', 'Other'] },
+        { id: 'howLong', label: 'How long have you lived at this address?', type: 'text', req: true },
+        { id: 'stairs', label: 'Will the dog have to use stairs at any point, for example to reach your apartment or a second floor?', type: 'radio', req: true, opts: YN },
+        { id: 'fence', label: 'Does the property have a fenced yard?', type: 'radio', req: true, opts: YN },
+        { id: 'exercise', label: 'How will you give the dog its daily exercise?', type: 'textarea', req: true, rows: 2 },
+      ] },
+      { h: 'Experience With Pets', note: "Having owned a pet or not doesn't make you more or less qualified to foster. This just helps us understand your experience.", fields: [
+        { id: 'owned', label: 'Have you ever owned a pet? If so, what species and breed, how long ago, for how long, and what happened to the pet?', type: 'textarea', req: true, rows: 3 },
+        { id: 'dogExp', label: 'What experience do you have with dogs?', type: 'textarea', req: true, rows: 2, hint: 'Dog training, vet tech, groomer, agility, happy pet owner and so on.' },
+        { id: 'fostered', label: 'Have you fostered an animal before? If so, how did it go?', type: 'textarea', req: true, rows: 2 },
+        { id: 'petsNow', label: 'Do you have pets now? For each one: name and species, breed, age, how long you have had them and whether they are spayed or neutered.', type: 'textarea', req: true, rows: 3, hint: 'Write "None" if you don\'t.' },
+        { id: 'dogFriendly', label: 'If you have a dog, is it friendly with other dogs?', type: 'radio', req: true, opts: ['Yes', 'No', 'Not sure', "I don't have a dog"] },
+        { id: 'otherRescue', label: 'Are you fostering for another rescue right now? If yes, which rescue, and which pets (breed and age)?', type: 'textarea', req: true, rows: 2, hint: 'Write "No" if you aren\'t.' },
+        { id: 'fostersFixed', label: 'Are those fosters spayed or neutered?', type: 'radio', req: true, opts: ['Yes', 'No', 'Not sure', 'Not fostering now'] },
+        { id: 'meds', label: 'Are any animals in your home on medication? If so, please explain.', type: 'textarea', req: true, rows: 2 },
+      ] },
+      { h: 'Caring for Your Foster Dog', fields: [
+        { id: 'alone', label: 'How many hours a day will the foster dog be left alone?', type: 'text', req: true, half: true },
+        { id: 'cameras', label: 'Do you have cameras at home to check on the dog, or would you be open to them?', type: 'radio', req: true, opts: ['Yes', 'No', 'Maybe'], half: true },
+        { id: 'day', label: 'Where will the dog stay during the day, and with whom?', type: 'textarea', req: true, rows: 2 },
+        { id: 'night', label: 'Where will the dog stay at night, and with whom?', type: 'textarea', req: true, rows: 2 },
+        { id: 'caretaker', label: 'Who will be the main caretaker of the dog?', type: 'text', req: true },
+        { id: 'areas', label: 'Which areas of the house will the dog be allowed in?', type: 'textarea', req: true, rows: 2 },
+        { id: 'offLimits', label: 'Are there any areas where the dog will not be allowed?', type: 'textarea', req: true, rows: 2 },
+        { id: 'travel', label: 'How often do you travel? Are you planning a vacation in the next one to two months?', type: 'radio', req: true, opts: ['Yes, within the first month of fostering', 'Yes, within two months of fostering', 'No, no vacation in the next two months'] },
+        { id: 'crate', label: 'Have you ever crate trained a dog?', type: 'radio', req: true, opts: YN, half: true },
+        { id: 'visit', label: "Are you willing to have someone from Bentley's Playhouse visit your home?", type: 'radio', req: true, opts: ['Yes', 'No', 'Maybe'], half: true },
+        { id: 'crateTime', label: 'If the dog is crate trained, how long would it stay in the crate each day?', type: 'text', req: true },
+        { id: 'incidentals', label: 'Are you willing to cover small incidental costs for a foster dog?', type: 'radio', req: true, opts: ['Yes', 'No', 'Not sure'], hint: "Bentley's Playhouse provides all supplies and pays for regular vet visits. Incidentals are small things the dog might need before we can get them to you, like a collar or leash, training pads, a bed or food." },
+      ] },
+      { h: 'Dog Fighting', fields: [
+        { id: 'fightAware', label: 'Are you aware that dog fighting exists, and that people look for "bait dogs"?', type: 'radio', req: true, opts: YN },
+        { id: 'fightAgree', label: 'Do you agree that dog fighting is animal abuse, that it should end and that those involved should be prosecuted to the fullest extent of the law?', type: 'radio', req: true, opts: YN },
+        { id: 'fightBiz', label: 'Are you involved in any business related to animal fighting or trafficking?', type: 'radio', req: true, opts: YN },
+      ] },
+      { h: 'Foster Care Agreement', note: 'Please type your initials next to each statement. Your electronic signature is legally binding.', fields: [
+        { id: 'i1', type: 'initials', req: true, label: "I understand and agree with everything explained to me during the application. If my foster dog is on medication, I will give it exactly as directed. I will never let the dog out loose on its own. If the dog needs medical care, I will contact Bentley's Playhouse first unless it's an emergency. If the dog needs medical care because of my negligence, I will pay for all of the treatment. The foster dog belongs to Bentley's Playhouse, and I will not sell, trade or give it away. My own pets and any other fosters are up to date on their standard vaccinations, and I have given Bentley's Playhouse a current shot record for each one." },
+        { id: 'i2', type: 'initials', req: true, label: "Anyone who wants to adopt my foster dog, including me, must go through the standard adoption process. Every adoption or placement decision is up to Bentley's Playhouse alone. My recommendations as the foster are taken into account." },
+        { id: 'i3', type: 'initials', req: true, label: "This is an application to volunteer as a foster. Bentley's Playhouse has made no promises about whether I'm eligible to foster certain animals." },
+        { id: 'i4', type: 'initials', req: true, label: "I will not bring other dogs or cats into my home while fostering, because that could expose the dog to disease or an attack and put us both in an unsafe situation." },
+        { id: 'i5', type: 'initials', req: true, label: "Fostering is a volunteer role, not a paid job, and I will not be paid by Bentley's Playhouse or its partners. Any donations made for the dog, to me or to the rescue, go to the dog's care. If I raise money myself, I do it by my own choice, I am responsible for it, and I will use it only for the dog's care and never for myself. Bentley's Playhouse is a nonprofit and does not raise money for personal use." },
+        { id: 'i6', type: 'initials', req: true, label: "This agreement is only for fostering. The dog stays the property of Bentley's Playhouse." },
+        { id: 'truthful', type: 'agree', req: true, label: 'Everything in this application is true and complete. I understand that giving false information now or at any point while fostering disqualifies me from fostering, now and in the future.' },
+        { id: 'signature', label: 'Type your full name to sign', type: 'text', req: true, half: true, sign: true },
+        { id: 'signDate', label: 'Date', type: 'date', req: true, half: true, today: true },
+      ] },
+    ],
+  },
+};
+
+/** Every field of a form, in order, with its section heading. */
+export const allFields = (form) => form.sections.flatMap((s) => s.fields.map((f) => ({ ...f, section: s.h })));

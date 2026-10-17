@@ -44,4 +44,4 @@ Many cover vet care and medications, and some provide food and supplies. Every p
 
 ## Local Options
 
-[Miami-Dade Animal Services](https://www.miamidade.gov/global/service.page?Mduid_service=ser1599345590627984) runs a public foster program. To tell us you're interested in fostering with Bentley's Playhouse, see [Get Involved](/get-involved/#foster).
+[Miami-Dade Animal Services](https://www.miamidade.gov/global/service.page?Mduid_service=ser1599345590627984) runs a public foster program. To foster with Bentley's Playhouse, fill out our [foster application](/applications/foster/).
