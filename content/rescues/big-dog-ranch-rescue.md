@@ -1,6 +1,6 @@
 ---
 name: Big Dog Ranch Rescue
-instagram: https://www.instagram.com/bigdogranchrescue/
+instagram: bigdogranchrescue
 website: bdrr.org
 area: Rescue
 donate: https://www.bdrr.org/donate
