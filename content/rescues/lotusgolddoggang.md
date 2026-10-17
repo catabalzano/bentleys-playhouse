@@ -1,12 +1,7 @@
 ---
-name: "@lotusgolddoggang"
+name: Lotus Gold Dog Gang
 order: 5
 instagram: lotusgolddoggang
-website: ""
-area: "Rescue"
-summary: ""
-needs: []
-wishlist: ""
-donate: ""
-logo: ""
+area: Rescue
 ---
+
