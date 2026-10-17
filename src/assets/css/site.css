@@ -1603,3 +1603,7 @@ fieldset.field { align-content: start; }
   .cpanel { padding: .75rem; }
   .cpanel__list { grid-template-columns: 1fr; }
 }
+
+/* Home adopt box: Adopt a Pet button next to RescueMe on computers, right under it on phones (Cata, Oct 17) */
+.dogs-home .empty .btn-row--adopt .btn--ghost { display: inline-flex; }
+@media (max-width: 700px) { .dogs-home .empty .btn-row--adopt .btn { display: flex; width: 100%; justify-content: center; } .dogs-home .empty .btn-row--adopt .btn + .btn { margin-top: .75rem; } }

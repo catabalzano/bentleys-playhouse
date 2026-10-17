@@ -151,7 +151,7 @@ ${dogs.length ? `
     <div>
       <h2 id="dogs-h" class="section-h">Looking for a Dog to Adopt?</h2>
       <p>Profiles of our current dogs will live here. For now, our adoptable dogs are listed on RescueMe, and our day-to-day rescue work is on Instagram.</p>
-      <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}</div>
+      <div class="btn-row btn-row--adopt">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}${button('Find dogs on Adopt a Pet', 'https://www.adoptapet.com/', { variant: 'ghost', externalLink: true })}</div>
       ${countyTabs()}
     </div>
   </div>
