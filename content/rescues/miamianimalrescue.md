@@ -1,12 +1,9 @@
 ---
-name: "@miamianimalrescue"
+name: Miami Animal Rescue
 order: 6
 instagram: miamianimalrescue
-website: ""
-area: "Rescue"
-summary: ""
-needs: []
-wishlist: ""
-donate: ""
-logo: ""
+website: https://www.miamianimalrescue.org/
+area: Rescue
+donate: https://www.miamianimalrescue.org/donate
 ---
+
