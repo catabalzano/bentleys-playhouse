@@ -16,7 +16,7 @@ export const APP_FORMS = {
     title: 'Adoption Application',
     short: 'Adoption application',
     lede: "Thank you for wanting to give a rescue dog a home. Bentley's Playhouse is a volunteer-run rescue. Our dogs live with foster families and get the vet care they need before they're adopted. These questions help us make sure the dog you love is a good fit for your home, and everyone adopting needs to fill them out.",
-    note: "We may decline an adoption based on the answers here or on our conversations with you. It takes about 15 minutes. Your answers are saved on this device as you go, so you can come back to finish.",
+    note: "We may decline an adoption based on your answers or our conversations with you. Your answers are saved in this browser as you go, so you can come back and finish later.",
     sections: [
       { h: 'About You', fields: [
         { id: 'pet', label: 'Name of the dog you are interested in', type: 'text', req: true, hint: "Not sure yet? Write \"Not sure\" and tell us what you're looking for below." },
@@ -91,7 +91,7 @@ export const APP_FORMS = {
     title: 'Foster Application',
     short: 'Foster application',
     lede: "Thank you for wanting to foster a dog with Bentley's Playhouse Animal Rescue and Sanctuary. Fosters give our dogs a safe place to heal and learn while they wait for their family. Please answer as completely as you can, so we can match the right dog with the right home.",
-    note: "Fosters must be 18 or older. It takes about 20 minutes. Your answers are saved on this device as you go, so you can come back to finish.",
+    note: "Fosters must be 18 or older. Your answers are saved in this browser as you go, so you can come back and finish later.",
     sections: [
       { h: 'About You', fields: [
         { id: 'name', label: 'Your full name', type: 'text', req: true, auto: 'name' },
