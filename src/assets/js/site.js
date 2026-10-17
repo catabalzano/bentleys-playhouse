@@ -372,3 +372,23 @@ var T = window.BP_T || function (s) { return s; };
     else if (a.matches('[data-pp-share]')) window.bpTrack('share_pup_link', { pup: a.getAttribute('data-pp-share'), page: page });
   }, true);
 })();
+
+/* Home: shelters by county as folder tabs (arrow keys move between tabs). Without JS every county shows. */
+(function () {
+  var box = document.querySelector('[data-ctabs]');
+  if (!box) return;
+  var list = box.querySelector('[role="tablist"]'), tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
+  var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+  function show(i, focus) {
+    tabs.forEach(function (t, j) { t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; panels[j].hidden = j !== i; });
+    if (focus) tabs[i].focus();
+  }
+  list.hidden = false; box.classList.add('is-tabs'); show(0);
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(i); });
+    t.addEventListener('keydown', function (e) {
+      var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : null;
+      if (n === null) return; e.preventDefault(); show((n + tabs.length) % tabs.length, true);
+    });
+  });
+})();

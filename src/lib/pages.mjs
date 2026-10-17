@@ -44,6 +44,29 @@ function card(item, { headingLevel = 'h3', showCat = true } = {}) {
 }
 
 // ============ HOME ============
+// Home "Looking for a Dog to Adopt?": shelters by county in color-coded folder tabs (Cata picked design B, Oct 17).
+// Without JavaScript every county shows, one under the other; site.js turns them into tabs.
+const COUNTIES = [
+  { id: 'mia', name: 'Miami-Dade', items: [
+    ['Miami-Dade Animal Services', 'County shelter · Doral and Medley', 'adopt-foster/#mdas'],
+    ['Humane Society of Greater Miami', 'Nonprofit shelter', 'https://www.humanesocietymiami.org/adopt-a-pet-today/'] ] },
+  { id: 'bro', name: 'Broward', items: [
+    ['Broward County Animal Care', 'County shelter · Fort Lauderdale', 'https://24petconnect.com/BrowardAllAnimals?at=DOG'],
+    ['Humane Society of Broward County', 'Nonprofit shelter', 'https://humanebroward.com/all-pets/'] ] },
+  { id: 'pbc', name: 'Palm Beach', items: [
+    ['Palm Beach County Animal Care & Control', 'County shelter · West Palm Beach', 'https://secure.co.palm-beach.fl.us/snap/adoptabledogs'],
+    ['Peggy Adams Animal Rescue League', 'Nonprofit shelter', 'https://peggyadams.org/adopt/'] ] },
+];
+function countyTabs() {
+  const ext = (u) => /^https?:/.test(u);
+  const link = ([n, sub, u]) => `<li><a class="ctab__item" href="${ext(u) ? u : href(u)}"${ext(u) ? ' target="_blank" rel="noopener"' : ''}><span>${esc(n)}<small>${esc(sub)}</small>${ext(u) ? '<span class="visually-hidden"> (opens in a new tab)</span>' : ''}</span><span class="ctab__go" aria-hidden="true">${icon(ext(u) ? 'external' : 'arrow', { size: 18 })}</span></a></li>`;
+  return `<div class="ctabs" data-ctabs>
+        <p class="ctabs__lbl" id="ctabs-lbl">Shelters near you</p>
+        <div class="ctabs__tabs" role="tablist" aria-labelledby="ctabs-lbl" hidden>${COUNTIES.map((c, i) => `<button type="button" role="tab" class="ctab ctab--${c.id}" id="ctab-${c.id}" aria-controls="cpanel-${c.id}" aria-selected="${i ? 'false' : 'true'}"${i ? ' tabindex="-1"' : ''}><i aria-hidden="true"></i>${c.name}</button>`).join('')}</div>
+        ${COUNTIES.map((c) => `<div class="cpanel cpanel--${c.id}" id="cpanel-${c.id}" role="tabpanel" aria-labelledby="ctab-${c.id}"><p class="cpanel__name">${c.name}</p><ul class="cpanel__list" role="list">${c.items.map(link).join('')}</ul></div>`).join('')}
+      </div>`;
+}
+
 export function home(data) {
   const s = ctx.site;
   const heroImg = s.hero.image
@@ -128,11 +151,8 @@ ${dogs.length ? `
     <div>
       <h2 id="dogs-h" class="section-h">Looking for a Dog to Adopt?</h2>
       <p>Profiles of our current dogs will live here. For now, our adoptable dogs are listed on RescueMe, and our day-to-day rescue work is on Instagram.</p>
-      <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}${button('Dogs at Miami-Dade Animal Services', 'adopt-foster/#mdas', { variant: 'ghost' })}${button('Dogs at Broward County Animal Care', 'https://24petconnect.com/BrowardAllAnimals?at=DOG', { variant: 'ghost', externalLink: true })}</div>
-      <ul class="adopt-list" role="list">
-        <li><a href="${href('adopt-foster/')}#mdas"><span>Miami-Dade Animal Services<small>Doral and Medley shelters</small></span><span class="adopt-list__go" aria-hidden="true">${icon('arrow', { size: 20 })}</span></a></li>
-        <li><a href="https://24petconnect.com/BrowardAllAnimals?at=DOG" target="_blank" rel="noopener"><span>Broward County Animal Care<small>Fort Lauderdale shelter</small><span class="visually-hidden"> (opens in a new tab)</span></span><span class="adopt-list__go" aria-hidden="true">${icon('external', { size: 18 })}</span></a></li>
-      </ul>
+      <div class="btn-row">${button('See our RescueMe listings', s.social.rescueme.url, { variant: 'primary', externalLink: true })}</div>
+      ${countyTabs()}
     </div>
   </div>
   ${previewNote('Add real dogs in <code>content/dogs/</code> and rescue stories in <code>content/stories/</code>. They appear here automatically.')}
