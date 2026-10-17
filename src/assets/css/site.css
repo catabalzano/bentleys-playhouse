@@ -1405,7 +1405,7 @@ fieldset.field { align-content: start; }
 .qh__go svg { display: none; }
 .qh::after { content: ""; grid-column: 3; grid-row: 1 / 3; width: 36px; height: 36px; border-radius: 50%; background: var(--qh-ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / 18px no-repeat; transition: transform .2s; }
 .qh:hover::after { transform: translateX(3px); }
-.qh--alert { --qh-bg: var(--alert-bg); --qh-ink: var(--alert-ink); }
+.qh--alert { --qh-bg: var(--alert-bg); --qh-ink: var(--orange); } /* brand Paw Orange (Cata, Oct 17) */
 .qh--fenix { --qh-bg: var(--tint-blue); --qh-ink: var(--link); }
 .qh--fenix::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E"); background-size: 16px; }
 /* "Who we are" on phones: logo centered, text stays left */
