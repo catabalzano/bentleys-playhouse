@@ -1606,6 +1606,12 @@ fieldset.field { align-content: start; }
 .ctabs.is-tabs .cback { display: none; }
 .ctabs.is-tabs .cpanel { position: relative; z-index: 5; margin-top: 0; border-top-left-radius: 0; box-shadow: 0 12px 26px rgba(31, 29, 43, .08); }
 .ctabs.is-tabs .cpanel__name { display: none; }
+/* all three folders share one spot, so the box keeps the height of the tallest one and nothing moves when you switch */
+.ctabs.is-tabs .cstack { display: grid; }
+.ctabs.is-tabs .ctabs__tabs { grid-row: 1; grid-column: 1; }
+.ctabs.is-tabs .cpanel { grid-row: 2; grid-column: 1; display: flex; flex-direction: column; }
+.ctabs.is-tabs .cpanel.is-off { visibility: hidden; }
+.ctabs.is-tabs .cpanel__list { flex: 1; }
 @media (max-width: 700px) {
   .ctabs.is-tabs .ctabs__tabs { gap: 4px; }
   .ctab { flex: 1 1 0; font-size: .9rem; padding: 4px 6px 0; height: 42px; }

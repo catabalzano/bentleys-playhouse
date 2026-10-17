@@ -383,7 +383,7 @@ var T = window.BP_T || function (s) { return s; };
     // the open folder is rank 0 (front); the others keep their order behind it (rank 1, then 2)
     var r = 0, ranks = tabs.map(function (t, j) { return j === i ? 0 : ++r; });
     tabs.forEach(function (t, j) {
-      t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; panels[j].hidden = j !== i;
+      t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; panels[j].classList.toggle('is-off', j !== i); panels[j].inert = j !== i; panels[j].setAttribute('aria-hidden', j !== i ? 'true' : 'false');
       t.setAttribute('data-rank', ranks[j]);
       var back = box.querySelector('[data-cback="' + t.id.replace('ctab-', '') + '"]'); if (back) back.setAttribute('data-rank', ranks[j]);
     });
