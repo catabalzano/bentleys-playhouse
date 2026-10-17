@@ -1580,10 +1580,10 @@ fieldset.field { align-content: start; }
 .ctabs__lbl { margin: 0 0 .7rem; font: 600 .85rem/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .cpanel--mia { --c: #5271FF; --t: color-mix(in srgb, #5271FF 20%, var(--paper)); --d: color-mix(in srgb, #5271FF 34%, var(--paper)); }
 .cpanel--bro { --c: #FF914D; --t: color-mix(in srgb, #FF914D 24%, var(--paper)); --d: color-mix(in srgb, #FF914D 40%, var(--paper)); }
-.cpanel--pbc { --c: #7A45E6; --t: color-mix(in srgb, #7A45E6 16%, var(--paper)); --d: color-mix(in srgb, #7A45E6 28%, var(--paper)); }
+.cpanel--pbc { --c: #7A45E6; --t: color-mix(in srgb, #8C52FF 34%, var(--paper)); --d: color-mix(in srgb, #8C52FF 50%, var(--paper)); }
 .ctab--mia { --t: color-mix(in srgb, #5271FF 20%, var(--paper)); --d: color-mix(in srgb, #5271FF 34%, var(--paper)); }
 .ctab--bro { --t: color-mix(in srgb, #FF914D 24%, var(--paper)); --d: color-mix(in srgb, #FF914D 40%, var(--paper)); }
-.ctab--pbc { --t: color-mix(in srgb, #7A45E6 16%, var(--paper)); --d: color-mix(in srgb, #7A45E6 28%, var(--paper)); }
+.ctab--pbc { --t: color-mix(in srgb, #8C52FF 34%, var(--paper)); --d: color-mix(in srgb, #8C52FF 50%, var(--paper)); }
 .cpanel { background: var(--t); border-radius: 18px; padding: 1.1rem; }
 .cpanel + .cpanel { margin-top: .9rem; }
 .cpanel__name { margin: 0 0 .6rem; font: 600 1.05rem var(--font-display); }
@@ -1602,7 +1602,7 @@ fieldset.field { align-content: start; }
 .ctab:not([aria-selected="true"]):hover::before { background: color-mix(in srgb, var(--d) 70%, var(--t)); }
 .ctab[aria-selected="true"] { z-index: 6; }
 .ctab[aria-selected="true"]::before { background: var(--t); }
-.ctab:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.ctabs.is-kb .ctab:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .ctabs.is-tabs .cback { display: none; }
 .ctabs.is-tabs .cpanel { position: relative; z-index: 5; margin-top: 0; border-top-left-radius: 0; box-shadow: 0 12px 26px rgba(31, 29, 43, .08); }
 .ctabs.is-tabs .cpanel__name { display: none; }

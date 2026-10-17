@@ -391,10 +391,10 @@ var T = window.BP_T || function (s) { return s; };
   }
   list.hidden = false; box.classList.add('is-tabs'); show(0);
   tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { show(i); });
+    t.addEventListener('click', function (e) { if (e.detail) box.classList.remove('is-kb'); show(i); });
     t.addEventListener('keydown', function (e) {
       var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : null;
-      if (n === null) return; e.preventDefault(); show((n + tabs.length) % tabs.length, true);
+      box.classList.add('is-kb'); if (n === null) return; e.preventDefault(); show((n + tabs.length) % tabs.length, true);
     });
   });
 })();
