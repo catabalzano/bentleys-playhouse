@@ -60,10 +60,15 @@ const COUNTIES = [
 function countyTabs() {
   const ext = (u) => /^https?:/.test(u);
   const link = ([n, sub, u]) => `<li><a class="ctab__item" href="${ext(u) ? u : href(u)}"${ext(u) ? ' target="_blank" rel="noopener"' : ''}><span>${esc(n)}<small>${esc(sub)}</small>${ext(u) ? '<span class="visually-hidden"> (opens in a new tab)</span>' : ''}</span><span class="ctab__go" aria-hidden="true">${icon(ext(u) ? 'external' : 'arrow', { size: 18 })}</span></a></li>`;
+  // Stacked file folders (Cata picked this, Oct 17): one folder per county, tabs cut left / middle / right.
+  // site.js brings the chosen county's folder to the front; the other two peek out behind it.
   return `<div class="ctabs" data-ctabs>
         <p class="ctabs__lbl" id="ctabs-lbl">Shelters near you</p>
-        <div class="ctabs__tabs" role="tablist" aria-labelledby="ctabs-lbl" hidden>${COUNTIES.map((c, i) => `<button type="button" role="tab" class="ctab ctab--${c.id}" id="ctab-${c.id}" aria-controls="cpanel-${c.id}" aria-selected="${i ? 'false' : 'true'}"${i ? ' tabindex="-1"' : ''}><i aria-hidden="true"></i>${c.name}</button>`).join('')}</div>
-        ${COUNTIES.map((c) => `<div class="cpanel cpanel--${c.id}" id="cpanel-${c.id}" role="tabpanel" aria-labelledby="ctab-${c.id}"><p class="cpanel__name">${c.name}</p><ul class="cpanel__list" role="list">${c.items.map(link).join('')}</ul></div>`).join('')}
+        <div class="cstack">
+          <div class="ctabs__tabs" role="tablist" aria-labelledby="ctabs-lbl" hidden>${COUNTIES.map((c, i) => `<button type="button" role="tab" class="ctab ctab--${c.id} ctab--p${i}" id="ctab-${c.id}" aria-controls="cpanel-${c.id}" aria-selected="${i ? 'false' : 'true'}"${i ? ' tabindex="-1"' : ''}>${c.name}</button>`).join('')}</div>
+          ${COUNTIES.map((c) => `<div class="cback cpanel--${c.id}" data-cback="${c.id}" aria-hidden="true"></div>`).join('')}
+          ${COUNTIES.map((c, i) => `<div class="cpanel cpanel--${c.id} cpanel--p${i}" id="cpanel-${c.id}" role="tabpanel" aria-labelledby="ctab-${c.id}"><p class="cpanel__name">${c.name}</p><ul class="cpanel__list" role="list">${c.items.map(link).join('')}</ul></div>`).join('')}
+        </div>
       </div>`;
 }
 

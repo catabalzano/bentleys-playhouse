@@ -1574,36 +1574,49 @@ fieldset.field { align-content: start; }
 .pp-video__h { font-family: var(--font-head, 'Fredoka', sans-serif); font-weight: 700; font-size: 1.15rem; margin: 0 0 .5rem; }
 .pp-video video { display: block; width: 100%; max-height: 70vh; border-radius: 18px; background: #1F1D2B; }
 
-/* ---------- Home: shelters by county, color-coded folder tabs (Cata picked design B, Oct 17) ---------- */
-.ctabs { margin-top: 1.6rem; --c: var(--blue); --t: var(--tint-blue); }
+/* ---------- Home: shelters by county as stacked file folders (Cata, Oct 17) ----------
+   Each county is a folder; tabs are cut at the left, middle and right. The open folder is in front (rank 0),
+   the others peek out behind it (rank 1 and 2, set by site.js). Without JS the counties are listed one under another. */
+.ctabs { margin-top: 1.6rem; }
 .ctabs__lbl { margin: 0 0 .7rem; font: 600 .85rem/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.ctabs__tabs { display: flex; gap: 4px; padding-left: 10px; }
-.ctab { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1.4rem .85rem; border-radius: 14px 14px 0 0; background: var(--t); border-top: 5px solid var(--c); font: 600 1.05rem/1.1 var(--font-display); color: var(--ink); white-space: nowrap; position: relative; top: 4px; transition: top .15s; }
-.ctab i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
-.ctab[aria-selected="true"] { top: 0; padding-bottom: 1.1rem; }
-.ctab:hover { top: 1px; }
-.ctab:focus-visible { outline: 3px solid var(--blue-deep); outline-offset: 2px; }
-.ctab--mia, .cpanel--mia { --c: #5271FF; --t: color-mix(in srgb, #5271FF 20%, var(--paper)); }
-.ctab--bro, .cpanel--bro { --c: #FF914D; --t: color-mix(in srgb, #FF914D 22%, var(--paper)); }
-.ctab--pbc, .cpanel--pbc { --c: #7A45E6; --t: color-mix(in srgb, #7A45E6 16%, var(--paper)); }
-.cpanel { background: var(--t); border-top: 5px solid var(--c); border-radius: 4px 20px 20px 20px; padding: 1.1rem; }
+.cpanel--mia { --c: #5271FF; --t: color-mix(in srgb, #5271FF 20%, var(--paper)); --d: color-mix(in srgb, #5271FF 34%, var(--paper)); }
+.cpanel--bro { --c: #FF914D; --t: color-mix(in srgb, #FF914D 24%, var(--paper)); --d: color-mix(in srgb, #FF914D 40%, var(--paper)); }
+.cpanel--pbc { --c: #7A45E6; --t: color-mix(in srgb, #7A45E6 16%, var(--paper)); --d: color-mix(in srgb, #7A45E6 28%, var(--paper)); }
+.ctab--mia { --t: color-mix(in srgb, #5271FF 20%, var(--paper)); --d: color-mix(in srgb, #5271FF 34%, var(--paper)); }
+.ctab--bro { --t: color-mix(in srgb, #FF914D 24%, var(--paper)); --d: color-mix(in srgb, #FF914D 40%, var(--paper)); }
+.ctab--pbc { --t: color-mix(in srgb, #7A45E6 16%, var(--paper)); --d: color-mix(in srgb, #7A45E6 28%, var(--paper)); }
+.cpanel { background: var(--t); border-radius: 18px; padding: 1.1rem; }
 .cpanel + .cpanel { margin-top: .9rem; }
-.ctabs.is-tabs .cpanel + .cpanel { margin-top: 0; }
-.ctabs.is-tabs .cpanel__name { display: none; }
 .cpanel__name { margin: 0 0 .6rem; font: 600 1.05rem var(--font-display); }
 .cpanel__list { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; list-style: none; margin: 0; padding: 0; }
-.ctab__item { display: flex; align-items: center; justify-content: space-between; gap: .75rem; height: 100%; box-sizing: border-box; padding: .9rem 1.1rem; background: var(--paper); border-radius: 14px; color: var(--ink); font-weight: 700; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+.ctab__item { display: flex; align-items: center; justify-content: space-between; gap: .75rem; height: 100%; box-sizing: border-box; padding: .9rem 1.1rem; background: var(--paper); border-radius: 14px; color: var(--ink); font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(31, 29, 43, .06); transition: transform .15s, box-shadow .15s; }
 .ctab__item:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(31, 29, 43, .1); }
 .ctab__item small { display: block; margin-top: .15rem; font-weight: 500; font-size: .85rem; color: var(--muted); }
 .ctab__go { color: var(--link); flex: none; }
+.cback { display: none; }
+/* tabbed (JS on) */
+.ctabs.is-tabs .cstack { position: relative; padding-top: 48px; }
+.ctabs.is-tabs .ctabs__tabs { position: absolute; inset: 0 0 auto 0; height: 48px; }
+.ctab { all: unset; box-sizing: border-box; cursor: pointer; position: absolute; bottom: -2px; width: 31%; height: 42px; display: flex; align-items: center; justify-content: center; z-index: 0; font: 600 1.05rem/1 var(--font-display); color: var(--ink); white-space: nowrap; transition: transform .2s; }
+.ctab::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--d); border-radius: 12px 12px 0 0; transform: perspective(60px) rotateX(10deg); transform-origin: bottom; }
+.ctab--p0 { left: 0; } .ctab--p1 { left: 34.5%; } .ctab--p2 { left: 69%; }
+.ctab[data-rank="1"] { transform: translateY(-11px); } .ctab[data-rank="2"] { transform: translateY(-22px); }
+.ctab[aria-selected="true"] { z-index: 6; }
+.ctab[aria-selected="true"]::before { background: var(--t); }
+.ctab:not([aria-selected="true"]):hover { transform: translateY(var(--lift, 0)); }
+.ctab[data-rank="1"]:hover { --lift: -14px; } .ctab[data-rank="2"]:hover { --lift: -25px; }
+.ctab:focus-visible::before { box-shadow: inset 0 0 0 3px var(--blue-deep); }
+.ctabs.is-tabs .cback { display: block; position: absolute; left: 0; right: 0; top: 48px; height: 90px; background: var(--d); border-radius: 18px; box-shadow: 0 -2px 6px rgba(31, 29, 43, .06); }
+.cback[data-rank="0"] { display: none !important; }
+.cback[data-rank="1"] { transform: translateY(-11px); z-index: 2; } .cback[data-rank="2"] { transform: translateY(-22px); z-index: 1; }
+.ctabs.is-tabs .cpanel { position: relative; z-index: 5; margin-top: 0; box-shadow: 0 -3px 8px rgba(31, 29, 43, .08), 0 12px 26px rgba(31, 29, 43, .1); }
+.ctabs.is-tabs .cpanel--p0 { border-top-left-radius: 4px; }
+.ctabs.is-tabs .cpanel__name { display: none; }
 @media (max-width: 700px) {
-  .ctabs__tabs { padding-left: 0; }
-  .ctab { flex: 1; padding-inline: .4rem; font-size: .95rem; }
-  .ctab i { display: none; }
+  .ctab { font-size: .9rem; }
   .cpanel { padding: .75rem; }
   .cpanel__list { grid-template-columns: 1fr; }
 }
-
 /* Home adopt box: Adopt a Pet button next to RescueMe on computers, right under it on phones (Cata, Oct 17) */
 .dogs-home .empty .btn-row--adopt .btn--ghost { display: inline-flex; }
 @media (max-width: 700px) { .dogs-home .empty .btn-row--adopt .btn { display: flex; width: 100%; justify-content: center; } .dogs-home .empty .btn-row--adopt .btn + .btn { margin-top: .75rem; } }

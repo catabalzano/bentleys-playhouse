@@ -380,7 +380,13 @@ var T = window.BP_T || function (s) { return s; };
   var list = box.querySelector('[role="tablist"]'), tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
   var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
   function show(i, focus) {
-    tabs.forEach(function (t, j) { t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; panels[j].hidden = j !== i; });
+    // the open folder is rank 0 (front); the others keep their order behind it (rank 1, then 2)
+    var r = 0, ranks = tabs.map(function (t, j) { return j === i ? 0 : ++r; });
+    tabs.forEach(function (t, j) {
+      t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; panels[j].hidden = j !== i;
+      t.setAttribute('data-rank', ranks[j]);
+      var back = box.querySelector('[data-cback="' + t.id.replace('ctab-', '') + '"]'); if (back) back.setAttribute('data-rank', ranks[j]);
+    });
     if (focus) tabs[i].focus();
   }
   list.hidden = false; box.classList.add('is-tabs'); show(0);
