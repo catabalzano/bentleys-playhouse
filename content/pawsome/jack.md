@@ -1,40 +1,34 @@
 ---
-name: "Jack"
+name: Jack
 status: available
 featuredWeek: 2026-10-19
 urgent: false
 needs: both
 photos:
-  - "/assets/img/pawsome/jack.jpg"
-  - "/assets/img/pawsome/jack-2.jpg"
-  - "/assets/img/pawsome/jack-3.jpg"
-  - "/assets/img/pawsome/jack-4.jpg"
-  - "/assets/img/pawsome/jack-5.jpg"
-photoAlt: "Jack, Pit bull"
-tagline: ""
-breed: "Pit bull"
+  - /assets/img/pawsome/jack.jpg
+  - /assets/img/pawsome/jack-2.jpg
+  - /assets/img/pawsome/jack-3.jpg
+  - /assets/img/pawsome/jack-4.jpg
+  - /assets/img/pawsome/jack-5.jpg
+photoAlt: Jack, Pit bull
+breed: Pit bull
 age: "4"
-sex: "Male"
-fixed: yes
-fixedNote: ""
-vaccinated: yes
-microchipped: yes
-heartworm: yes
-goodWithDogs: yes
+sex: Male
+fixed: "yes"
+vaccinated: "yes"
+microchipped: "yes"
+heartworm: "yes"
+goodWithDogs: "yes"
 goodWithCats: unknown
-goodWithKids: yes
-goodNote: ""
-personality: []
+goodWithKids: "yes"
 location:
   type: mdas-doral
-  name: ""
-  url: ""
-  city: "Doral"
-  animalId: "(A2741924)"
+  city: Doral
+  animalId: (A2741924)
 contact:
-  instagram: "bentleysplayhouse"
-  instructions: ""
-submissionId: "20261019-8a88442a"
+  instagram: bentleysplayhouse
+submissionId: 20261019-8a88442a
+photoFocus: 45% 58%
 ---
 🐾 335 days. That’s how long Jack has been waiting for his forever home. He’s now one of the longest-term residents at the Doral shelter, and after spending today with him on a Pawventure, I genuinely cannot understand how this sweet boy hasn’t been adopted yet. ❤️
 
