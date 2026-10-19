@@ -5,8 +5,8 @@ featuredWeek: 2026-10-19
 urgent: false
 needs: both
 photos:
-  - /assets/img/pawsome/jack.jpg
   - /assets/img/pawsome/jack-2.jpg
+  - /assets/img/pawsome/jack.jpg
   - /assets/img/pawsome/jack-3.jpg
   - /assets/img/pawsome/jack-4.jpg
   - /assets/img/pawsome/jack-5.jpg
@@ -24,11 +24,12 @@ goodWithKids: "yes"
 location:
   type: mdas-doral
   city: Doral
-  animalId: (A2741924)
+  animalId: A2741924
 contact:
   instagram: bentleysplayhouse
 submissionId: 20261019-8a88442a
-photoFocus: 45% 58%
+photoFocus: 55% 96%
+size: Large
 ---
 🐾 335 days. That’s how long Jack has been waiting for his forever home. He’s now one of the longest-term residents at the Doral shelter, and after spending today with him on a Pawventure, I genuinely cannot understand how this sweet boy hasn’t been adopted yet. ❤️
 
