@@ -218,6 +218,11 @@ export function helpHub(data) {
     <span><strong>Is a dog injured, sick or in immediate danger?</strong><br>Start with the emergency steps.</span>
     ${icon('arrow', { size: 24 })}
   </a>
+  <a class="urgent-card urgent-card--tip" href="${href('submit-a-tip/')}">
+    <span class="urgent-card__icon">${icon('shield', { size: 30 })}</span>
+    <span><strong>Seen an animal being hurt or neglected?</strong><br>Submit a tip. You can stay anonymous, and you can report negligence at Miami-Dade Animal Services too.</span>
+    ${icon('arrow', { size: 24 })}
+  </a>
   ${fenixCallout()}
   ${choiceCards('h2')}
 </section>

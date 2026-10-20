@@ -1667,3 +1667,25 @@ fieldset.field { align-content: start; }
   .app-initial__box { justify-items: start; }
   .app-steps { display: none; }
 }
+
+/* ---------- Submit a tip (/submit-a-tip/, Oct 19) ---------- */
+.tip-urgent { display: flex; gap: .75rem; align-items: flex-start; margin: 0 0 1.4rem; padding: 1rem 1.2rem; border-radius: 18px; background: var(--alert-bg); border: 2px solid var(--orange); }
+.tip-urgent p { margin: 0; }
+.tip-urgent .icon { color: var(--alert-ink); flex: none; margin-top: .15rem; }
+.tip-anon { background: var(--tint-violet); box-shadow: none; padding: 1.1rem 1.3rem; }
+.tip-anon__line input { width: 24px; height: 24px; flex: none; margin-top: .1rem; }
+.tip-call { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1rem 1.4rem; align-items: start; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.tip-call:first-of-type { padding-top: 0; }
+.tip-call:last-child { border-bottom: 0; padding-bottom: 0; }
+.tip-call__a { display: grid; gap: .9rem; }
+.tip-agree { display: grid; gap: .7rem; }
+.tip-agree .app-agree { background: var(--paper); border: 2px solid var(--line); }
+.tip-agree .app-agree:has(input:checked) { border-color: var(--blue-deep); background: var(--tint-blue); }
+.app-chip input:disabled + span { opacity: .45; cursor: not-allowed; }
+@media (max-width: 700px) { .tip-call { grid-template-columns: 1fr; } }
+.tip-call__q { border: 0; padding: 0; margin: 0; min-width: 0; }
+.tip-call__q legend { font-weight: 700; margin-bottom: .45rem; padding: 0; }
+.urgent-card--tip { background: var(--tint-violet); border-color: var(--violet); }
+.urgent-card--tip .urgent-card__icon { color: var(--violet); }
+.utility__tip { font-weight: 600; color: var(--ink) !important; margin-right: auto; padding-left: 1rem; border-left: 1px solid var(--line); }
+@media (max-width: 700px) { .utility__tip { display: none; } }

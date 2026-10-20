@@ -11,6 +11,7 @@ import { ctx, ROOT, readJSON, readCollection, md, strip, href, apHtml, apTitle }
 import { page } from './lib/layout.mjs';
 import * as P from './lib/pages.mjs';
 import * as APPS from './lib/applications.mjs';
+import { tipPage } from './lib/tip.mjs';
 import * as P2 from './lib/pages2.mjs';
 import * as P3 from './lib/pages3.mjs';
 import * as PS from './lib/pawsome-submit.mjs';
@@ -134,6 +135,7 @@ emit('rescues-you-can-help/', { title: 'Rescues You Can Help', seoTitle: 'Miami 
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
 for (const g of guides) emit(`get-help/${g.slug}/`, { shareKicker: 'Get Help', sharePhoto: g.cover && 'assets/img/covers/' + g.cover, shareCategory: g.category || 'lost-found', title: g.title, seoTitle: g.seoTitle, ogType: 'article', modified: g.lastReviewed, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
 for (const k of ['adoption', 'foster']) emit(APPS.APP_FORMS[k].route, { title: APPS.APP_FORMS[k].title, seoTitle: `${APPS.APP_FORMS[k].title} | Bentley's Playhouse Miami Dog Rescue`, shareKicker: 'Adopt & Foster', shareCategory: 'adopt-foster', description: k === 'adoption' ? "Apply to adopt a rescue dog from Bentley's Playhouse in Miami." : "Apply to foster a rescue dog with Bentley's Playhouse in Miami.", body: () => APPS.applicationPage(k), scripts: ['js/apply.js'] });
+emit('submit-a-tip/', { title: 'Submit a Tip', seoTitle: 'Report Animal Cruelty or Neglect in Miami: Submit a Tip', shareKicker: 'Get Help', shareCategory: 'emergency', description: 'Report an animal being hurt, neglected or put in danger in Miami, including negligence at Miami-Dade Animal Services. You can stay anonymous.', body: () => tipPage(), scripts: ['js/tip.js'] });
 emit('adopt-foster/', { title: 'Adopt & Foster', seoTitle: 'Adopt or Foster a Rescue Dog in Miami', description: pages.adopt.summary, body: () => P.adopt(data) });
 for (const d of dogs) emit(`adopt-foster/dogs/${d.slug}/`, { title: d.name, description: d.summary || `Meet ${d.name}.`, body: () => P.dogPage(d) });
 emit('resources/', { title: 'Resource Library', description: 'Searchable guides, printable checklists and trusted resources for dog rescue, lost and found, adoption and care in Miami and beyond.', body: () => P.library(data), scripts: [] });
