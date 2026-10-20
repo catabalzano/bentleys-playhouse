@@ -1,6 +1,7 @@
 // /submit-a-tip/ — community tips about animals at risk in Miami (Cata, Oct 19, 2026). Script: js/tip.js. Backend: worker/src/tips.js.
 import { ctx, esc, href, icon, breadcrumb } from './core.mjs';
 import { turnstileKey } from './pages.mjs';
+import { TIP_AGREE } from '../../worker/src/tip-agree.js';
 
 const endpoint = () => { try { return new URL(ctx.site.forms.contactEndpoint).origin + '/tip'; } catch (e) { return ''; } };
 const R = () => ` <span class="req">(${ctx.t('form.required')})</span>`;
@@ -89,11 +90,11 @@ export function tipPage() {
       <h2 class="app-sec__h" id="tip-s6-h"><span class="app-sec__n">6</span>Your Agreement</h2>
       <p class="app-sec__note">Please read and tick each statement. Ticking these boxes is the same as signing them.</p>
       <div class="tip-agree">
-        ${agree('accurate', "I certify that everything I've shared in this tip is true, complete and accurate to the best of my knowledge. I understand that knowingly giving false information may have legal consequences.")}
-        ${agree('owner', "I certify that I took the photos, videos and documents I'm submitting, or that I have the right to share them, and that sharing them doesn't violate anyone else's rights.")}
-        ${agree('investigate', "I give Bentley's Playhouse permission to use what I submit to look into this report, including sharing it with animal services, law enforcement, veterinarians or other rescues when that helps the animal.")}
-        ${agree('anonUnderstand', "I asked to stay anonymous. I understand this means Bentley's Playhouse may use and publish my content without giving me credit, to respect my request for anonymity.", ' data-anon-only hidden')}
-        ${agree('release', "Bentley's Playhouse will follow the choices I made on this form. If I later change my mind, for example from being credited to staying anonymous or the other way around, I agree that Bentley's Playhouse is not liable or responsible for content it already used or published while following my earlier choices. Bentley's Playhouse will make reasonable efforts to honor my new choice from then on.")}
+        ${agree('accurate', TIP_AGREE.accurate)}
+        ${agree('owner', TIP_AGREE.owner)}
+        ${agree('investigate', TIP_AGREE.investigate)}
+        ${agree('anonUnderstand', TIP_AGREE.anonUnderstand, ' data-anon-only hidden')}
+        ${agree('release', TIP_AGREE.release)}
       </div>
     </section>
 

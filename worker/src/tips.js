@@ -2,7 +2,8 @@
 //  POST /tip   public: fields + up to 5 PDFs and 3 photos → msg:<id> (form "tip") + msgf:<id>:<n> files
 // Shows up in the admin's 📬 Messages ("Tips" tab) with every answer and the attachments.
 // hello@ gets an email with the answers (files stay in the admin); the tipster gets a short "we got it" email.
-import { sendMail, layout, p, note, plain, h } from './mail.js';
+import { sendMail, layout, p, note, plain, h, h2 } from './mail.js';
+import { TIP_AGREE } from './tip-agree.js';
 
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
 const fail = (msg, status = 400) => Object.assign(new Error(msg), { publicMessage: msg, status });
@@ -90,23 +91,27 @@ export async function receiveTip(req, env) {
 
   const name = [t.first, t.last].filter(Boolean).join(' ') || 'Anonymous';
   const A = (s, q, a) => ({ s, q, a: a || '' });
+  const S1 = 'About You', S2 = "What's Happening", S3 = "Who You've Already Contacted", S4 = 'Proof and Posts', S5 = 'Using Your Content', S6 = 'Your Agreement';
+  const signedAt = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }).replace(' PM', ' p.m.').replace(' AM', ' a.m.').replace(/^(\w+) /, (m0, mo) => (({ January: 'Jan.', February: 'Feb.', August: 'Aug.', September: 'Sept.', October: 'Oct.', November: 'Nov.', December: 'Dec.' })[mo] || mo) + ' ') + ' (Miami time)';
   const answers = [
-    A('About them', 'Wants to stay anonymous', anon ? 'Yes' : 'No'),
-    A('About them', 'Name', [t.first, t.last].filter(Boolean).join(' ')),
-    A('About them', 'Email', t.email), A('About them', 'Phone', t.phone),
-    A('About them', 'Instagram', t.instagram), A('About them', 'Can we DM them?', t.canDm),
-    A("What's happening", 'Negligence at Miami-Dade Animal Services?', t.mdas), A("What's happening", 'MDAS shelter', t.mdas === 'Yes' ? t.mdasShelter : ''), A("What's happening", 'MDAS animal ID', t.mdas === 'Yes' ? t.mdasAnimalId : ''),
-    A("What's happening", 'What is happening', t.details), A("What's happening", 'Where', t.where), A("What's happening", 'When', t.when),
-    A('Who they contacted', 'Called 311?', t.called311), A('Who they contacted', '311 said', t.said311),
-    A('Who they contacted', 'Called 911?', t.called911), A('Who they contacted', 'Police said', t.said911), A('Who they contacted', 'Case number', t.caseNumber),
-    A('Proof and posts', 'Social media posts', t.postLinks), A('Proof and posts', 'Video links', t.videoLinks),
-    A('Proof and posts', 'Attachments', files.map((x) => x.name).join(', ')),
-    A('Using their content', 'May we post or repost it?', t.canPost), A('Using their content', 'Credit', t.credit),
-    A('Agreement', 'Ticked', `Accurate, owns the content, investigation use, release${anon ? ', anonymity' : ''}, privacy (${new Date().toISOString().slice(0, 16).replace('T', ' ')} UTC)`),
+    A(S1, 'Keep me anonymous', anon ? 'Yes' : 'No'),
+    A(S1, 'First name', t.first), A(S1, 'Last name', t.last),
+    A(S1, 'Email', t.email), A(S1, 'Phone number', t.phone),
+    A(S1, 'Instagram account', t.instagram), A(S1, 'Can we DM you on Instagram?', t.canDm),
+    A(S2, 'Want to report a negligence case at Miami-Dade Animal Services?', t.mdas),
+    A(S2, 'Which shelter?', t.mdas === 'Yes' ? t.mdasShelter : ''), A(S2, 'Animal ID', t.mdas === 'Yes' ? t.mdasAnimalId : ''),
+    A(S2, 'Tell us exactly what is happening. Be as specific as possible.', t.details), A(S2, 'Where is this happening?', t.where), A(S2, 'When did you see it?', t.when),
+    A(S3, 'Did you already call 311?', t.called311), A(S3, 'What did they say?', t.said311),
+    A(S3, 'Did you call 911?', t.called911), A(S3, 'What did the police say?', t.said911), A(S3, 'Case number', t.caseNumber),
+    A(S4, "Links to social media posts you've made about this", t.postLinks), A(S4, 'Video links', t.videoLinks),
+    A(S4, 'Files attached', files.map((x) => x.name).join(', ')),
+    A(S5, 'May we post or repost your content on social media to report what\'s happening?', t.canPost), A(S5, 'Do you want credit for your content?', t.credit),
+    ...agreed.map((k) => A(S6, TIP_AGREE[k], `Agreed · ${signedAt}`)),
+    A(S6, "I'm OK with Bentley's Playhouse using these details to look into my tip and contact me about it.", `Agreed · ${signedAt}`),
   ];
   const m = {
     id: new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + crypto.randomUUID().slice(0, 8),
-    form: 'tip', createdAt: new Date().toISOString(), read: false,
+    form: 'tip', firstName: t.first || 'there', createdAt: new Date().toISOString(), read: false,
     name: anon ? (name === 'Anonymous' ? name : `${name} (asked to stay anonymous)`) : name, email: t.email, phone: t.phone, area: t.where,
     topic: `${t.mdas === 'Yes' ? 'MDAS negligence tip' : 'Tip'}: ${t.where}`, anonymous: anon, answers,
     files: files.map((x, i) => ({ n: i, name: x.name, type: x.type, size: x.size })),
@@ -114,10 +119,9 @@ export async function receiveTip(req, env) {
   for (const [i, x] of files.entries()) await env.SUBMISSIONS.put(`msgf:${m.id}:${i}`, x.buf, { metadata: { name: x.name, type: x.type } });
   await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m));
   await env.SUBMISSIONS.put(rlKey, String(used + 1), { expirationTtl: 90000 });
-  if (env.ALERTS !== 'off') {
-    try { await toTeam(env, m); } catch (e) { console.error('tip alert', e); }
-    if (t.email) try { m.confirm = await toTipster(env, m, t.first); await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m)); } catch (e) { console.error('tip confirm', e); }
-  }
+  // the tipster always gets their confirmation with every answer (it's their record); the alert to hello@ follows ALERTS
+  if (t.email) try { m.confirm = await toTipster(env, m, t.first); await env.SUBMISSIONS.put(`msg:${m.id}`, JSON.stringify(m)); } catch (e) { console.error('tip confirm', e); }
+  if (env.ALERTS !== 'off') try { await toTeam(env, m); } catch (e) { console.error('tip alert', e); }
   return json({ ok: true });
 }
 
@@ -136,10 +140,24 @@ function toTeam(env, m) {
 }
 
 async function toTipster(env, m, first) {
-  const subject = 'We got your tip';
-  const body = p('Thank you for speaking up for an animal. We got your tip and will look into it.') + note("We read every tip ourselves. If we need more details, we'll reach out using the contact information you gave us. If an animal is in danger right now, please call 911, or Miami-Dade Animal Services at 311.") + p('If you have more photos, videos or updates, just reply to this email.');
-  const html = layout(env, { pre: subject, title: first ? `Thank you, ${h(first)}!` : 'Thank you!', body });
-  const text = plain([first ? `Thank you, ${first}!` : 'Thank you!', '', 'We got your tip and will look into it. If an animal is in danger right now, please call 911, or Miami-Dade Animal Services at 311.', '', 'If you have more photos, videos or updates, just reply to this email.']);
+  const subject = 'We got your tip: a copy for your records';
+  let last = '';
+  const rows = m.answers.filter((x) => x.a).map((x) => {
+    const head = x.s !== last ? `<tr><td colspan="2" style="padding:18px 0 6px;font-family:Arial,sans-serif;font-weight:bold;font-size:16px;color:#2F45C8">${h(x.s)}</td></tr>` : '';
+    last = x.s;
+    return `${head}<tr><td style="padding:6px 14px 6px 0;vertical-align:top;width:48%;font-family:Arial,sans-serif;font-size:14px;line-height:1.45;color:#5C5A72">${h(x.q)}</td><td style="padding:6px 0;vertical-align:top;font-family:Arial,sans-serif;font-size:14px;line-height:1.45;color:#1F1D2B">${h(x.a).replace(/\n/g, '<br>')}</td></tr>`;
+  }).join('');
+  const body = p('Thank you for speaking up for an animal. We got your tip and will look into it.')
+    + note("We read every tip ourselves. If we need more details, we'll reach out using the contact information you gave us. If an animal is in danger right now, please call 911, or Miami-Dade Animal Services at 311.")
+    + p('If you have more photos, videos or updates, just reply to this email.')
+    + h2('Your Tip, Word for Word')
+    + p(`Here's everything you sent us on ${h(m.answers.find((x) => x.s === 'Your Agreement').a.replace(/^Agreed · /, ''))}, including the statements you agreed to. Please keep this email for your records.`, 'color:#5C5A72;font-size:14px')
+    + `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin:0 0 10px">${rows}</table>`
+    + p(`Reference number: ${h(m.id)}`, 'color:#5C5A72;font-size:13px');
+  const html = layout(env, { pre: 'We got your tip. Here is a copy of everything you sent.', title: first ? `Thank you, ${h(first)}!` : 'Thank you!', body });
+  last = '';
+  const lines = m.answers.filter((x) => x.a).map((x) => { const head = x.s !== last ? `\n== ${x.s} ==\n` : ''; last = x.s; return `${head}${x.q}\n  ${x.a}`; }).join('\n');
+  const text = plain([first ? `Thank you, ${first}!` : 'Thank you!', '', 'We got your tip and will look into it. If an animal is in danger right now, please call 911, or Miami-Dade Animal Services at 311.', '', 'If you have more photos, videos or updates, just reply to this email.', '', 'YOUR TIP, WORD FOR WORD (keep this for your records)', lines, '', `Reference number: ${m.id}`]);
   const r = await sendMail(env, { to: m.email, subject, html, text, tag: 'tip-confirm' });
   return { subject, at: new Date().toISOString(), status: r && r.id ? 'sent' : r && r.skipped ? 'off' : 'failed' };
 }
