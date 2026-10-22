@@ -248,3 +248,16 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .pd-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 .pd-table .num{text-align:right}
 .pd-paid{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+/* social card framing (pledge drives) */
+.sc{display:grid;gap:10px;max-width:560px}
+.sc__card{position:relative;display:flex;aspect-ratio:1200/630;border-radius:12px;overflow:hidden;background:#2F45C8;box-shadow:0 6px 18px rgba(31,29,43,.18)}
+.sc__panel{position:relative;width:43.33%;flex:none;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 4.7%;box-sizing:border-box;color:#fff;border-right:4px solid #FFBD59}
+.sc__kick{align-self:flex-start;background:#FFBD59;color:#1F1D2B;font-size:9px;font-weight:800;letter-spacing:.06em;padding:3px 7px;border-radius:999px}
+.sc__title{font-family:Fredoka,var(--font-display,sans-serif);font-size:clamp(18px,4.2vw,27px);line-height:1.05}
+.sc__url{position:absolute;left:10%;bottom:5%;background:#fff;color:#2F45C8;font-size:9px;font-weight:800;padding:3px 8px;border-radius:999px}
+.sc__photo{position:relative;flex:1;overflow:hidden;cursor:grab;touch-action:none;background:#DDE4FF}
+.sc__photo:active{cursor:grabbing}
+.sc__photo img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.sc__ctl{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.sc__ctl label{display:flex;align-items:center;gap:8px;font-weight:700}
+.sc__ctl input[type=range]{width:180px}

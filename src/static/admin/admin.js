@@ -205,6 +205,8 @@
         { k: 'pronoun', label: 'Him, her or them', type: 'chips1', options: [['him', 'Him'], ['her', 'Her'], ['them', 'Them']] },
         { k: 'goal', label: 'Goal amount (optional)', type: 'number', hint: 'Shows a progress bar. Leave empty to show just the total pledged.' },
         { k: 'photo', label: 'Photo', type: 'image' }, { k: 'photoAlt', label: 'Photo description' },
+        { k: 'sharePhoto', label: 'Different photo for the social card (optional)', type: 'image', hint: 'Leave empty to use the photo above.' },
+        { k: 'shareFocus', label: 'Frame the social card', type: 'sharefocus', src: 'photo', alt: 'sharePhoto', shareKicker: 'Pledge to help a shelter pup', titleFrom: 'name', wide: true, hint: 'Drag the photo to move it and use the slider to zoom. This is exactly the picture people see when you send the link in a text, on Instagram or on Facebook. It updates about 2 minutes after you save.' },
         { k: 'date', label: 'Started', type: 'date' },
         { k: 'summary', label: 'About (two or three sentences)', type: 'text', wide: true },
         { k: 'body', label: 'More about the dog (optional)', type: 'markdown', wide: true },
@@ -559,6 +561,7 @@
         else if (t === 'images' || t === 'image') inner = '<span class="lbl">' + esc(f.label) + (f.req ? ' <span class="req">*</span>' : '') + '</span><div class="photos" data-imgs="' + f.k + '" data-multi="' + (t === 'images') + '"></div>';
         else if (t === 'file') inner = lab + '<div class="fileline" data-file="' + f.k + '"></div>';
         else if (t === 'video') inner = '<span class="lbl">' + esc(f.label) + '</span><div class="videobox" data-video="' + f.k + '"></div>';
+        else if (t === 'sharefocus') inner = '<span class="lbl">' + esc(f.label) + '</span><div class="sharebox" data-sharefocus="' + f.k + '"></div>';
         else if (t === 'focus') inner = '<span class="lbl">' + esc(f.label) + '</span><div class="focusbox" data-focus="' + f.k + '" data-src="' + f.src + '"></div>';
         return '<div class="' + cls + '" data-field="' + f.k + '"' + hide + '>' + inner + hint + '</div>';
       }
@@ -622,6 +625,48 @@
           $('[data-reset]', box).onclick = function () { set(data, k, ''); dirty = true; draw(); };
         }
         focusRedraw = draw;
+        draw();
+      });
+      // social card framing (pledge drives): same math as frameBox() in src/lib/covers.mjs
+      $$('[data-sharefocus]').forEach(function (box) {
+        var k = box.getAttribute('data-sharefocus'), F = null;
+        C.groups.forEach(function (g) { g[1].forEach(function (x) { if (x.k === k) F = x; }); });
+        function src() { return get(data, F.alt) || get(data, F.src) || ''; }
+        function val() { var m = String(get(data, k) || '').match(/^(\d{1,3}(?:\.\d+)?)% (\d{1,3}(?:\.\d+)?)%(?: (\d(?:\.\d+)?))?$/); return m ? { x: +m[1], y: +m[2], z: m[3] ? +m[3] : 1 } : { x: 50, y: 50, z: 1 }; }
+        function save(v) { set(data, k, Math.round(v.x) + '% ' + Math.round(v.y) + '% ' + (Math.round(v.z * 100) / 100)); dirty = true; }
+        var PW = 680, PH = 630;
+        function draw() {
+          var p = src();
+          if (!p) { box.innerHTML = '<p class="hint">Add a photo first.</p>'; return; }
+          var title = 'Pledge for ' + (get(data, F.titleFrom) || '…') + '!';
+          box.innerHTML = '<div class="sc"><div class="sc__card"><div class="sc__panel"><span class="sc__kick">' + esc(F.shareKicker.toUpperCase()) + '</span><b class="sc__title">' + esc(title) + '</b><span class="sc__url">🐾 bentleysplayhouse.org</span></div>' +
+            '<div class="sc__photo" data-drag title="Drag to move the photo"><img alt="" draggable="false" src="' + esc(imgSrc(p)) + '"></div></div>' +
+            '<div class="sc__ctl"><label>Zoom <input type="range" min="1" max="3" step="0.05" data-zoom></label><button type="button" class="btn btn--ghost btn--sm" data-reset>Center it again</button></div></div>';
+          var ph = $('[data-drag]', box), img = $('img', ph), v = val(), nat = null;
+          $('[data-zoom]', box).value = v.z;
+          function place() {
+            if (!nat) return;
+            var s = Math.max(PW / nat[0], PH / nat[1]) * v.z, w = nat[0] * s, h = nat[1] * s;
+            img.style.width = (w / PW * 100) + '%'; img.style.height = (h / PH * 100) + '%';
+            img.style.left = ((PW - w) * v.x / 100 / PW * 100) + '%'; img.style.top = ((PH - h) * v.y / 100 / PH * 100) + '%';
+          }
+          img.onload = function () { nat = [img.naturalWidth, img.naturalHeight]; place(); };
+          if (img.complete && img.naturalWidth) img.onload();
+          $('[data-zoom]', box).oninput = function () { v.z = +this.value; place(); save(v); };
+          $('[data-reset]', box).onclick = function () { v = { x: 50, y: 50, z: 1 }; $('[data-zoom]', box).value = 1; place(); set(data, k, ''); dirty = true; };
+          var last = null;
+          ph.onpointerdown = function (e) { last = [e.clientX, e.clientY]; try { ph.setPointerCapture(e.pointerId); } catch (er) {} };
+          ph.onpointermove = function (e) {
+            if (!last || !nat) return;
+            var r = ph.getBoundingClientRect(), k2 = PW / r.width;
+            var s = Math.max(PW / nat[0], PH / nat[1]) * v.z, slackX = PW - nat[0] * s, slackY = PH - nat[1] * s;
+            if (slackX < -0.5) v.x = Math.min(100, Math.max(0, v.x + (e.clientX - last[0]) * k2 / slackX * 100));
+            if (slackY < -0.5) v.y = Math.min(100, Math.max(0, v.y + (e.clientY - last[1]) * k2 / slackY * 100));
+            last = [e.clientX, e.clientY]; place(); save(v);
+          };
+          ph.onpointerup = ph.onpointercancel = function () { last = null; };
+        }
+        var prev = focusRedraw; focusRedraw = function () { prev(); draw(); };
         draw();
       });
       // images

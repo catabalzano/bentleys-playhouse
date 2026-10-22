@@ -61,8 +61,37 @@ function wrap(text, size, maxW) {
   return lines;
 }
 
+/** Where a framed photo sits in a box: CSS object-fit: cover, scaled by `zoom`, then placed like object-position x% y%.
+ *  Shared with the admin preview (src/static/admin/admin.js → shareFrame), so what you frame there is what gets shared. */
+export function frameBox(imgW, imgH, boxW, boxH, focus) {
+  const m = String(focus || '').match(/^(\d{1,3}(?:\.\d+)?)% (\d{1,3}(?:\.\d+)?)%(?: (\d(?:\.\d+)?))?$/);
+  const x = m ? +m[1] : 50, y = m ? +m[2] : 50, z = m && m[3] ? Math.min(3, Math.max(1, +m[3])) : 1;
+  const s = Math.max(boxW / imgW, boxH / imgH) * z, w = imgW * s, h = imgH * s;
+  return { x: (boxW - w) * x / 100, y: (boxH - h) * y / 100, w, h };
+}
+
+/** Pledge drives: blue text panel on the left, the pup's photo framed on the right (Oct 22, 2026). */
+const SPLIT = { panel: 520 };
+function splitSVG({ title, kicker, photo, photoSize, focus }) {
+  let size = 64; let lines = wrap(title, size, 420);
+  while (lines.length > 4 && size > 44) { size -= 4; lines = wrap(title, size, 420); }
+  const lh = Math.round(size * 1.08), textH = lines.length * lh, y0 = 315 - textH / 2 + size * 0.8;
+  const pw = 1200 - SPLIT.panel, b = frameBox(photoSize[0], photoSize[1], pw, 630, focus);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><clipPath id="pc"><rect x="${SPLIT.panel}" y="0" width="${pw}" height="630"/></clipPath></defs>
+  <rect width="1200" height="630" fill="#2F45C8"/>
+  <g clip-path="url(#pc)"><image href="${photo}" x="${SPLIT.panel + b.x}" y="${b.y}" width="${b.w}" height="${b.h}" preserveAspectRatio="none"/></g>
+  <rect x="${SPLIT.panel - 4}" y="0" width="10" height="630" fill="#FFBD59"/>
+  <g fill="#fff" opacity=".08">${[[60, 90, 2.4, -20], [400, 140, 2, 15], [90, 470, 2.1, 10]].map(([x, y, s, r]) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})">${PAW}</g>`).join('')}</g>
+  ${kicker ? `<rect x="56" y="${y0 - size - 62}" rx="22" ry="22" width="${Math.min(430, 40 + kicker.length * 15.5)}" height="44" fill="#FFBD59"/><text x="78" y="${y0 - size - 32}" font-family="Figtree" font-weight="800" font-size="22" letter-spacing="2" fill="#1F1D2B">${escX(kicker.toUpperCase())}</text>` : ''}
+  <text font-family="Fredoka" font-weight="700" font-size="${size}" fill="#fff">${lines.map((l, i) => `<tspan x="56" y="${y0 + i * lh}">${escX(l)}</tspan>`).join('')}</text>
+  <g transform="translate(56 556)"><rect width="330" height="46" rx="23" fill="#fff"/><g transform="translate(14 9) scale(1.15)" fill="#FF914D">${PAW}</g><text x="52" y="31" font-family="Figtree" font-weight="800" font-size="21" fill="#2F45C8">bentleysplayhouse.org</text></g>
+</svg>`;
+}
+
 /** 1200×630 share image SVG with title. `photo` (data URI) makes a photo card instead of the illustration. */
-export function shareSVG({ title, kicker, category = 'default', icon, photo }) {
+export function shareSVG({ title, kicker, category = 'default', icon, photo, layout, photoSize, focus }) {
+  if (layout === 'split' && photo && photoSize) return splitSVG({ title, kicker, photo, photoSize, focus });
   let size = 76; let lines = wrap(title, size, 600);
   while (lines.length > 4 && size > 50) { size -= 6; lines = wrap(title, size, 600); }
   const lh = Math.round(size * 1.08);

@@ -113,7 +113,7 @@ function emit(route, opts) {
   if (!opts.noindex && !opts.ogImage) {
     const name = route.replace(/\/$/, '').replace(/\//g, '--') || 'home';
     opts = { ...opts, ogImage: `og/${name}.png` };
-    shareJobs.push({ file: path.join(OUT, 'assets', opts.ogImage), title: opts.shareTitle || opts.title, kicker: opts.shareKicker || "Bentley's Playhouse", category: opts.shareCategory || 'default', icon: opts.shareIcon, photo: opts.sharePhoto });
+    shareJobs.push({ file: path.join(OUT, 'assets', opts.ogImage), title: opts.shareTitle || opts.title, kicker: opts.shareKicker || "Bentley's Playhouse", category: opts.shareCategory || 'default', icon: opts.shareIcon, photo: opts.sharePhoto, layout: opts.shareLayout, focus: opts.shareFocus });
   }
   const out = page({ ...opts, body: typeof opts.body === 'function' ? opts.body() : opts.body });
   // AP style everywhere: 5 p.m., 10:30 a.m., noon; Oct. 1, 2026
@@ -137,7 +137,7 @@ emit('rescues-you-can-help/', { title: 'Rescues You Can Help', seoTitle: 'Miami 
 emit('get-help/', { title: 'Get Help', description: 'Step-by-step help if you found a dog, lost your dog, rescued a dog, or a dog is hurt or in danger in Miami-Dade.', body: () => P.helpHub(data) });
 for (const g of guides) emit(`get-help/${g.slug}/`, { shareKicker: 'Get Help', sharePhoto: g.cover && 'assets/img/covers/' + g.cover, shareCategory: g.category || 'lost-found', title: g.title, seoTitle: g.seoTitle, ogType: 'article', modified: g.lastReviewed, description: g.summary, bodyClass: 'is-guide', body: () => P.guide(g, data) });
 for (const k of ['adoption', 'foster']) emit(APPS.APP_FORMS[k].route, { title: APPS.APP_FORMS[k].title, seoTitle: `${APPS.APP_FORMS[k].title} | Bentley's Playhouse Miami Dog Rescue`, shareKicker: 'Adopt & Foster', shareCategory: 'adopt-foster', description: k === 'adoption' ? "Apply to adopt a rescue dog from Bentley's Playhouse in Miami." : "Apply to foster a rescue dog with Bentley's Playhouse in Miami.", body: () => APPS.applicationPage(k), scripts: ['js/apply.js'] });
-for (const d of pledges) emit(PL.pledgeRoute(d), { title: d.status === 'pulled' ? `${d.name} Is Safe!` : `Pledge for ${d.name}`, shareTitle: d.status === 'pulled' ? `${d.name} is safe!` : `Pledge for ${d.name}!`, shareKicker: 'Pledge to help a shelter pup', shareCategory: 'adopt-foster', sharePhoto: d.photo || undefined, description: d.summary || `Pledge to help get ${d.name} out of ${d.shelter || 'the shelter'}. Every pledge goes directly to the rescue that pulls ${d.name}.`, bodyClass: 'is-pledge', body: () => PL.pledgePage(d), scripts: ['js/pledge.js'] });
+for (const d of pledges) emit(PL.pledgeRoute(d), { title: d.status === 'pulled' ? `${d.name} Is Safe!` : `Pledge for ${d.name}`, shareTitle: d.status === 'pulled' ? `${d.name} is safe!` : `Pledge for ${d.name}!`, shareKicker: 'Pledge to help a shelter pup', shareCategory: 'adopt-foster', sharePhoto: d.sharePhoto || d.photo || undefined, shareLayout: 'split', shareFocus: d.shareFocus, description: d.summary || `Pledge to help get ${d.name} out of ${d.shelter || 'the shelter'}. Every pledge goes directly to the rescue that pulls ${d.name}.`, bodyClass: 'is-pledge', body: () => PL.pledgePage(d), scripts: ['js/pledge.js'] });
 emit('submit-a-tip/', { title: 'Submit a Tip', seoTitle: 'Report Animal Cruelty or Neglect in Miami: Submit a Tip', shareKicker: 'Get Help', shareCategory: 'emergency', description: 'Report an animal being hurt, neglected or put in danger in Miami, including negligence at Miami-Dade Animal Services. You can stay anonymous.', body: () => tipPage(), scripts: ['js/tip.js'] });
 emit('adopt-foster/', { title: 'Adopt & Foster', seoTitle: 'Adopt or Foster a Rescue Dog in Miami', description: pages.adopt.summary, body: () => P.adopt(data) });
 for (const d of dogs) emit(`adopt-foster/dogs/${d.slug}/`, { title: d.name, description: d.summary || `Meet ${d.name}.`, body: () => P.dogPage(d) });
@@ -278,8 +278,9 @@ fs.cpSync(path.join(ROOT, 'src/static'), OUT, { recursive: true });
 const mime = (f) => (/\.png$/i.test(f) ? 'image/png' : /\.webp$/i.test(f) ? 'image/webp' : 'image/jpeg');
 for (const j of shareJobs) {
   let photo;
-  if (j.photo) { const f = path.join(ROOT, 'src', j.photo.replace(/^\/?/, '').replace(/^assets\//, 'assets/')); if (fs.existsSync(f)) photo = `data:${mime(f)};base64,` + fs.readFileSync(f).toString('base64'); }
-  const ok = (await renderShare({ ...j, photo }, j.file)) || (photo && (await renderShare({ ...j, photo: undefined }, j.file)));
+  let photoSize;
+  if (j.photo) { const f = path.join(ROOT, 'src', j.photo.replace(/^\/?/, '').replace(/^assets\//, 'assets/')); if (fs.existsSync(f)) { photo = `data:${mime(f)};base64,` + fs.readFileSync(f).toString('base64'); if (j.layout) try { const m = await (await import('sharp')).default(f).metadata(); photoSize = [m.width, m.height]; } catch (e) {} } }
+  const ok = (await renderShare({ ...j, photo, photoSize }, j.file)) || (photo && (await renderShare({ ...j, photo: undefined }, j.file)));
   if (!ok) fs.copyFileSync(path.join(ROOT, 'src/assets/img/og-image.png'), j.file);
 }
 // a light JPEG copy of each pup's share card, used at the top of the emails we send about that pup
