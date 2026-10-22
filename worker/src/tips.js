@@ -57,7 +57,7 @@ export async function receiveTip(req, env) {
     canPost: pick(clean(f.get('canPost')), POST),
     credit: anon ? CREDIT[1] : pick(clean(f.get('credit')), CREDIT),
   };
-  const agreed = ['accurate', 'owner', 'investigate', 'release', ...(anon ? ['anonUnderstand'] : [])];
+  const agreed = TIP_AGREE.map((a) => a.id);
   const missing = [];
   if (!anon) { if (!t.first) missing.push('first name'); if (!t.last) missing.push('last name'); if (!t.phone) missing.push('phone number'); }
   if (!t.mdas) missing.push('whether this is about Miami-Dade Animal Services');
@@ -106,7 +106,7 @@ export async function receiveTip(req, env) {
     A(S4, "Links to social media posts you've made about this", t.postLinks), A(S4, 'Video links', t.videoLinks),
     A(S4, 'Files attached', files.map((x) => x.name).join(', ')),
     A(S5, 'May we post or repost your content on social media to report what\'s happening?', t.canPost), A(S5, 'Do you want credit for your content?', t.credit),
-    ...agreed.map((k) => A(S6, TIP_AGREE[k], `Agreed · ${signedAt}`)),
+    ...TIP_AGREE.map((a, n) => A(S6, `${n + 1}. ${a.title}. ${a.text}`, `Agreed · ${signedAt}`)),
     A(S6, "I'm OK with Bentley's Playhouse using these details to look into my tip and contact me about it.", `Agreed · ${signedAt}`),
   ];
   const m = {

@@ -1764,3 +1764,4 @@ fieldset.field { align-content: start; }
 .pl-disclose .icon { flex: none; color: var(--blue-deep); margin-top: .1rem; }
 .pl-disclose p { margin: 0; }
 .pl-polaroid img { object-position: 45% 30%; }
+.tip-agree__t { display: block; margin-bottom: .2rem; }

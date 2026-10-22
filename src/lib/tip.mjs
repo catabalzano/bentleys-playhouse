@@ -43,7 +43,7 @@ export function tipPage() {
         <fieldset class="field field--wide app-q"><legend>Want to report a negligence case at Miami-Dade Animal Services?${R()}</legend>${chips('mdas', ['Yes', 'No'], true)}</fieldset>
         <div class="field" data-mdas-only hidden><label for="tip-mdas-where">Which shelter?</label><select id="tip-mdas-where" name="mdasShelter"><option value="">Choose one</option><option>Doral</option><option>Medley</option><option>Not sure</option></select></div>
         <div class="field" data-mdas-only hidden><label for="tip-mdas-id">Animal ID, if you know it</label><input id="tip-mdas-id" name="mdasAnimalId" type="text" maxlength="40" placeholder="For example A1234567"></div>
-        <div class="field field--wide"><label for="tip-what">Tell us exactly what is happening. Be as specific as possible.${R()}</label><p class="hint" id="tip-what-h">What you saw, the animal (type, color, size), how often it happens and anything that could help us find it.</p><textarea id="tip-what" name="details" rows="7" maxlength="5000" required aria-describedby="tip-what-h"></textarea></div>
+        <div class="field field--wide"><label for="tip-what">Tell us exactly what is happening. Be as specific as possible.${R()}</label><p class="hint" id="tip-what-h">What you saw, the animal (type, color, size), how often it happens and anything that could help us find it. Please say which parts you saw yourself and which someone told you.</p><textarea id="tip-what" name="details" rows="7" maxlength="5000" required aria-describedby="tip-what-h"></textarea></div>
         <div class="field"><label for="tip-where">Where is this happening?${R()}</label><input id="tip-where" name="where" type="text" maxlength="200" required placeholder="Address, cross streets or neighborhood"></div>
         <div class="field"><label for="tip-when">When did you see it? <span class="opt">(optional)</span></label><input id="tip-when" name="when" type="text" maxlength="120" placeholder="Date and time, or &quot;every day&quot;"></div>
       </div>
@@ -90,11 +90,7 @@ export function tipPage() {
       <h2 class="app-sec__h" id="tip-s6-h"><span class="app-sec__n">6</span>Your Agreement</h2>
       <p class="app-sec__note">Please read and tick each statement. Ticking these boxes is the same as signing them.</p>
       <div class="tip-agree">
-        ${agree('accurate', TIP_AGREE.accurate)}
-        ${agree('owner', TIP_AGREE.owner)}
-        ${agree('investigate', TIP_AGREE.investigate)}
-        ${agree('anonUnderstand', TIP_AGREE.anonUnderstand, ' data-anon-only hidden')}
-        ${agree('release', TIP_AGREE.release)}
+        ${TIP_AGREE.map((a, n) => agree(a.id, `<b class="tip-agree__t">${n + 1}. ${esc(a.title)}</b> ${esc(a.text)}`)).join('')}
       </div>
     </section>
 
