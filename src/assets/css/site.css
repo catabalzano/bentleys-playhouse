@@ -1689,3 +1689,74 @@ fieldset.field { align-content: start; }
 .urgent-card--tip .urgent-card__icon { color: var(--violet); }
 .utility__tip { font-weight: 600; color: var(--ink) !important; margin-right: auto; padding-left: 1rem; border-left: 1px solid var(--line); }
 @media (max-width: 700px) { .utility__tip { display: none; } }
+
+/* ---------- pledge drives (/pledge/<slug>/, Oct 22, 2026) ---------- */
+.pl { padding: clamp(1.75rem, 5vw, 3.5rem) 0 clamp(1.5rem, 4vw, 2.5rem); }
+.pl__in { display: flex; flex-wrap: wrap; gap: clamp(1.75rem, 5vw, 3.25rem); align-items: flex-start; }
+.pl__pup { flex: 1 1 380px; min-width: 0; display: grid; gap: 1.5rem; }
+.pl-tags { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; }
+.pl-polaroid { position: relative; justify-self: start; width: min(100%, 440px); margin: .9rem 0 .3rem .4rem; padding: 14px 14px 0; background: var(--paper); border-radius: 6px; box-shadow: 8px 8px 0 var(--gold), 0 10px 28px rgba(31, 29, 43, .12); transform: rotate(-2deg); }
+.pl-polaroid img, .pl-tag { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 3px; }
+.pl-polaroid figcaption { padding: .55rem .2rem .9rem; font: 700 1.8rem/1.05 Caveat, cursive; color: var(--blue-deep); text-align: center; }
+.pl-polaroid__tape { position: absolute; top: -14px; left: 50%; width: 120px; height: 30px; margin-left: -60px; background: rgba(255, 145, 77, .55); transform: rotate(3deg); clip-path: polygon(2% 0, 98% 6%, 100% 50%, 97% 100%, 3% 94%, 0 50%); }
+.pl-tag { display: grid; place-content: center; justify-items: center; gap: .3rem; background: repeating-linear-gradient(45deg, var(--tint-blue) 0 14px, #E9EEFF 14px 28px); color: var(--blue-deep); text-align: center; }
+.pl-tag__name { font: 700 clamp(3rem, 9vw, 4.4rem)/1 var(--font-display); color: var(--blue); }
+.pl-tag__id { font: 700 1.8rem/1 Caveat, cursive; }
+.pl-tag .icon { color: var(--orange); margin-top: .4rem; }
+.pl-about { display: grid; gap: .6rem; }
+.pl-about p { margin: 0; color: var(--muted); }
+.pl-about__h { margin: 0; font-size: var(--step-2); }
+.pl-card { flex: 1 1 440px; min-width: 0; display: grid; gap: 1.4rem; align-content: start; background: var(--paper); border-radius: 22px; padding: clamp(1.25rem, 4vw, 2rem); box-shadow: 0 1px 2px rgba(31, 29, 43, .05), 0 8px 24px rgba(31, 29, 43, .06); }
+.pl-card > p { margin: 0; }
+.pl-kicker { margin: 0 0 -.9rem; font: 600 .95rem/1.2 var(--font-display); color: var(--blue-deep); text-transform: uppercase; letter-spacing: .06em; }
+.pl-h { margin: 0; font-size: clamp(2.4rem, 6vw, 3rem); line-height: 1.05; color: var(--blue); }
+.pl-progress { display: grid; gap: .55rem; }
+.pl-progress__num { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .5rem; margin: 0; }
+.pl-progress__num b { font: 600 1.45rem/1.2 var(--font-display); }
+.pl-progress__num span { color: var(--muted); font-weight: 500; }
+.pl-progress__goal { margin-left: auto; font-size: .95rem; }
+.pl-bar { height: 16px; background: var(--tint-blue); border-radius: 999px; overflow: hidden; }
+.pl-bar span { display: block; height: 100%; min-width: 16px; background: var(--orange); border-radius: 999px; transition: width .8s ease; }
+.pl-form { gap: 1.1rem; }
+.pl-form input[type="text"], .pl-form input[type="email"] { width: 100%; }
+.pl-amounts .app-chip span { min-width: 4.6rem; justify-content: center; font-family: var(--font-display); font-size: 1.05rem; }
+.pl-other { margin-top: .8rem; }
+.pl-other__in { display: flex; align-items: center; gap: .4rem; max-width: 12rem; }
+.pl-other__in span { font: 600 1.2rem var(--font-display); }
+.pl-promise { display: flex; gap: .7rem; align-items: flex-start; padding: .9rem 1rem; border-radius: 14px; background: var(--tint-orange); }
+.pl-promise .icon { flex: none; color: var(--alert-ink); margin-top: .1rem; }
+.pl-promise p { margin: 0; }
+.pl-submit { width: 100%; min-height: 56px; font-size: 1.15rem; font-family: var(--font-display); font-weight: 600; }
+.pl-fine { margin: 0; font-size: .85rem; color: var(--muted); }
+.pl-done { display: grid; gap: .9rem; outline: none; }
+.pl-done > p { margin: 0; }
+.pl-done__h { margin: 0; font-size: var(--step-2); color: var(--blue); }
+.pl-done__amt { display: grid; padding: .8rem 1rem; border-radius: 14px; background: var(--tint-blue); }
+.pl-done__amt span { font-size: .9rem; color: var(--muted); }
+.pl-done__amt b { font: 600 1.8rem/1.15 var(--font-display); }
+.pl-done__note { font: 700 1.7rem/1.1 Caveat, cursive; color: var(--blue-deep); }
+.pl-share { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+.pl-share__copy { background: var(--paper); color: var(--blue-deep); border-color: var(--blue-deep); }
+.pl-share__share { background: var(--gold); color: var(--ink); }
+.pl-share__msg { flex: 1 1 100%; margin: 0; min-height: 1.2em; font-size: .9rem; font-weight: 700; }
+.pl-share__msg:empty { display: none; }
+.pl-how { padding: clamp(1rem, 3vw, 2rem) 0; }
+.pl-steps { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1.1rem; }
+.pl-steps li { display: grid; gap: .5rem; align-content: start; padding: 1.4rem; background: var(--paper); border-radius: 22px; box-shadow: 0 8px 24px rgba(31, 29, 43, .06); }
+.pl-steps h3 { margin: 0; font-size: 1.3rem; }
+.pl-steps p { margin: 0; color: var(--muted); }
+.pl-steps__n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gold); font: 600 1.2rem var(--font-display); }
+.pl-spread { padding: clamp(1rem, 3vw, 2rem) 0 clamp(2.5rem, 6vw, 4rem); }
+.pl-spread__in { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem 1.6rem; padding: 1.6rem clamp(1.2rem, 4vw, 2rem); border-radius: 22px; background: var(--blue-deep); color: #fff; }
+.pl-spread__art { width: 84px; height: auto; flex: none; }
+.pl-spread__txt { flex: 1 1 260px; min-width: 0; }
+.pl-spread__txt h2 { margin: 0; color: #fff; font-size: var(--step-2); }
+.pl-spread__txt p { margin: .2rem 0 0; color: var(--tint-blue); }
+.pl-spread .pl-share__copy { border-color: #fff; }
+.pl-spread .pl-share__msg { color: #fff; }
+@media (max-width: 600px) {
+  .pl-polaroid { width: min(100%, 320px); }
+  .pl-spread__art { width: 64px; }
+  .pl-share .btn { flex: 1 1 auto; }
+}
+.hero__ctas .btn--pledge { min-height: 50px; padding-inline: 1.35em; }

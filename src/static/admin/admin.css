@@ -239,3 +239,12 @@ dialog.modal::backdrop{background:rgba(31,29,43,.55);backdrop-filter:blur(3px)}
 .app-ans__dl dt{font-weight:600}
 .app-ans__dl dd{white-space:normal;overflow-wrap:anywhere}
 @media(max-width:700px){.app-ans__dl{grid-template-columns:1fr}.app-ans__dl dd{margin-bottom:6px}}
+/* pledges */
+.pd-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-start}
+.pd-sum{display:grid;text-align:right}.pd-sum b{font-size:30px;line-height:1.1}.pd-sum span{color:var(--muted);font-size:14px}
+.pd-wrap{overflow-x:auto;margin-top:12px}
+.pd-table{width:100%;border-collapse:collapse;font-size:15px;min-width:720px}
+.pd-table th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:10px 8px;border-bottom:2px solid var(--line)}
+.pd-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.pd-table .num{text-align:right}
+.pd-paid{display:inline-flex;gap:6px;align-items:center;cursor:pointer}

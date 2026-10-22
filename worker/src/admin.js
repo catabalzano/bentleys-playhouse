@@ -18,6 +18,7 @@ export const COLLECTIONS = {
   rescues: { folder: 'content/rescues', images: 'src/assets/img/rescues', format: 'md', title: 'name' },
   dogs: { folder: 'content/dogs', images: 'src/assets/img/dogs', format: 'md', title: 'name' },
   events: { folder: 'content/events', images: 'src/assets/img/events', format: 'md', title: 'title' },
+  pledges: { folder: 'content/pledges', images: 'src/assets/img/pledges', format: 'md', title: 'name' },
   money: { folder: 'content/finances/entries', images: 'src/assets/finances/receipts', format: 'json', title: 'description' },
 };
 

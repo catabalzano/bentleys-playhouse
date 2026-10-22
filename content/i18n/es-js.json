@@ -196,5 +196,12 @@
  "description": "descripción",
  "Please add:": "Por favor agrega:",
  "The last day has to be after the first day.": "El último día tiene que ser después del primero.",
- "Tell us about your next event.": "Cuéntanos sobre tu próximo evento."
+ "Tell us about your next event.": "Cuéntanos sobre tu próximo evento.",
+ "pledged by 1 person": "prometidos por 1 persona",
+ "pledged by {n} people": "prometidos por {n} personas",
+ "pledged so far. Be the first!": "prometidos hasta ahora. ¡Sé la primera persona!",
+ "Link copied! Paste it in your Stories, a post or a message.": "¡Enlace copiado! Pégalo en tus historias, una publicación o un mensaje.",
+ "Copy this link:": "Copia este enlace:",
+ "Please complete the \"I am human\" check above the button.": "Completa la verificación \"Soy humano\" que está arriba del botón.",
+ "Sending your pledge…": "Enviando tu promesa…"
 }

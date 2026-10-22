@@ -91,6 +91,7 @@ export function home(data) {
       <div class="hero__ctas">
         ${button('Find help', 'get-help/', { ic: 'search' })}
         ${button('Get involved', 'get-involved/', { variant: 'ghost', ic: 'hands' })}
+        ${(() => { const d = (data.pledges || []).find((x) => x.status === 'open' && x.onHomepage); return d ? button(`Pledge for ${esc(d.name)}`, `pledge/${d.slug}/`, { variant: 'donate', ic: 'heart' }).replace('class="btn btn--donate"', 'class="btn btn--donate btn--pledge"') : ''; })()}
       </div>
     </div>
     ${s.hero.image ? '' : previewNote('The doorway illustration (built around Bentley from your logo) stands in for a hero photo. Add a joyful photo you own in <code>content/site.json → hero</code>.')}

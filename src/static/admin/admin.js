@@ -83,6 +83,7 @@
   var LOCL = {}; LOC.forEach(function (x) { LOCL[x[0]] = x[1]; });
   var STATUS = [['available', 'Available'], ['pending', 'Adoption pending'], ['adopted', 'Adopted']];
   var STL = { available: 'Available', pending: 'Pending', adopted: 'Adopted' };
+  var PLS = { open: 'Pledging open', pulled: 'Pulled!', closed: 'Closed' };
 
   var COLS = {
     pawsome: {
@@ -187,6 +188,26 @@
         { k: 'goodWith', label: 'Good with' }, { k: 'medical', label: 'Medical notes' },
         { k: 'date', label: 'Date listed', type: 'date' }, { k: 'inquiryUrl', label: 'Application link for this dog' },
         { k: 'summary', label: 'Summary', type: 'text', wide: true }, { k: 'body', label: 'About', type: 'markdown', wide: true },
+      ]]],
+    },
+    pledges: {
+      label: 'Pledge drives', one: 'pledge drive', icon: '🙏', titleKey: 'name',
+      intro: 'A page where people promise an amount to help pull a shelter dog. The link is bentleysplayhouse.org/pledge/name-anumber/.',
+      thumb: function (d) { return d.photo; }, sub: function (d) { return [PLS[d.status] || 'Pledging open', d.animalId].filter(Boolean).join(' · '); },
+      sort: function (a, b) { return String(b.data.date || '').localeCompare(a.data.date || ''); },
+      slugFrom: function (d) { return slugify([d.name, d.animalId].filter(Boolean).join(' ')); },
+      defaults: function () { return { status: 'open', shelter: 'Miami-Dade Animal Services', onHomepage: true, date: today() }; },
+      groups: [['Pledge drive', [
+        { k: 'name', label: 'Dog\'s name', req: true }, { k: 'animalId', label: 'Shelter ID (A number)', hint: 'e.g. "A2828453". It becomes part of the link.' },
+        { k: 'status', label: 'Status', type: 'chips1', options: [['open', 'Pledging open'], ['pulled', 'Pulled! (page says he\'s safe)'], ['closed', 'Closed']] },
+        { k: 'onHomepage', label: 'Show a "Pledge for …" button on the homepage (while pledging is open)', type: 'bool' },
+        { k: 'shelter', label: 'Shelter', hint: 'e.g. "Miami-Dade Animal Services"' }, { k: 'shelterSite', label: 'Which location', hint: 'e.g. "Doral" or "Medley". Leave empty if you\'re not sure.' },
+        { k: 'pronoun', label: 'Him, her or them', type: 'chips1', options: [['him', 'Him'], ['her', 'Her'], ['them', 'Them']] },
+        { k: 'goal', label: 'Goal amount (optional)', type: 'number', hint: 'Shows a progress bar. Leave empty to show just the total pledged.' },
+        { k: 'photo', label: 'Photo', type: 'image' }, { k: 'photoAlt', label: 'Photo description' },
+        { k: 'date', label: 'Started', type: 'date' },
+        { k: 'summary', label: 'About (two or three sentences)', type: 'text', wide: true },
+        { k: 'body', label: 'More about the dog (optional)', type: 'markdown', wide: true },
       ]]],
     },
     money: {
@@ -318,6 +339,7 @@
       '<a class="nav" href="#messages" data-nav="messages">📬 Messages <span class="count" data-msgcount></span></a>' +
       '<a class="nav" href="#cases" data-nav="cases">🐾 Adoption cases <span class="count" data-casecount></span></a>' +
       '<a class="nav" href="#rescues" data-nav="rescues">🤝 Rescue contacts</a>' +
+      '<a class="nav" href="#pledges" data-nav="pledges">🙏 Pledges</a>' +
       '<a class="nav" href="#eventreqs" data-nav="eventreqs">📨 Event requests <span class="count" data-evcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
@@ -360,6 +382,7 @@
     if (h === 'homephoto') return homePhoto();
     if (h === 'messages') return messages();
     if (h === 'rescues') return rescues();
+    if (p[0] === 'pledges') return pledges(p[1] ? decodeURIComponent(p[1]) : null);
     if (p[0] === 'cases') return cases(p[1] || null);
     if (h === 'eventreqs') return eventReqs();
     if (h === 'settings' || h === 'profile') return profile();
@@ -450,6 +473,7 @@
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#messages"><span class="big">' + (S.msgs ? unread() : '…') + '</span><b>Messages</b><span>From the Contact and Get Involved forms</span></a>' +
       '<a class="home-card" href="#cases"><span class="big">🐾</span><b>Adoption cases</b><span>Steps to follow for every “I want to adopt”</span></a>' +
+      '<a class="home-card" href="#pledges"><span class="big">🙏</span><b>Pledges</b><span>Who pledged to help pull a shelter dog</span></a>' +
       '<a class="home-card" href="#rescues"><span class="big">🤝</span><b>Rescue contacts</b><span>Every rescue and foster that listed a pup</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
       ORDER.map(function (k) { return '<a class="home-card" href="#c/' + k + '"><span class="big">' + COLS[k].icon + '</span><b>' + esc(COLS[k].label) + '</b><span>' + esc(COLS[k].intro) + '</span></a>'; }).join('') +
@@ -872,6 +896,91 @@
   }
   function telLinks(p) { var d = String(p).replace(/[^\d+]/g, ''); return esc(p) + ' <a class="hint" href="tel:' + esc(d) + '">Call</a> · <a class="hint" href="sms:' + esc(d) + '">Text</a>'; }
   function day(iso) { return iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''; }
+  // ---------- pledges ----------
+  // Pledge drives (content/pledges) + who pledged (worker/src/pledges.js). Nothing is charged; once the dog is pulled,
+  // "Email everyone who pledged" sends each person their amount and how to pay.
+  function pledges(slug) {
+    main().innerHTML = '<div class="head"><div><h1>🙏 Pledges</h1><p>People who promised money to help pull a shelter dog. Nothing is charged when they pledge. Once the dog is out, email everyone with how to send it, then tick who paid.</p></div><div class="row__act"><a class="btn btn--go" href="#c/pledges/new">＋ New pledge drive</a></div></div><div data-pd><p class="empty">Loading…</p></div>';
+    var box = $('[data-pd]');
+    var money = function (n) { n = Number(n) || 0; return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : Math.round(n).toLocaleString('en-US')); };
+    var day = function (iso) { return iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''; };
+    fetchCol('pledges', true).then(function (items) {
+      items = (items || []).slice().sort(COLS.pledges.sort);
+      if (!items.length) { box.innerHTML = '<p class="empty">No pledge drives yet. Click “New pledge drive” to make one.</p>'; return; }
+      var cur = items.find(function (x) { return x.slug === slug; }) || items[0];
+      box.innerHTML = (items.length > 1 ? '<div class="card"><label for="pd-pick"><b>Pledge drive</b></label> <select id="pd-pick">' + items.map(function (x) { return '<option value="' + esc(x.slug) + '"' + (x.slug === cur.slug ? ' selected' : '') + '>' + esc(x.data.name) + (x.data.animalId ? ' · ' + esc(x.data.animalId) : '') + ' (' + esc(PLS[x.data.status] || 'Pledging open') + ')</option>'; }).join('') + '</select></div>' : '') + '<div data-one><p class="empty">Loading…</p></div>';
+      var pick = $('#pd-pick'); if (pick) pick.onchange = function () { location.hash = '#pledges/' + encodeURIComponent(pick.value); };
+      drive(cur);
+    }, function (e) { box.innerHTML = '<p class="empty">' + esc(e.message) + '</p>'; });
+
+    function drive(it) {
+      var d = it.data, one = $('[data-one]'), url = 'https://bentleysplayhouse.org/pledge/' + it.slug + '/';
+      api('/api/pledges/' + encodeURIComponent(it.slug)).then(function (j) {
+        var list = j.pledges || [], paid = list.filter(function (x) { return x.paid; });
+        var paidSum = paid.reduce(function (s, x) { return s + (Number(x.amount) || 0); }, 0);
+        one.innerHTML = '<section class="card">' +
+          '<div class="pd-top"><div><h2 style="margin:0">' + esc(d.name) + (d.animalId ? ' · ' + esc(d.animalId) : '') + ' <span class="pill' + (d.status === 'pulled' ? ' ok' : '') + '">' + esc(PLS[d.status] || 'Pledging open') + '</span></h2>' +
+          '<p class="hint" style="margin:4px 0 0"><a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(url.replace('https://', '')) + ' ↗</a> <button class="btn btn--ghost btn--sm" type="button" data-copy>Copy link</button></p></div>' +
+          '<div class="pd-sum"><b>' + money(j.total) + '</b><span>' + j.count + (j.count === 1 ? ' pledge' : ' pledges') + (d.goal ? ' · goal ' + money(d.goal) : '') + '</span><span>' + money(paidSum) + ' paid so far</span></div></div>' +
+          '<div class="row__act" style="justify-content:flex-start;flex-wrap:wrap;margin:16px 0 4px">' +
+            '<a class="btn btn--ghost btn--sm" href="#c/pledges/' + encodeURIComponent(it.slug) + '">✏️ Edit page, photo or status</a>' +
+            '<button class="btn btn--go btn--sm" type="button" data-mail' + (list.length ? '' : ' disabled') + '>✉️ Email everyone who pledged</button>' +
+            '<button class="btn btn--ghost btn--sm" type="button" data-csv' + (list.length ? '' : ' disabled') + '>⬇️ Download spreadsheet</button></div>' +
+          '<div data-compose></div>' +
+          (list.length ? '<div class="pd-wrap"><table class="pd-table"><thead><tr><th>Name</th><th>Email</th><th>Social</th><th class="num">Pledge</th><th>Date</th><th>Paid?</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody>' +
+            list.map(function (x, i) {
+              var soc = String(x.social || ''), ig = /^@[\w.]{1,30}$/.test(soc) ? 'https://www.instagram.com/' + soc.slice(1) + '/' : (/^https?:\/\//.test(soc) ? soc : '');
+              return '<tr data-i="' + i + '"><td><b>' + esc(x.first + ' ' + x.last) + '</b>' + (x.emailedAt ? '<br><small class="hint">✉️ Emailed ' + esc(day(x.emailedAt)) + '</small>' : '') + '</td>' +
+                '<td><a href="mailto:' + esc(x.email) + '">' + esc(x.email) + '</a></td>' +
+                '<td>' + (ig ? '<a href="' + esc(ig) + '" target="_blank" rel="noopener">' + esc(soc) + '</a>' : esc(soc)) + '</td>' +
+                '<td class="num"><b>' + money(x.amount) + '</b></td><td>' + esc(day(x.at)) + '</td>' +
+                '<td><label class="pd-paid"><input type="checkbox" data-paid' + (x.paid ? ' checked' : '') + '> Paid</label></td>' +
+                '<td><button class="btn btn--ghost btn--sm" type="button" data-rm aria-label="Remove ' + esc(x.first) + '\'s pledge">✕</button></td></tr>';
+            }).join('') + '</tbody></table></div>' : '<p class="empty">No pledges yet. Share the link: every pledge shows up here.</p>') +
+          '</section>';
+        $('[data-copy]', one).onclick = function () { navigator.clipboard.writeText(url).then(function () { toast('Link copied.'); }); };
+        $$('tr[data-i]', one).forEach(function (tr) {
+          var x = list[+tr.getAttribute('data-i')];
+          $('[data-paid]', tr).onchange = function () {
+            var cb = this;
+            api('/api/pledges/' + encodeURIComponent(it.slug) + '/' + x.id, { method: 'PUT', json: { paid: cb.checked } }).then(function () { x.paid = cb.checked; toast(cb.checked ? 'Marked as paid.' : 'Marked as not paid.'); }, function (e) { cb.checked = !cb.checked; toast(e.message); });
+          };
+          $('[data-rm]', tr).onclick = function () {
+            if (!confirm('Remove ' + x.first + ' ' + x.last + '\'s ' + money(x.amount) + ' pledge? This can\'t be undone.')) return;
+            api('/api/pledges/' + encodeURIComponent(it.slug) + '/' + x.id, { method: 'DELETE' }).then(function () { toast('Removed.'); drive(it); }, function (e) { toast(e.message); });
+          };
+        });
+        var csv = $('[data-csv]', one);
+        csv.onclick = function () {
+          var cell = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+          var out = [['First name', 'Last name', 'Email', 'Social', 'Pledge', 'Date', 'Paid', 'Emailed']].concat(list.map(function (x) { return [x.first, x.last, x.email, x.social, Number(x.amount).toFixed(2), (x.at || '').slice(0, 10), x.paid ? 'Yes' : 'No', (x.emailedAt || '').slice(0, 10)]; }))
+            .map(function (r) { return r.map(cell).join(','); }).join('\r\n');
+          var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + out], { type: 'text/csv' })); a.download = 'pledges-' + it.slug + '-' + today() + '.csv'; document.body.appendChild(a); a.click(); a.remove();
+        };
+        $('[data-mail]', one).onclick = function () {
+          var c = $('[data-compose]', one), nm = d.name;
+          c.innerHTML = '<div class="card" style="background:#F2F5FF;box-shadow:none"><h3 style="margin:0 0 8px">Email everyone who pledged</h3>' +
+            '<p class="hint">Each person gets their own email from hello@bentleysplayhouse.org, with their name and pledge amount added. {first} becomes their first name and {amount} their pledge.</p>' +
+            '<div class="f"><label for="pm-to">Send to</label><select id="pm-to"><option value="all">Everyone (' + list.length + ')</option><option value="unpaid">Only people who haven\'t paid (' + list.filter(function (x) { return !x.paid; }).length + ')</option><option value="unemailed">Only people not emailed yet (' + list.filter(function (x) { return !x.emailedAt; }).length + ')</option></select></div>' +
+            '<div class="f" style="margin-top:10px"><label for="pm-s">Subject</label><input id="pm-s" type="text" style="width:100%" value="' + esc(nm) + ' is safe! Here\'s how to send your pledge"></div>' +
+            '<div class="f" style="margin-top:10px"><label for="pm-m">Message</label><textarea id="pm-m" rows="9" style="width:100%">' + esc(nm + ' is out of the shelter, and you helped make it happen. Thank you!\n\nYou pledged {amount}. Here\'s how to send it:\n[Write how to pay here: Zelle, Venmo, PayPal or another way]\n\nWe\'ll share updates on Instagram at @bentleysplayhouse.') + '</textarea></div>' +
+            '<div class="row__act" style="justify-content:flex-start;margin-top:12px"><button class="btn btn--go btn--sm" type="button" data-send>✉️ Send</button><button class="btn btn--ghost btn--sm" type="button" data-x>Cancel</button><span class="msg" role="status" data-m></span></div></div>';
+          $('[data-x]', c).onclick = function () { c.innerHTML = ''; };
+          $('[data-send]', c).onclick = function () {
+            var b = this, msg = $('#pm-m', c).value, to = $('#pm-to', c);
+            if (/\[Write how to pay here/.test(msg)) { toast('Replace “[Write how to pay here…]” with how people can pay.'); $('#pm-m', c).focus(); return; }
+            var n = to.options[to.selectedIndex].text.replace(/.*\((\d+)\).*/, '$1');
+            if (!confirm('Send this email to ' + n + ' ' + (n === '1' ? 'person' : 'people') + '?')) return;
+            b.disabled = true; $('[data-m]', c).textContent = 'Sending… this takes about a second per person.';
+            api('/api/pledges/' + encodeURIComponent(it.slug) + '/email', { method: 'POST', json: { subject: $('#pm-s', c).value, message: msg, only: to.value } }).then(function (r) {
+              toast('Sent ' + r.sent + ' of ' + r.of + (r.failed ? '. ' + r.failed + ' didn\'t send; try "Only people not emailed yet".' : '.')); drive(it);
+            }, function (e) { b.disabled = false; $('[data-m]', c).textContent = e.message; });
+          };
+        };
+      }, function (e) { one.innerHTML = '<p class="empty">' + esc(e.message) + '</p>'; });
+    }
+  }
+
   function rescues() {
     main().innerHTML = '<div class="head"><div><h1>🤝 Rescue contacts</h1><p>Every rescue and foster that lists a pup on Pawsome Pooches is saved here automatically, with the person who sent it in. Only admins can see this. You can also add one yourself, fix details and write notes.</p></div><div class="row__act"><button class="btn btn--ghost" data-csv>⬇️ Download spreadsheet</button><button class="btn btn--go" data-add>＋ Add a rescue</button></div></div>' +
       '<div class="card"><label for="rq"><b>Find a rescue</b></label><input id="rq" type="search" placeholder="Name, email, phone, Instagram, city or pup…" style="width:100%;margin-top:6px"></div>' +
