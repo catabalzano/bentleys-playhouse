@@ -900,7 +900,7 @@
   // Pledge drives (content/pledges) + who pledged (worker/src/pledges.js). Nothing is charged; once the dog is pulled,
   // "Email everyone who pledged" sends each person their amount and how to pay.
   function pledges(slug) {
-    main().innerHTML = '<div class="head"><div><h1>🙏 Pledges</h1><p>People who promised money to help pull a shelter dog. Nothing is charged when they pledge. Once the dog is out, email everyone with how to send it, then tick who paid.</p></div><div class="row__act"><a class="btn btn--go" href="#c/pledges/new">＋ New pledge drive</a></div></div><div data-pd><p class="empty">Loading…</p></div>';
+    main().innerHTML = '<div class="head"><div><h1>🙏 Pledges</h1><p>People who promised money to help get a shelter pup out. Pledges go directly to the rescue that pulls the pup; we never collect the money. Once the pup is out, email everyone with how to pay the rescue, then tick who paid.</p></div><div class="row__act"><a class="btn btn--go" href="#c/pledges/new">＋ New pledge drive</a></div></div><div data-pd><p class="empty">Loading…</p></div>';
     var box = $('[data-pd]');
     var money = function (n) { n = Number(n) || 0; return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : Math.round(n).toLocaleString('en-US')); };
     var day = function (iso) { return iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''; };
@@ -963,12 +963,12 @@
             '<p class="hint">Each person gets their own email from hello@bentleysplayhouse.org, with their name and pledge amount added. {first} becomes their first name and {amount} their pledge.</p>' +
             '<div class="f"><label for="pm-to">Send to</label><select id="pm-to"><option value="all">Everyone (' + list.length + ')</option><option value="unpaid">Only people who haven\'t paid (' + list.filter(function (x) { return !x.paid; }).length + ')</option><option value="unemailed">Only people not emailed yet (' + list.filter(function (x) { return !x.emailedAt; }).length + ')</option></select></div>' +
             '<div class="f" style="margin-top:10px"><label for="pm-s">Subject</label><input id="pm-s" type="text" style="width:100%" value="' + esc(nm) + ' is safe! Here\'s how to send your pledge"></div>' +
-            '<div class="f" style="margin-top:10px"><label for="pm-m">Message</label><textarea id="pm-m" rows="9" style="width:100%">' + esc(nm + ' is out of the shelter, and you helped make it happen. Thank you!\n\nYou pledged {amount}. Here\'s how to send it:\n[Write how to pay here: Zelle, Venmo, PayPal or another way]\n\nWe\'ll share updates on Instagram at @bentleysplayhouse.') + '</textarea></div>' +
+            '<div class="f" style="margin-top:10px"><label for="pm-m">Message</label><textarea id="pm-m" rows="9" style="width:100%">' + esc(nm + ' is out of the shelter, and you helped make it happen. Thank you!\n\nYou pledged {amount}. Please send it directly to the rescue that pulled ' + nm + ':\n[Write the rescue\'s name and how to pay them here: Zelle, Venmo, PayPal or another way]\n\nWe\'ll share updates on Instagram at @bentleysplayhouse.') + '</textarea></div>' +
             '<div class="row__act" style="justify-content:flex-start;margin-top:12px"><button class="btn btn--go btn--sm" type="button" data-send>✉️ Send</button><button class="btn btn--ghost btn--sm" type="button" data-x>Cancel</button><span class="msg" role="status" data-m></span></div></div>';
           $('[data-x]', c).onclick = function () { c.innerHTML = ''; };
           $('[data-send]', c).onclick = function () {
             var b = this, msg = $('#pm-m', c).value, to = $('#pm-to', c);
-            if (/\[Write how to pay here/.test(msg)) { toast('Replace “[Write how to pay here…]” with how people can pay.'); $('#pm-m', c).focus(); return; }
+            if (/\[Write the rescue/.test(msg)) { toast('Replace “[Write the rescue’s name…]” with the rescue and how to pay them.'); $('#pm-m', c).focus(); return; }
             var n = to.options[to.selectedIndex].text.replace(/.*\((\d+)\).*/, '$1');
             if (!confirm('Send this email to ' + n + ' ' + (n === '1' ? 'person' : 'people') + '?')) return;
             b.disabled = true; $('[data-m]', c).textContent = 'Sending… this takes about a second per person.';

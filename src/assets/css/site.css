@@ -1760,3 +1760,7 @@ fieldset.field { align-content: start; }
   .pl-share .btn { flex: 1 1 auto; }
 }
 .hero__ctas .btn--pledge { min-height: 50px; padding-inline: 1.35em; }
+.pl-disclose { display: flex; gap: .7rem; align-items: flex-start; padding: .9rem 1rem; border-radius: 14px; background: var(--tint-blue); font-size: .95rem; }
+.pl-disclose .icon { flex: none; color: var(--blue-deep); margin-top: .1rem; }
+.pl-disclose p { margin: 0; }
+.pl-polaroid img { object-position: 45% 30%; }

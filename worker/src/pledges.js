@@ -1,4 +1,4 @@
-// Pledge drives (Cata, Oct 22, 2026): bentleysplayhouse.org/pledge/<slug>/ — people promise an amount to help pull a shelter dog.
+// Pledge drives (Cata, Oct 22, 2026): bentleysplayhouse.org/pledge/<slug>/ — people promise an amount to help get a shelter pup out; the money goes straight to the rescue that pulls them.
 // Nothing is charged. Once the dog is pulled, the admin emails everyone who pledged with how to send it.
 //
 //  POST   /pledge                         public: drive, firstName, lastName, email, social, amount → pledge:<drive>:<id>
@@ -113,12 +113,13 @@ async function receivePledge(req, env) {
 async function toPledger(env, d, rec) {
   const subject = `Thank you for pledging for ${d.name}!`;
   const url = d.url || `${SITE(env)}/pledge/`;
-  const body = p(`We got your pledge to help pull ${h(d.name)} from ${h(d.shelter || 'the shelter')}. This email is your record of it.`)
+  const body = p(`We got your pledge to help get ${h(d.name)} out of ${h(d.shelter || 'the shelter')}. This email is your record of it.`)
     + facts([['Your pledge', `<b>${money(rec.amount)}</b>`], ['For', h(d.name) + (d.animalId ? ` (${h(d.animalId)})` : '')], ['Name', h(`${rec.first} ${rec.last}`)], ['Social', h(rec.social)]])
     + note(`<strong>This is a promise, not a payment.</strong> Nothing is charged today. Once ${h(d.name)} is safe, we'll email you from hello@bentleysplayhouse.org with how to send your pledge.`)
+    + p(`Every pledge goes directly to the rescue that steps up to pull ${h(d.name)}, not to Bentley's Playhouse. We don't take a percentage, and we never collect or handle the money.`, 'color:#5C5A72;font-size:14px')
     + p(`Every share brings in more pledges. Send ${h(d.name)}'s page to a friend: <a href="${h(url)}" style="color:#2F45C8;font-weight:700">${h(url.replace(/^https?:\/\//, ''))}</a>`);
   const html = layout(env, { pre: `Your ${money(rec.amount)} pledge for ${d.name} is in. Nothing is charged today.`, title: `Thank you, ${h(rec.first)}!`, body });
-  const text = plain([`Thank you, ${rec.first}!`, '', `We got your pledge to help pull ${d.name} from ${d.shelter || 'the shelter'}.`, '', `Your pledge: ${money(rec.amount)}`, `For: ${d.name}${d.animalId ? ` (${d.animalId})` : ''}`, '', `This is a promise, not a payment. Nothing is charged today. Once ${d.name} is safe, we'll email you from hello@bentleysplayhouse.org with how to send your pledge.`, '', `Share ${d.name}'s page: ${url}`]);
+  const text = plain([`Thank you, ${rec.first}!`, '', `We got your pledge to help get ${d.name} out of ${d.shelter || 'the shelter'}.`, '', `Your pledge: ${money(rec.amount)}`, `For: ${d.name}${d.animalId ? ` (${d.animalId})` : ''}`, '', `This is a promise, not a payment. Nothing is charged today. Once ${d.name} is safe, we'll email you from hello@bentleysplayhouse.org with how to send your pledge.`, '', `Every pledge goes directly to the rescue that steps up to pull ${d.name}, not to Bentley's Playhouse. We don't take a percentage, and we never collect or handle the money.`, '', `Share ${d.name}'s page: ${url}`]);
   const r = await sendMail(env, { to: rec.email, subject, html, text, tag: 'pledge-confirm' });
   return { at: new Date().toISOString(), status: r && r.id ? 'sent' : r && r.skipped ? 'off' : 'failed' };
 }

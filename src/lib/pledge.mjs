@@ -26,6 +26,11 @@ function polaroid(d) {
   return `<figure class="pl-polaroid"><span class="pl-polaroid__tape" aria-hidden="true"></span>${inner}<figcaption>${d.status === 'pulled' ? `${esc(d.name)} is safe!` : `${esc(d.name)}, waiting for a way out`}</figcaption></figure>`;
 }
 
+/** Where pledges go: shown on every pledge page (Cata, Oct 22, 2026). */
+export function disclosure(d) {
+  return `<div class="pl-disclose">${icon('shield', { size: 22 })}<p><strong>Where your pledge goes.</strong> This page only keeps a list of pledges, so everyone who pledges can follow through and we can all help ${esc(d.name)}. Every pledge goes directly to the rescue that steps up to pull ${esc(d.name)}, not to Bentley's Playhouse. We don't take a percentage, and we never collect or handle the money. Bentley's Playhouse never asks for or accepts donations for animals that aren't in our care.</p></div>`;
+}
+
 function progress(d) {
   return `<div class="pl-progress" data-pl-progress${d.goal ? ` data-goal="${d.goal}"` : ''}>
     <p class="pl-progress__num"><b data-pl-total>$0</b> <span data-pl-count>pledged so far</span>${d.goal ? `<span class="pl-progress__goal">Goal $${d.goal.toLocaleString('en-US')}</span>` : ''}</p>
@@ -56,24 +61,25 @@ function form(d) {
       <div class="field pl-other" data-pl-other hidden><label for="${id('other')}">Other amount</label><div class="pl-other__in"><span aria-hidden="true">$</span><input id="${id('other')}" name="amountOther" type="text" inputmode="decimal" maxlength="9" placeholder="0"></div></div>
     </fieldset>
     <div class="pl-promise">${icon('heart', { size: 22 })}<p><strong>This is a promise, not a payment.</strong> Nothing is charged today. Once ${esc(d.name)} is safe, we'll email you how to send your pledge.</p></div>
+    ${disclosure(d)}
     <div class="hp" aria-hidden="true"><label for="${id('website')}">Leave this empty</label><input id="${id('website')}" name="website" type="text" tabindex="-1" autocomplete="off"></div>
     ${turnstileKey() ? `<div class="cf-turnstile" data-sitekey="${esc(turnstileKey())}" data-theme="light" data-size="flexible"></div>` : ''}
     <button class="btn btn--primary pl-submit" type="submit">${icon('heart', { size: 20 })}<span>Pledge for ${esc(d.name)}</span></button>
     <p class="form__status" role="status" aria-live="polite"></p>
-    <p class="pl-fine">Bentley's Playhouse is not a 501(c)(3) nonprofit yet, so pledges aren't tax-deductible. We only use your details to contact you about ${esc(d.name)}. <a href="${href('privacy/')}">Privacy</a></p>
+    <p class="pl-fine">We only use your details to contact you about ${esc(d.name)} and your pledge. <a href="${href('privacy/')}">Privacy</a></p>
   </form>`;
 }
 
 function card(d) {
-  const head = `<p class="pl-kicker">${d.status === 'pulled' ? 'Rescued' : `Help us pull ${({ her: 'her', them: 'them' })[d.pronoun] || 'him'}`}</p>
+  const head = `<p class="pl-kicker">${d.status === 'pulled' ? 'Rescued' : `Help get ${({ her: 'her', them: 'them' })[d.pronoun] || 'him'} out`}</p>
     <h1 class="pl-h">${d.status === 'pulled' ? `${esc(d.name)} Is Safe!` : `Pledge for ${esc(d.name)}!`}</h1>`;
-  if (d.status === 'pulled') return `${head}${progress(d)}<p>Thank you to everyone who pledged. ${esc(d.name)} is out of the shelter. If you pledged, check your email for how to send it.</p>${share(d)}`;
-  if (d.status === 'closed') return `${head}${progress(d)}<p>Pledges for ${esc(d.name)} are closed. Thank you so much for wanting to help!</p><p><a class="arrow-link" href="${href('pawsome-pooches/')}">Meet other pups who need help ${icon('arrow', { size: 18 })}</a></p>`;
+  if (d.status === 'pulled') return `${head}${progress(d)}<p>Thank you to everyone who pledged. ${esc(d.name)} is out of the shelter. If you pledged, check your email for how to send it to the rescue.</p>${disclosure(d)}${share(d)}`;
+  if (d.status === 'closed') return `${head}${progress(d)}<p>Pledges for ${esc(d.name)} are closed. Thank you so much for wanting to help!</p>${disclosure(d)}<p><a class="arrow-link" href="${href('pawsome-pooches/')}">Meet other pups who need help ${icon('arrow', { size: 18 })}</a></p>`;
   return `${head}${progress(d)}${form(d)}
     <div class="pl-done" data-pl-done hidden tabindex="-1">
       <h2 class="pl-done__h">Thank You for Pledging for ${esc(d.name)}!</h2>
       <p class="pl-done__amt"><span>Your pledge</span><b data-pl-mine></b></p>
-      <p>We sent a copy to your email. Once ${esc(d.name)} is out, we'll write from hello@bentleysplayhouse.org with how to send it.</p>
+      <p>We sent a copy to your email. Once ${esc(d.name)} is out, we'll write from hello@bentleysplayhouse.org with how to send it directly to the rescue.</p>
       <p class="pl-done__note">${esc(d.name)} owes you a tail wag.</p>
     </div>`;
 }
@@ -95,8 +101,8 @@ ${d.status === 'open' ? `<section class="pl-how" aria-labelledby="pl-how-h">
     <h2 id="pl-how-h" class="section-h">How Pledging Works</h2>
     <ol class="pl-steps">
       <li><span class="pl-steps__n">1</span><h3>You Pledge</h3><p>Tell us how much you can give. No card, no payment yet.</p></li>
-      <li><span class="pl-steps__n">2</span><h3>We Pull ${esc(d.name)}</h3><p>Once there's enough support, we get ${esc(d.name)} out of ${esc(d.shelter || 'the shelter')}.</p></li>
-      <li><span class="pl-steps__n">3</span><h3>We Email You</h3><p>You get a note from hello@bentleysplayhouse.org with your amount and how to send it.</p></li>
+      <li><span class="pl-steps__n">2</span><h3>A Rescue Steps Up</h3><p>A rescue pulls ${esc(d.name)} out of ${esc(d.shelter || 'the shelter')}. The pledges go to that rescue.</p></li>
+      <li><span class="pl-steps__n">3</span><h3>We Email You</h3><p>You get a note from hello@bentleysplayhouse.org with your amount and how to pay the rescue directly.</p></li>
     </ol>
   </div>
 </section>
