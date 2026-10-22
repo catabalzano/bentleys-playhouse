@@ -13,8 +13,14 @@
     document.querySelectorAll('[data-pl-count]').forEach(function (el) {
       el.textContent = j.count ? (j.count === 1 ? T('pledged by 1 person') : T('pledged by {n} people').replace('{n}', j.count)) : T('pledged so far. Be the first!');
     });
-    document.querySelectorAll('[data-pl-progress][data-goal]').forEach(function (box) {
-      var goal = Number(box.getAttribute('data-goal')) || 0, pct = goal ? Math.min(100, Math.round(j.total / goal * 100)) : 0;
+    // with a goal the bar fills toward it; without one it fills toward the next milestone ($100, $250, $500, $750, $1,000, then every $500)
+    var STEPS = [100, 250, 500, 750, 1000];
+    function milestone(t) { for (var i = 0; i < STEPS.length; i++) if (t < STEPS[i]) return STEPS[i]; return (Math.floor(t / 500) + 1) * 500; }
+    document.querySelectorAll('[data-pl-progress]').forEach(function (box) {
+      var set = Number(box.getAttribute('data-goal')) || 0, goal = set || milestone(j.total), pct = Math.min(100, Math.round(j.total / goal * 100));
+      var lab = box.querySelector('[data-pl-goal]');
+      if (lab) lab.textContent = set ? T('Goal') + ' ' + money(goal) : (j.total >= 1 ? T('Next milestone') + ' ' + money(goal) : '');
+      var pbm = box.querySelector('[role="progressbar"]'); if (pbm) pbm.setAttribute('aria-valuemax', String(goal));
       var bar = box.querySelector('[data-pl-bar]'); if (bar) bar.style.width = pct + '%';
       var pb = box.querySelector('[role="progressbar"]'); if (pb) pb.setAttribute('aria-valuenow', String(Math.round(j.total)));
     });

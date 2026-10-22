@@ -33,8 +33,8 @@ export function disclosure(d) {
 
 function progress(d) {
   return `<div class="pl-progress" data-pl-progress${d.goal ? ` data-goal="${d.goal}"` : ''}>
-    <p class="pl-progress__num"><b data-pl-total>$0</b> <span data-pl-count>pledged so far</span>${d.goal ? `<span class="pl-progress__goal">Goal $${d.goal.toLocaleString('en-US')}</span>` : ''}</p>
-    ${d.goal ? `<div class="pl-bar" role="progressbar" aria-label="Pledged so far" aria-valuemin="0" aria-valuemax="${d.goal}" aria-valuenow="0"><span data-pl-bar style="width:0%"></span></div>` : ''}
+    <p class="pl-progress__num"><b data-pl-total>$0</b> <span data-pl-count>pledged so far</span><span class="pl-progress__goal" data-pl-goal>${d.goal ? `Goal $${d.goal.toLocaleString('en-US')}` : ''}</span></p>
+    <div class="pl-bar" role="progressbar" aria-label="Pledged so far" aria-valuemin="0" aria-valuemax="${d.goal || 100}" aria-valuenow="0"><span data-pl-bar style="width:0%"></span></div>
   </div>`;
 }
 
