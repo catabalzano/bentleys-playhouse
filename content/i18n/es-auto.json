@@ -535,5 +535,6 @@
  "<t2/><t1>Share Jack</t1>": "<t2/><t1>Compartir a Jack</t1>",
  "Bentley's Playhouse shares community dogs to help them get seen. Adoptions are handled by MDAS · Doral. Always meet the dog first and ask for vet records. Listed Oct. 19, 2026.": "Bentley's Playhouse comparte perros de la comunidad para ayudarlos a que se les vea. Las adopciones las maneja MDAS · Doral. Siempre conoce al perro primero y pide los registros veterinarios. Listado el 19 de octubre de 2026.",
  "Submit a tip": "Envía una pista",
- "<t1>Submit a tip</t1>": "<t1>Envía una pista</t1>"
+ "<t1>Submit a tip</t1>": "<t1>Envía una pista</t1>",
+ "<t1><t7/><t2>Find help</t2></t1> <t3><t8/><t4>Get involved</t4></t3> <t5><t9/><t6>Pledge for Chase</t6></t5>": "<t1><t7/><t2>Encuentra ayuda</t2></t1> <t3><t8/><t4>Participa</t4></t3> <t5><t9/><t6>Promete por Chase</t6></t5>"
 }
