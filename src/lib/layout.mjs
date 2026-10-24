@@ -93,7 +93,7 @@ export function footer() {
     </div>
     ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Submit a tip', 'submit-a-tip/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
     ${col('Learn', [['Pawsome Pooches', 'pawsome-pooches/'], ['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists'], ['Rehoming a dog safely', 'resources/rehoming-a-dog-safely/']])}
-    ${col(esc(s.name), [['Our Story', 'our-story/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : [])])}
+    ${col(esc(s.name), [['Our Story', 'our-story/'], ['Pups in My City', 'pupsinmycity/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : [])])}
     <div class="footer__col"><h2 class="footer__h">Follow Along</h2>${socialButtons({ youtube: true })}</div>
   </div>
   <div class="wrap footer__notice">

@@ -253,8 +253,27 @@
       { k: 'body', label: 'Description', type: 'markdown', wide: true },
     ]]],
   };
+  // Pups in My City episodes (content/episodes) → "Watch a Few Episodes" on /pupsinmycity/
+  function ytId(u) { var m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|\/(?:shorts|embed|live)\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : ''; }
+  COLS.episodes = {
+    label: 'Pups in My City', one: 'episode', icon: '🎬', titleKey: 'title',
+    intro: 'Episodes shown under "Watch a Few Episodes" on the Pups in My City page. Paste the YouTube link. The page shows one episode: the featured one, or the newest.',
+    thumb: function (d) { var id = ytId(d.youtube); return id ? 'https://i.ytimg.com/vi/' + id + '/mqdefault.jpg' : null; }, ph: function () { return '🎬'; },
+    sub: function (d) { return [d.date, d.hidden ? 'Hidden' : (d.featured ? '⭐ Featured' : ''), ytId(d.youtube) ? '' : '⚠️ Check the YouTube link'].filter(Boolean).join(' · '); },
+    sort: function (a, b) { return String(b.data.date || '').localeCompare(a.data.date || ''); },
+    slugFrom: function (d) { return (d.date || today()) + '-' + slugify(d.title).slice(0, 40); },
+    defaults: function () { return { date: today() }; },
+    groups: [['Episode', [
+      { k: 'title', label: 'Episode title', req: true, hint: 'e.g. "Brunch With Luna in Wynwood"' },
+      { k: 'youtube', label: 'YouTube link', req: true, wide: true, hint: 'Copy it from YouTube (Share → Copy link). Regular videos and Shorts both work.' },
+      { k: 'date', label: 'Date posted', type: 'date', req: true, hint: 'The newest episodes show first.' },
+      { k: 'featured', label: 'Feature it (this one shows on the page, even if it\'s not the newest)', type: 'bool' },
+      { k: 'hidden', label: 'Hide this episode from the website', type: 'bool' },
+      { k: 'summary', label: 'One or two sentences about it (optional)', type: 'text', wide: true },
+    ]]],
+  };
   var EVC = { spay: 'Spay/neuter', walk: 'Dog walk', adopt: 'Adoption', clinic: 'Vaccines & chips', fund: 'Fundraiser' };
-  var ORDER = ['pawsome', 'events', 'stories', 'rescues', 'dogs', 'money'];
+  var ORDER = ['pawsome', 'events', 'episodes', 'stories', 'rescues', 'dogs', 'money'];
 
   // ---------- sign-in ----------
   function card(inner) { app.className = ''; app.innerHTML = '<div class="gate"><div class="gate__card"><div class="card-top"></div><img class="gate__logo" src="../assets/img/logo-main.png" alt="">' + inner + '</div></div>'; }

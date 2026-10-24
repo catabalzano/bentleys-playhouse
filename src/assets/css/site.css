@@ -1765,3 +1765,86 @@ fieldset.field { align-content: start; }
 .pl-disclose p { margin: 0; }
 .pl-polaroid img { object-position: 45% 30%; }
 .tip-agree__t { display: block; margin-bottom: .2rem; }
+
+/* ---------- Pups in My City (/pupsinmycity/, Oct 23) — navy + teal from the show's logo ---------- */
+.pimc-head, .pimc-sec, .pimc-follow { --pimc-navy: #0E2547; --pimc-teal: #0F7F8C; --pimc-sand: #F6EFE6; --pimc-sand-2: #EADFD1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.pimc-head, .pimc-sec, .pimc-follow) { --pimc-navy: #C9D6F2; --pimc-teal: #5FD0DC; --pimc-sand: #2A2638; --pimc-sand-2: #3A3450; } }
+:root[data-theme="dark"] :is(.pimc-head, .pimc-sec, .pimc-follow) { --pimc-navy: #C9D6F2; --pimc-teal: #5FD0DC; --pimc-sand: #2A2638; --pimc-sand-2: #3A3450; }
+.pimc-head { background: radial-gradient(55% 80% at 100% 0%, color-mix(in srgb, var(--pimc-teal) 16%, transparent) 0%, transparent 65%), var(--pimc-sand); }
+.pimc-head__in { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; margin-top: .5rem; }
+.pimc-head .page-h { color: var(--pimc-navy); }
+.pimc-kicker { margin: 0 0 .4rem; font: 700 .82rem/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--pimc-teal); }
+.pimc-ctas { margin-top: 1.25rem; }
+.pimc-tv { margin: 0; transform: rotate(1.2deg); }
+.pimc-tv__screen { border-radius: var(--r-md); overflow: hidden; border: 6px solid var(--paper); box-shadow: 8px 8px 0 var(--pimc-teal), var(--shadow-soft); }
+.pimc-tv__screen img { display: block; width: 100%; height: auto; }
+.pimc-tv__onair { display: inline-flex; align-items: center; gap: .45rem; margin: 1rem 0 0 .25rem; padding: .3rem .8rem; border-radius: 999px; background: var(--paper); font: 700 .8rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--pimc-navy); transform: rotate(-1.2deg); }
+.pimc-dot { width: .6rem; height: .6rem; border-radius: 50%; background: #E5484D; box-shadow: 0 0 0 3px color-mix(in srgb, #E5484D 25%, transparent); }
+@media (prefers-reduced-motion: no-preference) { .pimc-dot { animation: pimc-blink 1.6s ease-in-out infinite; } }
+@keyframes pimc-blink { 50% { opacity: .35; } }
+
+.pimc-wonder { margin: clamp(1rem, 3vw, 2rem) auto clamp(2rem, 5vw, 3.5rem); max-width: 760px; padding: 0 0 0 1.25rem; border-left: 5px solid var(--orange); }
+.pimc-wonder p { margin: 0; font: 600 var(--step-2)/1.3 var(--font-display); color: var(--ink); }
+.pimc-wonder span { display: block; font: italic 400 1.05rem/1.4 var(--font-body); color: var(--muted); margin-bottom: .3rem; }
+
+.pimc-sec { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.pimc-h { font-size: var(--step-3); color: var(--pimc-navy); margin: 0 0 .35rem; }
+.pimc-sub { color: var(--muted); margin: 0 0 1.5rem; }
+.pimc-segs { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+.pimc-seg { --tone: var(--blue-deep); --tint: var(--tint-blue); background: var(--paper); border-radius: var(--r-md); padding: 1.25rem 1.25rem 1.1rem; box-shadow: var(--shadow-soft); border-top: 5px solid var(--tone); }
+.pimc-seg--orange { --tone: var(--orange); --tint: var(--tint-orange); }
+.pimc-seg--violet { --tone: var(--violet); --tint: var(--tint-violet); }
+.pimc-seg--teal { --tone: var(--pimc-teal, #0F7F8C); --tint: color-mix(in srgb, var(--pimc-teal, #0F7F8C) 14%, var(--paper)); }
+.pimc-seg--gold { --tone: var(--gold); --tint: var(--tint-gold); }
+.pimc-seg__ic { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--tint); color: var(--tone); margin-bottom: .75rem; }
+.pimc-seg h3 { font-size: 1.2rem; margin: 0 0 .35rem; }
+.pimc-seg p { margin: 0; color: var(--muted); font-size: .98rem; }
+
+.pimc-why { background: var(--pimc-sand); border-radius: var(--r-lg); padding: clamp(1.5rem, 4vw, 2.5rem); }
+.pimc-why__list { margin: 0; padding: 0; list-style: none; counter-reset: w; display: grid; gap: 1rem; }
+.pimc-why__list li { counter-increment: w; position: relative; padding-left: 3rem; }
+.pimc-why__list li::before { content: counter(w); position: absolute; left: 0; top: -.1rem; width: 2.1rem; height: 2.1rem; border-radius: 50%; display: grid; place-items: center; background: var(--pimc-teal); color: #fff; font: 700 1rem/1 var(--font-display); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pimc-why__list li::before { color: #102028; } }
+:root[data-theme="dark"] .pimc-why__list li::before { color: #102028; }
+
+.pimc-host { display: grid; grid-template-columns: minmax(200px, 340px) 1fr; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+.pimc-host__photo img { display: block; width: 100%; height: auto; border-radius: 999px 999px var(--r-md) var(--r-md); border: 6px solid var(--paper); box-shadow: -8px 8px 0 var(--orange); transform: rotate(-1.5deg); }
+.pimc-host__txt p { max-width: 55ch; }
+
+.pimc-pitch__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+.pimc-card { background: var(--paper); border: 2px dashed var(--pimc-sand-2); border-radius: var(--r-md); padding: 1.25rem; }
+.pimc-card h3 { margin: 0 0 .35rem; font-size: 1.15rem; }
+.pimc-card p { color: var(--muted); margin: 0 0 .75rem; }
+
+.pimc-follow { text-align: left; background: var(--pimc-navy); color: #fff; border-radius: var(--r-lg); padding: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.pimc-follow .pimc-h { color: #fff; }
+.pimc-follow > p { margin: 0 0 1.25rem; color: #D6E0F2; }
+.pimc-follow__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .75rem; }
+.pimc-follow__list a { display: inline-flex; align-items: center; gap: .6rem; min-height: 50px; padding: .55rem 1.1rem; border-radius: 999px; background: #fff; color: #0E2547; text-decoration: none; font-weight: 600; box-shadow: 4px 4px 0 #5FD0DC; transition: transform .18s ease, box-shadow .18s ease; }
+.pimc-follow__list a:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #5FD0DC; }
+.pimc-follow__list b { margin-right: .25rem; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pimc-follow { background: #10203A; } }
+:root[data-theme="dark"] .pimc-follow { background: #10203A; }
+
+@media (max-width: 760px) {
+  .pimc-head__in, .pimc-host { grid-template-columns: 1fr; }
+  .pimc-tv { order: -1; transform: none; }
+  .pimc-host__photo { max-width: 280px; }
+  .pimc-ctas .btn { flex: 1 1 100%; }
+}
+
+/* Pups in My City: "Watch a Few Episodes" (episodes come from the admin, content/episodes) */
+.pimc-eps { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+.pimc-ep--big { grid-column: 1 / -1; }
+.pimc-ep--big .pimc-ep__video { max-width: 860px; }
+.pimc-ep__video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-md); overflow: hidden; background: #0E2547; box-shadow: 6px 6px 0 var(--pimc-teal, #0F7F8C); }
+.pimc-ep__video img, .pimc-ep__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
+.pimc-ep__play { display: block; position: absolute; inset: 0; }
+.pimc-ep__btn { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #0E2547; box-shadow: 0 4px 16px rgb(0 0 0 / .3); transition: transform .18s ease, background-color .18s; }
+.pimc-ep__play:hover .pimc-ep__btn, .pimc-ep__play:focus-visible .pimc-ep__btn { transform: scale(1.1); background: var(--gold); }
+.pimc-ep__btn svg { margin-left: 3px; }
+.pimc-ep__t { font-size: 1.15rem; margin: .9rem 0 .2rem; }
+.pimc-ep__s { margin: 0; color: var(--muted); font-size: .98rem; }
+.pimc-eps__more { margin: 1.25rem 0 0; }
+.pimc-eps__soon { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1rem; padding: 1.25rem 1.5rem; background: var(--paper); border: 2px dashed var(--line); border-radius: var(--r-md); color: var(--pimc-teal, #0F7F8C); }
+.pimc-eps__soon p { margin: 0; flex: 1 1 260px; color: var(--ink); }
