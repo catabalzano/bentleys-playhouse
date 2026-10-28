@@ -31,10 +31,10 @@ export function disclosure(d) {
   return `<div class="pl-disclose">${icon('shield', { size: 22 })}<p><strong>Where your pledge goes.</strong> This page only keeps a list of pledges, so everyone who pledges can follow through and we can all help ${esc(d.name)}. Every pledge goes directly to the rescue that steps up to pull ${esc(d.name)}, not to Bentley's Playhouse. We don't take a percentage, and we never collect or handle the money. Bentley's Playhouse never asks for or accepts donations for animals that aren't in our care.</p></div>`;
 }
 
-function progress(d) {
-  return `<div class="pl-progress" data-pl-progress${d.goal ? ` data-goal="${d.goal}"` : ''}>
-    <p class="pl-progress__num"><b data-pl-total>$0</b> <span data-pl-count>pledged so far</span><span class="pl-progress__goal" data-pl-goal>${d.goal ? `Goal $${d.goal.toLocaleString('en-US')}` : ''}</span></p>
-    <div class="pl-bar" role="progressbar" aria-label="Pledged so far" aria-valuemin="0" aria-valuemax="${d.goal || 100}" aria-valuenow="0"><span data-pl-bar style="width:0%"></span></div>
+/** How many people have pledged (no amounts, no bar: Cata, Oct 28, 2026). The number fills in from js/pledge.js. */
+function progress() {
+  return `<div class="pl-progress" data-pl-progress>
+    <p class="pl-progress__num" data-pl-people>Be the first to pledge!</p>
   </div>`;
 }
 

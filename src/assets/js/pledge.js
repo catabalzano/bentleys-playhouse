@@ -7,22 +7,14 @@
   var money = function (n) { n = Number(n) || 0; return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : Math.round(n).toLocaleString('en-US')); };
 
   // ---------- total so far ----------
+  // the page shows only how many people have pledged (no amounts, no bar: Oct 28, 2026)
   function showTotals(j) {
-    if (!j || typeof j.total !== 'number') return;
-    document.querySelectorAll('[data-pl-total]').forEach(function (el) { el.textContent = money(j.total); });
-    document.querySelectorAll('[data-pl-count]').forEach(function (el) {
-      el.textContent = j.count ? (j.count === 1 ? T('pledged by 1 person') : T('pledged by {n} people').replace('{n}', j.count)) : T('pledged so far. Be the first!');
-    });
-    // with a goal the bar fills toward it; without one it fills toward the next milestone ($100, $250, $500, $750, $1,000, then every $500)
-    var STEPS = [100, 250, 500, 750, 1000];
-    function milestone(t) { for (var i = 0; i < STEPS.length; i++) if (t < STEPS[i]) return STEPS[i]; return (Math.floor(t / 500) + 1) * 500; }
-    document.querySelectorAll('[data-pl-progress]').forEach(function (box) {
-      var set = Number(box.getAttribute('data-goal')) || 0, goal = set || milestone(j.total), pct = Math.min(100, Math.round(j.total / goal * 100));
-      var lab = box.querySelector('[data-pl-goal]');
-      if (lab) lab.textContent = set ? T('Goal') + ' ' + money(goal) : (j.total >= 1 ? T('Next milestone') + ' ' + money(goal) : '');
-      var pbm = box.querySelector('[role="progressbar"]'); if (pbm) pbm.setAttribute('aria-valuemax', String(goal));
-      var bar = box.querySelector('[data-pl-bar]'); if (bar) bar.style.width = pct + '%';
-      var pb = box.querySelector('[role="progressbar"]'); if (pb) pb.setAttribute('aria-valuenow', String(Math.round(j.total)));
+    if (!j || typeof j.count !== 'number') return;
+    document.querySelectorAll('[data-pl-people]').forEach(function (el) {
+      if (!j.count) { el.textContent = T('Be the first to pledge!'); return; }
+      el.innerHTML = '<b></b> <span></span>';
+      el.firstChild.textContent = String(j.count);
+      el.lastChild.textContent = j.count === 1 ? T('person has pledged') : T('people have pledged');
     });
   }
   var stats = root.getAttribute('data-stats');

@@ -203,7 +203,7 @@
         { k: 'onHomepage', label: 'Show a "Pledge for …" button on the homepage (while pledging is open)', type: 'bool' },
         { k: 'shelter', label: 'Shelter', hint: 'e.g. "Miami-Dade Animal Services"' }, { k: 'shelterSite', label: 'Which location', hint: 'e.g. "Doral" or "Medley". Leave empty if you\'re not sure.' },
         { k: 'pronoun', label: 'Him, her or them', type: 'chips1', options: [['him', 'Him'], ['her', 'Her'], ['them', 'Them']] },
-        { k: 'goal', label: 'Goal amount (optional)', type: 'number', hint: 'Shows a progress bar. Leave empty to show just the total pledged.' },
+        { k: 'goal', label: 'Goal amount (optional)', type: 'number', hint: 'Only shown here in the admin. The pledge page shows just how many people have pledged.' },
         { k: 'photo', label: 'Photo', type: 'image' }, { k: 'photoAlt', label: 'Photo description' },
         { k: 'sharePhoto', label: 'Different photo for the social card (optional)', type: 'image', hint: 'Leave empty to use the photo above.' },
         { k: 'shareFocus', label: 'Frame the social card', type: 'sharefocus', src: 'photo', alt: 'sharePhoto', shareKicker: 'Pledge to help a shelter pup', titleFrom: 'name', wide: true, hint: 'Drag the photo to move it and use the slider to zoom. This is exactly the picture people see when you send the link in a text, on Instagram or on Facebook. It updates about 2 minutes after you save.' },
