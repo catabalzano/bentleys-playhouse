@@ -537,5 +537,6 @@
  "Submit a tip": "Envía una pista",
  "<t1>Submit a tip</t1>": "<t1>Envía una pista</t1>",
  "<t1><t7/><t2>Find help</t2></t1> <t3><t8/><t4>Get involved</t4></t3> <t5><t9/><t6>Pledge for Chase</t6></t5>": "<t1><t7/><t2>Encuentra ayuda</t2></t1> <t3><t8/><t4>Participa</t4></t3> <t5><t9/><t6>Promete por Chase</t6></t5>",
- "Mixed breed · 2 · Male": "Raza mixta · 2 · Macho"
+ "Mixed breed · 2 · Male": "Raza mixta · 2 · Macho",
+ "<t1>Pups in My City</t1>": "<t1>Perritos en mi ciudad</t1>"
 }
