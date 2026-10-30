@@ -1846,3 +1846,8 @@ fieldset.field { align-content: start; }
 .pimc-eps__more { margin: 1.25rem 0 0; }
 .pimc-eps__soon { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1rem; padding: 1.25rem 1.5rem; background: var(--paper); border: 2px dashed var(--line); border-radius: var(--r-md); color: var(--pimc-teal, #0F7F8C); }
 .pimc-eps__soon p { margin: 0; flex: 1 1 260px; color: var(--ink); }
+/* Donate pop-up badge: same look as the header logo (cream circle, gold offset shadow) — Cata, Oct 29 */
+.gift__badge { background: #F9F5F2; border: 0; padding: 0; box-shadow: 5px 5px 0 var(--gold); transform: translateX(-50%); display: grid; place-items: center; border-radius: 50%; }
+.gift__badge .gift__logo { width: 92%; }
+.gift__badge .logo img { border-radius: 0; height: auto; }
+.gift__badge .logo .logo__l { display: block !important; } .gift__badge .logo .logo__d { display: none !important; }

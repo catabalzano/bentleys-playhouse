@@ -1,7 +1,7 @@
 // Donate pop-up ("gift card") and the same block on the Donate page.
 // Amounts + "where it goes" come from content/site.json → donate.tiers; payment options from donate.methods.
 import { doodle, doodleFor } from './doodles.mjs';
-import { ctx, esc, href, asset, icon } from './core.mjs';
+import { ctx, esc, href, asset, icon, logo } from './core.mjs';
 
 const NOTE = "Donation to Bentley's Playhouse";
 const TEMPLATES = {
@@ -51,7 +51,7 @@ export function giftBlock({ inDialog = false } = {}) {
   const pl = primary ? linkFor(primary) : null;
   return `<div class="gift" data-gift>
   ${inDialog ? `<button type="button" class="gift__x" data-donate-close aria-label="Close">${icon('x', { size: 20 })}</button>` : ''}
-  <div class="gift__badge"><img src="${asset('img/logo-badge.png')}" alt="" width="120" height="119"></div>
+  <div class="gift__badge">${logo('gift__logo', { alt: '', eager: true })}</div>
   <h2 class="gift__h" id="${pid}">Help a Pup Today</h2>
   <p class="gift__sub">Pick an amount to see where your gift goes.</p>
   <div class="gift__tiers" role="radiogroup" aria-labelledby="${pid}">${tierHtml}</div>
