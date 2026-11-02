@@ -203,7 +203,7 @@
         { k: 'onHomepage', label: 'Show a "Pledge for …" button on the homepage (while pledging is open)', type: 'bool' },
         { k: 'shelter', label: 'Shelter', hint: 'e.g. "Miami-Dade Animal Services"' }, { k: 'shelterSite', label: 'Which location', hint: 'e.g. "Doral" or "Medley". Leave empty if you\'re not sure.' },
         { k: 'pronoun', label: 'Him, her or them', type: 'chips1', options: [['him', 'Him'], ['her', 'Her'], ['them', 'Them']] },
-        { k: 'goal', label: 'Goal amount (optional)', type: 'number', hint: 'Only shown here in the admin. The pledge page shows just how many people have pledged.' },
+        { k: 'goal', label: 'Goal amount (optional)', type: 'number', hint: 'While pledging is open, the page shows only how many people have pledged. Once you close pledges, it shows the amount raised and the bar toward this goal.' },
         { k: 'photo', label: 'Photo', type: 'image' }, { k: 'photoAlt', label: 'Photo description' },
         { k: 'sharePhoto', label: 'Different photo for the social card (optional)', type: 'image', hint: 'Leave empty to use the photo above.' },
         { k: 'shareFocus', label: 'Frame the social card', type: 'sharefocus', src: 'photo', alt: 'sharePhoto', shareKicker: 'Pledge to help a shelter pup', titleFrom: 'name', wide: true, hint: 'Drag the photo to move it and use the slider to zoom. This is exactly the picture people see when you send the link in a text, on Instagram or on Facebook. It updates about 2 minutes after you save.' },
@@ -986,11 +986,13 @@
           '<div class="pd-top"><div><h2 style="margin:0">' + esc(d.name) + (d.animalId ? ' · ' + esc(d.animalId) : '') + ' <span class="pill' + (d.status === 'pulled' ? ' ok' : '') + '">' + esc(PLS[d.status] || 'Pledging open') + '</span></h2>' +
           '<p class="hint" style="margin:4px 0 0"><a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(url.replace('https://', '')) + ' ↗</a> <button class="btn btn--ghost btn--sm" type="button" data-copy>Copy link</button></p></div>' +
           '<div class="pd-sum"><b>' + money(j.total) + '</b><span>' + j.count + (j.count === 1 ? ' pledge' : ' pledges') + (d.goal ? ' · goal ' + money(d.goal) : '') + '</span><span>' + money(paidSum) + ' paid so far</span></div></div>' +
+          (Number(d.goal) ? (function () { var g = Number(d.goal), pct = Math.min(100, Math.round(j.total / g * 100)), met = j.total >= g; return '<div class="pd-goal" style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px"><span>' + money(j.total) + ' of ' + money(g) + '</span><span' + (met ? ' style="color:#1B6E45"' : '') + '>' + (met ? '🎉 Goal met!' : pct + '%') + '</span></div><div style="height:14px;background:#DDE4FF;border-radius:999px;overflow:hidden"><span style="display:block;height:100%;width:' + pct + '%;min-width:14px;background:' + (met ? '#1B6E45' : '#FF914D') + ';border-radius:999px"></span></div></div>'; })() : '') +
           '<div class="row__act" style="justify-content:flex-start;flex-wrap:wrap;margin:16px 0 4px">' +
             '<a class="btn btn--ghost btn--sm" href="#c/pledges/' + encodeURIComponent(it.slug) + '">✏️ Edit page, photo or status</a>' +
+            (d.status === 'open' ? '<button class="btn btn--danger btn--sm" type="button" data-close>🔒 Close pledges</button>' : '<button class="btn btn--ghost btn--sm" type="button" data-reopen>🔓 Reopen pledges</button>') +
             '<button class="btn btn--go btn--sm" type="button" data-mail' + (list.length ? '' : ' disabled') + '>✉️ Email everyone who pledged</button>' +
             '<button class="btn btn--ghost btn--sm" type="button" data-csv' + (list.length ? '' : ' disabled') + '>⬇️ Download spreadsheet</button></div>' +
-          '<div data-compose></div>' +
+          '<div data-closebox></div><div data-compose></div>' +
           (list.length ? '<div class="pd-wrap"><table class="pd-table"><thead><tr><th>Name</th><th>Email</th><th>Social</th><th class="num">Pledge</th><th>Date</th><th>Paid?</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody>' +
             list.map(function (x, i) {
               var soc = String(x.social || ''), ig = /^@[\w.]{1,30}$/.test(soc) ? 'https://www.instagram.com/' + soc.slice(1) + '/' : (/^https?:\/\//.test(soc) ? soc : '');
@@ -1003,6 +1005,20 @@
             }).join('') + '</tbody></table></div>' : '<p class="empty">No pledges yet. Share the link: every pledge shows up here.</p>') +
           '</section>';
         $('[data-copy]', one).onclick = function () { navigator.clipboard.writeText(url).then(function () { toast('Link copied.'); }); };
+        // close or reopen the drive: saves the status on the drive's page (the site updates in about 2 minutes)
+        function setStatus(st, msg) {
+          var data = {}; for (var k in d) data[k] = d[k]; data.status = st;
+          return api('/api/content/pledges/' + encodeURIComponent(it.slug), { method: 'PUT', json: { data: data, body: it.body } }).then(function () { d.status = st; it.data = data; delete S.cache.pledges; toast(msg); drive(it); }, function (e) { toast(e.message); });
+        }
+        var cl = $('[data-close]', one), ro = $('[data-reopen]', one);
+        if (cl) cl.onclick = function () {
+          var cb = $('[data-closebox]', one);
+          cb.innerHTML = '<div class="card" style="background:#FFF4EA;box-shadow:none"><h3 style="margin:0 0 6px">Close pledges for ' + esc(d.name) + '?</h3><p class="hint" style="margin:0 0 10px">The page stops taking pledges and shows "Pledges closed" with how much was raised' + (Number(d.goal) ? ' and the bar toward the ' + money(d.goal) + ' goal' : '') + '. You can reopen it any time.</p>' +
+            '<div class="row__act" style="justify-content:flex-start;flex-wrap:wrap"><button class="btn btn--go btn--sm" type="button" data-st="pulled">🎉 ' + esc(d.name) + ' is safe: close pledges</button><button class="btn btn--ghost btn--sm" type="button" data-st="closed">Close pledges (not pulled)</button><button class="btn btn--ghost btn--sm" type="button" data-cx>Cancel</button></div></div>';
+          $('[data-cx]', cb).onclick = function () { cb.innerHTML = ''; };
+          $$('[data-st]', cb).forEach(function (b) { b.onclick = function () { b.disabled = true; setStatus(b.getAttribute('data-st'), 'Pledges closed. The page updates in about 2 minutes.'); }; });
+        };
+        if (ro) ro.onclick = function () { if (confirm('Reopen pledges for ' + d.name + '? The page will take pledges again.')) setStatus('open', 'Pledges reopened. The page updates in about 2 minutes.'); };
         $$('tr[data-i]', one).forEach(function (tr) {
           var x = list[+tr.getAttribute('data-i')];
           $('[data-paid]', tr).onchange = function () {

@@ -10,6 +10,18 @@
   // the page shows only how many people have pledged (no amounts, no bar: Oct 28, 2026)
   function showTotals(j) {
     if (!j || typeof j.count !== 'number') return;
+    // closed drive: amount raised + bar toward the goal (Nov 2, 2026)
+    document.querySelectorAll('[data-pl-final]').forEach(function (box) {
+      var total = Number(j.total) || 0, goal = Number(box.getAttribute('data-goal')) || 0;
+      var t = box.querySelector('[data-pl-total]'); if (t) t.textContent = money(total);
+      var c = box.querySelector('[data-pl-count]'); if (c) c.textContent = j.count === 1 ? T('pledged by 1 person') : T('pledged by {n} people').replace('{n}', j.count);
+      if (goal) {
+        var pct = Math.min(100, Math.round(total / goal * 100));
+        var bar = box.querySelector('[data-pl-bar]'); if (bar) setTimeout(function () { bar.style.width = pct + '%'; }, 60);
+        var pb = box.querySelector('[role="progressbar"]'); if (pb) pb.setAttribute('aria-valuenow', String(Math.round(total)));
+        var met = box.querySelector('[data-pl-met]'); if (met && total >= goal) { met.hidden = false; box.classList.add('is-met'); }
+      }
+    });
     document.querySelectorAll('[data-pl-people]').forEach(function (el) {
       if (!j.count) { el.textContent = T('Be the first to pledge!'); return; }
       el.innerHTML = '<b></b> <span></span>';

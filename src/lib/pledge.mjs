@@ -32,7 +32,14 @@ export function disclosure(d) {
 }
 
 /** How many people have pledged (no amounts, no bar: Cata, Oct 28, 2026). The number fills in from js/pledge.js. */
-function progress() {
+function progress(d) {
+  // once pledges close: the amount raised, the bar toward the goal and "we met our goal" (Cata, Nov 2, 2026)
+  if (d && d.status !== 'open') return `<div class="pl-progress pl-progress--closed" data-pl-progress data-pl-final${d.goal ? ` data-goal="${d.goal}"` : ''}>
+    <p class="pl-closed">${icon('heart', { size: 18 })} Pledges closed</p>
+    <p class="pl-progress__num"><b data-pl-total>$0</b> <span data-pl-count>pledged</span>${d.goal ? `<span class="pl-progress__goal" data-pl-goal>Goal $${d.goal.toLocaleString('en-US')}</span>` : ''}</p>
+    ${d.goal ? `<div class="pl-bar" role="progressbar" aria-label="Pledged toward the goal" aria-valuemin="0" aria-valuemax="${d.goal}" aria-valuenow="0"><span data-pl-bar style="width:0%"></span></div>` : ''}
+    <p class="pl-met" data-pl-met hidden>🎉 We met our goal!</p>
+  </div>`;
   return `<div class="pl-progress" data-pl-progress>
     <p class="pl-progress__num" data-pl-people>Be the first to pledge!</p>
   </div>`;

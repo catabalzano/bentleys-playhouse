@@ -1851,3 +1851,11 @@ fieldset.field { align-content: start; }
 .gift__badge .gift__logo { width: 92%; }
 .gift__badge .logo img { border-radius: 0; height: auto; }
 .gift__badge .logo .logo__l { display: block !important; } .gift__badge .logo .logo__d { display: none !important; }
+
+/* Pledge drive closed: amount raised + bar toward the goal (Nov 2) */
+.pl-closed { display: inline-flex; align-items: center; gap: .4rem; justify-self: start; margin: 0 0 .2rem; padding: .3rem .8rem; border-radius: 999px; background: var(--ink); color: #fff; font: 600 .85rem/1.2 var(--font-display); letter-spacing: .04em; text-transform: uppercase; }
+.pl-progress__goal { margin-left: auto; font-size: .95rem; }
+.pl-bar { height: 16px; background: var(--tint-blue); border-radius: 999px; overflow: hidden; }
+.pl-bar span { display: block; height: 100%; min-width: 16px; background: var(--orange); border-radius: 999px; transition: width .8s ease; }
+.pl-progress--closed.is-met .pl-bar span { background: var(--good); }
+.pl-met { margin: .1rem 0 0; font: 600 1.1rem/1.3 var(--font-display); color: var(--good); }
