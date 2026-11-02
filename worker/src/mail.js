@@ -48,16 +48,16 @@ export const facts = (rows) => `<table role="presentation" cellpadding="0" cells
 export function layout(env, { pre, title, body, photo, photoAlt }) {
   const site = SITE(env);
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>${h(title)}</title><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet"></head>
-<body style="margin:0;padding:0;background:${CREAM}">
+<body bgcolor="${CREAM}" style="margin:0;padding:0;background:${CREAM}">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:${CREAM}">${h(pre)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${CREAM}"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${CREAM}" style="background:${CREAM}"><tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px">
-  <tr><td align="center" style="background:${BLUE};border-radius:24px 24px 0 0;padding:22px 20px 18px">
-    <a href="${site}/" style="text-decoration:none"><img src="${site}/assets/img/email/logo-white.png" width="230" alt="Bentley's Playhouse" style="display:block;width:230px;max-width:70%;height:auto;border:0;font-family:${HEAD};font-size:24px;font-weight:700;color:#ffffff"></a>
+  <tr><td align="center" bgcolor="${BLUE}" style="background:${BLUE};border-radius:24px 24px 0 0;padding:0;line-height:0;font-size:0">
+    <a href="${site}/" style="text-decoration:none;display:block"><img src="${site}/assets/img/email/header.png" width="600" alt="Bentley's Playhouse Animal Rescue" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:24px 24px 0 0;font-family:${HEAD};font-size:24px;font-weight:700;color:#ffffff;background:${BLUE}"></a>
   </td></tr>
-  <tr><td style="background:${GOLD};height:6px;line-height:6px;font-size:0">&nbsp;</td></tr>
+  <tr><td bgcolor="${GOLD}" style="background:${GOLD};height:6px;line-height:6px;font-size:0">&nbsp;</td></tr>
   ${photo ? `<tr><td style="background:#ffffff;padding:0"><img src="${h(photo)}" width="600" height="315" alt="${h(photoAlt || '')}" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>` : ''}
-  <tr><td style="background:#ffffff;border-radius:${photo ? '0 0' : '0 0'} 24px 24px;padding:30px 30px 26px">
+  <tr><td bgcolor="#ffffff" style="background:#ffffff;border-radius:${photo ? '0 0' : '0 0'} 24px 24px;padding:30px 30px 26px">
     <h1 style="margin:0 0 14px;font-family:${HEAD};font-size:27px;line-height:1.25;color:${INK}">${title}</h1>
     ${body}
     ${note(`<strong>Have any questions?</strong> Just reply to this email and we'll get back to you.`)}

@@ -13,7 +13,7 @@
 // The drives themselves (name, A number, status) are content files (content/pledges/*.md) edited in the admin;
 // the site publishes them at /pledge/drives.json and this service only accepts pledges for open drives.
 import { sessionOk } from './admin.js';
-import { sendMail, layout, p, note, facts, h, plain } from './mail.js';
+import { sendMail, layout, p, note, facts, h, h2, plain, btn } from './mail.js';
 
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
 const fail = (msg, status = 400) => Object.assign(new Error(msg), { publicMessage: msg, status });
@@ -136,19 +136,15 @@ export async function handlePledges(req, env, url) {
   }
   if (parts[3] === 'email' && req.method === 'POST') {
     const b = await req.json().catch(() => ({}));
-    const subject = clean(b.subject, 160), message = String(b.message || '').replace(/\r\n/g, '\n').trim().slice(0, 6000);
-    if (!subject || !message) throw fail('Please write a subject and a message.');
     const d = (await drives(env))[drive] || { name: 'the pup' };
+    const mail = pledgeMail(b, d); // checks everything before anyone is emailed
     const only = ['unpaid', 'unemailed'].includes(b.only) ? b.only : 'all';
     const list = (await roster(env, drive)).filter((x) => only === 'all' || (only === 'unpaid' ? !x.paid : !x.emailedAt));
+    if (b.preview) return json({ ok: true, html: mail.html({ first: 'Ana', amount: 30 }, env) });
     let sent = 0, failed = 0;
     for (const x of list) {
-      const fill = (s) => s.replace(/\{first\}/gi, x.first).replace(/\{amount\}/gi, money(Number(x.amount)));
-      const paras = fill(message).split(/\n{2,}/).map((para) => p(h(para).replace(/\n/g, '<br>'))).join('');
-      const html = layout(env, { pre: fill(subject), title: `Hi ${h(x.first)}!`, body: paras + facts([['Your pledge', `<b>${money(Number(x.amount))}</b>`], ['For', h(d.name)]]) });
-      const text = plain([`Hi ${x.first}!`, '', fill(message), '', `Your pledge: ${money(Number(x.amount))} for ${d.name}`]);
-      const r = await sendMail(env, { to: x.email, subject: fill(subject), html, text, tag: 'pledge-update' }).catch(() => null);
-      if (r && r.id) { sent++; await save(env, drive, { ...x, emailedAt: new Date().toISOString(), emailSubject: fill(subject) }); }
+      const r = await sendMail(env, { to: x.email, subject: mail.subject(x), html: mail.html(x, env), text: mail.text(x), tag: 'pledge-update' }).catch(() => null);
+      if (r && r.id) { sent++; await save(env, drive, { ...x, emailedAt: new Date().toISOString(), emailSubject: mail.subject(x) }); }
       else failed++;
       await new Promise((ok) => setTimeout(ok, 550)); // Resend allows about 2 emails a second
     }
@@ -166,4 +162,57 @@ export async function handlePledges(req, env, url) {
   }
   if (req.method === 'DELETE') { await env.SUBMISSIONS.delete(`pledge:${drive}:${pid}`); return json({ ok: true }); }
   throw fail('Not found', 404);
+}
+
+// ---------- "send your pledge" email (Nov 2, 2026: built from fields, so it always looks on brand) ----------
+// body: { subject, intro, rescue: { name, instagram }, methods: [{ type, value, payee }] }
+export const PAY_TYPES = { zeffy: 'Zeffy', paypal: 'PayPal', venmo: 'Venmo', zelle: 'Zelle', cashapp: 'Cash App', check: 'Check', link: 'Donation page', other: 'Other' };
+const isUrl = (v) => /^https:\/\/[^\s]+\.[^\s]+$/i.test(v) && !/\.\.\.|…/.test(v);
+export function pledgeMail(b, d) {
+  const subjectT = clean(b.subject, 160);
+  const intro = String(b.intro || '').replace(/\r\n/g, '\n').trim().slice(0, 2000);
+  const rescue = { name: clean(b.rescue && b.rescue.name, 120), instagram: clean(b.rescue && b.rescue.instagram, 60).replace(/^@/, '') };
+  const methods = (Array.isArray(b.methods) ? b.methods : []).slice(0, 8).map((m) => ({ type: PAY_TYPES[m.type] ? m.type : 'other', value: String(m.value || '').replace(/\r\n/g, '\n').trim().slice(0, 400), payee: clean(m.payee, 120) })).filter((m) => m.value);
+  if (!subjectT) throw fail('Please write a subject.');
+  if (!rescue.name) throw fail('Please add the name of the rescue that pulled the pup.');
+  if (!methods.length) throw fail('Please add at least one way to send the pledge.');
+  for (const m of methods) {
+    if (['zeffy', 'link'].includes(m.type) && !isUrl(m.value)) throw fail(`The ${PAY_TYPES[m.type]} link has to be the full address, starting with https:// (copy it from the browser bar, not from an Instagram caption, where links get shortened with "...").`);
+    if (m.type === 'paypal' && /^http/i.test(m.value) && !isUrl(m.value)) throw fail('The PayPal link has to be the full address, starting with https://.');
+  }
+  const name = d.name || 'the pup';
+  const cap = (v) => String(v || '').charAt(0).toUpperCase() + String(v || '').slice(1);
+  const fill = (s, x) => s.replace(/\{first\}/gi, cap(x.first)).replace(/\{amount\}/gi, money(Number(x.amount)));
+  const A = 'color:#2F45C8;font-weight:700;text-decoration:none';
+  const row = (label, valueHtml, button = '') => `<tr><td style="padding:14px 0;border-top:1px solid #E3E6F5;font-family:Figtree,\'Segoe UI\',Helvetica,Arial,sans-serif"><div style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#5C5A72;margin:0 0 4px">${h(label)}</div><div style="font-size:16px;line-height:1.5;color:#1F1D2B">${valueHtml}</div>${button}</td></tr>`;
+  const methodHtml = (m) => {
+    const v = m.value;
+    switch (m.type) {
+      case 'zeffy': return row('Zeffy (card or bank)', 'Donate online with Zeffy. It\'s free for the rescue.', btn('Donate on Zeffy', v));
+      case 'link': return row(m.payee || 'Donation page', `<a href="${h(v)}" style="${A}">${h(v.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>`, btn('Open the donation page', v));
+      case 'paypal': return isUrl(v) ? row('PayPal', `<a href="${h(v)}" style="${A}">${h(v.replace(/^https?:\/\/(www\.)?/, ''))}</a>`, btn('Pay with PayPal', v)) : row('PayPal', `Send to <b>${h(v)}</b>`);
+      case 'venmo': { const hd = v.replace(/^@/, ''); return /^[\w-]{3,40}$/.test(hd) ? row('Venmo', `<a href="https://venmo.com/u/${h(hd)}" style="${A}">@${h(hd)}</a>`) : row('Venmo', `Search for <b>${h(v)}</b>`); }
+      case 'cashapp': { const tg = v.replace(/^\$/, ''); return /^[\w-]{1,30}$/.test(tg) ? row('Cash App', `<a href="https://cash.app/$${h(tg)}" style="${A}">$${h(tg)}</a>`) : row('Cash App', h(v)); }
+      case 'zelle': return row('Zelle', `Send to <b>${h(v)}</b>`);
+      case 'check': return row('Check', `${m.payee ? `Make it out to <b>${h(m.payee)}</b><br>` : ''}Mail it to:<br>${h(v).replace(/\n/g, '<br>')}`);
+      default: return row(m.payee || 'Other', h(v).replace(/\n/g, '<br>'));
+    }
+  };
+  const methodText = (m) => `- ${m.type === 'other' || m.type === 'link' ? (m.payee || PAY_TYPES[m.type]) : PAY_TYPES[m.type]}: ${m.type === 'check' ? `${m.payee ? `make it out to ${m.payee}, ` : ''}mail to ${m.value.replace(/\n/g, ', ')}` : m.value}`;
+  const ig = rescue.instagram ? ` (<a href="https://www.instagram.com/${h(rescue.instagram)}/" style="${A}">@${h(rescue.instagram)}</a>)` : '';
+  return {
+    subject: (x) => fill(subjectT, x),
+    html: (x, env) => layout(env, {
+      pre: `You pledged ${money(Number(x.amount))} for ${name}. Here's how to send it to ${rescue.name}.`,
+      title: `Hi ${h(cap(x.first))}!`,
+      body: (intro ? fill(intro, x).split(/\n{2,}/).map((para) => p(h(para).replace(/\n/g, '<br>'))).join('') : p(`${h(name)} is out of the shelter, and you helped make it happen. Thank you!`))
+        + `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 8px"><tr><td bgcolor="#FFF3D6" style="background:#FFF3D6;border-radius:16px;padding:16px 18px;font-family:Figtree,\'Segoe UI\',Helvetica,Arial,sans-serif;color:#1F1D2B"><div style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7A5A12">Your pledge</div><div style="font-size:30px;font-weight:700;line-height:1.2;margin:2px 0">${money(Number(x.amount))}</div><div style="font-size:15px">for ${h(name)}${d.animalId ? ` (${h(d.animalId)})` : ''}</div></td></tr></table>`
+        + h2('How to Send Your Pledge')
+        + p(`Please send it directly to <b>${h(rescue.name)}</b>${ig}, the rescue that pulled ${h(name)}. Bentley's Playhouse never collects or handles the money. Pick whichever way is easiest:`)
+        + `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 18px;border-bottom:1px solid #E3E6F5">${methods.map(methodHtml).join('')}</table>`
+        + note(`<strong>Tip:</strong> add "${h(name)}" to the payment note so ${h(rescue.name)} knows what it's for.`)
+        + p('We\'ll share updates on Instagram at <a href="https://www.instagram.com/bentleysplayhouse/" style="' + A + '">@bentleysplayhouse</a>.'),
+    }),
+    text: (x) => plain([`Hi ${cap(x.first)}!`, '', intro ? fill(intro, x) : `${name} is out of the shelter, and you helped make it happen. Thank you!`, '', `Your pledge: ${money(Number(x.amount))} for ${name}`, '', `HOW TO SEND YOUR PLEDGE`, `Please send it directly to ${rescue.name}${rescue.instagram ? ` (@${rescue.instagram})` : ''}, the rescue that pulled ${name}. Bentley's Playhouse never collects or handles the money.`, '', ...methods.map(methodText), '', `Tip: add "${name}" to the payment note so ${rescue.name} knows what it's for.`, '', 'We\'ll share updates on Instagram at @bentleysplayhouse.']),
+  };
 }

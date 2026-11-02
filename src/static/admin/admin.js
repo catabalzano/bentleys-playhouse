@@ -1022,21 +1022,53 @@
           var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + out], { type: 'text/csv' })); a.download = 'pledges-' + it.slug + '-' + today() + '.csv'; document.body.appendChild(a); a.click(); a.remove();
         };
         $('[data-mail]', one).onclick = function () {
+          // Nov 2: built from fields (rescue + ways to pay) so every email looks on brand; no pasted captions
           var c = $('[data-compose]', one), nm = d.name;
+          var TYPES = [['zeffy', 'Zeffy link'], ['zelle', 'Zelle'], ['venmo', 'Venmo'], ['cashapp', 'Cash App'], ['paypal', 'PayPal'], ['check', 'Check'], ['link', 'Other donation page'], ['other', 'Other']];
+          var PH = { zeffy: 'https://www.zeffy.com/… (the full link from the browser bar)', zelle: 'Email or phone for Zelle', venmo: '@username', cashapp: '$cashtag', paypal: 'PayPal email or paypal.me link', check: 'Mailing address (two lines is fine)', link: 'https://…', other: 'Details' };
+          function rowHtml(m) {
+            m = m || { type: 'zeffy', value: '', payee: '' };
+            return '<div class="pm-row" style="display:grid;grid-template-columns:150px 1fr auto;gap:8px;align-items:start;margin-top:8px"><select data-t aria-label="Way to pay">' + TYPES.map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === m.type ? ' selected' : '') + '>' + t[1] + '</option>'; }).join('') + '</select>' +
+              '<div><input type="text" data-p placeholder="Make the check out to…" value="' + esc(m.payee || '') + '" style="width:100%;margin-bottom:6px' + (m.type === 'check' || m.type === 'link' || m.type === 'other' ? '' : ';display:none') + '"><textarea data-v rows="' + (m.type === 'check' ? 2 : 1) + '" style="width:100%;min-height:0" placeholder="' + esc(PH[m.type]) + '">' + esc(m.value || '') + '</textarea></div>' +
+              '<button type="button" class="btn btn--ghost btn--sm" data-rmrow aria-label="Remove">✕</button></div>';
+          }
           c.innerHTML = '<div class="card" style="background:#F2F5FF;box-shadow:none"><h3 style="margin:0 0 8px">Email everyone who pledged</h3>' +
-            '<p class="hint">Each person gets their own email from hello@bentleysplayhouse.org, with their name and pledge amount added. {first} becomes their first name and {amount} their pledge.</p>' +
+            '<p class="hint">Each person gets their own branded email from hello@bentleysplayhouse.org with their name, their pledge amount and the ways to pay below. {first} becomes their first name and {amount} their pledge.</p>' +
             '<div class="f"><label for="pm-to">Send to</label><select id="pm-to"><option value="all">Everyone (' + list.length + ')</option><option value="unpaid">Only people who haven\'t paid (' + list.filter(function (x) { return !x.paid; }).length + ')</option><option value="unemailed">Only people not emailed yet (' + list.filter(function (x) { return !x.emailedAt; }).length + ')</option></select></div>' +
             '<div class="f" style="margin-top:10px"><label for="pm-s">Subject</label><input id="pm-s" type="text" style="width:100%" value="' + esc(nm) + ' is safe! Here\'s how to send your pledge"></div>' +
-            '<div class="f" style="margin-top:10px"><label for="pm-m">Message</label><textarea id="pm-m" rows="9" style="width:100%">' + esc(nm + ' is out of the shelter, and you helped make it happen. Thank you!\n\nYou pledged {amount}. Please send it directly to the rescue that pulled ' + nm + ':\n[Write the rescue\'s name and how to pay them here: Zelle, Venmo, PayPal or another way]\n\nWe\'ll share updates on Instagram at @bentleysplayhouse.') + '</textarea></div>' +
-            '<div class="row__act" style="justify-content:flex-start;margin-top:12px"><button class="btn btn--go btn--sm" type="button" data-send>✉️ Send</button><button class="btn btn--ghost btn--sm" type="button" data-x>Cancel</button><span class="msg" role="status" data-m></span></div></div>';
+            '<div class="f" style="margin-top:10px"><label for="pm-m">Opening line</label><textarea id="pm-m" rows="2" style="width:100%">' + esc(nm + ' is out of the shelter, and you helped make it happen. Thank you!') + '</textarea></div>' +
+            '<div class="grid" style="margin-top:10px"><div class="f"><label for="pm-rn">Rescue that pulled ' + esc(nm) + ' <span class="req">*</span></label><input id="pm-rn" type="text" placeholder="For example The Pittie Party of Central Florida"></div><div class="f"><label for="pm-ri">Their Instagram (optional)</label><input id="pm-ri" type="text" placeholder="@handle"></div></div>' +
+            '<div class="f" style="margin-top:10px"><b>Ways to send the pledge</b><p class="hint">One per line. Paste the full link for Zeffy (from the browser bar, not from an Instagram caption, where links get cut with "...").</p><div data-rows>' + rowHtml() + '</div><button type="button" class="btn btn--ghost btn--sm" data-addrow style="margin-top:8px">+ Add another way</button></div>' +
+            '<div class="row__act" style="justify-content:flex-start;margin-top:12px"><button class="btn btn--ghost btn--sm" type="button" data-prev>👀 Preview the email</button><button class="btn btn--go btn--sm" type="button" data-send>✉️ Send</button><button class="btn btn--ghost btn--sm" type="button" data-x>Cancel</button><span class="msg" data-m></span></div><div data-pv></div></div>';
+          var rows = $('[data-rows]', c);
+          function wire() {
+            $$('.pm-row', rows).forEach(function (r) {
+              $('[data-rmrow]', r).onclick = function () { r.remove(); };
+              $('[data-t]', r).onchange = function () { var t = this.value, v = $('[data-v]', r), pp = $('[data-p]', r); v.placeholder = PH[t]; v.rows = t === 'check' ? 2 : 1; pp.style.display = (t === 'check' || t === 'link' || t === 'other') ? '' : 'none'; pp.placeholder = t === 'check' ? 'Make the check out to…' : 'What to call it (for example Amazon wishlist)'; };
+            });
+          }
+          wire();
+          $('[data-addrow]', c).onclick = function () { rows.insertAdjacentHTML('beforeend', rowHtml({ type: 'zelle' })); wire(); };
           $('[data-x]', c).onclick = function () { c.innerHTML = ''; };
+          function payload(extra) {
+            var o = { subject: $('#pm-s', c).value, intro: $('#pm-m', c).value, rescue: { name: $('#pm-rn', c).value, instagram: $('#pm-ri', c).value }, only: $('#pm-to', c).value,
+              methods: $$('.pm-row', rows).map(function (r) { return { type: $('[data-t]', r).value, value: $('[data-v]', r).value, payee: $('[data-p]', r).value }; }) };
+            for (var k in extra) o[k] = extra[k];
+            return o;
+          }
+          $('[data-prev]', c).onclick = function () {
+            var pv = $('[data-pv]', c);
+            api('/api/pledges/' + encodeURIComponent(it.slug) + '/email', { method: 'POST', json: payload({ preview: true }) }).then(function (r) {
+              pv.innerHTML = '<p class="hint" style="margin-top:12px">Preview (sample name and amount):</p><iframe title="Email preview" style="width:100%;height:720px;border:1px solid #dde;border-radius:12px;background:#fff"></iframe>';
+              $('iframe', pv).srcdoc = r.html;
+            }, function (e) { $('[data-m]', c).textContent = e.message; });
+          };
           $('[data-send]', c).onclick = function () {
-            var b = this, msg = $('#pm-m', c).value, to = $('#pm-to', c);
-            if (/\[Write the rescue/.test(msg)) { toast('Replace “[Write the rescue’s name…]” with the rescue and how to pay them.'); $('#pm-m', c).focus(); return; }
+            var b = this, to = $('#pm-to', c);
             var n = to.options[to.selectedIndex].text.replace(/.*\((\d+)\).*/, '$1');
             if (!confirm('Send this email to ' + n + ' ' + (n === '1' ? 'person' : 'people') + '?')) return;
             b.disabled = true; $('[data-m]', c).textContent = 'Sending… this takes about a second per person.';
-            api('/api/pledges/' + encodeURIComponent(it.slug) + '/email', { method: 'POST', json: { subject: $('#pm-s', c).value, message: msg, only: to.value } }).then(function (r) {
+            api('/api/pledges/' + encodeURIComponent(it.slug) + '/email', { method: 'POST', json: payload({}) }).then(function (r) {
               toast('Sent ' + r.sent + ' of ' + r.of + (r.failed ? '. ' + r.failed + ' didn\'t send; try "Only people not emailed yet".' : '.')); drive(it);
             }, function (e) { b.disabled = false; $('[data-m]', c).textContent = e.message; });
           };
