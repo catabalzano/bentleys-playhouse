@@ -68,7 +68,7 @@ export function pupsCityPage(episodes = []) {
       </div>
     </div>
     <figure class="pimc-tv">
-      <div class="pimc-tv__screen"><img src="${asset('img/pups-in-my-city-masthead.jpg')}" alt="Pups in My City logo: Pups in My City, always bring the dog, Miami, with a line drawing of a woman walking a happy dog" width="1400" height="788" fetchpriority="high"></div>
+      <div class="pimc-tv__screen"><img src="${asset('img/pups-in-my-city-masthead-v2.jpg')}" alt="Pups in My City logo: Pups in My City, always bring the dog, Miami, with a line drawing of a woman walking a happy dog" width="1400" height="788" fetchpriority="high"></div>
       <figcaption class="pimc-tv__onair"><span class="pimc-dot" aria-hidden="true"></span>Filmed in Miami</figcaption>
     </figure>
   </div>
