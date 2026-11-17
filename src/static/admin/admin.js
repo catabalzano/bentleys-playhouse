@@ -361,6 +361,7 @@
       '<a class="nav" href="#cases" data-nav="cases">🐾 Adoption cases <span class="count" data-casecount></span></a>' +
       '<a class="nav" href="#rescues" data-nav="rescues">🤝 Rescue contacts</a>' +
       '<a class="nav" href="#pledges" data-nav="pledges">🙏 Pledges</a>' +
+      '<a class="nav" href="#contacts" data-nav="contacts">👥 Contacts</a>' +
       '<a class="nav" href="#eventreqs" data-nav="eventreqs">📨 Event requests <span class="count" data-evcount></span></a>' +
       ORDER.map(function (k) { return '<a class="nav" href="#c/' + k + '" data-nav="c/' + k + '">' + COLS[k].icon + ' ' + esc(COLS[k].label) + '</a>'; }).join('') +
       '<a class="nav" href="#homephoto" data-nav="homephoto">🖼️ Homepage photo</a>' +
@@ -403,6 +404,7 @@
     if (h === 'homephoto') return homePhoto();
     if (h === 'messages') return messages();
     if (h === 'rescues') return rescues();
+    if (h === 'contacts') return contacts();
     if (p[0] === 'pledges') return pledges(p[1] ? decodeURIComponent(p[1]) : null);
     if (p[0] === 'cases') return cases(p[1] || null);
     if (h === 'eventreqs') return eventReqs();
@@ -494,6 +496,7 @@
       '<a class="home-card" href="#submissions"><span class="big">' + (S.subs ? pending : '…') + '</span><b>Submitted pups</b><span>' + (pending ? 'waiting for your review' : 'Nothing new to review') + '</span></a>' +
       '<a class="home-card" href="#messages"><span class="big">' + (S.msgs ? unread() : '…') + '</span><b>Messages</b><span>From the Contact and Get Involved forms</span></a>' +
       '<a class="home-card" href="#cases"><span class="big">🐾</span><b>Adoption cases</b><span>Steps to follow for every “I want to adopt”</span></a>' +
+      '<a class="home-card" href="#contacts"><span class="big">👥</span><b>Contacts</b><span>Everyone who pledged, and who wants the newsletter</span></a>' +
       '<a class="home-card" href="#pledges"><span class="big">🙏</span><b>Pledges</b><span>Who pledged to help pull a shelter dog</span></a>' +
       '<a class="home-card" href="#rescues"><span class="big">🤝</span><b>Rescue contacts</b><span>Every rescue and foster that listed a pup</span></a>' +
       '<a class="home-card" href="#c/pawsome/new"><span class="big">＋</span><b>Add a Pawsome Pooch</b><span>Feature a dog yourself</span></a>' +
@@ -960,6 +963,64 @@
   }
   function telLinks(p) { var d = String(p).replace(/[^\d+]/g, ''); return esc(p) + ' <a class="hint" href="tel:' + esc(d) + '">Call</a> · <a class="hint" href="sms:' + esc(d) + '">Text</a>'; }
   function day(iso) { return iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''; }
+  // ---------- contacts ----------
+  // One private address book (worker/src/contacts.js). Everyone who pledges lands here; "Newsletter" = they left
+  // "Send me Pups in My City" ticked. Pups in My City is on Substack (no API): download the list, import it there.
+  function contacts() {
+    main().innerHTML = '<div class="head"><div><h1>👥 Contacts</h1><p>Everyone who pledges for a pup is saved here automatically, one row per person. <b>Newsletter</b> means they asked for Pups in My City. People who pledged before that box existed are saved with it off.</p></div></div><div data-ct><p class="empty">Loading…</p></div>';
+    var box = $('[data-ct]'), list = [], q = '', only = false;
+    var day = function (iso) { return iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''; };
+    api('/api/contacts').then(function (j) { list = j.contacts || []; draw(); }, function (e) { box.innerHTML = '<p class="empty">' + esc(e.message) + '</p>'; });
+    function csv(rows, name) {
+      var cell = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + rows.map(function (r) { return r.map(cell).join(','); }).join('\r\n')], { type: 'text/csv' })); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    }
+    function draw() {
+      var news = list.filter(function (c) { return c.news; });
+      var shown = list.filter(function (c) {
+        if (only && !c.news) return false;
+        if (!q) return true;
+        return (c.first + ' ' + c.last + ' ' + c.email + ' ' + c.social + ' ' + c.from).toLowerCase().indexOf(q) > -1;
+      });
+      box.innerHTML = '<section class="card">' +
+        '<div class="pd-top"><div><h2 style="margin:0">' + list.length + (list.length === 1 ? ' contact' : ' contacts') + '</h2><p class="hint" style="margin:4px 0 0">' + news.length + ' asked for the newsletter</p></div>' +
+        '<div class="row__act" style="flex-wrap:wrap"><button class="btn btn--ghost btn--sm" type="button" data-all' + (list.length ? '' : ' disabled') + '>⬇️ Download all contacts</button><button class="btn btn--go btn--sm" type="button" data-news' + (news.length ? '' : ' disabled') + '>⬇️ Newsletter list for Substack</button></div></div>' +
+        '<p class="hint" style="margin:12px 0 0">To add the newsletter list to Pups in My City: in Substack, open <b>Subscribers</b>, choose <b>Add subscribers › Import</b> and upload the file.</p>' +
+        '<div class="row__act" style="justify-content:flex-start;flex-wrap:wrap;margin:16px 0 4px;gap:12px"><input type="search" placeholder="Search name, email or social" data-q value="' + esc(q) + '" style="min-width:240px"><label class="pd-paid"><input type="checkbox" data-only' + (only ? ' checked' : '') + '> Newsletter only</label></div>' +
+        (shown.length ? '<div class="pd-wrap"><table class="pd-table"><thead><tr><th>Name</th><th>Email</th><th>Social</th><th>Where from</th><th>Last seen</th><th>Newsletter</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody>' +
+          shown.map(function (c, i) {
+            var soc = String(c.social || ''), ig = /^@[\w.]{1,30}$/.test(soc) ? 'https://www.instagram.com/' + soc.slice(1) + '/' : (/^https?:\/\//.test(soc) ? soc : '');
+            return '<tr data-id="' + esc(c.id) + '"><td><b>' + esc((c.first + ' ' + c.last).trim() || '—') + '</b></td>' +
+              '<td><a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a></td>' +
+              '<td>' + (ig ? '<a href="' + esc(ig) + '" target="_blank" rel="noopener">' + esc(soc) + '</a>' : esc(soc)) + '</td>' +
+              '<td>' + esc(c.from || '') + '</td><td>' + esc(day(c.lastAt)) + '</td>' +
+              '<td><label class="pd-paid"><input type="checkbox" data-n' + (c.news ? ' checked' : '') + '> Yes</label></td>' +
+              '<td><button class="btn btn--ghost btn--sm" type="button" data-rm aria-label="Remove ' + esc(c.first || c.email) + '">✕</button></td></tr>';
+          }).join('') + '</tbody></table></div>' : '<p class="empty">' + (list.length ? 'No one matches.' : 'No contacts yet. Everyone who pledges will show up here.') + '</p>') +
+        '</section>';
+      var qi = $('[data-q]', box); qi.oninput = function () { q = this.value.trim().toLowerCase(); var pos = this.selectionStart; draw(); var n = $('[data-q]', box); n.focus(); n.setSelectionRange(pos, pos); };
+      $('[data-only]', box).onchange = function () { only = this.checked; draw(); };
+      $('[data-all]', box).onclick = function () {
+        csv([['First name', 'Last name', 'Email', 'Social', 'Newsletter', 'Where from', 'First seen', 'Last seen']].concat(list.map(function (c) { return [c.first, c.last, c.email, c.social, c.news ? 'Yes' : 'No', c.from, (c.firstAt || '').slice(0, 10), (c.lastAt || '').slice(0, 10)]; })), 'contacts-' + today() + '.csv');
+      };
+      $('[data-news]', box).onclick = function () {
+        csv([['email', 'name']].concat(news.map(function (c) { return [c.email, (c.first + ' ' + c.last).trim()]; })), 'pups-in-my-city-subscribers-' + today() + '.csv');
+      };
+      $$('tr[data-id]', box).forEach(function (tr) {
+        var c = list.find(function (x) { return x.id === tr.getAttribute('data-id'); });
+        $('[data-n]', tr).onchange = function () {
+          var cb = this;
+          if (cb.checked && !confirm('Only turn this on if ' + (c.first || 'they') + ' asked for the newsletter. Turn it on?')) { cb.checked = false; return; }
+          api('/api/contacts/' + c.id, { method: 'PUT', json: { news: cb.checked } }).then(function () { c.news = cb.checked; toast(cb.checked ? 'Added to the newsletter list.' : 'Taken off the newsletter list.'); draw(); }, function (e) { cb.checked = !cb.checked; toast(e.message); });
+        };
+        $('[data-rm]', tr).onclick = function () {
+          if (!confirm('Remove ' + ((c.first + ' ' + c.last).trim() || c.email) + ' from Contacts? Their pledges stay in Pledges. This can\'t be undone.')) return;
+          api('/api/contacts/' + c.id, { method: 'DELETE' }).then(function () { list = list.filter(function (x) { return x !== c; }); toast('Removed.'); draw(); }, function (e) { toast(e.message); });
+        };
+      });
+    }
+  }
+
   // ---------- pledges ----------
   // Pledge drives (content/pledges) + who pledged (worker/src/pledges.js). Nothing is charged; once the dog is pulled,
   // "Email everyone who pledged" sends each person their amount and how to pay.

@@ -13,6 +13,7 @@
 // The drives themselves (name, A number, status) are content files (content/pledges/*.md) edited in the admin;
 // the site publishes them at /pledge/drives.json and this service only accepts pledges for open drives.
 import { sessionOk } from './admin.js';
+import { upsertContact } from './contacts.js';
 import { sendMail, layout, p, note, facts, h, h2, plain, btn } from './mail.js';
 
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
@@ -102,6 +103,8 @@ async function receivePledge(req, env) {
   };
   await save(env, drive, rec);
   await env.SUBMISSIONS.put(rlKey, String(used + 1), { expirationTtl: 90000 });
+  // Contacts (admin › 👥 Contacts): everyone who pledges, with whether they left "Send me Pups in My City" ticked
+  try { await upsertContact(env, { email: t.email, first: t.first, last: t.last, social: t.social, news: f.get('news') === 'yes', source: { type: 'pledge', key: `pledge:${drive}`, label: `Pledged for ${d.name}`, at: rec.at } }); } catch (e) { console.error('pledge contact', e); }
   // their copy (always: it's their record of what they promised); the alert to hello@ follows ALERTS
   try { rec.confirm = await toPledger(env, d, rec); await save(env, drive, rec); } catch (e) { console.error('pledge confirm', e); }
   if (env.ALERTS !== 'off') try { await sendMail(env, { to: env.NOTIFY_EMAIL || 'hello@bentleysplayhouse.org', subject: `New pledge for ${d.name}: ${money(amount)}`, text: `${t.first} ${t.last} (${t.email}, ${t.social}) pledged ${money(amount)} for ${d.name}.\nRoster: ${SITE(env)}/admin/#pledges`, html: `<p>${h(t.first)} ${h(t.last)} (${h(t.email)}, ${h(t.social)}) pledged <b>${money(amount)}</b> for ${h(d.name)}.</p><p><a href="${SITE(env)}/admin/#pledges">Open the roster</a></p>`, replyTo: t.email, tag: 'pledge-alert' }); } catch (e) { console.error('pledge alert', e); }

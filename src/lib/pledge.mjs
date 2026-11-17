@@ -69,11 +69,12 @@ function form(d) {
     </fieldset>
     <div class="pl-promise">${icon('heart', { size: 22 })}<p><strong>This is a promise, not a payment.</strong> Nothing is charged today. Once ${esc(d.name)} is safe, we'll email you how to send your pledge.</p></div>
     ${disclosure(d)}
+    <label class="pl-news"><input type="checkbox" name="news" value="yes" checked><span>Send me <strong>Pups in My City</strong>, our newsletter. You can unsubscribe anytime.</span></label>
     <div class="hp" aria-hidden="true"><label for="${id('website')}">Leave this empty</label><input id="${id('website')}" name="website" type="text" tabindex="-1" autocomplete="off"></div>
     ${turnstileKey() ? `<div class="cf-turnstile" data-sitekey="${esc(turnstileKey())}" data-theme="light" data-size="flexible"></div>` : ''}
     <button class="btn btn--primary pl-submit" type="submit">${icon('heart', { size: 20 })}<span>Pledge for ${esc(d.name)}</span></button>
     <p class="form__status" role="status" aria-live="polite"></p>
-    <p class="pl-fine">We only use your details to contact you about ${esc(d.name)} and your pledge. <a href="${href('privacy/')}">Privacy</a></p>
+    <p class="pl-fine">We use your details to contact you about ${esc(d.name)} and your pledge, and save them in our private contacts list. We never sell or share them. <a href="${href('privacy/')}">Privacy</a></p>
   </form>`;
 }
 

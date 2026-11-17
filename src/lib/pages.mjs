@@ -803,6 +803,8 @@ export function privacy() {
   <p>When you use our Contact form or the "Raise Your Hand" form on Get Involved, we receive what you type: your name, email and anything optional you add (phone, neighborhood or ZIP, interests, your message). We use it only to reply to you and coordinate the help you asked about.</p>
   <h3>"Submit a Pup" for Pawsome Pooches</h3>
   <p>When you submit a dog, we receive the dog's details and photos, plus your name, social media handle, phone and email. Your contact details are only for us: they are never shown on the website. If we approve the listing, the dog's details and photos are published on the site. If we don't, we delete the photos.</p>
+  <h3>Pledges</h3>
+  <p>When you pledge for a pup, we receive your name, email, social media handle, the amount you pledged and whether you asked for our newsletter. We use it to keep a list of pledges and to email you how to send your pledge directly to the rescue. We also save your name, email and social handle in our private contacts list, so we can keep in touch. If you left "Send me Pups in My City" ticked, we add your email to Pups in My City, our newsletter on Substack, which then emails it to you. You can unsubscribe from any issue, and you can ask us to delete your details at any time.</p>
   <h3>Donations</h3>
   <p>Donations go through the payment app you choose (such as PayPal, Venmo, Zelle or Cash App). We don't see or store your card or bank details. That app's own privacy policy applies, and we receive what it shares with recipients, usually your name and the amount.</p>
   <h3>Things That Stay on Your Device</h3>

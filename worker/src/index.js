@@ -9,6 +9,7 @@ import { eventsPublic, eventsAdmin } from './events.js';
 import { receiveApplication } from './applications.js';
 import { receiveTip } from './tips.js';
 import { pledgePublic, handlePledges } from './pledges.js';
+import { handleContacts } from './contacts.js';
 // Bentley's Playhouse · Pawsome Pooches submissions
 // A tiny private backend for the static site (GitHub Pages can't receive forms).
 //
@@ -52,6 +53,7 @@ export default {
       else if (url.pathname === '/tip' && req.method === 'POST') res = await receiveTip(req, env);
       else if (url.pathname === '/pledge' || url.pathname === '/pledge/stats') res = await pledgePublic(req, env, url);
       else if (url.pathname.startsWith('/api/pledges')) res = await handlePledges(req, env, url);
+      else if (url.pathname.startsWith('/api/contacts')) res = await handleContacts(req, env, url);
       else if (url.pathname === '/interest' && req.method === 'POST') res = await receiveInterest(req, env, ctx);
       else if (url.pathname === '/adopted' && req.method === 'POST') res = await markAdopted(req, env);
       else if (url.pathname.startsWith('/api/messages')) res = await handleMessages(req, env, url);
