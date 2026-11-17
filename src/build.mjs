@@ -412,6 +412,19 @@ sitemap.push(...esRoutes);
   if (idx.es.length) { fs.mkdirSync(path.join(OUT, 'es'), { recursive: true }); fs.writeFileSync(path.join(OUT, 'es/search.json'), JSON.stringify(idx.es)); }
   console.log(`Search: ${idx.en.length} English and ${idx.es.length} Spanish entries`);
 }
+// Pawsome Pooches photos: add ?v=<hash of the published file> to every link, so when a photo changes
+// (e.g. the "Adopted!" sticker is added) browsers load the new copy instead of an old one they saved (Cata, Nov 16)
+{
+  const pdir = path.join(OUT, 'assets/img/pawsome');
+  const ver = new Map();
+  if (fs.existsSync(pdir)) for (const f of fs.readdirSync(pdir)) if (/\.(jpe?g|png|webp)$/i.test(f)) ver.set(f, crypto.createHash('sha1').update(fs.readFileSync(path.join(pdir, f))).digest('hex').slice(0, 8));
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (e.name === 'admin' ? [] : walk(path.join(d, e.name))) : /\.(html|json)$/.test(e.name) ? [path.join(d, e.name)] : []));
+  if (ver.size) for (const file of walk(OUT)) {
+    const s = fs.readFileSync(file, 'utf8');
+    const t = s.replace(/(\/assets\/img\/pawsome\/)([\w.-]+\.(?:jpe?g|png|webp))(?![\w?.-])/gi, (m, a, f) => (ver.has(f) ? `${a}${f}?v=${ver.get(f)}` : m));
+    if (t !== s) fs.writeFileSync(file, t);
+  }
+}
 // sitemap + robots
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.map((r) => `  <url><loc>${base}/${r}</loc></url>`).join('\n')}\n</urlset>\n`);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), ctx.mode === 'live' ? `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n` : 'User-agent: *\nDisallow: /\n');
