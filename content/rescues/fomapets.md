@@ -1,5 +1,5 @@
 ---
-name: Friends Of Miami Animals
+name: Friends of Miami Animals
 order: 3
 instagram: fomapets
 website: https://www.fomapets.org/
