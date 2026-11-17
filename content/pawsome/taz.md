@@ -1,6 +1,6 @@
 ---
 name: Taz
-status: available
+status: adopted
 featuredWeek: 2026-10-11
 urgent: false
 needs: adoption
@@ -28,5 +28,6 @@ location:
 contact:
   instagram: bentleysplayhouse
 submissionId: 20261011-7dff745b
+adoptedDate: 2026-11-16
 ---
 Taz has been at the shelter for more than 300 days! He’s such an amazing dog. He’s laid back, mellow, has normal energy levels (more moderate).
