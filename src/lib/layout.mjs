@@ -127,7 +127,7 @@ export function footer() {
       <p class="footer__mission">${esc(s.tagline || s.mission)}</p>
       <p class="footer__line">A Miami-based animal rescue helping dogs, and the people who show up for them.</p>
     </div>
-    ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Submit a tip', 'submit-a-tip/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
+    ${col('Get Help', [['I found a dog', 'get-help/found-a-dog/'], ['I lost my dog', 'get-help/lost-my-dog/'], ['I rescued a dog', 'get-help/rescued-a-dog/'], ['Hurt or in danger', 'get-help/emergency/'], ['Kept outside or caged', 'get-help/dog-kept-outside/'], ['Submit a tip', 'submit-a-tip/'], ['Vet clinic directory', 'resources/vet-clinics/']])}
     ${col('Learn', [['Pawsome Pooches', 'pawsome-pooches/'], ['Adopt & Foster', 'adopt-foster/'], ['Resource Library', 'resources/'], ['Flyer builder', 'resources/flyer-builder/'], ['Printable checklists', 'resources/#checklists'], ['Rehoming a dog safely', 'resources/rehoming-a-dog-safely/']])}
     ${col(esc(s.name), [['Our Story', 'our-story/'], ['Pups in My City', 'pupsinmycity/'], ['Where the money goes', 'transparency/'], ['Get Involved', 'get-involved/'], ['Rescues you can help', 'rescues-you-can-help/'], ['Contact & FAQ', 'contact/'], ...(s.donate.verified ? [['Donate', 'donate/']] : [])])}
     <div class="footer__col"><h2 class="footer__h">Follow Along</h2>${socialButtons({ youtube: true })}</div>

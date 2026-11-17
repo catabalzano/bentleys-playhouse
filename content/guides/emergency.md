@@ -9,15 +9,17 @@ order: 0
 category: emergency
 summary: Who to call and how to stay safe when a dog is injured, very sick, poisoned, being hurt or in traffic.
 scope: Miami-Dade numbers, general safety guidance
-lastReviewed: 2026-10-05
+lastReviewed: 2026-11-17
 featured: true
-keywords: [emergency, injured, hurt, hit by car, poison, cruelty, abuse, danger, bleeding, heat]
-related: [reporting-animal-cruelty, poison-and-emergency-contacts, affordable-vet-care-miami]
+keywords: [emergency, injured, hurt, hit by car, poison, cruelty, abuse, danger, bleeding, heat, hotline, SOSPET, report]
+related: [dog-kept-outside, reporting-animal-cruelty, poison-and-emergency-contacts, affordable-vet-care-miami]
 steps:
   - title: Make Sure You're Safe First
-    body: Don't step into traffic or put yourself between fighting animals. A dog in pain may bite, even a friendly one.
+    body: Don't step into traffic or put yourself between fighting animals. A dog in pain may bite, even a friendly one. Don't go onto private property or try to take the dog yourself. You could get hurt or end up in legal trouble.
   - title: If a Person Is in Danger or Cruelty Is Happening Now, Call 911
-    body: For animal cruelty in progress in Miami-Dade, call **911**. For other cruelty or neglect, call Animal Services at **311** or **305-468-5900**.
+    body: For animal cruelty in progress in Miami-Dade, call **911**. For other cruelty or neglect, call Animal Services at **311** or **305-468-5900**. Always call both **911** and **311**, and write down the date, the time, who you spoke to and the report number for each call. If the case later goes viral online, or something happens to the animal, that record proves the right steps were followed from the start and shows who was told and didn't act.
+  - title: Report It to the Florida Statewide Animal Cruelty Hotline
+    body: After you've called 911 and 311, call the state's new hotline at **844-4-SOSPET (844-476-7738)** or report online at [AnimalCrueltyHotlineFL.org](https://www.animalcrueltyhotlinefl.org/). It's free, open 24/7, and you can stay anonymous. The hotline sends your report to the right local agency and gives you a Hotline Report ID. Keep it with your other report numbers. It's not a police case number, so it doesn't replace your calls to 911 and 311.
   - title: For a Hurt or Loose Dog, Call Animal Services
     body: Call **311** or **305-468-5900** with the exact location. For a dog on an expressway, call Florida Highway Patrol at ***347**. Near a school, Miami-Dade Schools Police is **305-995-2677**.
   - title: If You Can Safely Transport the Dog, Call an Emergency Vet First
@@ -29,6 +31,7 @@ local:
   body: |
     Bentley's Playhouse is a small rescue, not an emergency service. We can't respond to emergencies or monitor messages around the clock. The agencies above can.
 sources:
+  - { title: "Florida Statewide Animal Cruelty Hotline", org: "Big Dog Ranch Rescue and the Florida Department of Agriculture and Consumer Services", url: "https://www.animalcrueltyhotlinefl.org/" }
   - { title: "First aid tips for pet owners", org: "AVMA", url: "https://www.avma.org/resources-tools/pet-owners/emergencycare/first-aid-tips-pet-owners" }
   - { title: "Report animal cruelty", org: "Miami-Dade Animal Services", url: "https://www.miamidade.gov/global/service.page?Mduid_service=ser1599239379649110" }
   - { title: "Report a stray dog", org: "Miami-Dade Animal Services", url: "https://www.miamidade.gov/global/service.page?Mduid_service=ser1599918653637991" }
@@ -37,6 +40,8 @@ sources:
   - { title: "How to safely help a stray animal", org: "Humane World for Animals", url: "https://www.humaneworld.org/en/resources/how-safely-help-stray-animal" }
 ---
 Stay as calm as you can. The steps below are the fastest way to get the right people involved.
+
+Is a dog kept outside, tied up, caged or on a balcony, but not in immediate danger? See [what to do when a dog is kept outside or caged](/get-help/dog-kept-outside/).
 
 ## Handling an Injured Dog Safely
 
