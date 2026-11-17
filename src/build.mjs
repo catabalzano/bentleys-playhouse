@@ -378,6 +378,40 @@ sitemap.push(...esRoutes);
     }
   }
 }
+// Site search index (header magnifying glass): one small JSON per language, built from the finished pages
+{
+  const { parse } = await import('node-html-parser');
+  const clean = (t) => (t || '').replace(/\s+/g, ' ').trim();
+  const kindOf = (r) => (/^(es\/)?pawsome-pooches\/[^/]+\/$/.test(r) ? 'pup' : /^(es\/)?(resources|get-help)\//.test(r) ? 'guide' : 'page');
+  const idx = { en: [], es: [] };
+  for (const r of sitemap) {
+    const f = r.endsWith('.html') ? path.join(OUT, r) : path.join(OUT, r, 'index.html');
+    if (!fs.existsSync(f)) continue;
+    const root = parse(fs.readFileSync(f, 'utf8'));
+    const main = root.querySelector('main');
+    if (!main) continue;
+    const ev = root.querySelector('#ev-data');
+    const evText = ev ? ev.text : '';
+    main.querySelectorAll('script, style, svg, noscript, template, dialog, nav, form, button, .visually-hidden, [aria-hidden="true"]').forEach((n) => n.remove());
+    const lang = r.startsWith('es/') ? 'es' : 'en';
+    const h1 = clean((main.querySelector('h1') || {}).text);
+    const title = h1 || clean((root.querySelector('title') || {}).text).replace(/\s*[|·–-]\s*Bentley.*$/, '') || 'Home';
+    const desc = clean((root.querySelector('meta[name="description"]') || { getAttribute: () => '' }).getAttribute('content'));
+    const heads = main.querySelectorAll('h2, h3').map((h) => clean(h.text)).filter(Boolean).join(' · ').slice(0, 600);
+    idx[lang].push({ r, t: title, k: kindOf(r), d: desc.slice(0, 220), h: heads, x: clean(main.text).slice(0, 4000) });
+    // each Community Calendar event is its own result
+    if (evText) {
+      try {
+        for (const e of JSON.parse(evText).events || []) {
+          idx[lang].push({ r, t: clean(e.title), k: 'event', d: [e.city, e.venue].filter(Boolean).join(' · '), h: clean(e.organizer || ''), x: clean(String(e.description || e.desc || '').replace(/<[^>]+>/g, ' ')), date: e.date, end: e.endDate || e.date });
+        }
+      } catch (err) { /* calendar data unreadable: the Events page itself is still indexed */ }
+    }
+  }
+  fs.writeFileSync(path.join(OUT, 'search.json'), JSON.stringify(idx.en));
+  if (idx.es.length) { fs.mkdirSync(path.join(OUT, 'es'), { recursive: true }); fs.writeFileSync(path.join(OUT, 'es/search.json'), JSON.stringify(idx.es)); }
+  console.log(`Search: ${idx.en.length} English and ${idx.es.length} Spanish entries`);
+}
 // sitemap + robots
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap.map((r) => `  <url><loc>${base}/${r}</loc></url>`).join('\n')}\n</urlset>\n`);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), ctx.mode === 'live' ? `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n` : 'User-agent: *\nDisallow: /\n');

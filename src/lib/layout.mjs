@@ -22,6 +22,40 @@ function donateLink(cls = 'btn btn--donate') {
   return `<a class="${cls}" href="${href('donate/')}" data-donate-open>${icon('heart', { size: 18 })}<span>${ctx.t('nav.donate')}</span></a>`;
 }
 
+// Site search: a cream sticker button (beside Donate on desktop, between Donate and Menu on phones)
+// that opens a full-screen search. Works with site.js + /search.json; without JS the button stays hidden.
+function searchBtn(cls) {
+  return `<button type="button" class="search-btn ${cls}" data-search-open aria-haspopup="dialog" aria-controls="site-search" hidden>${icon('search', { size: 22 })}<span class="visually-hidden">Search the site</span></button>`;
+}
+const SEARCH_POPULAR = [['Emergency Steps', 'get-help/emergency/'], ['Adopt a Dog', 'adopt-foster/'], ['Foster', 'applications/foster/'], ['Events', 'events/'], ['Submit a Tip', 'submit-a-tip/']];
+function searchDialog() {
+  return `<dialog class="search-ov" id="site-search" aria-labelledby="site-search-h" data-root="${href('')}">
+  <div class="search-ov__in">
+    <div class="search-ov__top">
+      <span class="search-ov__badge">${logo('', { alt: '' })}</span>
+      <button type="button" class="search-ov__x" data-search-close>${icon('x', { size: 22 })}<span class="visually-hidden">Close search</span></button>
+    </div>
+    <form class="search-ov__form" role="search" action="${href('')}" data-search-form>
+      <label class="search-ov__h" id="site-search-h" for="site-q">What Are You Sniffing For?</label>
+      <svg class="search-ov__squig" viewBox="0 0 190 16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 10c20-8 30 6 50 0s30-8 50 0 30 6 50 0 20-6 32-2"/></svg>
+      <div class="search-ov__row">
+        <div class="search-ov__bar">
+          ${icon('search', { size: 24, cls: 'search-ov__icon' })}
+          <input class="search-ov__input" id="site-q" name="q" type="search" autocomplete="off" spellcheck="false" placeholder="Try “foster” or “events”" aria-describedby="site-search-status">
+        </div>
+        <button class="search-ov__go" type="submit">Fetch</button>
+      </div>
+      <p class="visually-hidden" id="site-search-status" aria-live="polite" data-search-status></p>
+    </form>
+    <div class="search-ov__popular" data-search-popular>
+      <p class="search-ov__plabel">Popular:</p>
+      ${SEARCH_POPULAR.map(([l, r]) => `<a class="search-ov__chip" href="${href(r)}">${l}</a>`).join('')}
+    </div>
+    <ol class="search-ov__results" data-search-results hidden></ol>
+  </div>
+</dialog>`;
+}
+
 function langSwitch() {
   const es = ctx.site.languages.find((l) => l.code === 'es' && l.enabled);
   if (!es || ctx.route.endsWith('.html')) return '';
@@ -50,19 +84,21 @@ ${ctx.mode === 'preview' ? `<aside class="preview-ribbon" aria-label="Preview no
   <div class="wrap site-header__in">
     <a class="brand" href="${href('')}"${home ? ' aria-current="page"' : ''}>${logoHtml}</a>
     ${donateVisible() ? donateLink('btn btn--donate header__donate') : ''}
+    ${searchBtn('header__search')}
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">
       <span class="menu-btn__open">${icon('menu')}<span>${t('menu')}</span></span>
       <span class="menu-btn__close">${icon('x')}<span>${t('close')}</span></span>
     </button>
     <nav class="nav" id="site-nav" aria-label="Main">
-      <ul class="nav__list">${navLinks()}${donateVisible() ? `<li class="nav__donate">${donateLink()}</li>` : ''}</ul>
+      <ul class="nav__list">${navLinks()}<li class="nav__search">${searchBtn('')}</li>${donateVisible() ? `<li class="nav__donate">${donateLink()}</li>` : ''}</ul>
       <div class="nav__extra">
         <a class="nav__link nav__contact" href="${href('transparency/')}">Transparency</a>
         <a class="nav__link nav__contact" href="${href('contact/')}">${t('nav.contact')}</a>${langSwitch().replace('class="lang-switch"', 'class="lang-switch nav__link nav__contact"')}
       </div>
     </nav>
   </div>
-</header>`;
+</header>
+${searchDialog()}`;
 }
 
 // Round white icon buttons (blue icons) used everywhere we link to our socials.

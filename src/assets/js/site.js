@@ -398,3 +398,118 @@ var T = window.BP_T || function (s) { return s; };
     });
   });
 })();
+
+/* Site search: header magnifying glass → full-screen "What Are You Sniffing For?" with results as you type (index: /search.json) */
+(function () {
+  var dlg = document.getElementById('site-search');
+  if (!dlg || typeof dlg.showModal !== 'function' || !window.fetch) return;
+  var T = window.BP_T || function (s) { return s; };
+  var openers = Array.prototype.slice.call(document.querySelectorAll('[data-search-open]'));
+  openers.forEach(function (b) { b.hidden = false; });
+  var form = dlg.querySelector('[data-search-form]'), input = dlg.querySelector('#site-q');
+  var list = dlg.querySelector('[data-search-results]'), popular = dlg.querySelector('[data-search-popular]'), status = dlg.querySelector('[data-search-status]');
+  var es = (document.documentElement.lang || '').slice(0, 2) === 'es';
+  var root = dlg.getAttribute('data-root') || '/';
+  var pretty = root.charAt(0) === '/';
+  var data = null, loading = null, last = null, timer = null;
+  var norm = function (s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var today = new Date(); today = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+  var AP = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
+  var ESM = ['ene.', 'feb.', 'mar.', 'abr.', 'may.', 'jun.', 'jul.', 'ago.', 'sept.', 'oct.', 'nov.', 'dic.'];
+  function day(d) { var p = d.split('-'); var m = +p[1] - 1, n = +p[2]; return es ? n + ' ' + ESM[m] : AP[m] + ' ' + n; }
+  function load() {
+    if (loading) return loading;
+    loading = fetch(root + (es ? 'es/' : '') + 'search.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (rows) {
+      data = rows.map(function (e) { e._t = norm(e.t); e._h = norm(e.h); e._d = norm(e.d); e._x = norm(e.x); return e; });
+      return data;
+    }).catch(function () { loading = null; data = null; });
+    return loading;
+  }
+  function link(r) { return root + (pretty || /\.html$/.test(r) ? r : r + 'index.html'); }
+  function hl(text, terms) {
+    var out = esc(text), n = norm(text);
+    var marks = [];
+    terms.forEach(function (t) { var i = n.indexOf(t); while (i > -1) { marks.push([i, i + t.length]); i = n.indexOf(t, i + t.length); } });
+    if (!marks.length) return out;
+    marks.sort(function (a, b) { return a[0] - b[0]; });
+    var res = '', pos = 0;
+    marks.forEach(function (m) { if (m[0] < pos) return; res += esc(text.slice(pos, m[0])) + '<mark>' + esc(text.slice(m[0], m[1])) + '</mark>'; pos = m[1]; });
+    return res + esc(text.slice(pos));
+  }
+  function snippet(e, terms) {
+    if (e.d && terms.some(function (t) { return e._d.indexOf(t) > -1; })) return e.d;
+    var i = -1;
+    terms.forEach(function (t) { var j = e._x.indexOf(t); if (j > -1 && (i < 0 || j < i)) i = j; });
+    if (i < 0) return e.d || e.x.slice(0, 150);
+    var a = Math.max(0, i - 60), b = Math.min(e.x.length, i + 110);
+    while (a > 0 && e.x.charAt(a - 1) !== ' ') a--;
+    return (a > 0 ? '…' : '') + e.x.slice(a, b).trim() + (b < e.x.length ? '…' : '');
+  }
+  function search(q) {
+    var terms = norm(q).split(/[^a-z0-9ñ'’]+/).filter(function (t) { return t.length > 1 || /\d/.test(t); });
+    if (!terms.length) terms = norm(q).trim() ? [norm(q).trim()] : [];
+    if (!terms.length || !data) return { terms: terms, hits: [] };
+    var hits = [];
+    data.forEach(function (e) {
+      if (e.k === 'event' && e.end && e.end < today) return;
+      var s = 0, all = true;
+      terms.forEach(function (t) {
+        var f = 0;
+        if (e._t.indexOf(t) > -1) f += (new RegExp('(^|[^a-z0-9])' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(e._t) ? 20 : 12);
+        if (e._h.indexOf(t) > -1) f += 5;
+        if (e._d.indexOf(t) > -1) f += 4;
+        if (e._x.indexOf(t) > -1) f += 1 + Math.min(4, e._x.split(t).length - 2);
+        if (!f) all = false; s += f;
+      });
+      if (all && s) hits.push({ e: e, s: s + (e.k === 'event' ? 1 : 0) });
+    });
+    hits.sort(function (a, b) { return b.s - a.s; });
+    return { terms: terms, hits: hits.slice(0, 12) };
+  }
+  var KIND = { page: 'Page', guide: 'Guide', pup: 'Pup', event: 'Event' };
+  function render() {
+    var q = input.value.trim();
+    if (!q) { list.hidden = true; list.innerHTML = ''; popular.hidden = false; status.textContent = ''; return; }
+    if (!data) { load().then(function () { if (data) render(); else { list.hidden = false; popular.hidden = false; list.innerHTML = '<li class="search-ov__none">' + esc(T('Search isn’t available right now. Try one of the popular links.')) + '</li>'; } }); return; }
+    var r = search(q);
+    list.hidden = false;
+    if (!r.hits.length) {
+      popular.hidden = false;
+      list.innerHTML = '<li class="search-ov__none">' + esc(T('No matches for')) + ' “' + esc(q) + '”. ' + esc(T('Try another word, or one of the popular links.')) + '</li>';
+      status.textContent = T('No matches');
+      return;
+    }
+    popular.hidden = true;
+    list.innerHTML = r.hits.map(function (h) {
+      var e = h.e;
+      var tag = T(KIND[e.k] || 'Page') + (e.k === 'event' && e.date ? ' · ' + (e.end && e.end !== e.date && e.date < today ? T('Through') + ' ' + day(e.end) : day(e.date)) : '');
+      return '<li><a class="search-ov__hit" href="' + esc(link(e.r)) + '"><span class="search-ov__tag search-ov__tag--' + e.k + '">' + esc(tag) + '</span><span class="search-ov__title">' + hl(e.t, r.terms) + '</span><span class="search-ov__snip">' + hl(snippet(e, r.terms), r.terms) + '</span></a></li>';
+    }).join('');
+    status.textContent = r.hits.length + ' ' + (r.hits.length === 1 ? T('result') : T('results'));
+  }
+  function open(from) {
+    last = from || document.activeElement;
+    load();
+    dlg.showModal();
+    document.documentElement.classList.add('search-open');
+    input.focus(); input.select();
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-search-open]');
+    if (b) { e.preventDefault(); open(b); }
+  });
+  dlg.querySelector('[data-search-close]').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('close', function () { document.documentElement.classList.remove('search-open'); if (last && last.focus) last.focus(); });
+  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 120); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); clearTimeout(timer); render();
+    var first = list.querySelector('a'); if (first && document.activeElement !== input) first.focus();
+  });
+  // "/" opens search from anywhere (not while typing in a field)
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== '/' || dlg.open || e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target; if (t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName))) return;
+    e.preventDefault(); open(openers.filter(function (b) { return b.offsetParent; })[0]);
+  });
+})();
