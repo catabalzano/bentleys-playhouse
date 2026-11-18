@@ -4,7 +4,9 @@ import { ctx, esc, href, asset, icon, breadcrumb } from './core.mjs';
 
 export const PIMC = {
   instagram: { url: 'https://www.instagram.com/pupsinmycity/', handle: '@pupsinmycity' },
-  youtube: { url: 'https://www.youtube.com/@pupsinmycity', handle: '@pupsinmycity' },
+  // Episodes live in a playlist on the Bentley's Playhouse YouTube channel (Cata, Nov 18)
+  youtube: { url: 'https://www.youtube.com/playlist?list=PLOHr8ySnb7r0', handle: 'Pups in My City' },
+  channel: { url: 'https://www.youtube.com/@BentleysPlayhouseTV' },
 };
 
 const ext = () => `<span class="visually-hidden"> (${ctx.t('externalLink')})</span>`;
@@ -45,7 +47,7 @@ function episodesSection(episodes) {
   const body = episodes.length
     ? `<ul class="pimc-eps" role="list">${episodes.map(episodeCard).join('')}</ul>
     <p class="pimc-eps__more"><a class="arrow-link" href="${esc(PIMC.youtube.url)}" target="_blank" rel="noopener">See every episode on YouTube ${icon('arrow', { size: 18 })}${ext()}</a></p>`
-    : `<div class="pimc-eps__soon">${icon('youtube', { size: 28 })}<p><strong>The first episodes are on the way.</strong> Subscribe on YouTube so you don't miss them.</p>${out(PIMC.youtube.url, 'Subscribe on YouTube', 'btn--primary', 'youtube')}</div>`;
+    : `<div class="pimc-eps__soon">${icon('youtube', { size: 28 })}<p><strong>The first episodes are on the way.</strong> Subscribe on YouTube so you don't miss them.</p>${out(PIMC.channel.url, 'Subscribe on YouTube', 'btn--primary', 'youtube')}</div>`;
   return `<section class="pimc-sec pimc-watch" id="episodes" aria-labelledby="pimc-watch-h">
     <h2 class="pimc-h" id="pimc-watch-h">Watch a Few Episodes</h2>
     ${body}
